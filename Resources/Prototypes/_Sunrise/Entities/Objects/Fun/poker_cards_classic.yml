@@ -24,6 +24,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: BasePokerCardClassicFlipped
   description: A poker card with you can play.
   components:
@@ -41,6 +42,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Two
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoClub
   description: A poker card with you can play. Its two of clubs
   components:
@@ -59,6 +61,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoClubFlipped
   description: A poker card with you can play.
   components:
@@ -76,6 +79,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Three
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeClub
   description: A poker card with you can play. Its three of clubs
   components:
@@ -94,6 +98,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeClubFlipped
   description: A poker card with you can play.
   components:
@@ -111,6 +116,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Four
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourClub
   description: A poker card with you can play. Its four of clubs
   components:
@@ -129,6 +135,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourClubFlipped
   description: A poker card with you can play.
   components:
@@ -146,6 +153,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Five
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveClub
   description: A poker card with you can play. Its five of clubs
   components:
@@ -164,6 +172,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveClubFlipped
   description: A poker card with you can play.
   components:
@@ -181,6 +190,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Six
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixClub
   description: A poker card with you can play. Its six of clubs
   components:
@@ -199,6 +209,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixClubFlipped
   description: A poker card with you can play.
   components:
@@ -216,6 +227,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Seven
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenClub
   description: A poker card with you can play. Its seven of clubs
   components:
@@ -234,6 +246,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenClubFlipped
   description: A poker card with you can play.
   components:
@@ -251,6 +264,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Eight
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightClub
   description: A poker card with you can play. Its eight of clubs
   components:
@@ -269,6 +283,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightClubFlipped
   description: A poker card with you can play.
   components:
@@ -286,6 +301,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Nine
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineClub
   description: A poker card with you can play. Its nine of clubs
   components:
@@ -304,6 +320,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineClubFlipped
   description: A poker card with you can play.
   components:
@@ -321,6 +338,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Ten
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenClub
   description: A poker card with you can play. Its ten of clubs
   components:
@@ -339,6 +357,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenClubFlipped
   description: A poker card with you can play.
   components:
@@ -356,6 +375,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Jack
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackClub
   description: A poker card with you can play. Its jack of clubs
   components:
@@ -374,6 +394,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackClubFlipped
   description: A poker card with you can play.
   components:
@@ -391,6 +412,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Queen
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenClub
   description: A poker card with you can play. Its queen of clubs
   components:
@@ -409,6 +431,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenClubFlipped
   description: A poker card with you can play.
   components:
@@ -426,6 +449,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,King
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingClub
   description: A poker card with you can play. Its king of clubs
   components:
@@ -444,6 +468,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingClubFlipped
   description: A poker card with you can play.
   components:
@@ -461,6 +486,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Club ,Ace
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceClub
   description: A poker card with you can play. Its ace of clubs
   components:
@@ -479,6 +505,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceClubFlipped
   description: A poker card with you can play.
   components:
@@ -496,6 +523,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Two
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoSpade
   description: A poker card with you can play. Its two of spades
   components:
@@ -514,6 +542,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -531,6 +560,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Three
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeSpade
   description: A poker card with you can play. Its three of spades
   components:
@@ -549,6 +579,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -566,6 +597,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Four
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourSpade
   description: A poker card with you can play. Its four of spades
   components:
@@ -584,6 +616,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -601,6 +634,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Five
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveSpade
   description: A poker card with you can play. Its five of spades
   components:
@@ -619,6 +653,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -636,6 +671,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Six
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixSpade
   description: A poker card with you can play. Its six of spades
   components:
@@ -654,6 +690,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -671,6 +708,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Seven
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenSpade
   description: A poker card with you can play. Its seven of spades
   components:
@@ -689,6 +727,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -706,6 +745,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Eight
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightSpade
   description: A poker card with you can play. Its eight of spades
   components:
@@ -724,6 +764,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -741,6 +782,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Nine
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineSpade
   description: A poker card with you can play. Its nine of spades
   components:
@@ -759,6 +801,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -776,6 +819,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Ten
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenSpade
   description: A poker card with you can play. Its ten of spades
   components:
@@ -794,6 +838,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -811,6 +856,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Jack
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackSpade
   description: A poker card with you can play. Its jack of spades
   components:
@@ -829,6 +875,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -846,6 +893,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Queen
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenSpade
   description: A poker card with you can play. Its queen of spades
   components:
@@ -864,6 +912,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -881,6 +930,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,King
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingSpade
   description: A poker card with you can play. Its king of spades
   components:
@@ -899,6 +949,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -916,6 +967,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Spade ,Ace
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceSpade
   description: A poker card with you can play. Its ace of spades
   components:
@@ -934,6 +986,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceSpadeFlipped
   description: A poker card with you can play.
   components:
@@ -951,6 +1004,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Two
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoHeart
   description: A poker card with you can play. Its two of hearts
   components:
@@ -969,6 +1023,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoHeartFlipped
   description: A poker card with you can play.
   components:
@@ -986,6 +1041,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Three
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeHeart
   description: A poker card with you can play. Its three of hearts
   components:
@@ -1004,6 +1060,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1021,6 +1078,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Four
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourHeart
   description: A poker card with you can play. Its four of hearts
   components:
@@ -1039,6 +1097,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1056,6 +1115,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Five
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveHeart
   description: A poker card with you can play. Its five of hearts
   components:
@@ -1074,6 +1134,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1091,6 +1152,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Six
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixHeart
   description: A poker card with you can play. Its six of hearts
   components:
@@ -1109,6 +1171,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1126,6 +1189,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Seven
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenHeart
   description: A poker card with you can play. Its seven of hearts
   components:
@@ -1144,6 +1208,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1161,6 +1226,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Eight
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightHeart
   description: A poker card with you can play. Its eight of hearts
   components:
@@ -1179,6 +1245,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1196,6 +1263,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Nine
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineHeart
   description: A poker card with you can play. Its nine of hearts
   components:
@@ -1214,6 +1282,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1231,6 +1300,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Ten
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenHeart
   description: A poker card with you can play. Its ten of hearts
   components:
@@ -1249,6 +1319,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1266,6 +1337,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Jack
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackHeart
   description: A poker card with you can play. Its jack of hearts
   components:
@@ -1284,6 +1356,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1301,6 +1374,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Queen
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenHeart
   description: A poker card with you can play. Its queen of hearts
   components:
@@ -1319,6 +1393,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1336,6 +1411,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,King
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingHeart
   description: A poker card with you can play. Its king of hearts
   components:
@@ -1354,6 +1430,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1371,6 +1448,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Heart ,Ace
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceHeart
   description: A poker card with you can play. Its ace of hearts
   components:
@@ -1389,6 +1467,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceHeartFlipped
   description: A poker card with you can play.
   components:
@@ -1406,6 +1485,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Two
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoDiamond
   description: A poker card with you can play. Its two of diamonds
   components:
@@ -1424,6 +1504,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTwoDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1441,6 +1522,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Three
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeDiamond
   description: A poker card with you can play. Its three of diamonds
   components:
@@ -1459,6 +1541,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicThreeDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1476,6 +1559,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Four
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourDiamond
   description: A poker card with you can play. Its four of diamonds
   components:
@@ -1494,6 +1578,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFourDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1511,6 +1596,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Five
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveDiamond
   description: A poker card with you can play. Its five of diamonds
   components:
@@ -1529,6 +1615,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicFiveDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1546,6 +1633,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Six
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixDiamond
   description: A poker card with you can play. Its six of diamonds
   components:
@@ -1564,6 +1652,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSixDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1581,6 +1670,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Seven
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenDiamond
   description: A poker card with you can play. Its seven of diamonds
   components:
@@ -1599,6 +1689,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicSevenDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1616,6 +1707,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Eight
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightDiamond
   description: A poker card with you can play. Its eight of diamonds
   components:
@@ -1634,6 +1726,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicEightDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1651,6 +1744,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Nine
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineDiamond
   description: A poker card with you can play. Its nine of diamonds
   components:
@@ -1669,6 +1763,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicNineDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1686,6 +1781,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Ten
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenDiamond
   description: A poker card with you can play. Its ten of diamonds
   components:
@@ -1704,6 +1800,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicTenDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1721,6 +1818,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Jack
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackDiamond
   description: A poker card with you can play. Its jack of diamonds
   components:
@@ -1739,6 +1837,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicJackDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1756,6 +1855,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Queen
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenDiamond
   description: A poker card with you can play. Its queen of diamonds
   components:
@@ -1774,6 +1874,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicQueenDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1791,6 +1892,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,King
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingDiamond
   description: A poker card with you can play. Its king of diamonds
   components:
@@ -1809,6 +1911,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicKingDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1826,6 +1929,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Diamond ,Ace
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceDiamond
   description: A poker card with you can play. Its ace of diamonds
   components:
@@ -1844,6 +1948,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicAceDiamondFlipped
   description: A poker card with you can play.
   components:
@@ -1861,6 +1966,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Red Joker
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicRedJoker
   description: A poker card with you can play. Its red joker
   components:
@@ -1878,6 +1984,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicRedJokerFlipped
   description: A poker card with you can play.
   components:
@@ -1895,6 +2002,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Black Joker
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicBlackJoker
   description: A poker card with you can play. Its black joker
   components:
@@ -1912,6 +2020,7 @@
 - type: entity
   suffix: Sergeev_Vladimer ,PlayableCards ,Base
   parent: BasePokerCardClassic
+  categories: [ HideSpawnMenu ]
   id: PokerCardClassicBlackJokerFlipped
   description: A poker card with you can play.
   components:
