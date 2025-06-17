@@ -7,7 +7,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 
-namespace Content.Shared.Starlight.Restrict;
+namespace Content.Shared._Sunrise.Restrict;
 public abstract partial class SharedRestrictSystem : EntitySystem
 {
     [Dependency] private readonly TagSystem _tagSystem = default!;
@@ -29,7 +29,7 @@ public abstract partial class SharedRestrictSystem : EntitySystem
                 _popup.PopupClient(Loc.GetString(_random.Pick(ent.Comp.Messages)), args.Uid);
         }
     }
-    
+
     private void OnShotAttempt(Entity<RestrictByUserTagComponent> ent, ref AttemptShootEvent args)
     {
         if (!_tagSystem.HasAllTags(args.User, ent.Comp.Contains) || _tagSystem.HasAnyTag(args.User, ent.Comp.DoestContain))

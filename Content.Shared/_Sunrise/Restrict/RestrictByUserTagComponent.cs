@@ -3,7 +3,7 @@ using Content.Shared.Tag;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.Starlight.Restrict;
+namespace Content.Shared._Sunrise.Restrict;
 [RegisterComponent, NetworkedComponent, Access(typeof(SharedAbductorSystem)), AutoGenerateComponentState]
 
 // Taken from Starlight https://github.com/ss14Starlight/space-station-14
