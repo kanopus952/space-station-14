@@ -24,6 +24,7 @@
         heart: OrganSlimeHeart # Sunrise-edit
         core: SentientSlimeCore
         lungs: OrganSlimeLungs
+        cavity: null # Sunrise-edit
     right arm:
       part: RightArmSlime
       connections:

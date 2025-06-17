@@ -29,6 +29,7 @@
         stomach: OrganReptilianStomach
         liver: OrganAnimalLiver
         kidneys: OrganHumanKidneys
+        cavity: null # Sunrise-edit
     #  connections:
     #  - right arm
     #  - left arm

@@ -29,6 +29,7 @@
         stomach: OrganArachnidStomach
         liver: OrganArachnidLiver
         kidneys: OrganArachnidKidneys
+        cavity: null # Sunrise-edit
      # connections:
      # - right arm
      # - left arm

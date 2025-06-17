@@ -21,6 +21,7 @@
       organs:
         stomach: OrganDionaStomachNymph
         lungs: OrganDionaLungsNymph
+        cavity: null # Sunrise-edit
     right arm:
       part: RightArmDiona
       connections:
