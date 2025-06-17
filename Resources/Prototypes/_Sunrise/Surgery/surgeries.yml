@@ -130,25 +130,6 @@
     sprite: Objects/Fun/Instruments/microphone.rsi
     state: icon
 
-- type: entity
-  parent: SurgeryBase
-  id: SurgeryLimbAttachment
-  name: Limb Attachment
-  description: Surgical attachment of a limb.
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision
-    steps:
-    - SurgeryStepExposeNerves
-    - SurgeryStepExposeBloodVessels
-    - SurgeryLimbAttachmentStep
-    - SurgeryStepRejoinNerves
-    - SurgeryStepRejoinBloodVessels
-    - SurgeryStepRestoreCartilage
-  - type: SurgeryAnyLimbSlotCondition
-  - type: Sprite
-    sprite: Objects/Specific/Medical/medical.rsi
-    state: medicated-suture
 #organs
 
 - type: entity
