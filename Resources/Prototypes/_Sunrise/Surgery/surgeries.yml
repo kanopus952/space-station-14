@@ -132,29 +132,6 @@
 
 - type: entity
   parent: SurgeryBase
-  id: SurgeryAmputation
-  name: Amputation
-  description: Surgical removal of a limb.
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision
-    steps:
-    - SurgeryStepExposeNerves
-    - SurgeryStepExposeBloodVessels
-    - SurgeryAmputationStep
-  - type: SurgeryPartCondition
-    parts:
-    - Arm
-    - Hand
-    - Leg
-    - Foot
-    - Tail
-  - type: Sprite
-    sprite: Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
-
-- type: entity
-  parent: SurgeryBase
   id: SurgeryLimbAttachment
   name: Limb Attachment
   description: Surgical attachment of a limb.
