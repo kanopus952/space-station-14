@@ -1,32 +1,4 @@
 - type: entity
-  parent: SurgeryBase
-  id: SurgeryAmputation
-  name: Amputation
-  description: Surgical removal of a limb.
-  components:
-  - type: Surgery
-    requirement:
-    - SurgeryOpenIncision
-    steps:
-    - SurgeryStepInciseCartilage
-    - SurgeryStepExposeNerves
-    - SurgeryStepExposeBloodVessels
-    - SurgeryAmputationStep
-  - type: SurgerySpeciesCondition
-    speciesBlacklist:
-    - SlimePerson
-  - type: SurgeryPartCondition
-    parts: 
-    - Arm
-    - Hand
-    - Leg
-    - Foot
-    - Tail
-  - type: Sprite
-    sprite: Objects/Specific/Medical/Surgery/saw.rsi
-    state: saw
-    
-- type: entity
   parent: SurgeryAmputation
   id: SurgeryAmputationHead
   name: Amputation
@@ -42,7 +14,7 @@
     - SurgeryStepExposeBloodVessels
     - SurgeryStepSawSkull
   - type: SurgeryPartCondition
-    parts: 
+    parts:
     - Head
 
 - type: entity
