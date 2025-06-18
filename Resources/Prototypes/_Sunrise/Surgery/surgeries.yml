@@ -524,7 +524,7 @@
     organ:
     - type: OrganHeart
   - type: Sprite
-    sprite: Mobs/Species/Slime/organs.rsi
+    sprite: _Sunrise/Mobs/Species/Slime/organs.rsi
     state: heart-on
 #
 - type: entity
