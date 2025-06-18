@@ -14,6 +14,7 @@
   maleLastNames: NamesDionaLast # Russian-LastnameGender
   femaleLastNames: NamesDionaLast # Russian-LastnameGender
   naming: TheFirstofLast
+  buttScanTexture: /Textures/_Sunrise/ButtsScans/diona.png # Sunrise-Edit
 
 - type: bodyType
   id: DionaNormal
@@ -22,8 +23,6 @@
     Head: MobDionaHead
     HeadTop: MobHumanoidAnyMarking
     HeadSide: MobHumanoidAnyMarking
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
     Chest: MobDionaTorso
     Eyes: MobDionaEyes
     LArm: MobDionaLArm
@@ -48,14 +47,8 @@
     HeadSide:
       points: 1
       required: false
-    UndergarmentTop:
-      points: 1
-      required: false
-    UndergarmentBottom:
-      points: 1
-      required: false
     Chest:
-      points: 1
+      points: 2
       required: false
     Legs:
       points: 2

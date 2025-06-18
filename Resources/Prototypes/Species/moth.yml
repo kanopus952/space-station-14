@@ -14,6 +14,7 @@
   femaleFirstNames: NamesMothFirstFemale
   maleLastNames: NamesMothLast
   femaleLastNames: NamesMothLast
+  buttScanTexture: /Textures/_Sunrise/ButtsScans/human.png # Sunrise-Edit SUNRISE-TODO: Спрайт жопы для молей
 
 - type: bodyType
   id: MothNormal
@@ -21,8 +22,6 @@
   sprites:
     Head: MobMothHead
     Snout: MobHumanoidAnyMarking
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
     Chest: MobMothTorso
     HeadTop: MobHumanoidAnyMarking
     HeadSide: MobHumanoidAnyMarking
@@ -98,14 +97,8 @@
     Head:
       points: 1
       required: false
-    UndergarmentTop:
-      points: 1
-      required: false
-    UndergarmentBottom:
-      points: 1
-      required: false
     Chest:
-      points: 1
+      points: 2
       required: false
     Legs:
       points: 2

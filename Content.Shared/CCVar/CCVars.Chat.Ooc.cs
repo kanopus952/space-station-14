@@ -8,7 +8,7 @@ public sealed partial class CCVars
         OocEnabled = CVarDef.Create("ooc.enabled", true, CVar.NOTIFY | CVar.REPLICATED);
 
     public static readonly CVarDef<bool> AdminOocEnabled =
-        CVarDef.Create("ooc.enabled_admin", true, CVar.NOTIFY);
+        CVarDef.Create("ooc.enabled_admin", false, CVar.NOTIFY); // Sunrise-Edit: Чтобы не подстрекали голосовать
 
     /// <summary>
     ///     If true, whenever OOC is disabled the Discord OOC relay will also be disabled.
@@ -24,4 +24,10 @@ public sealed partial class CCVars
 
     public static readonly CVarDef<bool> ShowOocPatronColor =
         CVarDef.Create("ooc.show_ooc_patron_color", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.CLIENT);
+
+    /// <summary>
+    ///     The discord channel ID to send OOC messages to (also recieve them). This requires the Discord Integration to be enabled and configured.
+    /// </summary>
+    public static readonly CVarDef<string> OocDiscordChannelId =
+        CVarDef.Create("ooc.discord_channel_id", string.Empty, CVar.SERVERONLY);
 }

@@ -1,5 +1,4 @@
 using Content.Server.Chemistry.Components;
-using Content.Server.Labels;
 using Content.Server.Popups;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Administration.Logs;
@@ -10,6 +9,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
+using Content.Shared.Labels.EntitySystems;
 using Content.Shared.Storage;
 using JetBrains.Annotations;
 using Robust.Server.Audio;
@@ -41,6 +41,8 @@ namespace Content.Server.Chemistry.EntitySystems
 
         [ValidatePrototypeId<EntityPrototype>]
         private const string PillPrototypeId = "Pill";
+
+        private const int MaxPillsPerRequest = 50; // Sunrise-Edit
 
         public override void Initialize()
         {
@@ -199,6 +201,14 @@ namespace Content.Server.Chemistry.EntitySystems
             // Ensure the number is valid.
             if (message.Number == 0 || !_storageSystem.HasSpace((container, storage)))
                 return;
+
+            // Surnise-Start
+            if (message.Number > MaxPillsPerRequest)
+            {
+                _popupSystem.PopupCursor(Loc.GetString("chem-master-window-too-many-pills-text"), user);
+                return;
+            }
+            // Surnise-End
 
             // Ensure the amount is valid.
             if (message.Dosage == 0 || message.Dosage > chemMaster.Comp.PillDosageLimit)

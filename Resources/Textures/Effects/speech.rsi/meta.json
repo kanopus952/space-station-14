@@ -72,6 +72,40 @@
             ]
         },
         {
+        "name": "diona0",
+        "delays": [
+            [
+                0.3,
+                0.3,
+                0.3,
+                0.4
+            ]
+        ]
+        },
+        {
+            "name": "diona1"
+        },
+        {
+            "name": "diona2"
+        },
+        {
+            "name": "gingerbread0",
+            "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.4
+                ]
+            ]
+        },
+        {
+            "name": "gingerbread1"
+        },
+        {
+            "name": "gingerbread2"
+        },
+        {
             "name": "alien1"
         },
         {
@@ -344,6 +378,35 @@
         },
         {
             "name": "machine2"
+        },
+        {
+            "name": "regal0",
+            "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.3,
+                    0.4
+                ]
+            ]
+        },
+        {
+            "name": "regal1"
+        },
+        {
+            "name": "regal2"
+        },
+        {
+            "name": "regal3",
+            "delays": [
+                [
+                    0.2,
+                    0.3,
+                    0.3,
+                    0.5,
+                    0.5
+                ]
+            ]
         },
         {
             "name": "machine3",
@@ -872,3 +935,4 @@
         }
     ]
 }
+

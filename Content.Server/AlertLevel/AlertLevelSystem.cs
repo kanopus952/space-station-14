@@ -119,6 +119,20 @@ public sealed class AlertLevelSystem : EntitySystem
     }
 
     /// <summary>
+    /// Get the default alert level for a station entity.
+    /// Returns an empty string if the station has no alert levels defined.
+    /// </summary>
+    /// <param name="station">The station entity.</param>
+    public string GetDefaultLevel(Entity<AlertLevelComponent?> station)
+    {
+        if (!Resolve(station.Owner, ref station.Comp) || station.Comp.AlertLevels == null)
+        {
+            return string.Empty;
+        }
+        return station.Comp.AlertLevels.DefaultLevel;
+    }
+
+    /// <summary>
     /// Set the alert level based on the station's entity ID.
     /// </summary>
     /// <param name="station">Station entity UID.</param>
@@ -150,6 +164,9 @@ public sealed class AlertLevelSystem : EntitySystem
             component.CurrentDelay = _cfg.GetCVar(CCVars.GameAlertLevelChangeDelay);
             component.ActiveDelay = true;
         }
+
+        // Sunrise added - добавил сохраненый прежний уровень для системы автодоступов
+        var previousLevel = component.CurrentLevel;
 
         component.CurrentLevel = level;
         component.IsLevelLocked = locked;
@@ -198,7 +215,8 @@ public sealed class AlertLevelSystem : EntitySystem
         }
         // Sunrise-End
 
-        RaiseLocalEvent(new AlertLevelChangedEvent(station, level));
+        // Sunrise edit - добавил прежний уровень для системы автодоступов
+        RaiseLocalEvent(new AlertLevelChangedEvent(station, level, previousLevel));
     }
 }
 
@@ -213,9 +231,12 @@ public sealed class AlertLevelChangedEvent : EntityEventArgs
     public EntityUid Station { get; }
     public string AlertLevel { get; }
 
-    public AlertLevelChangedEvent(EntityUid station, string alertLevel)
+    public string PreviousLevel; // Sunrise added - прежний уровень для системы автодоступов
+
+    public AlertLevelChangedEvent(EntityUid station, string alertLevel, string previousLevel)
     {
         Station = station;
         AlertLevel = alertLevel;
+        PreviousLevel = previousLevel; // Sunrise added - прежний уровень для системы автодоступов
     }
 }

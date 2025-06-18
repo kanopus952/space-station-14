@@ -20,6 +20,9 @@
   id: JobBlueShield
 
 - type: playTimeTracker
+  id: JobBlueShieldEnsign
+
+- type: playTimeTracker
   id: JobNtrGuard
 
 - type: playTimeTracker
@@ -123,3 +126,9 @@
 
 - type: playTimeTracker
   id: JobUSSPCaptain
+
+- type: playTimeTracker
+  id: AntagBloodCultist
+
+- type: playTimeTracker
+  id: JobMiningSpecialist

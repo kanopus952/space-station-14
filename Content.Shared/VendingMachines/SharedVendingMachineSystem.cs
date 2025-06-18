@@ -24,7 +24,6 @@ namespace Content.Shared.VendingMachines;
 public abstract partial class SharedVendingMachineSystem : EntitySystem
 {
     [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] private   readonly INetManager _net = default!;
     [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
     [Dependency] private   readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private   readonly SharedAppearanceSystem _appearanceSystem = default!;
@@ -408,7 +407,8 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
                 }
 
                 // Sunrise-start
-                if (TryComp<PlayerCountDependentStockComponent>(uid, out var dependentStockComponent))
+                if (TryComp<PlayerCountDependentStockComponent>(uid, out var dependentStockComponent) &&
+                    type == InventoryType.Regular)
                 {
                     restock = (uint) Math.Floor(
                         amount + Math.Pow(_player.PlayerCount, 0.8f) * dependentStockComponent.Coefficient);

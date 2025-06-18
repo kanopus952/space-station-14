@@ -20,13 +20,13 @@
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: PowerCellSmall
+        startingItem: PowerCellHigh
         insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
         whitelist:
           tags:
             - PowerCell
-            - PowerCellSmall
+            - PowerCellHigh
 
 - type: entity
   name: LNT620 "Spark"
@@ -239,7 +239,7 @@
   - type: Clothing
     sprite: _Sunrise/Objects/Weapons/Guns/Battery/pulse_revolver.rsi
   - type: Gun
-    fireRate: 2.75
+    fireRate: 2
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
     soundEmpty:
@@ -249,9 +249,9 @@
     startingCharge: 720
   - type: BatterySelfRecharger
     autoRecharge: true
-    autoRechargeRate: 145
+    autoRechargeRate: 60
     autoRechargePause: true
-    autoRechargePauseTime: 4
+    autoRechargePauseTime: 6
   - type: EnergyGunFireModes
     fireModes:
     - hitscanProto: BulletDisabler
@@ -292,6 +292,9 @@
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
+    - state: mag-unshaded-4
+      map: [ "enum.GunVisualLayers.MagUnshaded" ]
+      shader: unshaded
     - state: mode-disabler
       shader: unshaded
       map: [ "Firemode" ]
@@ -320,7 +323,7 @@
   - type: MagazineVisuals
     magState: mag
     steps: 5
-    zeroVisible: true
+    zeroVisible: false
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -664,6 +667,7 @@
     magState: mag
     steps: 3
     zeroVisible: true
+  - type: Appearance
   - type: Battery
     maxCharge: 3000
     startingCharge: 3000
@@ -708,6 +712,7 @@
     magState: mag
     steps: 3
     zeroVisible: true
+  - type: Appearance
   - type: Battery
     maxCharge: 2000
     startingCharge: 2000
@@ -756,6 +761,7 @@
     magState: mag
     steps: 3
     zeroVisible: true
+  - type: Appearance
   - type: Battery
     maxCharge: 8000
     startingCharge: 8000
@@ -805,6 +811,7 @@
     magState: mag
     steps: 6
     zeroVisible: true
+  - type: Appearance
   - type: Battery
     maxCharge: 2500
     startingCharge: 2500
@@ -853,6 +860,7 @@
     magState: mag
     steps: 3
     zeroVisible: true
+  - type: Appearance
   - type: Battery
     maxCharge: 1800
     startingCharge: 1800
@@ -962,6 +970,8 @@
   - type: EyeCursorOffset
     maxOffset: 3
     pvsIncrease: 0.3
+  - type: StaticPrice
+    price: 3500
 
 - type: entity
   name: SAM-300
@@ -1005,6 +1015,8 @@
     autoRechargeRate: 10
     autoRechargePause: true
     autoRechargePauseTime: 10
+  - type: StaticPrice
+    price: 7500
 
 - type: entity
   name: UVL-21 «Vivern»
@@ -1050,52 +1062,5 @@
     maxCharge: 7500
     startingCharge: 7500
   - type: EmpImmune
-
-- type: entity
-  name: temperature gun
-  parent: [BaseWeaponBattery, BaseGunWieldable]
-  id: WeaponTemperatureGun
-  description: An advanced gun that shoots body-temperature-changing beams. This probably constitutes as some kind of war crime.
-  components:
-  - type: Sprite
-    sprite: _Sunrise/Objects/Weapons/Guns/Battery/temperaturegun.rsi
-    layers:
-    - state: base
-      map: ["enum.GunVisualLayers.Base"]
-    - state: mag-unshaded-1
-      visible: false
-      map: ["enum.GunVisualLayers.MagUnshaded"]
-      shader: unshaded
-  - type: Appearance
-  - type: Item
-    size: Large
-    shape:
-    - 0,0,3,1
-  - type: MagazineVisuals
-    magState: mag
-    steps: 5
-    zeroVisible: false
-  - type: Clothing
-    sprite: _Sunrise/Objects/Weapons/Guns/Battery/temperaturegun.rsi
-  - type: Gun
-    fireRate: 1
-    soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/taser2.ogg
-  - type: ProjectileBatteryAmmoProvider
-    proto: BoltTempgunCold
-    fireCost: 100
-  - type: BatteryWeaponFireModes
-    fireModes:
-    - proto: BoltTempgunCold
-      fireCost: 125
-    - proto: BoltTempgunHot
-      fireCost: 100
-    - proto: BoltTempgunVeryCold
-      fireCost: 250
-    - proto: BoltTempgunVeryHot
-      fireCost: 200
-  - type: Battery
-    maxCharge: 1000
-    startingCharge: 1000
   - type: StaticPrice
-    price: 100
+    price: 9000

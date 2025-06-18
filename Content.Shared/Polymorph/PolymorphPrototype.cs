@@ -41,6 +41,14 @@ public sealed partial record PolymorphConfiguration
     public EntProtoId Entity;
 
     /// <summary>
+    /// Additional entity to spawn when polymorphing/reverting.
+    /// Gets parented to the entity polymorphed into.
+    /// Useful for visual effects.
+    /// </summary>
+    [DataField(serverOnly: true)]
+    public EntProtoId? EffectProto;
+
+    /// <summary>
     /// The delay between the polymorph's uses in seconds
     /// Slightly weird as of right now.
     /// </summary>
@@ -140,6 +148,14 @@ public sealed partial record PolymorphConfiguration
     /// </summary>
     [DataField]
     public LocId? ExitPolymorphPopup = "polymorph-revert-popup-generic";
+
+    // Sunrise-Start
+    /// <summary>
+    /// Если true, полиморф будет заблокирован для сущностей с MindContainerComponent.HasMind
+    /// </summary>
+    [DataField(serverOnly: false)]
+    public bool BlockIfHasMind = false;
+    // Sunrise-End
 }
 
 public enum PolymorphInventoryChange : byte

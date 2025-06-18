@@ -33,3 +33,6 @@
     endSound:
       path: /Audio/_Sunrise/Medical/Surgery/scalpel2.ogg
   # Sunrise-end
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200

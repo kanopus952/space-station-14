@@ -53,8 +53,6 @@ public sealed partial class FleshCultSystem
         SubscribeLocalEvent<FleshAbilitiesComponent, ComponentStartup>(OnStartup);
     }
 
-
-
     private int MatchSaturation(int bloodVolume, bool hasAppearance)
     {
         if (hasAppearance)
@@ -74,13 +72,13 @@ public sealed partial class FleshCultSystem
     {
         if (hasAppearance)
         {
-            return 30;
+            return 10;
         }
         return bloodVolume switch
         {
-            >= 300 => 20,
-            >= 150 => 15,
-            >= 100 => 10,
+            >= 300 => 5,
+            >= 150 => 3,
+            >= 100 => 1,
             _ => 0
         };
     }

@@ -1,5 +1,7 @@
 ent-BoxCardboard = cardboard box
     .desc = A cardboard box for storing things.
+ent-BoxSurvivalBase = cardboard box
+    .desc = A cardboard box for storing things.
 ent-BoxMousetrap = mousetrap box
     .desc = This box is filled with mousetraps. Try not to get your hand stuck in one.
 ent-BoxLightbulb = lightbulb box
@@ -64,3 +66,5 @@ ent-BoxDarts = darts box
     .desc = A box filled with colorful darts.
 ent-BoxEnvelope = envelope box
     .desc = A box filled with envelopes.
+ent-BoxUtensil = utensil box
+    .desc = A box filled with forks and spoons.

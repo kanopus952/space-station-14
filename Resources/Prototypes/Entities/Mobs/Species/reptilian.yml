@@ -12,7 +12,6 @@
     - Snout
     - HeadTop
     - HeadSide
-    undergarmentBottom: UndergarmentBottomBoxersReptilian
   - type: Hunger
   - type: Puller
     needsHands: false
@@ -75,7 +74,7 @@
       285: 0.4
   - type: Wagging
   - type: Inventory
-    speciesId: reptilian
+    speciesId: Human
     femaleDisplacements:
       jumpsuit:
         sizeMaps:
@@ -110,7 +109,6 @@
     - Snout
     - HeadTop
     - HeadSide
-    undergarmentBottom: UndergarmentBottomBoxersReptilian
   - type: Inventory
     speciesId: reptilian
     femaleDisplacements:

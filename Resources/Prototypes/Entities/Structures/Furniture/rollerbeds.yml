@@ -12,6 +12,7 @@
     - type: Sprite
       sprite: Structures/Furniture/rollerbeds.rsi
       noRot: true
+      drawdepth: Puddles #Sunrise-add
       layers:
       - state: rollerbed
         map: ["unfoldedLayer"]
@@ -39,6 +40,12 @@
     - type: Damageable
     - type: Destructible
       thresholds:
+        - trigger: # Excess damage, don't spawn entities
+            !type:DamageTrigger
+            damage: 100
+          behaviors:
+          - !type:DoActsBehavior
+            acts: ["Destruction"]
         - trigger:
             !type:DamageTrigger
             damage: 50
@@ -54,7 +61,8 @@
     - type: Strap
       position: Down
       rotation: -90
-      buckleOffset: "0,0.15"
+      buckleOffsets: # Sunrise-Edit
+      - "0,0.15"
       buckleOnInteractHand: False
     - type: Appearance
     - type: GenericVisualizer

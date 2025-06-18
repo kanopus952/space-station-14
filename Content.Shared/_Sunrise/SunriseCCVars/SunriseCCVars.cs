@@ -1,9 +1,9 @@
-﻿using Robust.Shared.Configuration;
+﻿using Robust.Shared;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared._Sunrise.SunriseCCVars;
 
-[CVarDefs]
-public sealed class SunriseCCVars
+public sealed partial class SunriseCCVars : CVars
 {
     /**
      * TTS (Text-To-Speech)
@@ -31,7 +31,7 @@ public sealed class SunriseCCVars
     /// Amount of seconds before timeout for API
     /// </summary>
     public static readonly CVarDef<int> TTSApiTimeout =
-        CVarDef.Create("tts.api_timeout", 5, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("tts.api_timeout", 10, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// Option to disable TTS events for client
@@ -86,16 +86,6 @@ public sealed class SunriseCCVars
 
     public static readonly CVarDef<bool> GodModeRoundEnd =
         CVarDef.Create("game.godmode_end", false, CVar.SERVERONLY);
-
-    /*
-     * Peaceful Round End
-     */
-
-    /// <summary>
-    /// Making everyone a pacifist at the end of a round.
-    /// </summary>
-    public static readonly CVarDef<bool> PeacefulRoundEnd =
-        CVarDef.Create("game.peaceful_end", false, CVar.SERVERONLY);
 
     /*
      * Queue
@@ -213,10 +203,10 @@ public sealed class SunriseCCVars
      */
 
     public static readonly CVarDef<bool> MinPlayersEnable =
-            CVarDef.Create("planet_prison.enable", true, CVar.SERVERONLY);
+        CVarDef.Create("planet_prison.enable", false, CVar.SERVERONLY);
 
     public static readonly CVarDef<int> MinPlayersPlanetPrison =
-        CVarDef.Create("planet_prison.min_players", 60, CVar.SERVERONLY);
+        CVarDef.Create("planet_prison.min_players", 0, CVar.SERVERONLY);
 
     /*
      * MaxLoadedChunks
@@ -280,25 +270,33 @@ public sealed class SunriseCCVars
 
     public static readonly CVarDef<bool> ShowMapVotes = CVarDef.Create("vote.show_map_votes", true);
 
-    public static readonly CVarDef<bool> RunMapVoteAfterRestart = CVarDef.Create("vote.run_map_vote_after_restart", false);
+    public static readonly CVarDef<bool> RunMapVoteAfterRestart =
+        CVarDef.Create("vote.run_map_vote_after_restart", false);
 
-    public static readonly CVarDef<bool> RunPresetVoteAfterRestart = CVarDef.Create("vote.run_preset_vote_after_restart", false);
+    public static readonly CVarDef<bool> RunPresetVoteAfterRestart =
+        CVarDef.Create("vote.run_preset_vote_after_restart", false);
 
-    public static readonly CVarDef<float> ChancePresetVoteAfterRestart = CVarDef.Create("vote.chance_preset_vote_after_restart", 0.5f);
+    public static readonly CVarDef<float> ChancePresetVoteAfterRestart =
+        CVarDef.Create("vote.chance_preset_vote_after_restart", 0.5f);
 
     public static readonly CVarDef<int> VotingsDelay = CVarDef.Create("vote.votings_delay", 60);
 
-    public static readonly CVarDef<int> MapVotingCount = CVarDef.Create("vote.map_voting_count", 3);
-
     public static readonly CVarDef<int> RoundVotingCount = CVarDef.Create("vote.round_voting_count", 3);
 
-    public static readonly CVarDef<string> RoundVotingChancesPrototype = CVarDef.Create("vote.round_voting_chances_prototype", "SunriseVoteSecret");
+    public static readonly CVarDef<string> RoundVotingChancesPrototype =
+        CVarDef.Create("vote.round_voting_chances_prototype", "SunriseVoteSecret");
+
+    public static readonly CVarDef<bool> VoteMusicDisable =
+        CVarDef.Create("vote.music_disable", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<bool> ExcludeMaps = CVarDef.Create("vote.exclude_map", false, CVar.SERVERONLY);
 
     /*
      * Preset
      */
 
-    public static readonly CVarDef<bool> ResetPresetAfterRestart = CVarDef.Create("game.reset_preset_after_restart", false);
+    public static readonly CVarDef<bool> ResetPresetAfterRestart =
+        CVarDef.Create("game.reset_preset_after_restart", false);
 
     /*
      * Ban links.
@@ -333,14 +331,14 @@ public sealed class SunriseCCVars
     public static readonly CVarDef<bool> JumpEnable =
         CVarDef.Create("jump.enable", true, CVar.SERVER | CVar.REPLICATED);
 
-    public static readonly CVarDef<float> JumpDeadChanse =
-        CVarDef.Create("jump.dead_chanse", 0.001f, CVar.SERVER | CVar.REPLICATED);
+    public static readonly CVarDef<float> JumpDeadChance =
+        CVarDef.Create("jump.dead_chance", 0.001f, CVar.SERVER | CVar.REPLICATED);
 
     public static readonly CVarDef<float> JumpCooldown =
         CVarDef.Create("jump.cooldown", 0.600f, CVar.SERVER | CVar.REPLICATED);
 
-    public static readonly CVarDef<bool> JumpSoundEnable =
-        CVarDef.Create("jump.sound_enable", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+    public static readonly CVarDef<bool> JumpSoundDisable =
+        CVarDef.Create("jump.sound_disable", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> BunnyHopEnable =
         CVarDef.Create("bunny_hop.enable", true, CVar.SERVER | CVar.REPLICATED);
@@ -361,15 +359,22 @@ public sealed class SunriseCCVars
      * Flip
      */
 
-    public static readonly CVarDef<float> FlipDeadChanse =
-        CVarDef.Create("flip.dead_chanse", 0.001f, CVar.SERVER | CVar.REPLICATED);
+    public static readonly CVarDef<float> FlipDeadChance =
+        CVarDef.Create("flip.dead_chance", 0.001f, CVar.SERVER | CVar.REPLICATED);
 
     /**
      * Slip
      */
 
-    public static readonly CVarDef<float> SlipDeadChanse =
-        CVarDef.Create("slip.dead_chanse", 0.001f, CVar.SERVER | CVar.REPLICATED);
+    public static readonly CVarDef<float> SlipDeadChance =
+        CVarDef.Create("slip.dead_chance", 0.001f, CVar.SERVER | CVar.REPLICATED);
+
+    /**
+     * Fall
+     */
+
+    public static readonly CVarDef<float> FallDeadChance =
+        CVarDef.Create("fall.dead_chance", 0.01f, CVar.SERVER | CVar.REPLICATED);
 
     /**
      * VigersRay
@@ -386,9 +391,6 @@ public sealed class SunriseCCVars
 
     public static readonly CVarDef<string> VigersRayVictims =
         CVarDef.Create("vigers_ray.victims", "", CVar.SERVERONLY);
-
-    public static readonly CVarDef<bool> DisableGameRules =
-        CVarDef.Create("vigers_ray.disable_game_rules", true, CVar.SERVERONLY);
 
     /// <summary>
     ///     Flavor Profile
@@ -425,4 +427,87 @@ public sealed class SunriseCCVars
 
     public static readonly CVarDef<bool> ChatPointingVisuals =
         CVarDef.Create("chat_icon_pointing.enable", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
+     * Mute new ghost role sound
+     */
+
+    public static readonly CVarDef<bool> MuteGhostRoleNotification =
+        CVarDef.Create("ghost.mute_role_notification", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
+     * Heartbeat sound
+     */
+
+    public static readonly CVarDef<bool> PlayHeartBeatSound =
+        CVarDef.Create("heartbeat.play_sound", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /**
+     * Transit hub
+     */
+
+    /// <summary>
+    /// До сколько часов общего наиграного времени игроки будут появляться на станции даже в позднем присоединеии.
+    /// </summary>
+    public static readonly CVarDef<int> ArrivalsMinHours =
+        CVarDef.Create("transithub.arrivals_min_hours", 0, CVar.SERVER | CVar.ARCHIVE);
+
+    public static readonly CVarDef<bool> ArrivalsRoundStartSpawn =
+        CVarDef.Create("transithub.arrivals_round_start_spawn", true, CVar.SERVER | CVar.ARCHIVE);
+
+    /*
+     * Random items-artifacts
+     */
+
+    /// <summary>
+    /// Включены ли артефакты-предметы? Переключение этого в моменты игры динамически включает и выключает фичу
+    /// </summary>
+    public static readonly CVarDef<bool> EnableRandomArtifacts =
+        CVarDef.Create("random_artifacts.enable", true, CVar.SERVER | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Соотношение артефактов-предметов к обычным предметам.
+    /// </summary>
+    public static readonly CVarDef<float> ItemToArtifactRatio =
+        CVarDef.Create("random_artifacts.ratio", 0.55f, CVar.SERVER | CVar.ARCHIVE);
+
+    /*
+     * AntiSpam params
+     */
+    public static readonly CVarDef<bool> AntiSpamEnable =
+        CVarDef.Create("anti_spam.enable", false, CVar.SERVER | CVar.ARCHIVE);
+    public static readonly CVarDef<int> AntiSpamCounterShort =
+        CVarDef.Create("anti_spam.counter_short", 1, CVar.SERVER | CVar.ARCHIVE);
+    public static readonly CVarDef<int> AntiSpamCounterLong =
+        CVarDef.Create("anti_spam.counter_long", 2, CVar.SERVER | CVar.ARCHIVE);
+    public static readonly CVarDef<float> AntiSpamMuteDuration =
+        CVarDef.Create("anti_spam.mute_duration", 10f, CVar.SERVER | CVar.ARCHIVE);
+    public static readonly CVarDef<float> AntiSpamTimeShort =
+        CVarDef.Create("anti_spam.time_short", 1.5f, CVar.SERVER | CVar.ARCHIVE);
+    public static readonly CVarDef<float> AntiSpamTimeLong =
+        CVarDef.Create("anti_spam.time_long", 5f, CVar.SERVER | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Вроде все очевидно
+    /// </summary>
+    public static readonly CVarDef<string> IpWhitelist =
+        CVarDef.Create("admin.ip_whitelist", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /*
+     * Chat sanitization
+     */
+
+    /// <summary>
+    /// Включена ли санитизация чата (антиспам от набегаторов)
+    /// </summary>
+    public static readonly CVarDef<bool> ChatSanitizationEnable =
+        CVarDef.Create("chatsan.enable", true, CVar.SERVER | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Контроллирует поведение санитизации.
+    /// Агрессивное: если сообщение не проходит критерии - блокировать полностью его.
+    /// Обычное: в сообщении, которое не проходит критерии, удалять не проходящие критерии части.
+    /// </summary>
+    public static readonly CVarDef<bool> ChatSanitizationAggressive =
+        CVarDef.Create("chatsan.aggressive", true, CVar.SERVER | CVar.ARCHIVE);
 }

@@ -38,5 +38,12 @@ namespace Content.Client.Administration.Systems
             _lastTypingUpdateSent = (_timing.RealTime, typing);
             RaiseNetworkEvent(new BwoinkClientTypingUpdated(channel, typing));
         }
+
+        // Sunrise-Start
+        public void LoadDbMessages(NetUserId userId)
+        {
+            RaiseNetworkEvent(new BwoinkRequestDbMessages(userId));
+        }
+        // Sunrise-End
     }
 }
