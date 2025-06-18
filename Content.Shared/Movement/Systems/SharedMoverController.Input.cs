@@ -185,12 +185,11 @@ namespace Content.Shared.Movement.Systems
             // Starlight-Abductor-start
             var xform = XformQuery.GetComponent(uid);
             if (TryComp(uid, out RelayInputMoverComponent? relay)
-                && TryComp(relay.RelayEntity, out TransformComponent? relayXform)
-                && MoverQuery.TryGetComponent(relay.RelayEntity, out var relayMover))
+                 && TryComp(relay.RelayEntity, out TransformComponent? relayXform)
+                 && MoverQuery.TryGetComponent(relay.RelayEntity, out var relayMover))
             {
                 xform = relayXform;
             }
-
             // If we updated parent then cancel the accumulator and force it now.
             if (!TryUpdateRelative(uid, mover, XformQuery.GetComponent(uid)) && mover.TargetRelativeRotation.Equals(Angle.Zero))
                 return;
@@ -203,6 +202,12 @@ namespace Content.Shared.Movement.Systems
 
         private bool TryUpdateRelative(EntityUid uid, InputMoverComponent mover, TransformComponent xform)
         {
+            // Starlight Start
+            if (RelayQuery.TryComp(uid, out var relay)
+                && XformQuery.TryComp(relay.RelayEntity, out var relayXform))
+                xform = relayXform;
+            // Starlight End
+
             var relative = xform.GridUid;
             relative ??= xform.MapUid;
 
@@ -342,6 +347,14 @@ namespace Content.Shared.Movement.Systems
 
             if (!MoverQuery.TryGetComponent(entity, out var moverComp))
                 return;
+            // Starlight-abductor start
+            var moverEntity = new Entity<InputMoverComponent>(entity, moverComp);
+
+            // Relay the fact we had any movement event.
+            // TODO: Ideally we'd do these in a tick instead of out of sim.
+            var moveEvent = new MoveInputEvent(moverEntity, moverComp.HeldMoveButtons, dir, state);
+            RaiseLocalEvent(entity, ref moveEvent);
+            // Starlight-abductor end
 
             // For stuff like "Moving out of locker" or the likes
             // We'll relay a movement input to the parent.
