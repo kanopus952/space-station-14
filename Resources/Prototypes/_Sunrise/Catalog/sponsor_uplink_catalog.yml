@@ -726,51 +726,6 @@
     whitelist:
     - Engineering
 
-#- type: listing
-#  id: UplinkSunriseWelderExperimental
-#  name: uplink-sunrise-welder-experimental-name
-#  productEntity: WelderExperimental
-#  cost:
-#    Suntick: 15
-#  categories:
-#  - EngineeringThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Engineering
-
-#- type: listing
-#  id: UplinkSunriseJawsOfLife
-#  name: uplink-sunrise-jaws-of-life-name
-#  productEntity: JawsOfLife
-#  cost:
-#    Suntick: 25
-#  categories:
-#  - EngineeringThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Engineering
-
-- type: listing
-  id: UplinkSunrisePowerDrill
-  name: uplink-sunrise-power-drill-name
-  productEntity: PowerDrill
-  cost:
-    Suntick: 15
-  categories:
-  - EngineeringThings
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
-  - !type:BuyerDepartmentCondition
-    whitelist:
-    - Engineering
-
 - type: listing
   id: UplinkSunriseRCDAmmo
   name: uplink-sunrise-rcd-ammo-name
@@ -800,21 +755,6 @@
   - !type:BuyerDepartmentCondition
     whitelist:
     - Engineering
-
-#- type: listing
-#  id: UplinkSunriseOmnitool
-#  name: uplink-sunrise-omnitool-name
-#  productEntity: Omnitool
-#  cost:
-#    Suntick: 30
-#  categories:
-#  - EngineeringThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Engineering
 
 - type: listing
   id: UplinkSunriseClothingOuterAtmosianBomberJacket
@@ -1045,6 +985,17 @@
     - IAA
 
 # Plushies
+
+- type: listing
+  id: UplinkSunrisePlushieUunaKatsuhiro
+  productEntity: PlushieUunaKatsuhiro
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
 
 - type: listing
   id: UplinkSunrisePlushieOne
@@ -1514,8 +1465,74 @@
     stock: 1
 
 - type: listing
+  id: UplinkSunrisePlushieMechanixFaurHorseman
+  productEntity: PlushieMechanixFaurHorseman
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
   id: UplinkSunrisePlushieMihailOsipov
   productEntity: PlushieMihailOsipov
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSunrisePlushieMadokaMori
+  productEntity: PlushieMadokaMori
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSunrisePlushieMolnia
+  productEntity: PlushieMolnia
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSunrisePlushieExperiencedSalvageSpecialist
+  productEntity: PlushieExperiencedSalvageSpecialist
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSunrisePlushieAlisaKrokozyabka
+  productEntity: PlushieAlisaKrokozyabka
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSunrisePlushieJamalDotsenko
+  productEntity: PlushieJamalDotsenko
   cost:
     Suntick: 4
   categories:
@@ -2218,21 +2235,6 @@
     whitelist:
     - Security
 
-#- type: listing
-#  id: UplinkSunriseMagazineBoxPistol
-#  name: uplink-sunrise-magazine-box-pistol-name
-#  productEntity: MagazineBoxPistol
-#  cost:
-#    Suntick: 30
-#  categories:
-#  - SecurityThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Security
-
 - type: listing
   id: UplinkSunriseBoxBodyBag
   name: uplink-sunrise-box-body-bag-name
@@ -2312,36 +2314,6 @@
 
 # Medical
 
-#- type: listing
-#  id: UplinkSunriseCryostasisBeaker
-#  name: uplink-sunrise-cryostasis-beaker-name
-#  productEntity: CryostasisBeaker
-#  cost:
-#    Suntick: 15
-#  categories:
-#  - MedicalThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Medical
-
-#- type: listing
-#  id: UplinkSunriseMedicatedSuture
-#  name: uplink-sunrise-medicated-suture-name
-#  productEntity: MedicatedSuture
-#  cost:
-#    Suntick: 10
-#  categories:
-#  - MedicalThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Medical
-
 - type: listing
   id: UplinkSunrisePillCanisterDermaline
   name: uplink-sunrise-pill-canister-dermaline-name
@@ -2386,36 +2358,6 @@
   - !type:BuyerDepartmentCondition
     whitelist:
     - Medical
-
-#- type: listing
-#  id: UplinkSunriseSyringeBluespace
-#  name: uplink-sunrise-syringe-bluespace-name
-#  productEntity: SyringeBluespace
-#  cost:
-#    Suntick: 10
-#  categories:
-#  - MedicalThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 2
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Medical
-
-#- type: listing
-#  id: UplinkSunriseRegenerativeMesh
-#  name: uplink-sunrise-regenerative-mesh-name
-#  productEntity: RegenerativeMesh
-#  cost:
-#    Suntick: 10
-#  categories:
-#  - MedicalThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Medical
 
 - type: listing
   id: UplinkSunriseClothingHandsGlovesNitrile
@@ -2585,36 +2527,6 @@
 # Research
 
 - type: listing
-  id: UplinkSunriseBookScientistsGuidebook
-  name: uplink-sunrise-book-scientists-guidebook-name
-  productEntity: BookScientistsGuidebook
-  cost:
-    Suntick: 8
-  categories:
-  - ScienceThings
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
-  - !type:BuyerDepartmentCondition
-    whitelist:
-    - Science
-
-#- type: listing
-#  id: UplinkSunriseResearchDisk5000
-#  name: uplink-sunrise-research-disk-name
-#  productEntity: ResearchDisk5000
-#  cost:
-#    Suntick: 15
-#  categories:
-#  - ScienceThings
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
-#  - !type:BuyerDepartmentCondition
-#    whitelist:
-#    - Science
-
-- type: listing
   id: UplinkSunriseClothingShoesBootsMag
   name: uplink-sunrise-clothing-shoes-boots-mag-name
   productEntity: ClothingShoesBootsMag
@@ -2677,9 +2589,9 @@
     - Civilian
 
 - type: listing
-  id: UplinkSunriseUnstableMutagenChemistryBottle
+  id: UplinkChemistryBottleUnstableMutagen
   name: uplink-sunrise-unstable-mutagen-chemistry-bottle-name
-  productEntity: UnstableMutagenChemistryBottle
+  productEntity: ChemistryBottleUnstableMutagen
   cost:
     Suntick: 16
   categories:
@@ -2692,9 +2604,9 @@
     - Civilian
 
 - type: listing
-  id: UplinkSunriseRobustHarvestChemistryBottle
+  id: UplinkChemistryBottleRobustHarvest
   name: uplink-sunrise-robust-harvest-chemistry-bottle-name
-  productEntity: RobustHarvestChemistryBottle
+  productEntity: ChemistryBottleRobustHarvest
   cost:
     Suntick: 8
   categories:
@@ -2777,21 +2689,6 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 2
-  - !type:BuyerDepartmentCondition
-    whitelist:
-    - Civilian
-
-- type: listing
-  id: UplinkSunriseAdvMopItem
-  name: uplink-sunrise-adv-mop-item-name
-  productEntity: AdvMopItem
-  cost:
-    Suntick: 20
-  categories:
-  - ServiceThings
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
   - !type:BuyerDepartmentCondition
     whitelist:
     - Civilian
@@ -2983,6 +2880,50 @@
     Suntick: 25
   categories:
   - Music
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkLustPlushieAndrewNarvi
+  productEntity: PlushieAndrewNarvi
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkLustPlushieTimofeyTatarchuk
+  productEntity: PlushieTimofeyTatarchuk
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkLustPlushieSansaMontanelli
+  productEntity: PlushieSansaMontanelli
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSunrisePlushieKalium
+  productEntity: PlushieKalium
+  cost:
+    Suntick: 4
+  categories:
+  - SpecialThings
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1

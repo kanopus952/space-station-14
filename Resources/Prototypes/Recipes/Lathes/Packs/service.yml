@@ -4,6 +4,7 @@
   id: ServiceStatic
   recipes:
   - Bucket
+  - Ashtray
   - DrinkMug
   - DrinkMugMetal
   - DrinkGlass
@@ -19,6 +20,8 @@
   - FoodPlateMuffinTin
   - FoodKebabSkewer
   - SprayBottle
+  - TrashBag
+  - LightReplacer
   - MopItem
   - Holoprojector
   - WetFloorSign
@@ -34,6 +37,16 @@
   - BoozeDispenserMachineCircuitboard
   - SodaDispenserMachineCircuitboard
 
+- type: latheRecipePack
+  id: HydroponicsStatic
+  recipes:
+  - HydroponicsToolMiniHoe
+  - HydroponicsToolScythe
+  - HydroponicsToolHatchet
+  - HydroponicsToolSpade
+  - HydroponicsToolClippers
+  - PlantAnalyzer
+
 ## Dynamic
 
 - type: latheRecipePack
@@ -48,6 +61,7 @@
   id: Instruments
   recipes:
   - SynthesizerInstrument
+  - PushHorn
 
 - type: latheRecipePack
   id: ServiceBoards

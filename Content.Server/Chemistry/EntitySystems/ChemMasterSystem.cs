@@ -1,5 +1,4 @@
 using Content.Server.Chemistry.Components;
-using Content.Server.Labels;
 using Content.Server.Popups;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Administration.Logs;
@@ -10,6 +9,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
+using Content.Shared.Labels.EntitySystems;
 using Content.Shared.Storage;
 using JetBrains.Annotations;
 using Robust.Server.Audio;
@@ -42,6 +42,8 @@ namespace Content.Server.Chemistry.EntitySystems
         [ValidatePrototypeId<EntityPrototype>]
         private const string PillPrototypeId = "Pill";
 
+        private const int MaxPillsPerRequest = 50; // Sunrise-Edit
+
         public override void Initialize()
         {
             base.Initialize();
@@ -53,6 +55,7 @@ namespace Content.Server.Chemistry.EntitySystems
             SubscribeLocalEvent<ChemMasterComponent, BoundUIOpenedEvent>(SubscribeUpdateUiState);
 
             SubscribeLocalEvent<ChemMasterComponent, ChemMasterSetModeMessage>(OnSetModeMessage);
+            SubscribeLocalEvent<ChemMasterComponent, ChemMasterSortingTypeCycleMessage>(OnCycleSortingTypeMessage);
             SubscribeLocalEvent<ChemMasterComponent, ChemMasterSetPillTypeMessage>(OnSetPillTypeMessage);
             SubscribeLocalEvent<ChemMasterComponent, ChemMasterReagentAmountButtonMessage>(OnReagentButtonMessage);
             SubscribeLocalEvent<ChemMasterComponent, ChemMasterCreatePillsMessage>(OnCreatePillsMessage);
@@ -76,7 +79,7 @@ namespace Content.Server.Chemistry.EntitySystems
             var bufferCurrentVolume = bufferSolution.Volume;
 
             var state = new ChemMasterBoundUserInterfaceState(
-                chemMaster.Mode, BuildInputContainerInfo(inputContainer), BuildOutputContainerInfo(outputContainer),
+                chemMaster.Mode, chemMaster.SortingType, BuildInputContainerInfo(inputContainer), BuildOutputContainerInfo(outputContainer),
                 bufferReagents, bufferCurrentVolume, chemMaster.PillType, chemMaster.PillDosageLimit, updateLabel);
 
             _userInterfaceSystem.SetUiState(owner, ChemMasterUiKey.Key, state);
@@ -89,6 +92,15 @@ namespace Content.Server.Chemistry.EntitySystems
                 return;
 
             chemMaster.Comp.Mode = message.ChemMasterMode;
+            UpdateUiState(chemMaster);
+            ClickSound(chemMaster);
+        }
+
+        private void OnCycleSortingTypeMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterSortingTypeCycleMessage message)
+        {
+            chemMaster.Comp.SortingType++;
+            if (chemMaster.Comp.SortingType > ChemMasterSortingType.Latest)
+                chemMaster.Comp.SortingType = ChemMasterSortingType.None;
             UpdateUiState(chemMaster);
             ClickSound(chemMaster);
         }
@@ -189,6 +201,14 @@ namespace Content.Server.Chemistry.EntitySystems
             // Ensure the number is valid.
             if (message.Number == 0 || !_storageSystem.HasSpace((container, storage)))
                 return;
+
+            // Surnise-Start
+            if (message.Number > MaxPillsPerRequest)
+            {
+                _popupSystem.PopupCursor(Loc.GetString("chem-master-window-too-many-pills-text"), user);
+                return;
+            }
+            // Surnise-End
 
             // Ensure the amount is valid.
             if (message.Dosage == 0 || message.Dosage > chemMaster.Comp.PillDosageLimit)

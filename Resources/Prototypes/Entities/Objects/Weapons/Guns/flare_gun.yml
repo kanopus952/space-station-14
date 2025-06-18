@@ -46,6 +46,7 @@
       - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/flaregun.ogg
+    bigTrigger: true # Sunrise-Edit
 
 
 - type: entity
@@ -73,3 +74,6 @@
   - type: Tag
     tags:
     - Sidearm
+  - type: Construction  # Sunrise-start
+    graph: GrenadeLauncherSecurity
+    node: start   # Sunrise-end

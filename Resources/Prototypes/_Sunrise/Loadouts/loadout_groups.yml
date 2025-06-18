@@ -131,6 +131,21 @@
   loadouts:
   - BlueShieldJumpsuit
   - BlueShieldJumpskirt
+  - BlueShieldTurtleneck
+
+- type: loadoutGroup
+  id: BlueShieldBelt
+  name: loadout-group-blueshield-belt
+  loadouts:
+  - BlueShieldWebbing
+  - AssaultBeltBS
+
+- type: loadoutGroup
+  id: BlueShieldNeck
+  name: loadout-group-blueshield-neck
+  loadouts:
+  - BlueShieldMantle
+  - BlueShieldCoat
 
 - type: loadoutGroup
   id: BarberJumpsuit
@@ -208,7 +223,21 @@
   loadouts:
   #- SunriseWeaponPistolG22
   - SunriseWeaponEnergyGun
+  - SunriseWeaponTaser
 
+# Security  HoS
+- type: loadoutGroup
+  id: SunriseSecurityGunHos
+  name: loadout-group-hos-gun
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - SunriseWeaponPistolG22
+  - SunriseWeaponTaser
+  - HeadofSecurityWeapon20h
+  - HeadofSecurityWeapon50h
+  - HeadofSecurityWeapon50h2
+  - HeadofSecurityWeapon100h
 # Medical
 
 - type: loadoutGroup
@@ -273,6 +302,8 @@
   - BeretSeniorPhysician
   - MedicalBeret
   - ParamedicBeret
+  - ChemistBeret
+  - PatologonatBeret
   - NurseHat
   - BlueSurgeryCap
   - GreenSurgeryCap
@@ -389,6 +420,7 @@
   maxLimit: 1
   loadouts:
   - MedicalBeret
+  - ChemistBeret
   - NurseHat
   - BlueSurgeryCap
   - GreenSurgeryCap
@@ -577,6 +609,7 @@
   maxLimit: 1
   loadouts:
   - MedicalBeret
+  - PatologonatBeret
   - NurseHat
   - BlueSurgeryCap
   - GreenSurgeryCap
@@ -783,6 +816,7 @@
   maxLimit: 2
   loadouts:
   - TrinketsEngineeringAAM
+  - TrinketsEngineeringEAM
   - TrinketsEngineeringTS
   - TrinketsEngineeringFL
   - TrinketsEngineeringGA
@@ -829,6 +863,7 @@
   - Sunrise-EngineerHeadBeret
   - Sunrise-BandRed
   - Sunrise-BandOrange
+  - Sunrise-AtmosBeret
   - Sunrise-BandYellow
   - Sunrise-BandCyan
   - StationEngineerHardhatRed
@@ -946,6 +981,7 @@
   maxLimit: 1
   loadouts:
   - Sunrise-EngineerHeadBeret
+  - Sunrise-AtmosBeret
   - Sunrise-BandRed
   - Sunrise-BandOrange
   - Sunrise-BandYellow
@@ -1058,6 +1094,13 @@
   - OrangeGloves
   - Sunrise-LightBrownGloves
   - Sunrise-BrownGloves
+
+- type: loadoutGroup
+  id: MailCarrierJumpsuit
+  name: loadout-group-mail-jumpsuit
+  loadouts:
+  - MailCarrierJumpsuit
+  - MailCarrierJumpskirt
 
 - type: loadoutGroup
   id: SunriseSalvageGloves

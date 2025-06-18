@@ -1,3 +1,5 @@
+ent-GrenadeFragLight = frag grenade
+    .desc = { ent-BaseGrenade.desc }
 ent-BaseArtilleryShell = base shell
     .desc = { ent-BaseItem.desc }
 ent-ShellFragArtillery = artillery frag shell
@@ -10,3 +12,9 @@ ent-ShellFlashArtillery = flash shell
     .desc = { ent-BaseArtilleryShell.desc }
 ent-ShellEMPArtillery = EMP shell
     .desc = { ent-BaseArtilleryShell.desc }
+ent-CannonBallEMPshot = EMPshot
+    .suffix = Pirate, Sunrise
+    .desc = { ent-BaseCannonBall.desc }
+ent-CannonBallFuze = fuzed cannonball
+    .suffix = Pirate, Sunrise
+    .desc = { ent-BaseCannonBall.desc }

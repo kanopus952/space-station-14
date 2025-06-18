@@ -55,6 +55,7 @@ using Content.Shared.Mobs.Components;
 using Content.Server.Stunnable;
 using Content.Shared.Jittering;
 using System.Linq;
+using Content.Server.Damage.Systems;
 using Content.Shared._RMC14.Xenonids.Screech;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Radio;
@@ -436,6 +437,9 @@ public sealed partial class ChangelingSystem : EntitySystem
             if (storedDNA.DNA != null && storedDNA.DNA == dna.DNA)
                 return false;
         }
+
+        if (dna.DNA == null)
+            return false;
 
         var data = new TransformData
         {

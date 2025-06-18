@@ -12,6 +12,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.Animations;
+using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -31,7 +32,6 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
-    [Dependency] private readonly IComponentFactory _factory = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
@@ -41,6 +41,7 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private readonly SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     public const string HitscanProto = "HitscanEffect";
@@ -118,14 +119,6 @@ public sealed partial class GunSystem : SharedGunSystem
 
     private void OnHitscan(HitscanEvent ev)
     {
-        // ALL I WANT IS AN ANIMATED EFFECT
-
-        // TODO EFFECTS
-        // This is very jank
-        // because the effect consists of three unrelatd entities, the hitscan beam can be split appart.
-        // E.g., if a grid rotates while part of the beam is parented to the grid, and part of it is parented to the map.
-        // Ideally, there should only be one entity, with one sprite that has multiple layers
-        // Or at the very least, have the other entities parented to the same entity to make sure they stick together.
         const double tracerInterval = 0.01f;
 
         foreach (var a in ev.Sprites)
@@ -146,14 +139,27 @@ public sealed partial class GunSystem : SharedGunSystem
                 var stepIndex = 0;
                 foreach (var stepCoords in entityCoordinatesEnumerable)
                 {
-                    var localIndex = stepIndex;
-                    var delay = localIndex * tracerInterval;
+                    var ent = CreateTracerEffect(stepCoords, a.angle, rsi, relativeXform);
 
-                    Timer.Spawn(TimeSpan.FromSeconds(delay), () =>
+                    var anim = new Animation()
                     {
-                        CreateTracerEffect(stepCoords, a.angle, rsi, relativeXform);
-                    });
+                        Length = TimeSpan.FromSeconds(3.00f),
+                        AnimationTracks =
+                        {
+                            new AnimationTrackSpriteFlick()
+                            {
+                                LayerKey = EffectLayers.Unshaded,
+                                KeyFrames =
+                                {
+                                    new AnimationTrackSpriteFlick.KeyFrame("empty", stepIndex * (float)tracerInterval),
+                                    new AnimationTrackSpriteFlick.KeyFrame(rsi.RsiState, (stepIndex + 1) * (float)tracerInterval),
+                                    new AnimationTrackSpriteFlick.KeyFrame("empty", (stepIndex + 2) * (float)tracerInterval),
+                                }
+                            }
+                        }
+                    };
 
+                    _animPlayer.Play(ent, anim, "hitscan-effect");
                     stepIndex++;
                 }
             }
@@ -174,31 +180,12 @@ public sealed partial class GunSystem : SharedGunSystem
         var delta = targetWorldRot - _xform.GetWorldRotation(xform);
         _xform.SetLocalRotationNoLerp(ent, xform.LocalRotation + delta, xform);
 
-        sprite[EffectLayers.Unshaded].AutoAnimated = false;
-        sprite.LayerSetSprite(EffectLayers.Unshaded, rsi);
-        sprite.LayerSetState(EffectLayers.Unshaded, rsi.RsiState);
-        sprite.Scale = new Vector2(1f, 1f);
-        sprite[EffectLayers.Unshaded].Visible = true;
-
-        var anim = new Animation()
-        {
-            Length = TimeSpan.FromSeconds(0.48f),
-            AnimationTracks =
-            {
-                new AnimationTrackSpriteFlick()
-                {
-                    LayerKey = EffectLayers.Unshaded,
-                    KeyFrames =
-                    {
-                        new AnimationTrackSpriteFlick.KeyFrame(rsi.RsiState, 0f),
-                        new AnimationTrackSpriteFlick.KeyFrame("empty", 0.02f),
-                    }
-                }
-            }
-        };
-
-        _animPlayer.Play(ent, anim, "hitscan-effect");
-        return ent;
+            sprite[EffectLayers.Unshaded].AutoAnimated = false;
+            _sprite.LayerSetSprite((ent, sprite), EffectLayers.Unshaded, rsi);
+            _sprite.LayerSetRsiState((ent, sprite), EffectLayers.Unshaded, rsi.RsiState);
+            sprite.Scale = new Vector2(1f, 1f);
+            sprite[EffectLayers.Unshaded].Visible = true;
+            return ent;
     }
 
     private void CreateStaticEffect(EntityCoordinates coords, Angle angle, SpriteSpecifier.Rsi rsi, float distance, TransformComponent relativeXform)
@@ -208,8 +195,8 @@ public sealed partial class GunSystem : SharedGunSystem
         var xform = Transform(ent);
         xform.LocalRotation = angle;
         sprite[EffectLayers.Unshaded].AutoAnimated = false;
-        sprite.LayerSetSprite(EffectLayers.Unshaded, rsi);
-        sprite.LayerSetState(EffectLayers.Unshaded, rsi.RsiState);
+        _sprite.LayerSetSprite((ent, sprite), EffectLayers.Unshaded, rsi);
+        _sprite.LayerSetRsiState((ent, sprite), EffectLayers.Unshaded, rsi.RsiState);
         sprite.Scale = new Vector2(distance, 1f);
         sprite[EffectLayers.Unshaded].Visible = true;
 
@@ -279,15 +266,23 @@ public sealed partial class GunSystem : SharedGunSystem
         // Define target coordinates relative to gun entity, so that network latency on moving grids doesn't fuck up the target location.
         var coordinates = TransformSystem.ToCoordinates(entity, mousePos);
 
-        NetEntity? target = null;
+        var targets = new List<NetEntity>();
         if (_state.CurrentState is GameplayStateBase screen)
-            target = GetNetEntity(screen.GetClickedEntity(mousePos));
+        {
+            var spriteTree = EntityManager.EntitySysManager.GetEntitySystem<SpriteTreeSystem>();
+            var entities = spriteTree.QueryAabb(mousePos.MapId, Box2.CenteredAround(mousePos.Position, new Vector2(1.5f, 1.5f)));
+
+            foreach (var ent in entities)
+            {
+                targets.Add(GetNetEntity(ent.Uid));
+            }
+        }
 
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
         EntityManager.RaisePredictiveEvent(new RequestShootEvent
         {
-            Target = target,
+            Targets = targets,
             Coordinates = GetNetCoordinates(coordinates),
             Gun = GetNetEntity(gunUid),
         });
@@ -462,7 +457,7 @@ public sealed partial class GunSystem : SharedGunSystem
         _animPlayer.Play(ent, anim, "muzzle-flash");
         if (!TryComp(gunUid, out PointLightComponent? light))
         {
-            light = (PointLightComponent) _factory.GetComponent(typeof(PointLightComponent));
+            light = Factory.GetComponent<PointLightComponent>();
             light.NetSyncEnabled = false;
             AddComp(gunUid, light);
         }

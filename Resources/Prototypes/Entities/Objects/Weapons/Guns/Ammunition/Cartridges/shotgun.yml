@@ -101,7 +101,7 @@
 
 - type: entity
   id: ShellShotgun
-  name: shell (.50)
+  name: shell (.50 pellet)
   parent: [ BaseShellHitscanShotgun, BaseSecurityContraband ]
   components:
   - type: Sprite
@@ -162,9 +162,9 @@
       ammo:
         reagents:
         - ReagentId: ChloralHydrate
-          Quantity: 15
+          Quantity: 9
   - type: SolutionInjectOnProjectileHit
-    transferAmount: 15
+    transferAmount: 9
     solution: ammo
   - type: SpentAmmoVisuals
     state: "tranquilizer"

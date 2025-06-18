@@ -1,12 +1,13 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Content.Server._Sunrise.Chat; //sunrise-edit
+using Content.Server._Sunrise.Chat; //sunrise-add
+using Content.Server._Sunrise.AntiSpam; // sunrise-add
+using Content.Server._Sunrise.ChatSan; // sunrise-add
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.Players.RateLimiting;
 using Content.Server.Speech.Prototypes;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Components;
@@ -25,7 +26,6 @@ using Content.Shared.Players;
 using Content.Shared.Players.RateLimiting;
 using Content.Shared.Popups;
 using Content.Shared.Radio;
-using Content.Shared.Speech;
 using Content.Shared.Whitelist;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -201,6 +201,15 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         if (!CanSendInGame(message, shell, player))
             return;
+        //sunrise-edit-start : IC Spam-mute
+        if (player != null)
+        {
+            var ev = new TrySendICMessageEvent(message, desiredType, player);
+            RaiseLocalEvent(source, ev);
+            if (ev.Cancelled)
+                return;
+        }
+        //sunrise-edit-end
 
         ignoreActionBlocker = CheckIgnoreSpeechBlocker(source, ignoreActionBlocker);
 
@@ -356,9 +365,9 @@ public sealed partial class ChatSystem : SharedChatSystem
             announcementSound ??= new SoundPathSpecifier(DefaultAnnouncementSound);
         }
 
-        if (playTts)
+        if (playTts && announcementSound != null)
         {
-            var announcementEv = new AnnouncementSpokeEvent(Filter.Broadcast(), message, announcementSound, announceVoice);
+            var announcementEv = new AnnouncementSpokeEvent(Filter.Broadcast(), message, _audio.ResolveSound(announcementSound), announceVoice);
             RaiseLocalEvent(announcementEv);
         }
         // Sunrise-end
@@ -395,9 +404,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (playDefault && announcementSound == null)
             announcementSound = new SoundPathSpecifier(DefaultAnnouncementSound);
 
-        if (playTts)
+        if (playTts && announcementSound != null)
         {
-            RaiseLocalEvent(new AnnouncementSpokeEvent(filter, message, announcementSound, announceVoice));
+            RaiseLocalEvent(new AnnouncementSpokeEvent(filter, message, _audio.ResolveSound(announcementSound), announceVoice));
         }
         // Sunrise-edit
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement from {sender}: {message}");
@@ -444,9 +453,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (playDefault && announcementSound == null)
             announcementSound = new SoundPathSpecifier(DefaultAnnouncementSound);
 
-        if (playTts)
+        if (playTts && announcementSound != null)
         {
-            RaiseLocalEvent(new AnnouncementSpokeEvent(filter, message, announcementSound, announceVoice));
+            RaiseLocalEvent(new AnnouncementSpokeEvent(filter, message, _audio.ResolveSound(announcementSound), announceVoice));
         }
         // Sunrise-edit
 
@@ -460,6 +469,13 @@ public sealed partial class ChatSystem : SharedChatSystem
     // Sunrise-Start
     private void SendCollectiveMindChat(EntityUid source, string message, CollectiveMindPrototype? collectiveMind)
     {
+        // Sunrise-Start
+        var sanEvent = new ChatSanRequestEvent(message);
+        RaiseLocalEvent(ref sanEvent);
+        if (sanEvent.Cancelled)
+            return;
+        message = sanEvent.Message;
+        // Sunrise-End
         if (_mobStateSystem.IsDead(source))
             return;
 
@@ -531,6 +547,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool isFormatted = false //sunrise-edit
         )
     {
+        // Sunrise-Start
+        var sanEvent = new ChatSanRequestEvent(originalMessage);
+        RaiseLocalEvent(ref sanEvent);
+        if (sanEvent.Cancelled)
+            return;
+        originalMessage = sanEvent.Message;
+        // Sunrise-End
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
             return;
 
@@ -605,6 +628,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool isFormatted = false //sunrise-edit
         )
     {
+        // Sunrise-Start
+        var sanEvent = new ChatSanRequestEvent(originalMessage);
+        RaiseLocalEvent(ref sanEvent);
+        if (sanEvent.Cancelled)
+            return;
+        originalMessage = sanEvent.Message;
+        // Sunrise-End
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
             return;
 
@@ -696,6 +726,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool isFormatted = false //sunrise-edit
         )
     {
+        // Sunrise-Start
+        var sanEvent = new ChatSanRequestEvent(action);
+        RaiseLocalEvent(ref sanEvent);
+        if (sanEvent.Cancelled)
+            return;
+        action = sanEvent.Message;
+        // Sunrise-End
         if (!_actionBlocker.CanEmote(source) && !ignoreActionBlocker)
             return;
 
@@ -710,8 +747,25 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("message", isFormatted ? action : FormattedMessage.RemoveMarkupOrThrow(action)));
 
         if (checkEmote)
-            TryEmoteChatInput(source, action);
-        SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, isFormatted ? ChatTransmitRange.HideChat : range, author); //sunrise-edit
+            TryEmoteChatInput(source, action); // sunrise-start
+
+        foreach (var (session, data) in GetRecipients(source, VoiceRange))
+        {
+            EntityUid listener;
+
+            if (session.AttachedEntity is not { Valid: true } playerEntity)
+                continue;
+
+            listener = session.AttachedEntity.Value;
+
+            if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
+                continue;
+
+            if (_examineSystem.InRangeUnOccluded(source, listener, VoiceRange))
+            {
+                _chatManager.ChatMessageToOne(ChatChannel.Emotes, action, wrappedMessage, source, false, session.Channel);
+            }
+        } // sunrise-end
         if (!hideLog)
             if (name != Name(source))
                 _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
@@ -722,6 +776,13 @@ public sealed partial class ChatSystem : SharedChatSystem
     // ReSharper disable once InconsistentNaming
     private void SendLOOC(EntityUid source, ICommonSession player, string message, bool hideChat)
     {
+        // Sunrise-Start
+        var sanEvent = new ChatSanRequestEvent(message);
+        RaiseLocalEvent(ref sanEvent);
+        if (sanEvent.Cancelled)
+            return;
+        message = sanEvent.Message;
+        // Sunrise-End
         var name = FormattedMessage.EscapeText(Identity.Name(source, EntityManager));
 
         if (_adminManager.IsAdmin(player))
@@ -744,6 +805,13 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     private void SendDeadChat(EntityUid source, ICommonSession player, string message, bool hideChat)
     {
+        // Sunrise-Start
+        var sanEvent = new ChatSanRequestEvent(message);
+        RaiseLocalEvent(ref sanEvent);
+        if (sanEvent.Cancelled)
+            return;
+        message = sanEvent.Message;
+        // Sunrise-End
         var clients = GetDeadChatClients();
         var playerName = Name(source);
         string wrappedMessage;
@@ -926,7 +994,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     }
 
     [ValidatePrototypeId<ReplacementAccentPrototype>]
-    public const string ChatSanitize_Accent = "chatsanitize_sunrise"; // Sunrise-Edit
+    public const string ChatSanitizeAccent = "chatsanitize_sunrise"; // Sunrise-Edit
 
     public string SanitizeMessageReplaceWords(string message)
     {
@@ -934,7 +1002,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         var msg = message;
 
-        msg = _wordreplacement.ApplyReplacements(msg, ChatSanitize_Accent);
+        msg = _wordreplacement.ApplyReplacements(msg, ChatSanitizeAccent);
 
         return msg;
     }
@@ -1121,14 +1189,14 @@ public enum ChatTransmitRange : byte
 public sealed class AnnouncementSpokeEvent(
     Filter source,
     string message,
-    SoundSpecifier? announcementSound,
+    ResolvedSoundSpecifier? announcementSound,
     string? announceVoice)
     : EntityEventArgs
 {
     public readonly Filter Source = source;
     public readonly string Message = message;
     public readonly string? AnnounceVoice = announceVoice;
-    public readonly SoundSpecifier? AnnouncementSound = announcementSound;
+    public readonly ResolvedSoundSpecifier? AnnouncementSound = announcementSound;
 }
 
 public sealed class RadioSpokeEvent(EntityUid source, string message, EntityUid[] receivers) : EntityEventArgs

@@ -25,7 +25,8 @@
     noRot: true
   - type: Strap
     position: Stand
-    buckleOffset: "0,-0.05"
+    buckleOffsets: # Sunrise-Edit
+    - "0,-0.05"
   - type: Pullable
   - type: Damageable
     damageContainer: Inorganic
@@ -49,6 +50,7 @@
           collection: MetalBreak
   - type: StaticPrice
     price: 50
+  - type: CanSleepOnBuckle # Sunrise-Edit
 
 #Starts unanchored, cannot be rotated while anchored
 - type: entity
@@ -212,6 +214,15 @@
     damageModifierSet: Wood
   - type: Destructible
     thresholds:
+    - trigger: # Excess damage, don't spawn entities
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 25
@@ -269,6 +280,15 @@
       collection: MaleScreams
   - type: Destructible
     thresholds:
+    - trigger: # Excess damage, don't spawn entities
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Voice/Human/womanlaugh.ogg
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 50
@@ -305,6 +325,15 @@
     damageModifierSet: Web
   - type: Destructible
     thresholds:
+    - trigger: # Excess damage, don't spawn entities
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 50
@@ -373,6 +402,14 @@
   - type: Construction
     graph: Seat
     node: chairSteelBench
+  # Sunrise-Start
+  - type: Strap
+    position: Stand
+    buckleOffsets:
+    - "-0.2,0"
+    - "0.2,0"
+    size: 200
+  # Sunrise-End
 
 - type: entity
   name: wooden bench
@@ -387,6 +424,15 @@
     node: chairWoodBench
   - type: Destructible
     thresholds:
+    - trigger: # Excess damage, don't spawn entities
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 50
@@ -403,3 +449,19 @@
             max: 4
   - type: StaticPrice
     price: 50
+  # Sunrise-Start
+  - type: Strap
+    position: Stand
+    buckleOffsets:
+    - "-0.2,0"
+    - "0.2,0"
+    size: 200
+  # Sunrise-End
+
+- type: entity
+  parent: StoolBase
+  id: ChairXeno
+  name: xeno chair
+  components:
+  - type: Sprite
+    state: xeno-chair

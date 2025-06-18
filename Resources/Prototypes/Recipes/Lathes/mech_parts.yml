@@ -3,14 +3,42 @@
 - type: latheRecipe
   abstract: true
   id: BaseMechPartRecipe
-  category: Mech
+  categories:
+  - Mech
   completetime: 10
 
-# Recipes
+- type: latheRecipe
+  abstract: true
+  parent: BaseMechPartRecipe
+  id: BaseRipleyLimbRecipe
+  materials:
+    Steel: 1000
+    Glass: 750
+
+- type: latheRecipe
+  abstract: true
+  parent: BaseMechPartRecipe
+  id: BaseHonkerLimbRecipe
+  materials:
+    Steel: 2000
+    Glass: 750
+    Bananium: 250
+
+- type: latheRecipe
+  abstract: true
+  parent: BaseMechPartRecipe
+  id: BaseHamtrLimbRecipe
+  materials:
+    Steel: 800
+    Glass: 600
+
+## Recipes
 
 # Ripley
 - type: latheRecipe
-  category: Ripley # Sunrise-Add
+  categories:
+  - Mech
+  - Ripley
   parent: BaseMechPartRecipe
   id: RipleyHarness
   result: RipleyHarness
@@ -19,41 +47,30 @@
     Glass: 1200
 
 - type: latheRecipe
-  category: Ripley # Sunrise-Add
-  parent: BaseMechPartRecipe
+  parent: BaseRipleyLimbRecipe
   id: RipleyLArm
   result: RipleyLArm
-  materials:
-    Steel: 1000
-    Glass: 750
 
 - type: latheRecipe
-  parent: RipleyLArm
+  parent: BaseRipleyLimbRecipe
   id: RipleyLLeg
   result: RipleyLLeg
 
 - type: latheRecipe
-  parent: RipleyLLeg
+  parent: BaseRipleyLimbRecipe
   id: RipleyRLeg
   result: RipleyRLeg
 
 - type: latheRecipe
-  parent: RipleyLArm
+  parent: BaseRipleyLimbRecipe
   id: RipleyRArm
   result: RipleyRArm
 
-- type: latheRecipe
-  category: MechEquipment # Sunrise-Add
-  parent: BaseMechPartRecipe
-  id: MechEquipmentGrabber
-  result: MechEquipmentGrabber
-  materials:
-    Steel: 500
-    Plastic: 200
-
 # H.O.N.K.
 - type: latheRecipe
-  category: Honker # Sunrise-Add
+  categories:
+  - Mech
+  - Honker
   parent: BaseMechPartRecipe
   id: HonkerHarness
   result: HonkerHarness
@@ -63,42 +80,30 @@
     Bananium: 500
 
 - type: latheRecipe
-  category: Honker # Sunrise-Add
-  parent: BaseMechPartRecipe
+  parent: BaseHonkerLimbRecipe
   id: HonkerLArm
   result: HonkerLArm
-  materials:
-    Steel: 2000
-    Glass: 750
-    Bananium: 250
 
 - type: latheRecipe
-  parent: HonkerLArm
+  parent: BaseHonkerLimbRecipe
   id: HonkerLLeg
   result: HonkerLLeg
 
 - type: latheRecipe
-  parent: HonkerLLeg
+  parent: BaseHonkerLimbRecipe
   id: HonkerRLeg
   result: HonkerRLeg
 
 - type: latheRecipe
-  parent: HonkerLArm
+  parent: BaseHonkerLimbRecipe
   id: HonkerRArm
   result: HonkerRArm
 
-- type: latheRecipe
-  category: MechEquipment # Sunrise-Add
-  parent: BaseMechPartRecipe
-  id: MechEquipmentHorn
-  result: MechEquipmentHorn
-  materials:
-    Steel: 500
-    Bananium: 200
-
 # HAMTR
 - type: latheRecipe
-  category: Hamptr # Sunrise-Add
+  categories:
+  - Mech
+  - Hamptr
   parent: BaseMechPartRecipe
   id: HamtrHarness
   result: HamtrHarness
@@ -107,41 +112,30 @@
     Glass: 1000
 
 - type: latheRecipe
-  category: Hamptr # Sunrise-Add
-  parent: BaseMechPartRecipe
+  parent: BaseHamtrLimbRecipe
   id: HamtrLArm
   result: HamtrLArm
-  materials:
-    Steel: 800
-    Glass: 600
 
 - type: latheRecipe
-  parent: HamtrLArm
+  parent: BaseHamtrLimbRecipe
   id: HamtrLLeg
   result: HamtrLLeg
 
 - type: latheRecipe
-  parent: HamtrLLeg
+  parent: BaseHamtrLimbRecipe
   id: HamtrRLeg
   result: HamtrRLeg
 
 - type: latheRecipe
-  parent: HamtrLArm
+  parent: BaseHamtrLimbRecipe
   id: HamtrRArm
   result: HamtrRArm
 
-- type: latheRecipe
-  category: MechEquipment # Sunrise-Add
-  parent: BaseMechPartRecipe
-  id: MechEquipmentGrabberSmall
-  result: MechEquipmentGrabberSmall
-  materials:
-    Steel: 400
-    Plastic: 100
-
 # Vim
 - type: latheRecipe
-  category: Vim # Sunrise-Add
+  categories:
+  - Mech
+  - Vim
   parent: BaseMechPartRecipe
   id: VimHarness
   result: VimHarness

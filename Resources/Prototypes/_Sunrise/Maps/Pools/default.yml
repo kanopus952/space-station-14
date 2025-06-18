@@ -1,19 +1,20 @@
+# НЕ ДОБАВЛЯТЬ НОВЫЕ КАРТЫ БЕЗ МОЕГО РЕВЬЮ! ~ SplikZerys
+
 - type: gameMapPool
   id: SunriseMapPool
   maps:
-  - SunriseDelta
-  - SunriseBox
-  - SunriseFland
-  - SunriseMarathon
-  - SunriseBagel
-  - SunriseMeta
-  - SunrisePlasma
-  # Играбельна но требует небольшой доработки
-  #- SunriseOasis
-  # Неиграбельно
+  - SunriseDelta # Прибытие стыкуется, но лишь 2 доками. Эвак стыкуется лишь 2 доками.
+  #- SunrisePlasma # Прибытие стыкуется лишь 1 доком с доступом командования. Эвак стыкуется лишь 2 доками.
+  #- SunriseBox # Прибытие не стыкуется, эвак стыкуется лишь 1 доком.
+  #- SunriseBarratry # Прибытие не стыкуется. Эвак залазит в станцию.
+  #- SunriseFland # Прибытие не стыкуется. Эвак залазит в станцию.
+  #- SunriseMarathon # Прибытие не стыкуется. Эвак залазит в станцию.
+  #- SunriseBagel # Прибытие стыкуется но не туда. Эвак залазит в станцию.
+  #- SunrisePacked # Прибытие не стыкуется. Эвак залазит в станцию.
+  #- SunriseOasis # Прибытие не стыкуется. Эвак залазит в станцию.
+  # НЕИГРАБЕЛЬНЫЕ:
   #- SunriseReach
-  # Неиграбельно
-  #- SunriseCorvaxGelta
+  #- SunriseRelic
   # SUNRISE-TODO: Старые-новые карты
   #- Glacier
   #- Shoukou
@@ -25,5 +26,3 @@
   #- Kettle
   #- Tortuga
   #- Arena
-
-# НЕ ДОБАВЛЯТЬ НОВЫЕ КАРТЫ БЕЗ МОЕГО РЕВЬЮ! ~ SplikZerys

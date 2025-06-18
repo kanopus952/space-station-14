@@ -79,12 +79,29 @@
   - CommonPets
 
 - type: roleLoadout
-  id: JobBlueShield
+  id: JobBlueShieldEnsign
   groups:
   - BlueShieldJumpsuit
   - BlueShieldBackpack
+  - BlueShieldBelt
+  - BlueShieldNeck
   - Trinkets
-  - Survival
+  - SurvivalSecurity
+  - GroupSpeciesBreathTool
+  - Bra
+  - Pants
+  - Socks
+  - CommonPets
+
+- type: roleLoadout
+  id: JobBlueShieldOfficer
+  groups:
+  - BlueShieldJumpsuit
+  - BlueShieldBackpack
+  - BlueShieldBelt
+  - BlueShieldNeck
+  - Trinkets
+  - SurvivalSecurity
   - GroupSpeciesBreathTool
   - Bra
   - Pants
@@ -271,6 +288,7 @@
   - SecurityPilotJumpsuit
   - SecurityBackpack
   - SecurityShoes
+  - SecurityBelt
   - SurvivalSecurity
   - Trinkets
   - SecurityTrinkets
@@ -388,8 +406,46 @@
   - CommonPets
 
 - type: roleLoadout
+  id: JobMailCarrier
+  groups:
+  - GroupTankHarness
+  - MailCarrierJumpsuit
+  - SunriseCargoTechGloves
+  - CargoTechnicianBackpack
+  - SunriseCargoTechNeck
+  - TrinketsCargo
+  - Trinkets
+  - Survival
+  - GroupSpeciesBreathTool
+  - Bra
+  - Pants
+  - Socks
+  - CommonPets
+
+- type: roleLoadout
   id: RoleSurvivalAssaultOps
   groups:
   - SurvivalSyndicate
   - GroupSpeciesBreathTool
   - GroupPocketTankDouble
+
+- type: roleLoadout
+  id: JobMiningSpecialist
+  groups:
+  - GroupTankHarness
+  - SunriseSalvageHead
+  - SunriseSalvageMask
+  - SunriseSalvageGloves
+  - SalvageSpecialistBackpack
+  - SalvageSpecialistOuterClothing
+  - SunriseSalvageNeck
+  - SalvageSpecialistShoes
+  - Glasses
+  - Survival
+  - Trinkets
+  - GroupSpeciesBreathTool
+  - TrinketsCargo
+  - Bra
+  - Pants
+  - Socks
+  - CommonPets

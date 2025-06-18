@@ -118,14 +118,6 @@
         prob: 0.3
       - id: MedkitBurnFilled
         prob: 0.7
-      - id: BoxMiniSyringe
-        prob: 0.75
-      - id: BoxMiniSyringe
-        prob: 0.25
-      - id: LauncherSyringeMed
-        prob: 0.45
-      - id: LauncherSyringePistol
-        prob: 0.15
       - id: ClothingNeckCloakMoth #bzzz Moth-pocalypse
         prob: 0.15
       - id: ClothingHeadHelmetSecurityMedic
@@ -141,12 +133,12 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingEyesGlassesSecurity
-        prob: 0.3
-      - id: ClothingHeadHatFedoraBrown
+      - id: ClothingEyesGlassesNoir
+      - id: ClothingHeadHatDetGadget
       - id: ClothingNeckTieDet
       - id: ClothingOuterVestDetective
-      - id: ClothingOuterCoatDetective
+      - id: ClothingOuterCoatDetectiveLoadout
+      - id: FlippoEngravedLighter
       - id: FlashlightSeclite
       - id: ForensicScanner
       - id: LogProbeCartridge

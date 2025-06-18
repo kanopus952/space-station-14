@@ -16,25 +16,40 @@
 
 - type: entity
   parent: BaseGameRule
-  id: LiteSubGamemodesRule
+  id: SubGamemodesRule
   components:
   - type: SubGamemodes
     rules:
     - id: Thief
-      prob: 1.0 # Воры будут всегда
-
+      prob: 0.3
+    - id: Changeling
+      prob: 0.3
+    - id: Vampire
+      prob: 0.3
+    - id: SubWizard
+      prob: 0.05
 
 - type: entity
   parent: BaseGameRule
-  id: MiddleSubGamemodesRule
+  id: SubGamemodesRuleNoWizard
   components:
   - type: SubGamemodes
     rules:
+    - id: Thief
+      prob: 0.3
     - id: Changeling
-      prob: 0.50
+      prob: 0.3
     - id: Vampire
-      prob: 0.50
+      prob: 0.3
 
+- type: entity
+  parent: BaseGameRule
+  id: DummyNonAntagChance
+  components:
+  - type: SubGamemodes
+    rules:
+    - id: DummyNonAntag
+      prob: 0.3
 
 - type: entity
   id: DeathMatch31
@@ -88,8 +103,9 @@
   components:
   - type: RandomMetadata #this generates the random operation name cuz it's cool.
     nameSegments:
-    - operationPrefix
-    - operationSuffix
+    - NamesOperationPrefix
+    - NamesOperationSuffix
+    nameFormat: name-format-nuclear-operation
   - type: NukeopsRule
   - type: RuleGrids
   - type: AntagSelection
@@ -111,9 +127,9 @@
   id: Nukeops
   components:
   - type: GameRule
-    minPlayers: 20 # Sunrise-Edit
+    minPlayers: 20
   - type: LoadMapRule
-    mapPath: /Maps/Nonstations/nukieplanet.yml
+    mapPath: /Maps/_Sunrise/Nonstations/nukieplanet.yml
   - type: AntagSelection
     selectionTime: PrePlayerSpawn
     definitions:
@@ -124,11 +140,17 @@
       roleLoadout:
       - RoleSurvivalNukie
       components:
+      # Sunrise edit start
+      - type: GhostPanelAntagonistMarker
+        name: ghost-panel-antagonist-nukeops-name
+        description: ghost-panel-antagonist-nukeops-description
+        priority: 10
+      # Sunrise edit end
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
-        - nukeops-role-commander
-        - SyndicateNamesElite
+        - NamesSyndicateElite
+        nameFormat: name-format-nukie-commander
       - type: NpcFactionMember
         factions:
         - Syndicate
@@ -144,8 +166,8 @@
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
-        - nukeops-role-medic
-        - SyndicateNamesNormal
+        - NamesSyndicateNormal
+        nameFormat: name-format-nukie-agent
       - type: NpcFactionMember
         factions:
         - Syndicate
@@ -163,8 +185,8 @@
       - type: NukeOperative
       - type: RandomMetadata
         nameSegments:
-        - nukeops-role-operator
-        - SyndicateNamesNormal
+        - NamesSyndicateNormal
+        nameFormat: name-format-nukie-operator
       - type: NpcFactionMember
         factions:
         - Syndicate
@@ -182,7 +204,7 @@
   - type: AntagRandomObjectives
     sets:
     - groups: TraitorObjectiveGroups
-    maxDifficulty: 5
+    maxDifficulty: 7
   - type: AntagSelection
     agentName: traitor-round-end-agent-name
 
@@ -196,10 +218,11 @@
       min: 600 # Sunrise-Edit
       max: 900 # Sunrise-Edit
   - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
     definitions:
     - prefRoles: [ Traitor ]
-      max: 8 # Sunrise-Edit
-      playerRatio: 10
+      max: 8
+      playerRatio: 15 # Sunrise-Edit
       pickCommandStaff: true # Sunrise-Edit
       maxCommandStaff: 1 # Sunrise-Edit
       blacklist:
@@ -229,10 +252,17 @@
   components:
   - type: GameRule
     minPlayers: 15
+    # Sunrise-Start
+    delay:
+      min: 1800
+      max: 2000
+    # Sunrise-End
   - type: RevolutionaryRule
   - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
     definitions:
     - prefRoles: [ HeadRev ]
+      fallbackRoles: [ Rev ]
       max: 3
       playerRatio: 15
       briefing:
@@ -245,6 +275,18 @@
       - type: HeadRevolutionary
       mindRoles:
       - MindRoleHeadRevolutionary
+    - prefRoles: [ Rev ]
+      fallbackRoles: [ HeadRev ]
+      max: 30
+      playerRatio: 3
+      briefing:
+        text: rev-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: Revolutionary
+      mindRoles:
+      - MindRoleRevolutionary
 
 - type: entity
   id: Sandbox
@@ -259,6 +301,63 @@
   - type: SecretRule
 
 - type: entity
+  abstract: true
+  parent: BaseGameRule
+  id: BaseWizardRule
+  components:
+  - type: AntagObjectives
+    objectives:
+    - WizardSurviveObjective
+    - WizardDemonstrateObjective
+  - type: LoadMapRule
+    gridPath: /Maps/Shuttles/wizard.yml
+  - type: RuleGrids
+  - type: AntagSelection
+  - type: AntagLoadProfileRule
+    speciesOverride: Human
+
+- type: entity
+  parent: BaseWizardRule
+  id: Wizard
+  components:
+  - type: GameRule
+    minPlayers: 10
+  - type: AntagSelection
+    agentName: wizard-round-end-name
+    selectionTime: PrePlayerSpawn
+    definitions:
+    - prefRoles: [ Wizard ]
+      max: 1
+      playerRatio: 1
+      spawnerPrototype: SpawnPointGhostWizard
+      roleLoadout:
+       - RoleSurvivalExtended
+      briefing:
+        text: wizard-role-greeting
+        color: Turquoise
+        # TODO: Need Wizard Start sound
+        #sound: "/Audio/Ambience/Antag/wizard_start.ogg"
+      startingGear: WizardBlueGear
+      # TODO: WizardComp as needed
+      components:
+      # Sunrise edit start
+      - type: GhostPanelAntagonistMarker
+        name: ghost-panel-antagonist-wizard-name
+        description: ghost-panel-antagonist-wizard-description
+        priority: 5
+      # Sunrise edit end
+      - type: NpcFactionMember
+        factions:
+        - Wizard
+      - type: RandomMetadata
+        nameSegments:
+        - NamesWizardFirst
+        - NamesWizardLast
+        nameFormat: name-format-wizard
+      mindRoles:
+      - MindRoleWizard
+
+- type: entity
   id: Zombie
   parent: BaseGameRule
   components:
@@ -269,6 +368,7 @@
       max: 900
   - type: ZombieRule
   - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
     definitions:
     - prefRoles: [ InitialInfected ]
       max: 6
@@ -290,6 +390,22 @@
       - type: InitialInfected
       mindRoles:
       - MindRoleInitialInfected
+
+# This rule makes the chosen players unable to get other antag rules, as a way to prevent metagaming job rolls.
+# Put this before antags assigned to station jobs, but after non-job antags (NukeOps/Wiz).
+- type: entity
+  id: DummyNonAntag
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+    minPlayers: 5
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn # Pre-selection before jobs; assignment doesn't really matter though, we only care about the pre-selection to block other antags.
+    removeUponFailedSpawn: false
+    definitions:
+    - prefRoles: [ InitialInfected, Traitor, Thief, HeadRev ]
+      max: 2
+      playerRatio: 30
 
 - type: entity
   id: GreenshiftAnnouncement
@@ -385,12 +501,26 @@
   - type: RoundstartStationVariationRule
     rules:
     - id: BasicPoweredLightVariationPass
-    - id: BasicTrashVariationPass
+    # Sunrise-Edit
+    #- id: BasicTrashVariationPass
     - id: SolidWallRustingVariationPass
     - id: ReinforcedWallRustingVariationPass
-    - id: BasicPuddleMessVariationPass
-      prob: 0.99
-      orGroup: puddleMess
-    - id: BloodbathPuddleMessVariationPass
-      prob: 0.01
-      orGroup: puddleMess
+    # Sunrise-Edit
+    #- id: BasicPuddleMessVariationPass
+    #  prob: 0.99
+    #  orGroup: puddleMess
+    #- id: BloodbathPuddleMessVariationPass
+    #  prob: 0.01
+    #  orGroup: puddleMess
+    - id: SmugglerStashVariationPass
+      prob: 0.90
+    - id: SolarPanelDamageVariationPass
+    - id: SolarPanelEmptyVariationPass
+    - id: BasicDecalDirtVariationPass
+    - id: BasicDecalGraffitiVariationPass
+    - id: BasicDecalBrunsVariationPass
+      prob: 0.50
+      orGroup: monospaceDecals
+    - id: BasicDecalDirtMonospaceVariationPass
+      prob: 0.50
+      orGroup: monospaceDecals

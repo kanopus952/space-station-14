@@ -47,6 +47,9 @@ public sealed partial class BlockingSystem
             if (args.Damage.GetTotal() <= 0)
                 return;
 
+            if (!_toggle.IsActivated(component.BlockingItem.Value)) // Sunrise-Edit
+                return;
+
             // A shield should only block damage it can itself absorb. To determine that we need the Damageable component on it.
             if (!TryComp<DamageableComponent>(component.BlockingItem, out var dmgComp))
                 return;
@@ -54,6 +57,9 @@ public sealed partial class BlockingSystem
             var blockFraction = blocking.IsBlocking ? blocking.ActiveBlockFraction : blocking.PassiveBlockFraction;
             blockFraction = Math.Clamp(blockFraction, 0, 1);
             _damageable.TryChangeDamage(component.BlockingItem, blockFraction * args.OriginalDamage);
+
+            var ev = new BlockingEvent(uid, args.Damage);
+            RaiseLocalEvent(component.BlockingItem.Value, ev);
 
             var modify = new DamageModifierSet();
             foreach (var key in dmgComp.Damage.DamageDict.Keys)

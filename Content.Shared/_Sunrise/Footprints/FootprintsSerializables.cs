@@ -10,14 +10,11 @@ namespace Content.Shared._Sunrise.Footprints;
 /// <summary>
 /// Component that represents a single footprint entity in the world
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class FootprintComponent : Component
 {
-    /// <summary>
-    /// Entity that created this footprint
-    /// </summary>
-    [AutoNetworkedField]
-    public EntityUid CreatorEntity;
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public ResPath SpritePath = new("/Textures/_Sunrise/Effects/footprints.rsi");
 
     /// <summary>
     /// Name of the solution container for this footprint
@@ -66,12 +63,6 @@ public sealed partial class PuddleFootprintComponent : Component
 [RegisterComponent]
 public sealed partial class FootprintEmitterComponent : Component
 {
-    /// <summary>
-    /// Path to the RSI file containing footprint sprites
-    /// </summary>
-    [ViewVariables(VVAccess.ReadOnly), DataField]
-    public ResPath SpritePath = new("/Textures/_Sunrise/Effects/footprints.rsi");
-
     /// <summary>
     /// State ID for left bare footprint
     /// </summary>
@@ -155,16 +146,10 @@ public sealed partial class FootprintEmitterComponent : Component
     public Entity<SolutionComponent>? BodySurfaceSolution;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public float TransferVolumeFoot = 0.2f;
+    public float TransferVolumeFoot = 0.5f;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public float TransferVolumeDragMark = 0.5f;
-
-    /// <summary>
-    /// Rate at which footprint color fades
-    /// </summary>
-    [DataField]
-    public float ColorFadeRate = 0.05f;
+    public float TransferVolumeDragMark = 1.0f;
 
     /// <summary>
     /// Offset from entity center for footprint placement

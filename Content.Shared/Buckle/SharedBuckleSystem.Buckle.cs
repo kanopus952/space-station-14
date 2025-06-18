@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Numerics;
 using Content.Shared.Alert;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
@@ -138,9 +140,24 @@ public abstract partial class SharedBuckleSystem
             return;
         }
 
-        var delta = (xform.LocalPosition - strapComp.BuckleOffset).LengthSquared();
-        if (delta > 1e-5)
+        // Sunrise-Start
+        if (strapComp.BuckleOffsets.Count == 0)
+            return;
+
+        var isValid = false;
+        foreach (var offset in strapComp.BuckleOffsets)
+        {
+            var delta = (xform.LocalPosition - offset).LengthSquared();
+            if (delta <= 1e-5)
+            {
+                isValid = true;
+                break;
+            }
+        }
+
+        if (!isValid)
             Unbuckle(buckle, (strapUid, strapComp), null);
+        // Sunrise-End
     }
 
     #endregion
@@ -369,7 +386,22 @@ public abstract partial class SharedBuckleSystem
         _rotationVisuals.SetHorizontalAngle(buckle.Owner, strap.Comp.Rotation);
 
         var xform = Transform(buckle);
-        var coords = new EntityCoordinates(strap, strap.Comp.BuckleOffset);
+        // Sunrise-Start
+        var offset = Vector2.Zero;
+
+        for (var i = 0; i < strap.Comp.BuckleOffsets.Count; i++)
+        {
+            if (!strap.Comp.CurrentOffsets.Values.Contains(strap.Comp.BuckleOffsets[i]))
+            {
+                offset = strap.Comp.BuckleOffsets[i];
+                break;
+            }
+        }
+
+        strap.Comp.CurrentOffsets[buckle.Owner] = offset;
+
+        var coords = new EntityCoordinates(strap, offset);
+        // Sunrise-End
         _transform.SetCoordinates(buckle, xform, coords, rotation: Angle.Zero);
 
         _joints.SetRelay(buckle, strap);
@@ -393,7 +425,7 @@ public abstract partial class SharedBuckleSystem
         if (TryComp<PhysicsComponent>(buckle, out var physics))
             _physics.ResetDynamics(buckle, physics);
 
-        DebugTools.AssertEqual(xform.ParentUid, strap.Owner);
+        //DebugTools.AssertEqual(xform.ParentUid, strap.Owner);
     }
 
     /// <summary>
@@ -416,7 +448,7 @@ public abstract partial class SharedBuckleSystem
 
     public bool TryUnbuckle(Entity<BuckleComponent?> buckle, EntityUid? user, bool popup)
     {
-        if (!Resolve(buckle.Owner, ref buckle.Comp))
+        if (!Resolve(buckle.Owner, ref buckle.Comp, false))
             return false;
 
         if (!CanUnbuckle(buckle, user, popup, out var strap))
@@ -458,7 +490,7 @@ public abstract partial class SharedBuckleSystem
         var buckleXform = Transform(buckle);
         var oldBuckledXform = Transform(strap);
 
-        if (buckleXform.ParentUid == strap.Owner && !Terminating(buckleXform.ParentUid))
+        if (buckleXform.ParentUid == strap.Owner && !Terminating(oldBuckledXform.ParentUid))
         {
             _transform.PlaceNextTo((buckle, buckleXform), (strap.Owner, oldBuckledXform));
             buckleXform.ActivelyLerping = false;
@@ -466,11 +498,14 @@ public abstract partial class SharedBuckleSystem
             var oldBuckledToWorldRot = _transform.GetWorldRotation(strap);
             _transform.SetWorldRotationNoLerp((buckle, buckleXform), oldBuckledToWorldRot);
 
+            // Sunrise-Start
             // TODO: This is doing 4 moveevents this is why I left the warning in, if you're going to remove it make it only do 1 moveevent.
-            if (strap.Comp.BuckleOffset != Vector2.Zero)
+            if (strap.Comp.CurrentOffsets[buckle.Owner] != Vector2.Zero)
             {
-                buckleXform.Coordinates = oldBuckledXform.Coordinates.Offset(strap.Comp.BuckleOffset);
+                buckleXform.Coordinates = oldBuckledXform.Coordinates.Offset(strap.Comp.CurrentOffsets[buckle.Owner]);
             }
+            strap.Comp.CurrentOffsets.Remove(buckle.Owner);
+            // Sunrise-End
         }
 
         _rotationVisuals.ResetHorizontalAngle(buckle.Owner);
@@ -516,8 +551,14 @@ public abstract partial class SharedBuckleSystem
         if (_gameTiming.CurTime < buckle.Comp.BuckleTime + buckle.Comp.Delay)
             return false;
 
-        if (user != null && !_interaction.InRangeUnobstructed(user.Value, strap.Owner, buckle.Comp.Range, popup: popup))
-            return false;
+        if (user != null)
+        {
+            if (!_interaction.InRangeUnobstructed(user.Value, strap.Owner, buckle.Comp.Range, popup: popup))
+                return false;
+
+            if (user.Value != buckle.Owner && !ActionBlocker.CanComplexInteract(user.Value))
+                return false;
+        }
 
         var unbuckleAttempt = new UnbuckleAttemptEvent(strap, buckle!, user, popup);
         RaiseLocalEvent(buckle, ref unbuckleAttempt);

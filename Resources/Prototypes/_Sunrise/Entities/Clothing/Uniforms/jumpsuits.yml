@@ -326,6 +326,41 @@
   - type: VentCrawClothing
 
 - type: entity
+  parent: [ ClothingUniformBase, ClothingOuterArmorBase, BaseSyndicateContraband ]
+  id: ClothingUniformJumpsuitArmouredBlack
+  name: armored black lawyer suit
+  description: A seemingly simple business suit.. until the first bullet bounced..
+  components:
+  - type: Sprite
+    sprite: Clothing/Uniforms/Jumpsuit/lawyerblack.rsi
+  - type: Clothing
+    sprite: Clothing/Uniforms/Jumpsuit/lawyerblack.rsi
+  - type: Tag
+    tags:
+      - Vest
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitBlueshieldJS
+  name: blueshield's jumpsuit
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Clothing/Uniforms/Jumpsuit/blueshield-js.rsi
+  - type: Clothing
+    sprite: _Sunrise/Clothing/Uniforms/Jumpsuit/blueshield-js.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitMiningSpecialist
+  name: mining specialist's jumpsuit
+  description: A suit passed down through many generations. a fine layer of dust trails behind it.
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Clothing/Uniforms/Jumpsuit/mining.rsi
+  - type: Clothing
+    sprite: _Sunrise/Clothing/Uniforms/Jumpsuit/mining.rsi
+
+- type: entity
   parent: UnsensoredClothingUniformBase
   id: ClothingUniformJumpsuitAbductor
   name: abductor uniform

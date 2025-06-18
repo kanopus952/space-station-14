@@ -37,6 +37,12 @@
 - type: Tag
   id: AnomalyCore
 
+- type: Tag
+  id: LoneOpsUplink
+
+- type: Tag
+  id: Flash
+
 # Catridges:
 
 - type: Tag
@@ -52,7 +58,20 @@
   id: CartridgeRail
 
 - type: Tag
+  id: CartridgeHeavyRifleNT
+
+- type: Tag
   id: MiniSyringe
+
+- type: Tag
+  id: HandGrenadeAmmo
+
+# Weapons
+- type: Tag
+  id: WrappedWeapon
+
+- type: Tag
+  id: UpgradeFlareGun
 
 # Magazines:
 - type: Tag
@@ -158,9 +177,6 @@
 
 - type: Tag
   id: MicroManipulatorStockPart
-
-- type: Tag
-  id: MatterBinStockPart
 
 - type: Tag
   id: PartRodMetal
@@ -344,6 +360,30 @@
 
 - type: Tag
   id: Geranium
+
+- type: Tag
+  id: WhitelistChameleonSuit
+
+- type: Tag
+  id: Sunflower
+
+- type: Tag
+  id: CarpRiftHealTarget
+
+- type: Tag
+  id: SheetPaper
+
+- type: Tag
+  id: PowerCellHigh
+
+- type: Tag
+  id: RiotShield
+
+- type: Tag
+  id: RiotShieldStrobe
+
+- type: Tag
+  id: DockCentComm
 
 - type: Tag
   id: Abductor
