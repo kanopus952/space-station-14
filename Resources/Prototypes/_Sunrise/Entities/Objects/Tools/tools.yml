@@ -1,4 +1,16 @@
-<<<<<<< HEAD
+- type: entity
+  id: RCDAdvancedSunrise
+  parent: RCD
+  name: advanced RCD
+  suffix: CE
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Objects/Tools/advanced-rcd.rsi
+  - type: Clothing
+    sprite: _Sunrise/Objects/Tools/advanced-rcd.rsi
+  - type: AutoRecharge
+    rechargeDuration: 30
+
 - type: entity
   name: abductor's wirecutter
   parent: BaseItem
@@ -111,17 +123,3 @@
       - Multitool
       - DoorElectronicsConfigurator
       - ShowWires
-=======
-﻿- type: entity
-  id: RCDAdvancedSunrise
-  parent: RCD
-  name: advanced RCD
-  suffix: CE
-  components:
-  - type: Sprite
-    sprite: _Sunrise/Objects/Tools/advanced-rcd.rsi
-  - type: Clothing
-    sprite: _Sunrise/Objects/Tools/advanced-rcd.rsi
-  - type: AutoRecharge
-    rechargeDuration: 30
->>>>>>> master
