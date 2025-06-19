@@ -1071,6 +1071,10 @@
   name: alien pistol
   components:
   - type: RestrictByUserTag
+    contains:
+    - Abductor
+    messages:
+    - abductor-gun-restricted-1
   - type: Sprite
     sprite: _Sunrise/Abductor/Objects/Weapons/Guns/Battery/alien.rsi
     layers:
