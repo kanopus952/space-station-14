@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._Sunrise.Action;
+using Content.Shared._Sunrise.StarlightAction;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.DoAfter;

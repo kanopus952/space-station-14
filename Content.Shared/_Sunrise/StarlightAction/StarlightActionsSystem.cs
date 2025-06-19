@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Content.Shared.Actions.Components;
 
-namespace Content.Shared._Sunrise.Action;
+namespace Content.Shared._Sunrise.StarlightAction;
 public sealed class StarlightActionsSystem : EntitySystem
 {
     public EntityUid[] HideActions(EntityUid performer, ActionsComponent? comp = null)
