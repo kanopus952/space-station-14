@@ -112,7 +112,7 @@
       ejectDelay: 2
       forceRandom: RandomOrganDubious
     - type: Sprite
-      sprite: _Sunrise/Structures/abductor_dispencer.rsi
+      sprite: _Sunrise/Abductor/Structures/abductor_dispencer.rsi
       layers:
       - state: "icon"
         map: ["enum.VendingMachineVisualLayers.Base"]
