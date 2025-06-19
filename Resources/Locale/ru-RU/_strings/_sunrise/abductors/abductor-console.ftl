@@ -24,3 +24,11 @@ abductor-experimentator-connected = эксперементатор: [color=green
 abductor-experimentator-not-connected = эксперементатор: [color=red]не подключён[/color]
 abductor-victim-none = жертва: [color=red]ОТСУТСТВУЕТ[/color]
 abductor-victim-detected = жертва: [color=green]{$victim}[/color]
+
+abductors-ui-shop-Wonderprod = Чудо-палка
+abductors-ui-shop-WeaponAlien = Инопланетный пистолет
+abductors-ui-shop-ClothingHeadHelmetAbductor = Шлем
+abductors-ui-shop-AbductorGizmo = Гизмо
+abductors-ui-shop-AbductorExtractor = Экстрактор сердца
+abductors-ui-shop-MedkitCombat = Боевая аптечка
+abductors-ui-shop-VendingMachineRestockAbductorDispenser = Пополнение диспенсера

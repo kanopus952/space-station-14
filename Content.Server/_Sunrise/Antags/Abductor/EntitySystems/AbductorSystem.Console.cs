@@ -205,10 +205,10 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
     protected override void UpdateGui(NetEntity? target, Entity<AbductorConsoleComponent> computer)
     {
-        string? targetName = null;
+        string targetName = string.Empty;
         string? victimName = null;
         if (target.HasValue && TryComp(GetEntity(target.Value), out MetaDataComponent? metadata))
-            targetName = metadata?.EntityName;
+            targetName = metadata.EntityName;
 
         if (computer.Comp.AlienPod == null)
         {
