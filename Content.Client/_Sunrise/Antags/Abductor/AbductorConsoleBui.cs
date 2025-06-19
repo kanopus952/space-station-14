@@ -163,15 +163,15 @@ public sealed class AbductorConsoleBui : BoundUserInterface
         _window.TargetLabel.Children.Clear();
 
         var padMsg = new FormattedMessage();
-        padMsg.AddMarkupOrThrow(state.AlienPadFound ? "pad: [color=green]connected[/color]" : "pad: [color=red]not found[/color]");
+        padMsg.AddMarkupOrThrow(state.AlienPadFound ? Loc.GetString("abductor-pad-connected") : Loc.GetString("abductor-pad-not-connected"));
         _window.PadLabel.SetMessage(padMsg);
 
         var dispencerMsg = new FormattedMessage();
-        dispencerMsg.AddMarkupOrThrow(state.DispencerFound ? "dispencer: [color=green]connected[/color]" : "dispencer: [color=red]not found[/color]");
+        dispencerMsg.AddMarkupOrThrow(state.DispencerFound ? Loc.GetString("abductor-dispencer-connected") : Loc.GetString("abductor-dispencer-not-connected"));
         _window.DispencerLabel.SetMessage(dispencerMsg);
 
         var msg = new FormattedMessage();
-        msg.AddMarkupOrThrow(state.Target == null ? "target: [color=red]NONE[/color]" : $"target: [color=green]{state.TargetName}[/color]");
+        msg.AddMarkupOrThrow(state.Target == null ? Loc.GetString("abductor-target-none") : Loc.GetString($"abductor-target-detected", ("state", state.TargetName)));
         _window.TeleportButton.Disabled = state.Target == null || !state.AlienPadFound;
         _window.TeleportButton.OnPressed += _ =>
         {
@@ -183,11 +183,11 @@ public sealed class AbductorConsoleBui : BoundUserInterface
         // experiment tab
 
         var experimentatorMsg = new FormattedMessage();
-        experimentatorMsg.AddMarkupOrThrow(state.AlienPadFound ? "experimentator: [color=green]connected[/color]" : "experimentator: [color=red]not found[/color]");
+        experimentatorMsg.AddMarkupOrThrow(state.AlienPadFound ? Loc.GetString("abductor-experimentator-connected") : Loc.GetString($"abductor-experimentator-not-connected"));
         _window.ExperimentatorLabel.SetMessage(experimentatorMsg);
 
         var victimMsg = new FormattedMessage();
-        victimMsg.AddMarkupOrThrow(state.VictimName == null ? "victim: [color=red]NONE[/color]" : $"victim: [color=green]{state.VictimName}[/color]");
+        victimMsg.AddMarkupOrThrow(state.VictimName == null ? Loc.GetString("abductor-victim-none") : Loc.GetString($"abductor-victim-detected", ("victim", state.VictimName)));
         _window.VictimLabel.SetMessage(victimMsg);
 
         _window.CompleteExperimentButton.Disabled = state.VictimName == null;

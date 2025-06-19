@@ -14,7 +14,7 @@ public sealed class AbductorCameraConsoleBuiState : BoundUserInterfaceState
 public sealed class AbductorConsoleBuiState : BoundUserInterfaceState
 {
     public NetEntity? Target { get; init; }
-    public string? TargetName { get; init; }
+    public string TargetName { get; init; } = string.Empty;
     public string? VictimName { get; init; }
     public bool AlienPadFound { get; init; }
     public bool ExperimentatorFound { get; init; }
