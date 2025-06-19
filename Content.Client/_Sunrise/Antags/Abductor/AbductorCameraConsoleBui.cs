@@ -42,7 +42,7 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
         if (_window != null) return;
         _window = new AbductorCameraConsoleWindow();
         _window.OnClose += Close;
-        _window.Title = "Intercepted cameras.";
+        _window.Title = Loc.GetString("abductor-camera-console-window");
 
         _window.StationsButton.OnPressed += _ =>
         {
@@ -115,7 +115,7 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
             || _station == null
             || !state.Stations.TryGetValue(_station.Value, out var station)
             ? "Stations"
-            : $"Station - {station.Name}";
+            : Loc.GetString($"abductor-stations", ("station", station.Name));
     }
 
     private enum ViewType

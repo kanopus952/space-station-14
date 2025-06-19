@@ -6,6 +6,7 @@ using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
 using static Content.Shared.Pinpointer.SharedNavMapSystem;
 using static Robust.Client.UserInterface.Control;
+using Content.Shared.Weapons.Ranged;
 
 namespace Content.Client._Sunrise.Antags.Abductor;
 
@@ -58,7 +59,7 @@ public sealed class AbductorConsoleBui : BoundUserInterface
         if (_window != null) return;
         _window = new AbductorConsoleWindow();
         _window.OnClose += Close;
-        _window.Title = "console";
+        _window.Title = Loc.GetString("abductor-console-window");
 
         _window.TeleportTabButton.OnPressed += _ => View(ViewType.Teleport);
 
@@ -125,12 +126,12 @@ public sealed class AbductorConsoleBui : BoundUserInterface
 
         var priceLabel = new Label
         {
-            Text = $" Price: {price}",
+            Text = Loc.GetString($"abductor-shop-element-price", ("price", price)),
         };
 
         var buyButton = new Button
         {
-            Text = "Buy",
+            Text = Loc.GetString("abductor-shop-buy-button"),
             HorizontalExpand = true,
         };
 
@@ -139,7 +140,7 @@ public sealed class AbductorConsoleBui : BoundUserInterface
             if (balance >= price)
                 balance -= price;
 
-            _window.BalanceLabel.SetMessage($"Balance: {balance}");
+            _window.BalanceLabel.SetMessage(Loc.GetString($"abductor-shop-element-balance", ("balance", balance)));
 
             SendMessage(new AbductorItemBuyedBuiMsg()
             {
@@ -226,7 +227,7 @@ public sealed class AbductorConsoleBui : BoundUserInterface
         if (state.CurrentBalance != null)
             balance = state.CurrentBalance.Value;
 
-        _window.BalanceLabel.SetMessage($"Balance: {balance}");
+        _window.BalanceLabel.SetMessage(Loc.GetString($"abductor-shop-element-balance", ("balance", balance)));
     }
 
     private void UpdateDisabledPanel(bool disable)
@@ -245,7 +246,7 @@ public sealed class AbductorConsoleBui : BoundUserInterface
         if (_window.DisabledLabel.GetMessage() is null)
         {
             var text = new FormattedMessage();
-            text.AddMarkupOrThrow("[color=red][font size=16]You need to plug in abductor armor![/font][/color]");
+            text.AddMarkupOrThrow(Loc.GetString("abductor-need-plug-in"));
             _window.DisabledLabel.SetMessage(text);
         }
 
