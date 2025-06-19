@@ -1086,12 +1086,17 @@
   - type: HitscanBatteryAmmoProvider
     proto: BulletDisabler
     fireCost: 100
-  - type: BatteryWeaponFireModes
+  - type: EnergyGunFireModes
     fireModes:
-    - proto: BulletDisabler
+    - hitscanProto: BulletDisabler
       fireCost: 100
-    - proto: BulletEnergyGunLaser
+      name: energy-gun-disable
+      state: base
+      shotType: Hitscan
+    - hitscanProto: BulletEnergyGunLaser
       fireCost: 100
+      name: energy-gun-lethal
+      shotType: Hitscan
   - type: MagazineVisuals
     magState: mag
     steps: 5
