@@ -29,7 +29,7 @@
     state: stun
     states:
       stun: !type:ItemSwitchState
-        verb: stun
+        verb: wonderprode-stun
         sprite:
           sprite: _Sunrise/Abductor/Objects/Weapons/Melee/wonderprod.rsi
           state: stun-icon
@@ -51,7 +51,7 @@
             variation: 0.250
 
       cuffs: !type:ItemSwitchState
-        verb: cuffs
+        verb: wonderprode-cuffs
         sprite:
           sprite: _Sunrise/Abductor/Objects/Weapons/Melee/wonderprod.rsi
           state: cuffs-icon
@@ -68,7 +68,7 @@
           proto: Cablecuffs
 
       sleep: !type:ItemSwitchState
-        verb: sleep
+        verb: wonderprode-sleep
         sprite:
           sprite: _Sunrise/Abductor/Objects/Weapons/Melee/wonderprod.rsi
           state: sleep-icon
@@ -88,7 +88,7 @@
             Quantity: 5
 
       damage: !type:ItemSwitchState
-        verb: damage
+        verb: wonderprode-damage
         components:
         - type: MeleeWeapon
           wideAnimationRotation: -135

@@ -469,7 +469,7 @@
     state: stealth
     states:
       Stealth: !type:ItemSwitchState
-        verb: Stealth
+        verb: abductor-armor-stealth
         hiden: true
         sprite:
           sprite: _Sunrise/Abductor/Clothing/OuterClothing/Armor/abductor.rsi
@@ -487,7 +487,7 @@
         - type: ExplosionResistance
           damageCoefficient: 0.85
       Combat: !type:ItemSwitchState
-        verb: Combat
+        verb: abductor-armor-combat
         hiden: true
         sprite:
           sprite: _Sunrise/Abductor/Clothing/OuterClothing/Armor/abductor.rsi
