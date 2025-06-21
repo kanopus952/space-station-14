@@ -198,8 +198,6 @@
       amount: 1
     Aluminium:
       amount: 1
-    Plasma:
-      amount: 1
   effects:
     - !type:EmpReactionEffect
       rangePerUnit: 0.2
