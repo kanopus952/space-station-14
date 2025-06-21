@@ -1,18 +1,19 @@
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
+using Content.Shared.Mech.EntitySystems;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._Sunrise.Paint;
+namespace Content.Shared.Mech.Components;
 
 /// <summary>
 /// Entity when used on another entity will paint target entity.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-[Access(typeof(SharedMechPaintSystem))]
+[Access(typeof(SharedMechSystem))]
 public sealed partial class MechPaintComponent : Component
 {
     /// <summary>
@@ -32,7 +33,7 @@ public sealed partial class MechPaintComponent : Component
     /// </summary>
     [DataField]
     public int Delay = 2;
-    
+
     /// <summary>
     /// What mech are paint?
     /// </summary>

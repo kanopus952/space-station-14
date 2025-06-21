@@ -4,6 +4,7 @@ using Content.Shared.Mech.EntitySystems;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
+using Content.Shared.Mech.Events;
 
 namespace Content.Client.Mech;
 
@@ -19,7 +20,7 @@ public sealed class MechSystem : SharedMechSystem
         base.Initialize();
 
         SubscribeLocalEvent<MechComponent, AppearanceChangeEvent>(OnAppearanceChanged);
-        SubscribeLocalEvent<MechComponent, UpdateAppearanceEvent>(OnUpdateAppearanceEvent);
+        SubscribeNetworkEvent<UpdateAppearanceEvent>(OnUpdateAppearanceEvent);
     }
 
     private void OnAppearanceChanged(EntityUid uid, MechComponent component, ref AppearanceChangeEvent args)
@@ -30,9 +31,13 @@ public sealed class MechSystem : SharedMechSystem
         UpdateAppearance(uid, component, args.Sprite);
     }
 
-    private void OnUpdateAppearanceEvent(EntityUid uid, MechComponent component, ref UpdateAppearanceEvent args)
+    private void OnUpdateAppearanceEvent(UpdateAppearanceEvent ev)
     {
+        var uid = GetEntity(ev.Uid);
         if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
+        if (!TryComp<MechComponent>(uid, out var component))
             return;
 
         UpdateAppearance(uid, component, sprite);
@@ -40,9 +45,6 @@ public sealed class MechSystem : SharedMechSystem
 
     private void UpdateAppearance(EntityUid uid, MechComponent component, SpriteComponent sprite)
     {
-        if (!_sprite.LayerExists((uid, sprite), MechVisualLayers.Base))
-            return;
-
         var state = component.BaseState;
         var drawDepth = DrawDepth.Mobs;
 

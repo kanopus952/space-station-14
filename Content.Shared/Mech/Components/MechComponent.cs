@@ -92,6 +92,9 @@ public sealed partial class MechComponent : Component
     [ViewVariables, AutoNetworkedField]
     public EntityUid? CurrentSelectedEquipment;
 
+    [DataField]
+    public bool AffectedByEmp = true;
+
     /// <summary>
     /// The maximum amount of equipment items that can be installed in the mech
     /// </summary>
