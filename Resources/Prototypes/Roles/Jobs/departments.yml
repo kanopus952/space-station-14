@@ -9,6 +9,7 @@
   - SalvageSpecialist
   - MailCarrier # Sunrise-Roles
   - MiningSpecialist # Sunrise-Roles
+  - MiningBorg # Sunrise-edit
 
 - type: department
   id: Civilian
@@ -33,7 +34,13 @@
   - Visitor
   - Zookeeper
   - ServiceWorker
-  - Barber # Sunrise-Roles
+  # Sunrise-start
+  - Barber
+  - ServiceBorg
+  - JanitorBorg
+  - ClownBorg
+  - PeaceBorg
+  # Sunrise-end
 
 # Вынесено в _Sunrise
 #- type: department
@@ -92,6 +99,7 @@
   - SeniorEngineer  # Sunrise-Senior
   - StationEngineer
   - TechnicalAssistant
+  - EngineerBorg # Sunrise-edit
 
 - type: department
   id: Medical
@@ -107,6 +115,7 @@
   - Psychologist
   - Paramedic
   - MedicalPathologist  # Sunrise-pathologist
+  - MedicalBorg # Sunrise-edit
 
 - type: department
   id: Security
@@ -123,6 +132,7 @@
   - Warden
   - Brigmedic  # Sunrise-Brigmedic
   - SecurityPilot # Sunrise-SecurityPilot
+  - SecurityBorg # Sunrise-edit
 
 - type: department
   id: Science
