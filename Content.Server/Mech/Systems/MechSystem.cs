@@ -452,12 +452,10 @@ public sealed partial class MechSystem : SharedMechSystem
             var netEntity = GetNetEntity(target);
             var ev = new UpdateAppearanceEvent(netEntity);
             RaiseNetworkEvent(ev);
-            return;
         }
         else
         {
             _popup.PopupEntity(Loc.GetString("paint-empty", ("used", args.Used)), args.User, args.User, PopupType.Medium);
-            return;
         }
     }
 
