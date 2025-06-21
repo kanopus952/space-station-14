@@ -208,6 +208,25 @@ public sealed partial class MechComponent : Component
     [DataField] public EntityUid? MechUiActionEntity;
     [DataField] public EntityUid? MechEjectActionEntity;
     [DataField] public EntityUid? MechLightsActionEntity;
+
+    [DataField]
+    public TimeSpan CooldownTime = TimeSpan.FromSeconds(6);
+
+    [DataField]
+    public float EffectInterval = 1f;
+
+    [DataField]
+    public float TimeAccumulator = 0f;
+
+    [DataField]
+    public TimeSpan NextPulseTime;
+
+    [DataField]
+    public int EmpDamage = 30;
+
+    [DataField]
+    public bool IsEmp = false;
+
 }
 
 public enum MechHealthState

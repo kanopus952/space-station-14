@@ -80,20 +80,6 @@ public sealed partial class MechSystem : SharedMechSystem
 
     private static readonly ProtoId<ToolQualityPrototype> PryingQuality = "Prying";
 
-    public TimeSpan RandomWalkTime = TimeSpan.FromSeconds(20);
-    public TimeSpan ExpireAt;
-
-    public TimeSpan CooldownTime = TimeSpan.FromSeconds(6);
-
-    public float EffectInterval = 1f;
-
-    public float TimeAccumulator = 0f;
-
-    public TimeSpan NextPulseTime;
-
-    public int EmpDamage = 30;
-    public bool IsEmp = false;
-
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -135,21 +121,21 @@ public sealed partial class MechSystem : SharedMechSystem
     {
         base.Update(frameTime);
         var query = EntityQueryEnumerator<MechComponent>();
-        if (query.MoveNext(out var uid, out var comp))
+        while (query.MoveNext(out var uid, out var comp))
         {
-            if (IsEmp == false)
-                return;
+            if (comp.IsEmp == false)
+                continue;
 
-            TimeAccumulator += frameTime;
+            comp.TimeAccumulator += frameTime;
 
-            if (TimeAccumulator < EffectInterval)
-                return;
+            if (comp.TimeAccumulator < comp.EffectInterval)
+                continue;
 
-            TimeAccumulator -= EffectInterval;
+            comp.TimeAccumulator -= comp.EffectInterval;
 
             Spawn("EffectSparks", Transform(uid).Coordinates);
-            if (_timing.CurTime > NextPulseTime)
-                IsEmp = false;
+            if (_timing.CurTime > comp.NextPulseTime)
+                comp.IsEmp = false;
         }
     }
     private void OnMechSay(EntityUid uid, MechComponent component, MechSayEvent args)
@@ -235,15 +221,15 @@ public sealed partial class MechSystem : SharedMechSystem
 
         var curTime = _timing.CurTime;
 
-        if (curTime < NextPulseTime)
+        if (curTime < component.NextPulseTime)
             return;
 
-        NextPulseTime = curTime + CooldownTime;
+        component.NextPulseTime = curTime + component.CooldownTime;
 
         var damageType = _protoMan.Index<DamageTypePrototype>("Shock");
-        var empDamage = new DamageSpecifier(damageType, FixedPoint2.New(EmpDamage));
+        var empDamage = new DamageSpecifier(damageType, FixedPoint2.New(component.EmpDamage));
         _damageable.TryChangeDamage(uid, empDamage);
-        IsEmp = true;
+        component.IsEmp = true;
     }
 
     private void OnRemoveEquipmentMessage(EntityUid uid, MechComponent component, MechEquipmentRemoveMessage args)
@@ -444,7 +430,7 @@ public sealed partial class MechSystem : SharedMechSystem
             return;
         }
 
-        if (entity.Comp.Whitelist != null && !_whitelistSystem.IsValid(entity.Comp.Whitelist, target) || !TryPaint(entity, target))
+        if (entity.Comp.Whitelist != null && !_whitelistSystem.IsValid(entity.Comp.Whitelist, target))
         {
             _popup.PopupEntity(Loc.GetString("paint-failure", ("target", args.Target)), args.User, args.User, PopupType.Medium);
             return;
