@@ -83,7 +83,16 @@ public sealed partial class MechSystem : SharedMechSystem
     public TimeSpan RandomWalkTime = TimeSpan.FromSeconds(20);
     public TimeSpan ExpireAt;
 
+    public TimeSpan CooldownTime = TimeSpan.FromSeconds(6);
+
+    public float EffectInterval = 1f;
+
+    public float TimeAccumulator = 0f;
+
+    public TimeSpan NextPulseTime;
+
     public int EmpDamage = 30;
+    public bool IsEmp = false;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -122,6 +131,27 @@ public sealed partial class MechSystem : SharedMechSystem
         #endregion
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        var query = EntityQueryEnumerator<MechComponent>();
+        if (query.MoveNext(out var uid, out var comp))
+        {
+            if (IsEmp == false)
+                return;
+
+            TimeAccumulator += frameTime;
+
+            if (TimeAccumulator < EffectInterval)
+                return;
+
+            TimeAccumulator -= EffectInterval;
+
+            Spawn("EffectSparks", Transform(uid).Coordinates);
+            if (_timing.CurTime > NextPulseTime)
+                IsEmp = false;
+        }
+    }
     private void OnMechSay(EntityUid uid, MechComponent component, MechSayEvent args)
     {
         _chatSystem.TrySendInGameICMessage(uid, Loc.GetString(args.Message), InGameICChatType.Speak, ChatTransmitRange.Normal);
@@ -203,9 +233,17 @@ public sealed partial class MechSystem : SharedMechSystem
         if (!component.AffectedByEmp)
             return;
 
+        var curTime = _timing.CurTime;
+
+        if (curTime < NextPulseTime)
+            return;
+
+        NextPulseTime = curTime + CooldownTime;
+
         var damageType = _protoMan.Index<DamageTypePrototype>("Shock");
         var empDamage = new DamageSpecifier(damageType, FixedPoint2.New(EmpDamage));
         _damageable.TryChangeDamage(uid, empDamage);
+        IsEmp = true;
     }
 
     private void OnRemoveEquipmentMessage(EntityUid uid, MechComponent component, MechEquipmentRemoveMessage args)
