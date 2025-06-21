@@ -193,13 +193,13 @@
   priority: 20
   reactants:
     Iron:
-      amount: 10
+      amount: 1
     Uranium:
-      amount: 10
+      amount: 1
     Aluminium:
-      amount: 10
+      amount: 1
     Plasma:
-      amount: 10
+      amount: 1
   effects:
     - !type:EmpReactionEffect
       rangePerUnit: 0.2
