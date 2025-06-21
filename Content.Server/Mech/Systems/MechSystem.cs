@@ -83,6 +83,8 @@ public sealed partial class MechSystem : SharedMechSystem
     public TimeSpan RandomWalkTime = TimeSpan.FromSeconds(20);
     public TimeSpan ExpireAt;
 
+    public int EmpDamage = 30;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -202,7 +204,7 @@ public sealed partial class MechSystem : SharedMechSystem
             return;
 
         var damageType = _protoMan.Index<DamageTypePrototype>("Shock");
-        var empDamage = new DamageSpecifier(damageType, FixedPoint2.New(30));
+        var empDamage = new DamageSpecifier(damageType, FixedPoint2.New(EmpDamage));
         _damageable.TryChangeDamage(uid, empDamage);
     }
 
@@ -404,7 +406,7 @@ public sealed partial class MechSystem : SharedMechSystem
             return;
         }
 
-        if (entity.Comp.Whitelist != null && !_whitelistSystem.IsValid(entity.Comp.Whitelist, target) || HasComp<HumanoidAppearanceComponent>(target) || HasComp<SubFloorHideComponent>(target))
+        if (entity.Comp.Whitelist != null && !_whitelistSystem.IsValid(entity.Comp.Whitelist, target) || !TryPaint(entity, target))
         {
             _popup.PopupEntity(Loc.GetString("paint-failure", ("target", args.Target)), args.User, args.User, PopupType.Medium);
             return;
@@ -428,8 +430,7 @@ public sealed partial class MechSystem : SharedMechSystem
             RaiseNetworkEvent(ev);
             return;
         }
-
-        if (!TryPaint(entity, target))
+        else
         {
             _popup.PopupEntity(Loc.GetString("paint-empty", ("used", args.Used)), args.User, args.User, PopupType.Medium);
             return;
