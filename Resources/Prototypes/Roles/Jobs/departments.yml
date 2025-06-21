@@ -39,7 +39,6 @@
   - ServiceBorg
   - JanitorBorg
   - ClownBorg
-  - PeaceBorg
   # Sunrise-end
 
 # Вынесено в _Sunrise
@@ -133,6 +132,7 @@
   - Brigmedic  # Sunrise-Brigmedic
   - SecurityPilot # Sunrise-SecurityPilot
   - SecurityBorg # Sunrise-edit
+  - PeaceBorg # Sunrise-edit
 
 - type: department
   id: Science
