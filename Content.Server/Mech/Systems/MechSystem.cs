@@ -45,7 +45,6 @@ using Content.Shared.Humanoid;
 using Content.Shared.SubFloor;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Nutrition.EntitySystems;
-using Content.Shared.Mech.Events;
 using Content.Server.Emp;
 using Content.Server.Destructible;
 using Robust.Shared.Toolshed.TypeParsers;
@@ -436,6 +435,9 @@ public sealed partial class MechSystem : SharedMechSystem
         if (args.Target is not { Valid: true } target)
             return;
 
+        if (!TryComp<AppearanceComponent>(target, out var apperance))
+            return;
+
         if (!_openable.IsOpen(entity))
         {
             _popup.PopupEntity(Loc.GetString("paint-closed", ("used", args.Used)), args.User, args.User, PopupType.Medium);
@@ -461,9 +463,7 @@ public sealed partial class MechSystem : SharedMechSystem
             entity.Comp.Used = true;
             Dirty(target, mech);
             args.Handled = true;
-            var netEntity = GetNetEntity(target);
-            var ev = new UpdateAppearanceEvent(netEntity);
-            RaiseNetworkEvent(ev);
+            UpdateAppearance(target, mech, apperance);
         }
         else
         {
