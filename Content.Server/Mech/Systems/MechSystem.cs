@@ -45,7 +45,6 @@ using Content.Shared.Humanoid;
 using Content.Shared.SubFloor;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Nutrition.EntitySystems;
-using Content.Shared.Mech.Events;
 using Content.Server.Emp;
 using Content.Server.Destructible;
 using Robust.Shared.Toolshed.TypeParsers;

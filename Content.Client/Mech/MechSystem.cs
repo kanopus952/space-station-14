@@ -4,7 +4,6 @@ using Content.Shared.Mech.EntitySystems;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
-using Content.Shared.Mech.Events;
 
 namespace Content.Client.Mech;
 
