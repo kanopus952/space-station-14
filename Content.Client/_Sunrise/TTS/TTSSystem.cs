@@ -34,7 +34,7 @@ public sealed class TTSSystem : EntitySystem
     private float _radioVolume;
     private int _fileIdx;
     private float _volumeAnnounce;
-
+    private bool _isQueue;
     private readonly Queue<QueuedTts> _ttsQueue = new();
     private (EntityUid Entity, AudioComponent Component)? _currentPlaying;
     private static readonly AudioResource EmptyAudioResource = new();
@@ -61,6 +61,7 @@ public sealed class TTSSystem : EntitySystem
         _cfg.OnValueChanged(SunriseCCVars.TTSRadioVolume, OnTtsRadioVolumeChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.TTSAnnounceVolume, OnTtsAnnounceVolumeChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.TTSClientEnabled, OnTtsClientOptionChanged, true);
+        _cfg.OnValueChanged(SunriseCCVars.TTSClientQueueEnabled, OnTTSQueueOptionChanged, true);
         SubscribeNetworkEvent<PlayTTSEvent>(OnPlayTTS);
         SubscribeNetworkEvent<AnnounceTtsEvent>(OnAnnounceTTSPlay);
     }
@@ -72,6 +73,7 @@ public sealed class TTSSystem : EntitySystem
         _cfg.UnsubValueChanged(SunriseCCVars.TTSRadioVolume, OnTtsRadioVolumeChanged);
         _cfg.UnsubValueChanged(SunriseCCVars.TTSAnnounceVolume, OnTtsAnnounceVolumeChanged);
         _cfg.UnsubValueChanged(SunriseCCVars.TTSClientEnabled, OnTtsClientOptionChanged);
+        _cfg.UnsubValueChanged(SunriseCCVars.TTSClientQueueEnabled, OnTTSQueueOptionChanged);
 
         ContentRoot.Clear();
         _currentPlaying = null;
@@ -93,6 +95,10 @@ public sealed class TTSSystem : EntitySystem
         _radioVolume = volume;
     }
 
+    private void OnTTSQueueOptionChanged(bool option)
+    {
+        _isQueue = option;
+    }
     private void OnTtsAnnounceVolumeChanged(float volume)
     {
         _volumeAnnounce = volume;
@@ -152,7 +158,7 @@ public sealed class TTSSystem : EntitySystem
         if (volume == 0)
             return;
 
-        if (ev.IsRadio && _cfg.GetCVar(SunriseCCVars.TTSClientQueueEnabled))
+        if (ev.IsRadio && _isQueue)
         {
             var entry = new QueuedTts(ev.Data, TtsType.Radio);
 
