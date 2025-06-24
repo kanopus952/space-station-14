@@ -1,7 +1,9 @@
 ﻿using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared._Sunrise.TTS;
+using Content.Shared.CCVar;
 using Robust.Client.Audio;
 using Robust.Client.ResourceManagement;
+using Robust.Shared;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
@@ -150,7 +152,7 @@ public sealed class TTSSystem : EntitySystem
         if (volume == 0)
             return;
 
-        if (ev.IsRadio)
+        if (ev.IsRadio && _cfg.GetCVar(SunriseCCVars.TTSClientQueueEnabled))
         {
             var entry = new QueuedTts(ev.Data, TtsType.Radio);
 
