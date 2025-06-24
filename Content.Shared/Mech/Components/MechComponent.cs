@@ -92,9 +92,6 @@ public sealed partial class MechComponent : Component
     [ViewVariables, AutoNetworkedField]
     public EntityUid? CurrentSelectedEquipment;
 
-    [DataField]
-    public bool AffectedByEmp = true;
-
     /// <summary>
     /// The maximum amount of equipment items that can be installed in the mech
     /// </summary>
@@ -209,23 +206,6 @@ public sealed partial class MechComponent : Component
     [DataField] public EntityUid? MechEjectActionEntity;
     [DataField] public EntityUid? MechLightsActionEntity;
 
-    [DataField]
-    public TimeSpan CooldownTime = TimeSpan.FromSeconds(6);
-
-    [DataField]
-    public float EffectInterval = 1f;
-
-    [DataField]
-    public float TimeAccumulator = 0f;
-
-    [DataField]
-    public TimeSpan NextPulseTime;
-
-    [DataField]
-    public int EmpDamage = 30;
-
-    [DataField]
-    public bool IsEmp = false;
 
 }
 

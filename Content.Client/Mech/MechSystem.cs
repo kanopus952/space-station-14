@@ -20,7 +20,6 @@ public sealed class MechSystem : SharedMechSystem
         base.Initialize();
 
         SubscribeLocalEvent<MechComponent, AppearanceChangeEvent>(OnAppearanceChanged);
-        SubscribeNetworkEvent<UpdateAppearanceEvent>(OnUpdateAppearanceEvent);
     }
 
     private void OnAppearanceChanged(EntityUid uid, MechComponent component, ref AppearanceChangeEvent args)
@@ -30,23 +29,11 @@ public sealed class MechSystem : SharedMechSystem
 
         UpdateAppearance(uid, component, args.Sprite);
     }
-
-    private void OnUpdateAppearanceEvent(UpdateAppearanceEvent ev)
-    {
-        var uid = GetEntity(ev.Uid);
-        if (!TryComp<SpriteComponent>(uid, out var sprite))
-            return;
-
-        if (!TryComp<MechComponent>(uid, out var component))
-            return;
-
-        UpdateAppearance(uid, component, sprite);
-    }
-
     private void UpdateAppearance(EntityUid uid, MechComponent component, SpriteComponent sprite)
     {
         var state = component.BaseState;
         var drawDepth = DrawDepth.Mobs;
+        UpdatePaintApperance(uid, component);
 
         if (component.BrokenState != null
             && _appearance.TryGetData<bool>(uid, MechVisuals.Broken, out var broken)
@@ -65,5 +52,17 @@ public sealed class MechSystem : SharedMechSystem
 
         _sprite.LayerSetRsiState((uid, sprite), MechVisualLayers.Base, state);
         _sprite.SetDrawDepth((uid, sprite), (int)drawDepth);
+    }
+
+    private void UpdatePaintApperance(EntityUid uid, MechComponent component)
+    {
+        if (_appearance.TryGetData<string>(uid, MechVisualLayers.Base, out var baseState))
+            component.BaseState = baseState;
+
+        if (_appearance.TryGetData<string>(uid, MechVisualLayers.Open, out var open))
+            component.OpenState = open;
+
+        if (_appearance.TryGetData<string>(uid, MechVisualLayers.Open, out var broken))
+            component.BrokenState = broken;
     }
 }

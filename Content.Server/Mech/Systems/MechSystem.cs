@@ -77,6 +77,7 @@ public sealed partial class MechSystem : SharedMechSystem
     [Dependency] private readonly OpenableSystem _openable = default!;
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
 
 
     private static readonly ProtoId<ToolQualityPrototype> PryingQuality = "Prying";
@@ -99,7 +100,7 @@ public sealed partial class MechSystem : SharedMechSystem
         SubscribeLocalEvent<MechPaintComponent, GetVerbsEvent<UtilityVerb>>(OnPaintVerb);
         SubscribeLocalEvent<MechComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<MechComponent, MechEquipmentRemoveMessage>(OnRemoveEquipmentMessage);
-        SubscribeLocalEvent<MechComponent, EmpPulseEvent>(OnEmpPulse);
+        SubscribeLocalEvent<MechAffectedByEMPComponent, EmpPulseEvent>(OnEmpPulse);
         SubscribeLocalEvent<MechPaintComponent, PaintDoAfterEvent>(OnPaint);
 
         SubscribeLocalEvent<MechComponent, UpdateCanMoveEvent>(OnMechCanMoveEvent);
@@ -132,22 +133,23 @@ public sealed partial class MechSystem : SharedMechSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        var query = EntityQueryEnumerator<MechComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        var query = EntityQueryEnumerator<MechAffectedByEMPComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var xfrom))
         {
-            if (comp.IsEmp == false)
+            if (!TryComp<MechOnEMPPulseComponent>(uid, out var emp))
                 continue;
 
-            comp.TimeAccumulator += frameTime;
+            var curTime = _timing.CurTime;
 
-            if (comp.TimeAccumulator < comp.EffectInterval)
+            if (emp.NextEffectTime > curTime)
                 continue;
 
-            comp.TimeAccumulator -= comp.EffectInterval;
+            emp.NextEffectTime = curTime + emp.EffectInterval;
 
-            Spawn("EffectSparks", Transform(uid).Coordinates);
-            if (_timing.CurTime > comp.NextPulseTime)
-                comp.IsEmp = false;
+            Spawn(comp.EffectEMP, xfrom.Coordinates);
+
+            if (curTime > comp.NextPulseTime)
+                RemComp<MechOnEMPPulseComponent>(uid);
         }
     }
     private void OnMechSay(EntityUid uid, MechComponent component, MechSayEvent args)
@@ -226,11 +228,8 @@ public sealed partial class MechSystem : SharedMechSystem
         Dirty(uid, component);
     }
 
-    private void OnEmpPulse(EntityUid uid, MechComponent component, ref EmpPulseEvent args)
+    private void OnEmpPulse(EntityUid uid, MechAffectedByEMPComponent component, ref EmpPulseEvent args)
     {
-        if (!component.AffectedByEmp)
-            return;
-
         var curTime = _timing.CurTime;
 
         if (curTime < component.NextPulseTime)
@@ -238,10 +237,9 @@ public sealed partial class MechSystem : SharedMechSystem
 
         component.NextPulseTime = curTime + component.CooldownTime;
 
-        var damageType = _protoMan.Index<DamageTypePrototype>("Shock");
-        var empDamage = new DamageSpecifier(damageType, FixedPoint2.New(component.EmpDamage));
-        _damageable.TryChangeDamage(uid, empDamage);
-        component.IsEmp = true;
+        _damageable.TryChangeDamage(uid, component.EmpDamage);
+
+        EnsureComp<MechOnEMPPulseComponent>(uid);
     }
 
     private void OnRemoveEquipmentMessage(EntityUid uid, MechComponent component, MechEquipmentRemoveMessage args)
@@ -416,13 +414,13 @@ public sealed partial class MechSystem : SharedMechSystem
         if (!args.CanReach)
             return;
 
-        if (args.Target is not { Valid: true } target)
+        if (!Exists(args.Target))
             return;
 
         if (!HasComp<MechComponent>(args.Target))
             return;
 
-        PrepPaint(uid, component, target, args.User);
+        PrepPaint(uid, component, args.Target, args.User);
     }
 
     private void OnPaint(Entity<MechPaintComponent> entity, ref PaintDoAfterEvent args)
@@ -436,39 +434,37 @@ public sealed partial class MechSystem : SharedMechSystem
         if (args.Target is not { Valid: true } target)
             return;
 
+        if (!TryComp<AppearanceComponent>(target, out var appearance))
+            return;
+
         if (!_openable.IsOpen(entity))
         {
             _popup.PopupEntity(Loc.GetString("paint-closed", ("used", args.Used)), args.User, args.User, PopupType.Medium);
             return;
         }
 
-        if (entity.Comp.Whitelist != null && !_whitelistSystem.IsValid(entity.Comp.Whitelist, target))
+        if (_whitelistSystem.IsWhitelistFailOrNull(entity.Comp.Whitelist, target))
         {
             _popup.PopupEntity(Loc.GetString("paint-failure", ("target", args.Target)), args.User, args.User, PopupType.Medium);
             return;
         }
 
-
-        if (TryPaint(entity, target))
-        {
-            EnsureComp<MechComponent>(target, out var mech);
-            _audio.PlayPvs(entity.Comp.Spray, entity);
-
-            _popup.PopupEntity(Loc.GetString("paint-success", ("target", args.Target)), args.User, args.User, PopupType.Medium);
-            mech.BaseState = entity.Comp.BaseState;
-            mech.OpenState = entity.Comp.OpenState;
-            mech.BrokenState = entity.Comp.BrokenState;
-            entity.Comp.Used = true;
-            Dirty(target, mech);
-            args.Handled = true;
-            var netEntity = GetNetEntity(target);
-            var ev = new UpdateAppearanceEvent(netEntity);
-            RaiseNetworkEvent(ev);
-        }
-        else
+        if (!TryPaint(entity, target))
         {
             _popup.PopupEntity(Loc.GetString("paint-empty", ("used", args.Used)), args.User, args.User, PopupType.Medium);
+            return;
         }
+
+        EnsureComp<MechComponent>(target, out var mech);
+        _audio.PlayPvs(entity.Comp.Spray, entity);
+        _popup.PopupEntity(Loc.GetString("paint-success", ("target", args.Target)), args.User, args.User, PopupType.Medium);
+        entity.Comp.Used = true;
+        Dirty(target, mech);
+        args.Handled = true;
+        _appearanceSystem.SetData(target, MechVisualLayers.Base, entity.Comp.BaseState, appearance);
+        _appearanceSystem.SetData(target, MechVisualLayers.Open, entity.Comp.OpenState, appearance);
+        _appearanceSystem.SetData(target, MechVisualLayers.Broken, entity.Comp.BrokenState, appearance);
+
     }
 
     private bool TryPaint(Entity<MechPaintComponent> entity, EntityUid target)
@@ -544,7 +540,7 @@ public sealed partial class MechSystem : SharedMechSystem
         }
     }
 
-    private void PrepPaint(EntityUid uid, MechPaintComponent component, EntityUid target, EntityUid user)
+    private void PrepPaint(EntityUid uid, MechPaintComponent component, EntityUid? target, EntityUid user)
     {
 
         var doAfterEventArgs = new DoAfterArgs(EntityManager, user, component.Delay, new PaintDoAfterEvent(), uid, target: target, used: uid)
