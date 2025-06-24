@@ -448,7 +448,7 @@ public sealed partial class MechSystem : SharedMechSystem
             return;
         }
 
-        if (!TryPaint(entity, target))
+        if (entity.Comp.Used)
         {
             _popup.PopupEntity(Loc.GetString("paint-empty", ("used", args.Used)), args.User, args.User, PopupType.Medium);
             return;
@@ -465,18 +465,6 @@ public sealed partial class MechSystem : SharedMechSystem
         _appearanceSystem.SetData(target, MechVisualLayers.Broken, entity.Comp.BrokenState, appearance);
 
     }
-
-    private bool TryPaint(Entity<MechPaintComponent> entity, EntityUid target)
-    {
-        if (HasComp<HumanoidAppearanceComponent>(target) || HasComp<SubFloorHideComponent>(target) || entity.Comp.Used)
-            return false;
-
-        if (HasComp<MechComponent>(target))
-            return true;
-
-        return false;
-    }
-
     private void SayCritMessage(EntityUid uid, MechComponent component, DamageableComponent damage, bool damageIncreased)
     {
         if (!damageIncreased)

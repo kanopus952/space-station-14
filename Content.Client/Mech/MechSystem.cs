@@ -61,7 +61,7 @@ public sealed class MechSystem : SharedMechSystem
         if (_appearance.TryGetData<string>(uid, MechVisualLayers.Open, out var open))
             component.OpenState = open;
 
-        if (_appearance.TryGetData<string>(uid, MechVisualLayers.Open, out var broken))
+        if (_appearance.TryGetData<string>(uid, MechVisualLayers.Broken, out var broken))
             component.BrokenState = broken;
     }
 }

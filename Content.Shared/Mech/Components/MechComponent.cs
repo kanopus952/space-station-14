@@ -205,8 +205,6 @@ public sealed partial class MechComponent : Component
     [DataField] public EntityUid? MechUiActionEntity;
     [DataField] public EntityUid? MechEjectActionEntity;
     [DataField] public EntityUid? MechLightsActionEntity;
-
-
 }
 
 public enum MechHealthState
