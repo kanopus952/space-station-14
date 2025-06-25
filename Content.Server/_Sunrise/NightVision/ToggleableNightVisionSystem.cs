@@ -2,7 +2,7 @@ using Content.Shared._Sunrise.NightVision.Components;
 using Content.Shared._Sunrise.NightVision.Events;
 using Content.Shared.Actions;
 
-namespace Content.Server_Sunrise.NightVision;
+namespace Content.Server._Sunrise.NightVision;
 
 public sealed class ToggleableNightVisionSystem : EntitySystem
 {
