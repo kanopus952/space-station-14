@@ -34,7 +34,7 @@ public sealed class TTSSystem : EntitySystem
     private float _radioVolume;
     private int _fileIdx;
     private float _volumeAnnounce;
-    private bool _isQueue;
+    private bool _isQueueEnabled;
     private readonly Queue<QueuedTts> _ttsQueue = new();
     private (EntityUid Entity, AudioComponent Component)? _currentPlaying;
     private static readonly AudioResource EmptyAudioResource = new();
@@ -97,7 +97,7 @@ public sealed class TTSSystem : EntitySystem
 
     private void OnTTSQueueOptionChanged(bool option)
     {
-        _isQueue = option;
+        _isQueueEnabled = option;
     }
     private void OnTtsAnnounceVolumeChanged(float volume)
     {
@@ -158,7 +158,7 @@ public sealed class TTSSystem : EntitySystem
         if (volume == 0)
             return;
 
-        if (ev.IsRadio && _isQueue)
+        if (ev.IsRadio && _isQueueEnabled)
         {
             var entry = new QueuedTts(ev.Data, TtsType.Radio);
 
