@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server._Sunrise.CryoTeleport;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Systems;
 using Content.Server.Mech.Components;
@@ -15,7 +14,6 @@ using Content.Shared.Mech.Components;
 using Content.Shared.Mech.EntitySystems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
 using Content.Shared.Tools;
@@ -30,8 +28,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Tag;
-using Robust.Server.Audio;
-using Robust.Shared.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
@@ -39,18 +35,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
-using Robust.Shared.Utility;
-using PaintDoAfterEvent = Content.Shared._Sunrise.Paint.PaintDoAfterEvent;
-using Content.Shared.Humanoid;
-using Content.Shared.SubFloor;
-using Robust.Shared.Audio.Systems;
-using Content.Shared.Nutrition.EntitySystems;
-using Content.Server.Emp;
-using Content.Server.Destructible;
-using Robust.Shared.Toolshed.TypeParsers;
-using Content.Shared.Damage.Prototypes;
-using Robust.Shared.Timing;
-using Content.Server.Physics.Components;
 namespace Content.Server.Mech.Systems;
 
 /// <inheritdoc/>
@@ -72,11 +56,6 @@ public sealed partial class MechSystem : SharedMechSystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly OpenableSystem _openable = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
 
     private static readonly ProtoId<ToolQualityPrototype> PryingQuality = "Prying";
