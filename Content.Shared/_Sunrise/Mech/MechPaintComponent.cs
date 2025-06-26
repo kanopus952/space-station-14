@@ -31,7 +31,7 @@ public sealed partial class MechPaintComponent : Component
     /// How long the doafter will take.
     /// </summary>
     [DataField]
-    public int Delay = 2;
+    public TimeSpan Delay = TimeSpan.FromSeconds(2);
 
     /// <summary>
     /// What mech are paint?
