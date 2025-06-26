@@ -1,13 +1,11 @@
 using Content.Shared._Sunrise.NightVision.Components;
-using Content.Shared.Mech.Components;
-using Content.Shared.Mech;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Player;
-using Content.Shared.Flash.Components;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
+using Robust.Shared.GameStates;
+using Content.Shared._Sunrise.NightVision;
 
 namespace Content.Client._Sunrise.Overlays;
 
@@ -26,13 +24,21 @@ public sealed class NightVisionSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<NightVisionComponent, ComponentInit>(OnVisionInit);
         SubscribeLocalEvent<NightVisionComponent, ComponentShutdown>(OnVisionShutdown);
-
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<NightVisionComponent, ComponentHandleState>(OnHandleVisionState);
 
         _overlay = new(_prototypeManager.Index<ShaderPrototype>("ModernNightVisionShader"));
+    }
+
+    private void OnHandleVisionState(Entity<NightVisionComponent> ent, ref ComponentHandleState args)
+    {
+        if (args.Current is not NightVisionComponentState state)
+            return;
+
+        ent.Comp.Effect = state.Effect;
+        AttemptAddVision(ent.Owner, ent.Comp);
     }
 
     private void OnPlayerAttached(Entity<NightVisionComponent> ent, ref LocalPlayerAttachedEvent args)
@@ -43,11 +49,6 @@ public sealed class NightVisionSystem : EntitySystem
     private void OnPlayerDetached(Entity<NightVisionComponent> ent, ref LocalPlayerDetachedEvent args)
     {
         AttemptRemoveVision(ent.Owner, true);
-    }
-
-    private void OnVisionInit(Entity<NightVisionComponent> ent, ref ComponentInit args)
-    {
-        AttemptAddVision(ent.Owner, ent.Comp);
     }
 
     private void OnVisionShutdown(Entity<NightVisionComponent> ent, ref ComponentShutdown args)

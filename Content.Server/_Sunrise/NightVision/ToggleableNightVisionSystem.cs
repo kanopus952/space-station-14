@@ -1,6 +1,8 @@
+using Content.Shared._Sunrise.NightVision;
 using Content.Shared._Sunrise.NightVision.Components;
 using Content.Shared._Sunrise.NightVision.Events;
 using Content.Shared.Actions;
+using Robust.Shared.GameStates;
 
 namespace Content.Server._Sunrise.NightVision;
 
@@ -13,6 +15,7 @@ public sealed class ToggleableNightVisionSystem : EntitySystem
         SubscribeLocalEvent<ToggleableNightVisionComponent, ComponentInit>(OnVisionInit);
         SubscribeLocalEvent<ToggleableNightVisionComponent, ComponentShutdown>(OnVisionShutdown);
         SubscribeLocalEvent<ToggleableNightVisionComponent, ToggleNightVisionEvent>(OnToggleNightVision);
+        SubscribeLocalEvent<NightVisionComponent, ComponentGetState>(OnGetState);
     }
 
     private void OnVisionInit(Entity<ToggleableNightVisionComponent> ent, ref ComponentInit args)
@@ -34,10 +37,22 @@ public sealed class ToggleableNightVisionSystem : EntitySystem
         ent.Comp.Active = !ent.Comp.Active;
 
         if (ent.Comp.Active)
-            EnsureComp<NightVisionComponent>(ent);
+            ToggleOn(ent, ent.Comp);
         else
             RemComp<NightVisionComponent>(ent);
 
         args.Handled = true;
+    }
+
+    private void ToggleOn(EntityUid uid, ToggleableNightVisionComponent comp)
+    {
+        EnsureComp<NightVisionComponent>(uid, out var vision);
+
+        vision.Effect = comp.Effect;
+    }
+
+    private void OnGetState(Entity<NightVisionComponent> ent, ref ComponentGetState args)
+    {
+        args.State = new NightVisionComponentState(ent.Comp.Effect);
     }
 }
