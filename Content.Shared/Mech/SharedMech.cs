@@ -20,8 +20,8 @@ public enum MechAssemblyVisuals : byte
 public enum MechVisualLayers : byte
 {
     Base,
-    Open,
-    Broken
+    Open, // Sunrise-added
+    Broken // Sunrise-added
 }
 
 /// <summary>

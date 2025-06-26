@@ -76,7 +76,7 @@ public sealed partial class MechSystem : SharedMechSystem
     [Dependency] private readonly OpenableSystem _openable = default!;
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
 
     private static readonly ProtoId<ToolQualityPrototype> PryingQuality = "Prying";
@@ -95,12 +95,8 @@ public sealed partial class MechSystem : SharedMechSystem
         SubscribeLocalEvent<MechComponent, MechEntryEvent>(OnMechEntry);
         SubscribeLocalEvent<MechComponent, MechExitEvent>(OnMechExit);
         SubscribeLocalEvent<MechComponent, MechSayEvent>(OnMechSay);
-        SubscribeLocalEvent<MechPaintComponent, AfterInteractEvent>(OnInteract);
-        SubscribeLocalEvent<MechPaintComponent, GetVerbsEvent<UtilityVerb>>(OnPaintVerb);
         SubscribeLocalEvent<MechComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<MechComponent, MechEquipmentRemoveMessage>(OnRemoveEquipmentMessage);
-        SubscribeLocalEvent<MechAffectedByEMPComponent, EmpPulseEvent>(OnEmpPulse);
-        SubscribeLocalEvent<MechPaintComponent, PaintDoAfterEvent>(OnPaint);
 
         SubscribeLocalEvent<MechComponent, UpdateCanMoveEvent>(OnMechCanMoveEvent);
 
@@ -110,8 +106,6 @@ public sealed partial class MechSystem : SharedMechSystem
         SubscribeLocalEvent<MechPilotComponent, ExhaleLocationEvent>(OnExhale);
         SubscribeLocalEvent<MechPilotComponent, AtmosExposedGetAirEvent>(OnExpose);
 
-        SubscribeLocalEvent<MechPilotComponent, BeforeCryoTeleportEvent>(OnCryoTeleportAttemptEvent); // Sunrise-add
-
         SubscribeLocalEvent<MechAirComponent, GetFilterAirEvent>(OnGetFilterAir);
 
         #region Equipment UI message relays
@@ -120,37 +114,6 @@ public sealed partial class MechSystem : SharedMechSystem
         #endregion
     }
 
-    // Sunrise-start
-    private void OnCryoTeleportAttemptEvent(EntityUid uid, MechPilotComponent component, BeforeCryoTeleportEvent args)
-    {
-        if (!TryComp<MechComponent>(component.Mech, out var mechComponent))
-            return;
-        TryEject(uid, mechComponent);
-    }
-    // Sunrise-end
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-        var query = EntityQueryEnumerator<MechAffectedByEMPComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var xfrom))
-        {
-            if (!TryComp<MechOnEMPPulseComponent>(uid, out var emp))
-                continue;
-
-            var curTime = _timing.CurTime;
-
-            if (emp.NextEffectTime > curTime)
-                continue;
-
-            emp.NextEffectTime = curTime + emp.EffectInterval;
-
-            Spawn(comp.EffectEMP, xfrom.Coordinates);
-
-            if (curTime > comp.NextPulseTime)
-                RemComp<MechOnEMPPulseComponent>(uid);
-        }
-    }
     private void OnMechSay(EntityUid uid, MechComponent component, MechSayEvent args)
     {
         _chatSystem.TrySendInGameICMessage(uid, Loc.GetString(args.Message), InGameICChatType.Speak, ChatTransmitRange.Normal);
@@ -225,20 +188,6 @@ public sealed partial class MechSystem : SharedMechSystem
 
         _actionBlocker.UpdateCanMove(uid);
         Dirty(uid, component);
-    }
-
-    private void OnEmpPulse(EntityUid uid, MechAffectedByEMPComponent component, ref EmpPulseEvent args)
-    {
-        var curTime = _timing.CurTime;
-
-        if (curTime < component.NextPulseTime)
-            return;
-
-        component.NextPulseTime = curTime + component.CooldownTime;
-
-        _damageable.TryChangeDamage(uid, component.EmpDamage);
-
-        EnsureComp<MechOnEMPPulseComponent>(uid);
     }
 
     private void OnRemoveEquipmentMessage(EntityUid uid, MechComponent component, MechEquipmentRemoveMessage args)
@@ -385,86 +334,6 @@ public sealed partial class MechSystem : SharedMechSystem
         }
     }
 
-    private void OnPaintVerb(EntityUid uid, MechPaintComponent component, GetVerbsEvent<UtilityVerb> args)
-    {
-        if (!args.CanInteract || !args.CanAccess)
-            return;
-
-        if (!HasComp<MechComponent>(args.Target))
-            return;
-
-        var paintText = Loc.GetString("paint-verb");
-
-        var verb = new UtilityVerb()
-        {
-            Act = () =>
-            {
-                PrepPaint(uid, component, args.Target, args.User);
-            },
-
-            Text = paintText,
-            Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/paint.svg.192dpi.png"))
-        };
-        args.Verbs.Add(verb);
-    }
-
-    private void OnInteract(EntityUid uid, MechPaintComponent component, AfterInteractEvent args)
-    {
-        if (!args.CanReach)
-            return;
-
-        if (!Exists(args.Target))
-            return;
-
-        if (!HasComp<MechComponent>(args.Target))
-            return;
-
-        PrepPaint(uid, component, args.Target, args.User);
-    }
-
-    private void OnPaint(Entity<MechPaintComponent> entity, ref PaintDoAfterEvent args)
-    {
-        if (args.Target == null || args.Used == null || !HasComp<MechComponent>(args.Target))
-            return;
-
-        if (args.Handled || args.Cancelled)
-            return;
-
-        if (args.Target is not { Valid: true } target)
-            return;
-
-        if (!TryComp<AppearanceComponent>(target, out var appearance))
-            return;
-
-        if (!_openable.IsOpen(entity))
-        {
-            _popup.PopupEntity(Loc.GetString("paint-closed", ("used", args.Used)), args.User, args.User, PopupType.Medium);
-            return;
-        }
-
-        if (_whitelistSystem.IsWhitelistFailOrNull(entity.Comp.Whitelist, target))
-        {
-            _popup.PopupEntity(Loc.GetString("paint-failure", ("target", args.Target)), args.User, args.User, PopupType.Medium);
-            return;
-        }
-
-        if (entity.Comp.Used)
-        {
-            _popup.PopupEntity(Loc.GetString("paint-empty", ("used", args.Used)), args.User, args.User, PopupType.Medium);
-            return;
-        }
-
-        EnsureComp<MechComponent>(target, out var mech);
-        _audio.PlayPvs(entity.Comp.Spray, entity);
-        _popup.PopupEntity(Loc.GetString("paint-success", ("target", args.Target)), args.User, args.User, PopupType.Medium);
-        entity.Comp.Used = true;
-        Dirty(target, mech);
-        args.Handled = true;
-        _appearanceSystem.SetData(target, MechVisualLayers.Base, entity.Comp.BaseState, appearance);
-        _appearanceSystem.SetData(target, MechVisualLayers.Open, entity.Comp.OpenState, appearance);
-        _appearanceSystem.SetData(target, MechVisualLayers.Broken, entity.Comp.BrokenState, appearance);
-
-    }
     private void SayCritMessage(EntityUid uid, MechComponent component, DamageableComponent damage, bool damageIncreased)
     {
         if (!damageIncreased)
@@ -525,20 +394,6 @@ public sealed partial class MechSystem : SharedMechSystem
             if (argEquip == equipment)
                 RaiseLocalEvent(equipment, ev);
         }
-    }
-
-    private void PrepPaint(EntityUid uid, MechPaintComponent component, EntityUid? target, EntityUid user)
-    {
-
-        var doAfterEventArgs = new DoAfterArgs(EntityManager, user, component.Delay, new PaintDoAfterEvent(), uid, target: target, used: uid)
-        {
-            BreakOnMove = true,
-            BreakOnDamage = true,
-            NeedHand = true,
-            BreakOnHandChange = true
-        };
-
-        _doAfter.TryStartDoAfter(doAfterEventArgs);
     }
 
     public override void UpdateUserInterface(EntityUid uid, MechComponent? component = null)

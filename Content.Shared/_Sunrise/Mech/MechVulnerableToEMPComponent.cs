@@ -1,13 +1,14 @@
 using Content.Shared.Damage;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.Mech.Components;
+namespace Content.Shared._Sunrise.Mech;
 
 /// <summary>
 /// Делает мех уязвимым к электромагнитным импульсам
 /// </summary>
-[RegisterComponent]
-public sealed partial class MechAffectedByEMPComponent : Component
+[RegisterComponent, NetworkedComponent]
+public sealed partial class MechVulnerableToEMPComponent : Component
 {
     [ViewVariables]
     public TimeSpan NextPulseTime;
@@ -25,5 +26,5 @@ public sealed partial class MechAffectedByEMPComponent : Component
     };
 
     [DataField]
-    public EntProtoId EffectEMP = "EffectSparks";
+    public EntProtoId EffectEMP = "EffectMechSparks";
 }

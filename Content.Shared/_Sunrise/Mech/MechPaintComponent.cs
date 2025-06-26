@@ -7,13 +7,12 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.Mech.Components;
+namespace Content.Shared._Sunrise.Mech;
 
 /// <summary>
 /// Entity when used on another entity will paint target entity.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-[Access(typeof(SharedMechSystem))]
 public sealed partial class MechPaintComponent : Component
 {
     /// <summary>

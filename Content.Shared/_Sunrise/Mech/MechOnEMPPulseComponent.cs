@@ -1,11 +1,12 @@
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.Mech.Components;
+namespace Content.Shared._Sunrise.Mech;
 
 /// <summary>
 /// Накладывается на мех, когда он находится под действием электромагнитного импульса
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class MechOnEMPPulseComponent : Component
 {
     [ViewVariables]
