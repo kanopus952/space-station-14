@@ -448,7 +448,6 @@
   - type: SurgeryOrganExistCondition
     organ:
     - type: OrganHeart
-    - type: OrganAnimalHeart
   - type: Sprite
     sprite: Mobs/Species/Human/organs.rsi
     state: heart-on
@@ -474,7 +473,6 @@
   - type: SurgeryOrganDontExistCondition
     organ:
     - type: OrganHeart
-    - type: OrganAnimalHeart
   - type: Sprite
     sprite: Mobs/Species/Human/organs.rsi
     state: heart-on
