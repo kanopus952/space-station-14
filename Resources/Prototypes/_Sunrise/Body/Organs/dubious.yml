@@ -1,6 +1,35 @@
 - type: entity
+  abstract: true
+  id: BaseOrganDubious
+  parent: [BaseItem, BaseOrganHeart]
+  components:
+  - type: Organ
+  - type: Extractable
+    grindableSolutionName: organ
+  - type: SolutionContainerManager
+    solutions:
+      organ:
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Sprite
+    state: heart-on
+  - type: Metabolizer
+    maxReagents: 2
+    metabolizerTypes: [Human]
+    groups:
+    - id: Medicine
+    - id: Poison
+    - id: Narcotic
+  - type: Item
+    size: Small
+    heldPrefix: heart
+  - type: Gibbable
+
+
+- type: entity
   id: OrganDubiousHealth
-  parent: [OrganHumanHeart]
+  parent: [BaseOrganDubious]
   name: gland
   description: Suspicious alien gland, replaces the heart.
   components:
@@ -12,7 +41,7 @@
 
 - type: entity
   id: OrganDubiousPlasma
-  parent: [OrganHumanHeart]
+  parent: [BaseOrganDubious]
   name: gland
   description: Suspicious alien gland, replaces the heart.
   components:
@@ -24,7 +53,7 @@
 
 - type: entity
   id: OrganDubiousGravity
-  parent: [OrganHumanHeart]
+  parent: [BaseOrganDubious]
   name: gland
   description: Suspicious alien gland, replaces the heart.
   components:
@@ -36,7 +65,7 @@
 
 - type: entity
   id: OrganDubiousEgg
-  parent: [OrganHumanHeart]
+  parent: [BaseOrganDubious]
   name: gland
   description: Suspicious alien gland, replaces the heart.
   components:
@@ -48,7 +77,7 @@
 
 - type: entity
   id: OrganDubiousSpider
-  parent: [OrganHumanHeart]
+  parent: [BaseOrganDubious]
   name: gland
   description: Suspicious alien gland, replaces the heart.
   components:
@@ -60,7 +89,7 @@
 
 - type: entity
   id: OrganDubiousVent
-  parent: [OrganHumanHeart]
+  parent: [BaseOrganDubious]
   name: gland
   description: Suspicious alien gland, replaces the heart.
   components:
