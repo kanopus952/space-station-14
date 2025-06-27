@@ -82,9 +82,10 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
         if (TryComp<AbductorConsoleComponent>(args.Target, out var console))
         {
-            console.Armor = GetNetEntity(ent);
+            var netEntity = GetNetEntity(ent);
+            console.Armor = netEntity;
             _popup.PopupEntity(Loc.GetString("abductors-ui-vest-linked"), args.User);
-            return;
+            UpdateGui(netEntity, (args.Target.Value, console));
         }
     }
 }
