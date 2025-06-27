@@ -104,6 +104,11 @@
   - type: PowerCellDraw
     drawRate: 0
     useRate: 20
+  - type: ComponentToggler
+    parent: true
+    components:
+      - type: NightVision
+        effect: EffectNightVisionSyndie
 
 - type: entity
   parent: [ClothingEyesGlassesThermal, ShowSecurityIcons, BaseSyndicateContraband]

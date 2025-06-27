@@ -199,11 +199,8 @@
       types:
         Blunt: 5
     damageSound: /Audio/Effects/hit_kick.ogg
-#  - type: DamagedByFlashing
-#    flashDamage:
-#      types:
-#        Shock: 5.0
-#  - type: NightVision
+  - type: ToggleableNightVision
+    effect: EffectNightVisioSpecies
 
 - type: entity
   save: false

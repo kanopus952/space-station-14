@@ -58,10 +58,12 @@ public sealed class NightVisionSystem : EntitySystem
 
     private void AttemptAddVision(EntityUid uid, NightVisionComponent comp)
     {
-        if (_player.LocalSession?.AttachedEntity != uid) return;
+        if (_player.LocalSession?.AttachedEntity != uid)
+            return;
 
         //only add if effect isnt already used
-        if (_effect != null) return;
+        if (_effect != null)
+            return;
 
         _overlayMan.AddOverlay(_overlay);
 
@@ -77,7 +79,8 @@ public sealed class NightVisionSystem : EntitySystem
     private void AttemptRemoveVision(EntityUid uid, bool force = false)
     {
         //ENSURE this is the local player
-        if (_player.LocalSession?.AttachedEntity != uid && !force) return;
+        if (_player.LocalSession?.AttachedEntity != uid && !force)
+            return;
 
         _overlayMan.RemoveOverlay(_overlay);
         Del(_effect);

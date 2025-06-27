@@ -127,6 +127,11 @@
         shader: unshaded
         map: [ "light" ]
   - type: ShowSyndicateIcons
+  - type: ComponentToggler
+    parent: true
+    components:
+      - type: NightVision
+        effect: EffectNightVisionSyndie
 
 - type: entity
   parent: ClothingEyesNVD
@@ -146,3 +151,8 @@
   - type: PowerCellDraw
     drawRate: 0
     useRate: 50
+  - type: ComponentToggler
+    parent: true
+    components:
+      - type: NightVision
+        effect: EffectNightVisionHandcraft

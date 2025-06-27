@@ -12,18 +12,18 @@ youve added are different based on their fields. So to get around this,
 we define all the actual BEHAVIOUR here, but then just make it appear as a new
 type by inheriting from this and implementing nothing. Thanks Robust Toolbox team.
 */
-public abstract class BaseVisionOverlay : Robust.Client.Graphics.Overlay
+public abstract class BaseVisionOverlay : Overlay
 {
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
-    private protected readonly ShaderInstance _shader;
+    private protected readonly ShaderInstance Shader;
     public BaseVisionOverlay(ShaderPrototype shader)
     {
         IoCManager.InjectDependencies(this);
-        _shader = shader.InstanceUnique();
+        Shader = shader.InstanceUnique();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -50,9 +50,9 @@ public abstract class BaseVisionOverlay : Robust.Client.Graphics.Overlay
         var worldHandle = args.WorldHandle;
         var viewport = args.WorldBounds;
 
-        _shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
+        Shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
-        worldHandle.UseShader(_shader);
+        worldHandle.UseShader(Shader);
         worldHandle.DrawRect(viewport, Color.White);
         worldHandle.UseShader(null);
     }

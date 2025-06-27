@@ -9,9 +9,11 @@ namespace Content.Server._Sunrise.NightVision;
 public sealed class ToggleableNightVisionSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<ToggleableNightVisionComponent, ComponentInit>(OnVisionInit);
         SubscribeLocalEvent<ToggleableNightVisionComponent, ComponentShutdown>(OnVisionShutdown);
         SubscribeLocalEvent<ToggleableNightVisionComponent, ToggleNightVisionEvent>(OnToggleNightVision);

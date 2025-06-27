@@ -17,5 +17,5 @@ public sealed partial class ToggleableNightVisionComponent : Component
     public EntityUid? ActionEntity;
 
     [ViewVariables]
-    public bool Active = false;
+    public bool Active;
 }
