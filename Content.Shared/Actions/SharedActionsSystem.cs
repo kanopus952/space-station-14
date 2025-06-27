@@ -446,8 +446,10 @@ public abstract class SharedActionsSystem : EntitySystem
 
         // even if we don't check for obstructions, we may still need to check the range.
         var xform = Transform(user);
-        if (xform.MapID != _transform.GetMapId(coords))
-            return false;
+        // Sunrise-start, для абдукторов. Иначе они не тепаются через карты
+        // if (xform.MapID != _transform.GetMapId(coords))
+        //     return false;
+        // Sunrise-end
 
         if (comp.Range <= 0)
             return true;
