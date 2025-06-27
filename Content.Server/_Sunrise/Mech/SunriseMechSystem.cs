@@ -15,6 +15,7 @@ using Content.Shared.Nutrition.EntitySystems;
 using Content.Server.Emp;
 using Robust.Shared.Timing;
 using Content.Shared._Sunrise.Mech;
+using Content.Shared.Coordinates;
 
 namespace Content.Server._Sunrise.Mech;
 
@@ -58,8 +59,8 @@ public sealed partial class SunriseMechSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<MechVulnerableToEMPComponent, MechOnEMPPulseComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var emp, out var xfrom))
+        var query = EntityQueryEnumerator<MechVulnerableToEMPComponent, MechOnEMPPulseComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var emp))
         {
             var curTime = _timing.CurTime;
 
@@ -68,7 +69,7 @@ public sealed partial class SunriseMechSystem : EntitySystem
 
             emp.NextEffectTime = curTime + emp.EffectInterval;
 
-            Spawn(comp.EffectEMP, xfrom.Coordinates);
+            SpawnAttachedTo(comp.EffectEMP, uid.ToCoordinates());
 
             if (curTime > comp.NextPulseTime)
                 RemComp<MechOnEMPPulseComponent>(uid);
