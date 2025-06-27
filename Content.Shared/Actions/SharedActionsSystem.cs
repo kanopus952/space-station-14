@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._Sunrise.Antags.Abductor;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
@@ -444,12 +445,14 @@ public abstract class SharedActionsSystem : EntitySystem
         if (comp.CheckCanAccess)
             return _interaction.InRangeUnobstructed(user, coords, range: comp.Range);
 
+        // Sunrise-start
+        if (HasComp<AbductorAgentComponent>(user) || HasComp<AbductorScientistComponent>(user))
+            return true;
+        // Sunrise-end
         // even if we don't check for obstructions, we may still need to check the range.
         var xform = Transform(user);
-        // Sunrise-start, для абдукторов. Иначе они не тепаются через карты
-        // if (xform.MapID != _transform.GetMapId(coords))
-        //     return false;
-        // Sunrise-end
+        if (xform.MapID != _transform.GetMapId(coords))
+            return false;
 
         if (comp.Range <= 0)
             return true;
