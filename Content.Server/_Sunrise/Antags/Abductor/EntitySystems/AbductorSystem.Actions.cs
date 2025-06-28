@@ -14,6 +14,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
+using Robust.Shared.Physics.Events;
 
 namespace Content.Server._Sunrise.Antags.Abductor;
 
@@ -26,6 +27,8 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     [Dependency] private readonly StarlightActionsSystem _starlightActions = default!;
 
     private static readonly EntProtoId<InstantActionComponent> _gizmoMark = "ActionGizmoMark";
+
+    private static readonly EntProtoId<InstantActionComponent> _sendAgent = "ActionSendAgent";
     private static readonly EntProtoId<InstantActionComponent> _sendYourself = "ActionSendYourself";
     private static readonly EntProtoId<InstantActionComponent> _exitAction = "ActionExitConsole";
 
@@ -41,14 +44,29 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         SubscribeLocalEvent<AbductorReturnToShipEvent>(OnReturn);
         SubscribeLocalEvent<AbductorScientistComponent, AbductorReturnDoAfterEvent>(OnDoAfterAbductorScientistReturn);
         SubscribeLocalEvent<AbductorAgentComponent, AbductorReturnDoAfterEvent>(OnDoAfterAbductorAgentReturn);
-
+        SubscribeLocalEvent<AbductorAlienPadComponent, StartCollideEvent>(OnStartCollide);
+        SubscribeLocalEvent<AbductorAlienPadComponent, EndCollideEvent>(OnEndCollide);
         SubscribeLocalEvent<SendYourselfEvent>(OnSendYourself);
+        SubscribeLocalEvent<SendAgentEvent>(OnSendAgent);
         SubscribeLocalEvent<AbductorScientistComponent, AbductorSendYourselfDoAfterEvent>(OnDoAfterAbductorScientistSendYourself);
         SubscribeLocalEvent<AbductorAgentComponent, AbductorSendYourselfDoAfterEvent>(OnDoAfterAbductorAgentSendYourself);
 
         SubscribeLocalEvent<GizmoMarkEvent>(OnGizmoMark);
     }
+    private void OnStartCollide(Entity<AbductorAlienPadComponent> ent, ref StartCollideEvent args)
+    {
+        if (!HasComp<AbductorAgentComponent>(args.OtherEntity))
+            return;
 
+        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity, out var component);
+    }
+    private void OnEndCollide(Entity<AbductorAlienPadComponent> ent, ref EndCollideEvent args)
+    {
+        if (!HasComp<AbductorAgentComponent>(args.OtherEntity))
+            return;
+
+        RemComp<AbductorOnAlienPadComponent>(args.OtherEntity);
+    }
     private void AbductorScientistComponentStartup(Entity<AbductorScientistComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.SpawnPosition = EnsureComp<TransformComponent>(ent).Coordinates;
@@ -177,6 +195,27 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         ev.Handled = true;
     }
 
+    private void OnSendAgent(SendAgentEvent ev)
+    {
+        var query = EntityQueryEnumerator<AbductorOnAlienPadComponent>(); // Щиткод, попробую поправить позже
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            _color.RaiseEffect(Color.FromHex("#BA0099"), new List<EntityUid>(1) { uid }, Filter.Pvs(uid, entityManager: EntityManager));
+            EnsureComp<TransformComponent>(uid, out var xform);
+            var effectEnt = SpawnAttachedTo(_teleportationEffectEntity, xform.Coordinates);
+            _xformSys.SetParent(effectEnt, uid);
+            EnsureComp<TimedDespawnComponent>(effectEnt, out var despawnEffectEntComp);
+
+            var effect = _entityManager.SpawnEntity(_teleportationEffect, ev.Target);
+            EnsureComp<TimedDespawnComponent>(effect, out var despawnComp);
+
+            var @event = new AbductorSendYourselfDoAfterEvent(GetNetCoordinates(ev.Target)); // не знаю пригодится ли тут дуафтер, нужно тестить с несколькими клиентами
+            var doAfter = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(5), @event, uid);
+            _doAfter.TryStartDoAfter(doAfter);
+            ev.Handled = true;
+        }
+    }
+
     private void OnDoAfterAbductorScientistSendYourself(Entity<AbductorScientistComponent> ent, ref AbductorSendYourselfDoAfterEvent args)
     {
         OnDoAfterSendYourself(ent, args);
@@ -234,6 +273,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         _actions.AddAction(args.Actor, ref comp.ExitConsole, _exitAction);
         _actions.AddAction(args.Actor, ref comp.SendYourself, _sendYourself);
         _actions.AddAction(args.Actor, ref comp.GizmoMark, _gizmoMark);
+        _actions.AddAction(args.Actor, ref comp.SendAgent, _sendAgent);
     }
     private void RemoveActions(EntityUid actor)
     {

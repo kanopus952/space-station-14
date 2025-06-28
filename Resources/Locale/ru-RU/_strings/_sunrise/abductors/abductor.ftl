@@ -1,4 +1,5 @@
 abductors-ui-vest-linked = Жилет связан
+need-switch-mode = Необходимо сменить режим костюма!
 
 abductors-weapon-restricted-1 = Нажимает на шарик.
 abductors-weapon-restricted-2 = Кажется, что они блокируют клинок.

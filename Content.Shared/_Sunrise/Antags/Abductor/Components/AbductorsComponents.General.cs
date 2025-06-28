@@ -47,6 +47,11 @@ public sealed partial class AbductorConsoleComponent : Component
 public sealed partial class AbductorAlienPadComponent : Component
 {
 }
+
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedAbductorSystem))]
+public sealed partial class AbductorOnAlienPadComponent : Component
+{
+}
 [RegisterComponent, NetworkedComponent, Access(typeof(SharedAbductorSystem)), AutoGenerateComponentState]
 public sealed partial class AbductorExperimentatorComponent : Component
 {
@@ -85,6 +90,10 @@ public sealed partial class AbductorsAbilitiesComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? GizmoMark;
 
+    [DataField, AutoNetworkedField]
+    public EntityUid? SendAgent;
+
+
     [DataField]
     public EntityUid[] HiddenActions = [];
 }
@@ -105,6 +114,11 @@ public sealed partial class ExitConsoleEvent : InstantActionEvent
 
 }
 public sealed partial class SendYourselfEvent : WorldTargetActionEvent
+{
+
+}
+
+public sealed partial class SendAgentEvent : WorldTargetActionEvent
 {
 
 }

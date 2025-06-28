@@ -10,39 +10,25 @@ using Content.Shared.ActionBlocker;
 using System.Linq;
 using Content.Shared.Popups;
 using Content.Shared.Interaction;
+using Content.Shared.Toggleable;
 
 namespace Content.Server._Sunrise.Antags.Abductor;
 
 public sealed partial class AbductorSystem : SharedAbductorSystem
 {
     [Dependency] private readonly ClothingSystem _clothing = default!;
-
     public void InitializeVest()
     {
         SubscribeLocalEvent<AbductorVestComponent, AfterInteractEvent>(OnVestInteract);
         SubscribeLocalEvent<AbductorVestComponent, ItemSwitchedEvent>(OnItemSwitch);
-        SubscribeLocalEvent<AbductorVestComponent, GotUnequippedEvent>(OnUnequipped);
-        SubscribeLocalEvent<AbductorVestComponent, GotEquippedEvent>(OnEquipped);
+        SubscribeLocalEvent<AbductorVestComponent, ToggleActionEvent>(OnToggle);
     }
 
-    private void OnEquipped(Entity<AbductorVestComponent> ent, ref GotEquippedEvent args)
+    private void OnToggle(Entity<AbductorVestComponent> ent, ref ToggleActionEvent args)
     {
-        if (args.Equipee != null && !HasComp<StealthComponent>(args.Equipee) && ent.Comp.CurrentState != AbductorArmorModeType.Combat)
-        {
-            AddComp<StealthComponent>(args.Equipee);
-            AddComp<StealthOnMoveComponent>(args.Equipee);
-        }
+        if (ent.Comp.CurrentState == AbductorArmorModeType.Combat)
+            _popup.PopupEntity(Loc.GetString("need-switch-mode"), ent.Owner, args.Performer, PopupType.MediumCaution);
     }
-
-    private void OnUnequipped(Entity<AbductorVestComponent> ent, ref GotUnequippedEvent args)
-    {
-        if (args.Equipee != null && HasComp<StealthComponent>(args.Equipee))
-        {
-            RemComp<StealthComponent>(args.Equipee);
-            RemComp<StealthOnMoveComponent>(args.Equipee);
-        }
-    }
-
     private void OnItemSwitch(EntityUid uid, AbductorVestComponent component, ref ItemSwitchedEvent args)
     {
 
@@ -60,17 +46,6 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
             {
                 RemComp<StealthComponent>(user);
                 RemComp<StealthOnMoveComponent>(user);
-            }
-        }
-        else
-        {
-            if (TryComp<ClothingComponent>(uid, out var clothingComponent))
-                _clothing.SetEquippedPrefix(uid, null, clothingComponent);
-
-            if (HasComp<MobStateComponent>(user) && !HasComp<StealthComponent>(user))
-            {
-                AddComp<StealthComponent>(user);
-                AddComp<StealthOnMoveComponent>(user);
             }
         }
     }

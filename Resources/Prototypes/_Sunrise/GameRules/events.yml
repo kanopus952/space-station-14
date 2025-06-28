@@ -125,9 +125,6 @@
       - type: Abductor
       - type: Muted
       - type: AbductorAgent
-      - type: ActionGrant
-        actions:
-        - ActionReturnToShip
       - type: Tag
         tags:
           - Abductor

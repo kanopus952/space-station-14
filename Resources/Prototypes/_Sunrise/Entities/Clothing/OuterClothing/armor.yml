@@ -466,7 +466,7 @@
     size: Normal
   - type: AbductorVest
   - type: ItemSwitch
-    state: stealth
+    state: Stealth
     states:
       Stealth: !type:ItemSwitchState
         verb: abductor-armor-stealth
@@ -486,6 +486,24 @@
               Caustic: 0.25
         - type: ExplosionResistance
           damageCoefficient: 0.85
+        - type: ItemToggle
+          predictable: false
+          onUse: false
+          soundActivate:
+            path: /Audio/_Sunrise/Items/Goggles/activate.ogg # Брал с ПНВ компоненты, звук понравился, решил оставить :)
+          soundDeactivate:
+            path: /Audio/_Sunrise/Items/Goggles/deactivate.ogg
+          soundFailToActivate:
+            path: /Audio/Machines/button.ogg
+        - type: ToggleClothing
+          action: AbductorVestToggleStealth
+          mustEquip: true
+          disableOnUnequip: true
+        - type: ComponentToggler
+          parent: true
+          components:
+          - type: Stealth
+          - type: StealthOnMove
       Combat: !type:ItemSwitchState
         verb: abductor-armor-combat
         hiden: true
