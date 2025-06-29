@@ -59,11 +59,11 @@
   components:
   - type: Action
     useDelay: 10
-    priority: -18
+    priority: -17
     itemIconStyle: BigAction
     icon:
       sprite: _Sunrise/Abductor/Interface/Actions/actions_abductor.rsi
-      state: gizmo
+      state: send
   - type: TargetAction
     checkCanAccess: false
     range: -1
@@ -80,8 +80,8 @@
     priority: -18
     itemIconStyle: BigAction
     icon:
-      sprite: _Sunrise/Abductor/Interface/Actions/actions_abductor.rsi
-      state: send
+      sprite: _Sunrise/Abductor/Clothing/OuterClothing/Armor/abductor.rsi
+      state: icon
   - type: InstantAction
     event: !type:ToggleActionEvent
 

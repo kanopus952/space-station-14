@@ -58,7 +58,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         if (!HasComp<AbductorAgentComponent>(args.OtherEntity))
             return;
 
-        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity, out var component);
+        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity);
     }
     private void OnEndCollide(Entity<AbductorAlienPadComponent> ent, ref EndCollideEvent args)
     {
