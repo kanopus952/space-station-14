@@ -23,4 +23,10 @@
     fontAccentColor: "#ffffff"
   - type: Paper
     defaultColor: "#07edf5"
-
+  - type: Sprite
+    sprite: _Sunrise/Objects/Misc/holopaper.rsi
+    layers:
+    - state: paper
+    - state: paper_written
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
