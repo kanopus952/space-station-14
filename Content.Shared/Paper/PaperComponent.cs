@@ -15,7 +15,7 @@ public sealed partial class PaperComponent : Component
     public int ContentSize { get; set; } = 10000;
 
     // Sunrise start
-    [DataField]
+    [DataField, AutoNetworkedField]
     public Color DefaultColor = new(25, 25, 25);
     // Sunrise-end
 
