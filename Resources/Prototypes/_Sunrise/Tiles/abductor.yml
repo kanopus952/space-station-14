@@ -2,7 +2,7 @@
   id: FloorAbductor
   name: tiles-abductor-floor
   sprite: /Textures/_Sunrise/Abductor/Tiles/abductor_tile.png
-  isSubfloor: true
+  isSubfloor: false
   footstepSounds:
     collection: FootstepAsteroid
   heatCapacity: 10000
