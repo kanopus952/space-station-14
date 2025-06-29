@@ -208,3 +208,6 @@
       - id: ScalpelAbductor
       - id: BoneGelAbductor
       - id: BoneSetterAbductor
+      - id: NitrousOxideTankFilled
+      - id: NitrousOxideTankFilled
+      - id: ClothingMaskBreath
