@@ -15,7 +15,7 @@ public sealed class SummonCultistListWindowBUI : BoundUserInterface
     {
         base.Open();
 
-        _window = new();
+        _window = new SummonCultistListWindow();
         _window.OpenCentered();
         _window.OnClose += Close;
 
@@ -38,5 +38,20 @@ public sealed class SummonCultistListWindowBUI : BoundUserInterface
         {
             _window?.PopulateList(newState.Items, newState.Label);
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (!disposing)
+            return;
+
+        if (_window == null)
+            return;
+
+        _window.OnClose -= Close;
+
+        _window?.Close();
     }
 }
