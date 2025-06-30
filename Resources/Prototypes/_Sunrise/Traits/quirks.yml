@@ -7,9 +7,9 @@
   - type: NoEmotions
 
 - type: trait
-  id: TallQuirck
-  name: trait-tall-quirck-name
-  description: trait-tall-quirck-desc
+  id: TallQuirk
+  name: trait-tall-quirk-name
+  description: trait-tall-quirk-desc
   category: HeightTraits
   cost: 1
   components:
@@ -17,9 +17,9 @@
     scale: 1.1,1.1
 
 - type: trait
-  id: ShortQuirck
-  name: trait-short-quirck-name
-  description: trait-short-quirck-desc
+  id: ShortQuirk
+  name: trait-short-quirk-name
+  description: trait-short-quirk-desc
   category: HeightTraits
   cost: 1
   components:
