@@ -36,7 +36,7 @@ public sealed class SummonCultistListWindowBUI : BoundUserInterface
 
         if (state is SummonCultistListWindowBUIState newState)
         {
-            _window?.PopulateList(newState.Items, newState.Label);
+            _window?.PopulateList(newState.Items, newState.Label, newState.MobStates, newState.Distances);
         }
     }
 
