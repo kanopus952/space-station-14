@@ -6,8 +6,9 @@ namespace Content.Shared._Sunrise.NightVision.Components;
 
 [RegisterComponent]
 [NetworkedComponent]
+[AutoGenerateComponentState(true)]
 public sealed partial class NightVisionComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntProtoId Effect = "EffectNightVision";
 }

@@ -27,17 +27,12 @@ public sealed class NightVisionSystem : EntitySystem
         SubscribeLocalEvent<NightVisionComponent, ComponentShutdown>(OnVisionShutdown);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
-        SubscribeLocalEvent<NightVisionComponent, ComponentHandleState>(OnHandleVisionState);
-
+        SubscribeLocalEvent<NightVisionComponent, AfterAutoHandleStateEvent>(OnHandleVisionState);
         _overlay = new(_prototypeManager.Index<ShaderPrototype>("ModernNightVisionShader"));
     }
 
-    private void OnHandleVisionState(Entity<NightVisionComponent> ent, ref ComponentHandleState args)
+    private void OnHandleVisionState(Entity<NightVisionComponent> ent, ref AfterAutoHandleStateEvent args)
     {
-        if (args.Current is not NightVisionComponentState state)
-            return;
-
-        ent.Comp.Effect = state.Effect;
         AttemptAddVision(ent.Owner, ent.Comp);
     }
 

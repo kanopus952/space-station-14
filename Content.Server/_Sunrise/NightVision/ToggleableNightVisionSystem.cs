@@ -17,7 +17,6 @@ public sealed class ToggleableNightVisionSystem : EntitySystem
         SubscribeLocalEvent<ToggleableNightVisionComponent, ComponentInit>(OnVisionInit);
         SubscribeLocalEvent<ToggleableNightVisionComponent, ComponentShutdown>(OnVisionShutdown);
         SubscribeLocalEvent<ToggleableNightVisionComponent, ToggleNightVisionEvent>(OnToggleNightVision);
-        SubscribeLocalEvent<NightVisionComponent, ComponentGetState>(OnGetState);
     }
 
     private void OnVisionInit(Entity<ToggleableNightVisionComponent> ent, ref ComponentInit args)
@@ -51,10 +50,5 @@ public sealed class ToggleableNightVisionSystem : EntitySystem
         EnsureComp<NightVisionComponent>(uid, out var vision);
 
         vision.Effect = comp.Effect;
-    }
-
-    private void OnGetState(Entity<NightVisionComponent> ent, ref ComponentGetState args)
-    {
-        args.State = new NightVisionComponentState(ent.Comp.Effect);
     }
 }
