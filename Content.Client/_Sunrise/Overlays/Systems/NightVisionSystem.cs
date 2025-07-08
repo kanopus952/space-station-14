@@ -15,7 +15,7 @@ public sealed class NightVisionSystem : EntitySystem
     [Dependency] private readonly IOverlayManager _overlayMan = default!;
     [Dependency] private readonly TransformSystem _xformSys = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-
+    private const string NightVisionShaderPrototype = "ModernNightVisionShader";
     private NightVisionOverlay _overlay = default!;
     [ViewVariables]
     private EntityUid? _effect = null;
@@ -28,7 +28,7 @@ public sealed class NightVisionSystem : EntitySystem
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<NightVisionComponent, AfterAutoHandleStateEvent>(OnHandleVisionState);
-        _overlay = new(_prototypeManager.Index<ShaderPrototype>("ModernNightVisionShader"));
+        _overlay = new(_prototypeManager.Index<ShaderPrototype>(NightVisionShaderPrototype));
     }
 
     private void OnHandleVisionState(Entity<NightVisionComponent> ent, ref AfterAutoHandleStateEvent args)
