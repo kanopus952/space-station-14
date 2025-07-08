@@ -65,10 +65,14 @@ uplink-pistol-magazine-caseless-name = Пистолетный магазин (.2
 uplink-pistol-magazine-caseless-desc = Пистолетный магазин на 10 патронов. Совместим с "Коброй".
 uplink-speedloader-magnum-name = Спидлоадер (.45 магнум ББ)
 uplink-speedloader-magnu-desc = Спидлоадер с 6 бронебойными, полностью игнорирующими броню, патронами для револьвера. Совместим с "Питоном".
-uplink-mosin-ammo-name = Коробка патронов (7,62ммR)
-uplink-mosin-ammo-desc = Коробка с 60 патронами для резервной винтовки.
+uplink-mosin-ammo-name = Коробка патронов (7,62мм)
+uplink-mosin-ammo-desc = Коробка с 60 патронами 7,62х39мм для лёгкого пулемета.
 uplink-sniper-ammo-name = Коробка патронов (.60 антиматериальные)
 uplink-sniper-ammo-desc = Коробка с 10 патронами для снайперской винтовки Христов.
+uplink-magazine-bulldog-pellet-name = Барабан (.50 дробь)
+uplink-magazine-bulldog-pellet-desc = Барабанный магазин на 8 патронов. Совместим с "Бульдогом".
+uplink-magazine-bulldog-slug-name = Барабан (.50 пули)
+uplink-magazine-bulldog-slug-desc = Барабанный магазин на 8 пулевых патронов. Совместим с "Бульдогом".
 # Utility
 uplink-holopara-kit-name = Набор "Голопаразит"
 uplink-holopara-kit-desc =

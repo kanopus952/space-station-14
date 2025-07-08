@@ -107,6 +107,8 @@ construction-graph-tag-ambrosia = { ent-FoodAmbrosiaVulgaris }
 construction-graph-tag-human-head = { ent-HeadHuman }
 construction-graph-tag-light-bulb = { ent-LightBulb }
 construction-graph-tag-radio = { ent-RadioHandheld }
+construction-graph-tag-UpgradeFlareGun = { ent-FlareGunSecurityUpgrade }
+construction-graph-tag-ModularReceiverAuto = { ent-ModularReceiverAuto }
 # Щиты и защита
 construction-graph-tag-strobe-shield = { ent-RiotShield }
 construction-graph-tag-security-helmet = { ent-ClothingHeadHelmetBasic }

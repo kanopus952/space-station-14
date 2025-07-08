@@ -76,6 +76,7 @@
     whitelist:
       tags:
       - Grenade
+      - HandGrenadeAmmo
     proto: GrenadeFrag
     capacity: 6
     chambers: [ True, True, True, True, True, True ]
@@ -106,7 +107,8 @@
     whitelist:
       tags:
       - Grenade
-    proto: GrenadeFlash
+      - HandGrenadeAmmo
+    proto: GrenadeFlashBang
     capacity: 6
     chambers: [ True, True, True, True, True, True ]
     ammoSlots: [ null, null, null, null, null, null ]
@@ -145,7 +147,7 @@
     bigTrigger: true
   - type: UseDelayOnShoot
   - type: UseDelay
-    delay: 0.75 #No script abuse
+    delay: 0.85 #No script abuse
   - type: Tag
     tags:
     - Sidearm

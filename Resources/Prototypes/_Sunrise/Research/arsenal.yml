@@ -78,6 +78,7 @@
   - WeaponMechCombatMG
   - PaintDurandExecutor
   - PaintDurandShire
+  - PowerCageHigh
   technologyPrerequisites:
   - Gygax
 
@@ -98,13 +99,10 @@
   - MagazineMP5Extended
   - MagazineMP7Extended
   - MagazineP90Extended
-  - MagazineM16A4Extended
+  - SunriseMagazineRifleExtended
   - MagazineAR18Extended
   #- MagazineM28Extended
-  - MagazineG36Extended
-  - MagazineFamasExtended
   - MagazineV31Extended
-  #- MagazineBauer127Extended
   - MagazineBR64Extended
   - MagazineDragunovExtended
 
@@ -120,6 +118,7 @@
   cost: 7500
   recipeUnlocks:
   - ClothingShoesBootsMagCombat
+  - ModularReceiverAuto
   technologyPrerequisites:
   - AdvancedRiotControl
 
