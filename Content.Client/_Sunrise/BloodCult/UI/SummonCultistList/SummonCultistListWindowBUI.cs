@@ -1,4 +1,5 @@
 ﻿using Content.Shared._Sunrise.BloodCult.UI;
+using Robust.Client.UserInterface;
 
 namespace Content.Client._Sunrise.BloodCult.UI.SummonCultistList;
 
@@ -15,8 +16,7 @@ public sealed class SummonCultistListWindowBUI : BoundUserInterface
     {
         base.Open();
 
-        _window = new SummonCultistListWindow();
-        _window.OpenCentered();
+        _window = this.CreateWindow<SummonCultistListWindow>();
         _window.OnClose += Close;
 
         _window.ItemSelected += (item, index) =>
@@ -46,11 +46,6 @@ public sealed class SummonCultistListWindowBUI : BoundUserInterface
 
         if (!disposing)
             return;
-
-        if (_window == null)
-            return;
-
-        _window.OnClose -= Close;
 
         _window?.Close();
     }
