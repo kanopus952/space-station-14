@@ -56,6 +56,8 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
         if (_window == null)
             return;
 
+        _window.Beacons.DisposeAllChildren();
+
         _station = station;
 
         foreach (var beacon in beacons)
@@ -83,7 +85,6 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
             return;
 
         _window!.Stations.DisposeAllChildren();
-        _window.Beacons.DisposeAllChildren();
 
         foreach (var station in state.Stations)
         {

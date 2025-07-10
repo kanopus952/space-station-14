@@ -302,10 +302,16 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     private void RemoveActions(EntityUid actor)
     {
         EnsureComp<AbductorsAbilitiesComponent>(actor, out var comp);
+
         if (comp.ExitConsole is not null)
             _actions.RemoveAction(actor, comp.ExitConsole);
+
         if (comp.SendYourself is not null)
             _actions.RemoveAction(actor, comp.SendYourself);
+
+        if (comp.SendAgent is not null)
+            _actions.RemoveAction(actor, comp.SendAgent);
+
         if (comp.GizmoMark is not null)
             _actions.RemoveAction(actor, comp.GizmoMark);
 
