@@ -115,7 +115,7 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
         _window.Title = State is not AbductorCameraConsoleBuiState state
             || _station == null
             || !state.Stations.TryGetValue(_station.Value, out var station)
-            ? "Stations"
+            ? Loc.GetString($"abductor-camera-console-window-stations")
             : Loc.GetString($"abductor-stations", ("station", station.Name));
     }
 

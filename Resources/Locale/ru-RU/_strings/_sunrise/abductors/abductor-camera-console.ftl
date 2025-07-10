@@ -5,6 +5,8 @@ abductors-ui-teleport = Телепорт
 abductors-ui-attract = Притяжение
 abductors-ui-stations = < Станции
 abductor-camera-console-window = Перехваченные камеры
+abductor-stations = Доступные маяки
+abductor-camera-console-window-stations =  Станции
 
 abductors-ui-gizmo-transferred = Информация о цели передана
 
