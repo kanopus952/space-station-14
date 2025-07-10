@@ -41,8 +41,7 @@ public sealed class MobStateActionsSystem : EntitySystem
 
         foreach (var act in component.GrantedActions)
         {
-            _actions.RemoveAction(uid, act); // Sunrise
-            QueueDel(act);
+            Del(act);
         }
         component.GrantedActions.Clear();
 
