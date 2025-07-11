@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._Sunrise.ScaleSprite;
+using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
@@ -20,7 +21,21 @@ public sealed class ScaleVisualsSystem : EntitySystem
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
-        // Удобно что не меняет Fixtures объекта
-        _sprite.SetScale((ent.Owner, sprite), ent.Comp.Scale);
+        if (sprite.Scale.IsEqualLengthTo(Vector2.One))
+        {
+            _sprite.SetScale((ent.Owner, sprite), ent.Comp.Scale);
+            return;
+        }
+
+        if (ent.Comp.Scale.IsLongerThan(sprite.Scale))
+        {
+            var scaleValue = ent.Comp.Scale - Vector2.One;
+            _sprite.SetScale((ent.Owner, sprite), scaleValue + sprite.Scale);
+        }
+        else
+        {
+            var scaleValue = Vector2.One - ent.Comp.Scale;
+            _sprite.SetScale((ent.Owner, sprite), sprite.Scale - scaleValue);
+        }
     }
 }

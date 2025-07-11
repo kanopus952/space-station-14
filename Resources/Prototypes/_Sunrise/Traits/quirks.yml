@@ -22,6 +22,8 @@
   description: trait-short-quirk-desc
   category: HeightTraits
   cost: 1
+  blacklist:
+  - Felinid # И так слишком мелкие
   components:
   - type: ScaleSprite
     scale: 0.9,0.9
