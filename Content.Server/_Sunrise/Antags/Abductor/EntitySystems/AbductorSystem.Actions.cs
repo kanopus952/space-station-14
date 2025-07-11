@@ -230,7 +230,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         }
         if (!foundAny)
         {
-            _popupSystem.PopupCursor("alian-pad-is-empty", ev.Performer);
+            _popupSystem.PopupCursor(Loc.GetString("alian-pad-is-empty"), ev.Performer);
         }
     }
 
