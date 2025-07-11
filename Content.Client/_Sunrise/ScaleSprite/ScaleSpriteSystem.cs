@@ -21,15 +21,6 @@ public sealed class ScaleVisualsSystem : EntitySystem
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
-        if (ent.Comp.Scale.IsLongerThan(sprite.Scale))
-        {
-            var scaleValue = ent.Comp.Scale - Vector2.One;
-            _sprite.SetScale((ent.Owner, sprite), scaleValue + sprite.Scale);
-        }
-        else
-        {
-            var scaleValue = Vector2.One - ent.Comp.Scale;
-            _sprite.SetScale((ent.Owner, sprite), sprite.Scale - scaleValue);
-        }
+        _sprite.SetScale((ent.Owner, sprite), sprite.Scale * ent.Comp.Scale);
     }
 }
