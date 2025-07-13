@@ -52,6 +52,8 @@ public sealed partial class AbductorAlienPadComponent : Component
 [RegisterComponent, NetworkedComponent, Access(typeof(SharedAbductorSystem))]
 public sealed partial class AbductorOnAlienPadComponent : Component
 {
+    [DataField]
+    public EntityUid? Pad;
 }
 [RegisterComponent, NetworkedComponent, Access(typeof(SharedAbductorSystem)), AutoGenerateComponentState]
 public sealed partial class AbductorExperimentatorComponent : Component

@@ -58,7 +58,8 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         if (!HasComp<AbductorAgentComponent>(args.OtherEntity))
             return;
 
-        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity);
+        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity, out var comp);
+        comp.Pad = ent.Owner;
     }
     private void OnEndCollide(Entity<AbductorAlienPadComponent> ent, ref EndCollideEvent args)
     {
@@ -203,11 +204,17 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     {
         // Если будет 2 шаттла абдукторов, то беды не миновать!
         bool foundAny = false;
-        var query = EntityQueryEnumerator<AbductorOnAlienPadComponent>(); // Щиткод, попробую поправить позже
-        while (query.MoveNext(out var uid, out var comp))
+        var query = EntityQueryEnumerator<AbductorOnAlienPadComponent, TransformComponent>(); // Щиткод, попробую поправить позже
+        while (query.MoveNext(out var uid, out var comp, out var xform))
         {
+            if (!TryComp(comp.Pad, out TransformComponent? padXform))
+                return;
+
+            if (padXform.MapID != xform.MapID)
+                return;
+
             _color.RaiseEffect(Color.FromHex("#BA0099"), new List<EntityUid>(1) { uid }, Filter.Pvs(uid, entityManager: EntityManager));
-            EnsureComp<TransformComponent>(uid, out var xform);
+
             var effectEnt = SpawnAttachedTo(_teleportationEffectEntity, xform.Coordinates);
             _xformSys.SetParent(effectEnt, uid);
             EnsureComp<TimedDespawnComponent>(effectEnt, out var despawnEffectEntComp);
