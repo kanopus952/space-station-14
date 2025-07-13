@@ -57,7 +57,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         if (!HasComp<AbductorAgentComponent>(args.OtherEntity))
             return;
 
-        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity, out var comp);
+        EnsureComp<AbductorOnAlienPadComponent>(args.OtherEntity);
     }
     private void OnEndCollide(Entity<AbductorAlienPadComponent> ent, ref EndCollideEvent args)
     {
@@ -210,7 +210,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
             if (!TryComp(ev.Performer, out TransformComponent? perXform))
                 return;
 
-            if (perXform.MapID != xform.MapID)
+            if (perXform.GridUid != xform.GridUid)
                 return;
 
             _color.RaiseEffect(Color.FromHex("#BA0099"), new List<EntityUid>(1) { uid }, Filter.Pvs(uid, entityManager: EntityManager));
