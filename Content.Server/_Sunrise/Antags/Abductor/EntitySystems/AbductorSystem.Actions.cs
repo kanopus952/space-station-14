@@ -208,10 +208,10 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
             if (!TryComp(ev.Performer, out TransformComponent? perXform))
-                return;
+                continue;
 
             if (perXform.GridUid != xform.GridUid)
-                return;
+                continue;
 
             _color.RaiseEffect(Color.FromHex("#BA0099"), new List<EntityUid>(1) { uid }, Filter.Pvs(uid, entityManager: EntityManager));
 
