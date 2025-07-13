@@ -1,29 +1,10 @@
 # Вкладка телепортации
 
 abductors-ui-beacons = Маяки
-abductors-ui-teleport = Телепорт
-abductors-ui-attract = Притяжение
 abductors-ui-stations = < Станции
 abductor-camera-console-window = Перехваченные камеры
-
-abductors-ui-gizmo-transferred = Информация о цели передана
-
-# Вкладка экспериментов
-
-abductors-ui-experiment = Эксперимент
-abductors-ui-complete-experiment = Завершить эксперимент
-
-# Вкладка брони
-
-abductors-ui-armor-control = Управление броней
-
-abductors-ui-combat-mode = Боевой режим
-abductors-ui-stealth-mode = Скрытный режим
-
-abductors-ui-lock-armor = Заблокировать броню
-abductors-ui-unlock-armor = Разблокировать броню
-
-abductors-ui-vest-linked = Броня синхронизирована
+abductor-stations = Доступные маяки
+abductor-camera-console-window-stations =  Станции
 
 # Роль призрака, задачи и т.д.
 
