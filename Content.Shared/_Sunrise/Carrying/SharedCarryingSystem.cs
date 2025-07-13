@@ -25,6 +25,7 @@ using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Climbing.Events;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Coordinates;
 
 namespace Content.Shared._Sunrise.Carrying;
 
@@ -58,6 +59,7 @@ public sealed class SharedCarryingSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
     [Dependency] private readonly PullingSystem _pullingSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
@@ -74,12 +76,12 @@ public sealed class SharedCarryingSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var carrier, out var carrierXform))
         {
-            if (!TryComp(carrier.Carried, out StandingStateComponent? standing))
+            if (!TryComp(uid, out StandingStateComponent? standing))
                 continue;
 
             if (standing.CurrentState == StandingState.Laying)
             {
-                _popupSystem.PopupPredicted(Loc.GetString("carry-lying-cancel"), carrier.Carried, uid, PopupType.SmallCaution);
+                _popupSystem.PopupClient(Loc.GetString("carry-lying-cancel"), carrier.Carried, uid, PopupType.MediumCaution);
                 DropCarried(uid, carrier.Carried);
             }
 
@@ -154,7 +156,7 @@ public sealed class SharedCarryingSystem : EntitySystem
         {
             BreakOnMove = true,
             NeedHand = true,
-            MovementThreshold = 0.0001f
+            MovementThreshold = 0.01f
         };
 
         _doAfterSystem.TryStartDoAfter(args);
@@ -276,9 +278,9 @@ public sealed class SharedCarryingSystem : EntitySystem
         if (TryComp<PullableComponent>(carried, out var pullable))
             _pullingSystem.TryStopPull(carried, pullable, carrier);
 
-        Transform(carrier).AttachToGridOrMap();
-        Transform(carried).Coordinates = Transform(carrier).Coordinates;
-        Transform(carried).AttachParent(carrier);
+        _transform.AttachToGridOrMap(carrier);
+        _transform.SetCoordinates(carried, carrier.ToCoordinates());
+        _transform.SetParent(carried, carrier);
 
         for (var i = 0; i < component.FreeHandsRequired; i++)
         {
@@ -345,20 +347,16 @@ public sealed class SharedCarryingSystem : EntitySystem
 
     public void DropCarried(EntityUid carrier, EntityUid carried)
     {
+        RemComp<KnockedDownComponent>(carried);
         RemComp<CarryingComponent>(carrier); // get rid of this first so we don't recusrively fire that event
         RemComp<CarryingSlowdownComponent>(carrier);
         RemComp<BeingCarriedComponent>(carried);
-        RemComp<KnockedDownComponent>(carried);
+
         _actionBlockerSystem.UpdateCanMove(carried);
         _virtualItemSystem.DeleteInHandsMatching(carrier, carried);
-        if (_entityManager.TryGetComponent<TransformComponent>(carried, out var transformComponent))
-        {
-            transformComponent.AttachToGridOrMap();
-        }
-        else
-        {
-            Console.WriteLine($"TransformComponent отсутствует у сущности {carried}.");
-        }
+
+        _transform.AttachToGridOrMap(carried);
+
         _standingState.Stand(carried);
         _movementSpeed.RefreshMovementSpeedModifiers(carrier);
 
