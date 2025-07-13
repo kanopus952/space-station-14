@@ -11,6 +11,7 @@ namespace Content.Server._Sunrise.Carrying
     {
         [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
         [Dependency] private readonly EscapeInventorySystem _escapeInventorySystem = default!;
+        [Dependency] private readonly SharedCarryingSystem _sharedCarrying = default!;
 
         public override void Initialize()
         {
@@ -31,18 +32,8 @@ namespace Content.Server._Sunrise.Carrying
 
             if (_actionBlockerSystem.CanInteract(uid, component.Carrier))
             {
-                _escapeInventorySystem.AttemptEscape(uid, component.Carrier, escape, MassContest(component.Carrier, uid));
+                _escapeInventorySystem.AttemptEscape(uid, component.Carrier, escape, _sharedCarrying.MassContest(component.Carrier, uid));
             }
-        }
-        public float MassContest(EntityUid roller, EntityUid target, PhysicsComponent? rollerPhysics = null, PhysicsComponent? targetPhysics = null)
-        {
-            if (!Resolve(roller, ref rollerPhysics, false) || !Resolve(target, ref targetPhysics, false))
-                return 1f;
-
-            if (targetPhysics.FixturesMass == 0)
-                return 1f;
-
-            return rollerPhysics.FixturesMass / targetPhysics.FixturesMass;
         }
     }
 }

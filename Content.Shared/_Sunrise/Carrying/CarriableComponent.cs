@@ -13,8 +13,10 @@ namespace Content.Shared._Sunrise.Carrying
         [DataField("freeHandsRequired")]
         public int FreeHandsRequired = 2;
 
+        [DataField]
         public float WalkSpeedModifier = 0.6f;
 
+        [DataField]
         public float SprintSpeedModifier = 0.6f;
     }
 }

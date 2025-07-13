@@ -32,6 +32,27 @@ namespace Content.Shared._Sunrise.Carrying;
 public sealed class SharedCarryingSystem : EntitySystem
 {
     private readonly float _maxThrowSpeed = 15f;
+    private const float CarryDistanceThreshold = 0.1f;
+    private const float BaseCarryTime = 1f;
+    private const float MaxCarryTime = 5f;
+    private const float SlowdownCoefficient = 0.15f;
+    private const float MinimumSpeedModifier = 0.1f;
+    private const float CarryInteractionRange = 0.75f;
+    private const float BaseThrowSpeed = 3f;
+
+    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly CarryingSlowdownSystem _slowdown = default!;
+    [Dependency] private readonly SharedVirtualItemSystem _virtualItemSystem = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
+    [Dependency] private readonly PullingSystem _pullingSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -52,21 +73,6 @@ public sealed class SharedCarryingSystem : EntitySystem
         SubscribeLocalEvent<BeingCarriedComponent, BuckledEvent>(OnBuckleChange);
         SubscribeLocalEvent<BeingCarriedComponent, InteractionAttemptEvent>(OnInteractionAttempt);
     }
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly CarryingSlowdownSystem _slowdown = default!;
-    [Dependency] private readonly SharedVirtualItemSystem _virtualItemSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
-    [Dependency] private readonly PullingSystem _pullingSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-
-
 
     public override void Update(float frametime)
     {
@@ -83,6 +89,7 @@ public sealed class SharedCarryingSystem : EntitySystem
             {
                 _popupSystem.PopupClient(Loc.GetString("carry-lying-cancel"), carrier.Carried, uid, PopupType.MediumCaution);
                 DropCarried(uid, carrier.Carried);
+                continue;
             }
 
             if (!TryComp(carrier.Carried, out TransformComponent? carriedXform))
@@ -91,7 +98,7 @@ public sealed class SharedCarryingSystem : EntitySystem
             if (!carrierXform.Coordinates.TryDistance(EntityManager, carriedXform.Coordinates, out var distance))
                 continue;
 
-            if (distance > 0.1f)
+            if (distance > CarryDistanceThreshold)
                 DropCarried(uid, carrier.Carried);
         }
     }
@@ -109,7 +116,7 @@ public sealed class SharedCarryingSystem : EntitySystem
         if (HasComp<BeingCarriedComponent>(args.User) || HasComp<BeingCarriedComponent>(args.Target))
             return;
 
-        if (!_interactionSystem.InRangeUnobstructed(args.User, uid, 0.75f))
+        if (!_interactionSystem.InRangeUnobstructed(args.User, uid, CarryInteractionRange))
             return;
 
         if (!_mobStateSystem.IsAlive(args.User))
@@ -132,14 +139,14 @@ public sealed class SharedCarryingSystem : EntitySystem
 
     private void StartCarryDoAfter(EntityUid carrier, EntityUid carried)
     {
-        TimeSpan length = TimeSpan.FromSeconds(1);
+        TimeSpan length = TimeSpan.FromSeconds(BaseCarryTime);
 
         var mod = MassContest(carrier, carried);
 
         if (mod != 0)
             length /= mod;
 
-        if (length >= TimeSpan.FromSeconds(5))
+        if (length >= TimeSpan.FromSeconds(MaxCarryTime))
         {
             _popupSystem.PopupPredicted(Loc.GetString("carry-too-heavy"), carried, carrier, PopupType.SmallCaution);
             return;
@@ -185,7 +192,7 @@ public sealed class SharedCarryingSystem : EntitySystem
 
         var multiplier = MassContest(uid, virtItem.BlockingEntity);
 
-        var throwSpeed = 3f * multiplier > _maxThrowSpeed ? _maxThrowSpeed : 3f * multiplier;
+        var throwSpeed = Math.Min(BaseThrowSpeed * multiplier, _maxThrowSpeed);
 
         _throwingSystem.TryThrow(virtItem.BlockingEntity, args.Direction, throwSpeed, uid);
     }
@@ -303,9 +310,11 @@ public sealed class SharedCarryingSystem : EntitySystem
         if (massRatio == 0)
             massRatio = 1;
 
+        // Формула замедления: чем меньше соотношение масс, тем больше замедление
+        // При равных массах (ratio = 1) модификатор = 0.85
         var massRatioSq = Math.Pow(massRatio, 2);
-        var modifier = (1 - (0.15 / massRatioSq));
-        modifier = Math.Max(0.1, modifier);
+        var modifier = 1 - (SlowdownCoefficient / massRatioSq);
+        modifier = Math.Max(MinimumSpeedModifier, modifier);
         var slowdownComp = EnsureComp<CarryingSlowdownComponent>(carrier);
         _slowdown.SetModifier(carrier, (float)modifier, (float)modifier, slowdownComp);
     }
