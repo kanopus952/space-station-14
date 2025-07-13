@@ -32,7 +32,7 @@ namespace Content.Server._Sunrise.Carrying
 
             if (_actionBlockerSystem.CanInteract(uid, component.Carrier))
             {
-                _escapeInventorySystem.AttemptEscape(uid, component.Carrier, escape, _sharedCarrying.MassContest(component.Carrier, uid));
+                _escapeInventorySystem.AttemptEscape(uid, component.Carrier, escape, _sharedCarrying.MassContest(component.Carrier, uid) / 2);
             }
         }
     }
