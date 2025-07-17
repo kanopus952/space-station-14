@@ -48,7 +48,7 @@ public sealed class TurfSystem : EntitySystem
 
         // This is scaled to 95 % so it doesn't encompass walls on other tiles.
         var tileAabb = Box2.UnitCentered.Scale(0.95f * size);
-        var worldBox = tileAabb.Translated(worldPos); // Ждем фикса оффов
+        var worldBox = new Box2Rotated(tileAabb.Translated(worldPos), gridRot, worldPos);
         tileAabb = tileAabb.Translated(localPos);
 
         var intersectionArea = 0f;
