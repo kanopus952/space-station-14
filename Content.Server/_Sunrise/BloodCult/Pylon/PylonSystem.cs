@@ -50,11 +50,7 @@ public sealed class PylonSystem : EntitySystem
 
     private void OnAnchorStateChanged(EntityUid uid, SharedPylonComponent component, AnchorStateChangedEvent args)
     {
-        if (args.Anchored)
-            component.Activated = true;
-        else
-            component.Activated = false;
-
+        component.Activated = args.Anchored;
 
         UpdateAppearance(uid, component);
     }

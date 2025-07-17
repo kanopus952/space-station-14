@@ -3,7 +3,6 @@ using Content.Shared.Maps;
 using Content.Shared.Physics;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
-using Robust.Shared.Toolshed.TypeParsers;
 
 namespace Content.Shared.Construction.Conditions;
 
