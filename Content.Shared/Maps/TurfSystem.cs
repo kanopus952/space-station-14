@@ -70,7 +70,7 @@ public sealed class TurfSystem : EntitySystem
                 if (!fixture.Hard)
                     continue;
 
-                if ((fixture.CollisionMask & (int) mask) == 0) // Тоже до фикса оффов
+                if ((fixture.CollisionLayer & (int) mask) == 0)
                     continue;
 
                 for (var i = 0; i < fixture.Shape.ChildCount; i++)
