@@ -282,7 +282,7 @@ public sealed class PullingSystem : EntitySystem
         if (TryComp<CarriableComponent>(component.Pulling, out var carriable))
         {
             args.ModifySpeed(carriable.WalkSpeedModifier, carriable.SprintSpeedModifier);
-            _popup.PopupPredictedCursor(Loc.GetString("can-carry"), uid, PopupType.SmallCaution);
+            _popup.PopupPredicted(Loc.GetString("can-carry"), uid, uid, PopupType.SmallCaution);
         }
         // Sunrise-end
 
