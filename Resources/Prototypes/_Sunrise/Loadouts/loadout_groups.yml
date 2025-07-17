@@ -221,9 +221,23 @@
   minLimit: 1
   maxLimit: 1
   loadouts:
-  #- SunriseWeaponPistolG22
-  - SunriseWeaponEnergyGun
-  - SunriseWeaponTaser
+  - GlockBox
+  - ACP14Box
+  - WeaponEnergyGunPistolSecurity
+  - WeaponDisabler
+  - WeaponTaser
+
+# Security  Detective
+- type: loadoutGroup
+  id: SunriseWeaponDetective
+  name: loadout-group-security-gun
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - DetectiveWeapon
+  - DetectiveWeapon20h
+  - DetectiveWeapon50h
+  - DetectiveWeapon50h2
 
 # Security  HoS
 - type: loadoutGroup
@@ -1208,33 +1222,6 @@
   - TrinketsCargoQueen
   - TrinketsCargoQ
   - TrinketsCargoLGW
-
-- type: loadoutGroup
-  id: CommonPets
-  name: loadout-group-pets
-  minLimit: 0
-  loadouts:
-  - PetRabbit
-  - PetAnteater
-  - PetOctopus
-  - PetNavySeal
-  - PetOtter
-  - PetAlexander
-  - PetMobCrabAtmos
-  - PetMobCorgiIan
-  - PetMobSlimesPet
-  - PetMobCatRuntime
-  - PetMobCorgiLisa
-  - PetMobCatFloppa
-  - PetMobWalter
-  - PetMcGriff
-  - PetMobPossumMorty
-  - PetMobPossumPoppy
-  - PetMobCorgiIanOld
-  - PetMobGoose
-  - PetMobClownGoblin
-  - PetMobCorgiIanPup
-  - PetMobParrot
 
 #Law
 
