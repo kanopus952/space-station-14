@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using JetBrains.Annotations;
@@ -36,12 +37,7 @@ public sealed partial class TileNotBlocked : IConstructionCondition
         }
         // Sunrise-start, Временное решение. У оффов много что поломано с методом IsTileBlocked
         // return !tileRef.Value.IsBlockedTurf(_filterMobs);
-        foreach (var entity in lookupSys.GetEntitiesIntersecting(location, LookupFlags.Static))
-        {
-            return false;
-        }
-
-        return true;
+        return !lookupSys.GetEntitiesIntersecting(location, LookupFlags.Static).Any();
         // Sunrise-end
     }
 
