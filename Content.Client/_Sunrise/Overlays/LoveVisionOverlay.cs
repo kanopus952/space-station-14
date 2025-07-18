@@ -25,15 +25,15 @@ public sealed class LoveVisionOverlay : Overlay
     [Dependency] private readonly IEntityManager _entityManager = default!;
 
     private readonly SpriteSystem _sprite;
-
     public override bool RequestScreenTexture => true;
-
     public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
     private readonly ShaderInstance _loveVisionShader;
     private readonly ShaderInstance _gradient;
     private const float RiseDistance = 100f;
     private readonly Robust.Client.Graphics.Texture _heartTexture;
+    private const string HeartTexturePath = "/Textures/_Sunrise/Interface/LoveVision/hearts.png";
 
+    private readonly Robust.Shared.Maths.Vector3 GradientColor = new(1.0f, 0.3f, 0.7f); // Розово-фиолетовый
     private readonly List<HeartData> _hearts = [];
 
     private struct HeartData
@@ -44,6 +44,7 @@ public sealed class LoveVisionOverlay : Overlay
     }
     private float _strength = 0.0f;
     private float _timeTicker = 0.0f;
+    private float _heartsLifetime = 1.5f;
     private TimeSpan _nextHeartTime;
 
     // private float EffectScale => Math.Clamp((_strength - _minStrength) / _maxStrength, 0.0f, 1.0f);
@@ -54,7 +55,7 @@ public sealed class LoveVisionOverlay : Overlay
         _sprite = _entityManager.System<SpriteSystem>();
         _loveVisionShader = _prototypeManager.Index<ShaderPrototype>("LoveVision").InstanceUnique();
         _gradient = _prototypeManager.Index<ShaderPrototype>("GradientCircleMask").InstanceUnique();
-        _heartTexture = _sprite.Frame0(new SpriteSpecifier.Texture(new ResPath("/Textures/_Sunrise/Interface/LoveVision/hearts.png")));
+        _heartTexture = _sprite.Frame0(new SpriteSpecifier.Texture(new ResPath(HeartTexturePath)));
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -124,18 +125,19 @@ public sealed class LoveVisionOverlay : Overlay
 
         if (curTime >= _nextHeartTime)
         {
-
+            // Случайное изменение размера
             var baseSize = new Vector2(100, 100);
             var scale = _random.NextFloat(0.8f, 1.2f);
             var finalSize = baseSize * scale;
 
             _hearts.Add(new HeartData
             {
-                Position = GetRandomSpawnPosition(args),
+                Position = GetRandomSpawnPosition(args, 600f, 600f),
                 SpawnTime = _timing.CurTime,
                 BaseSize = finalSize
             });
 
+            // Задержка перед появлением нового сердечка
             var delay = _random.NextFloat() * 0.2f + 0.1;
             _nextHeartTime = curTime + TimeSpan.FromSeconds(delay);
         }
@@ -147,30 +149,28 @@ public sealed class LoveVisionOverlay : Overlay
             var heart = _hearts[i];
             var timeElapsed = curTime - heart.SpawnTime;
 
-            var lifetime = 1.5f;
-
-            var lifeTime = (curTime - heart.SpawnTime).TotalSeconds;
-
-            if (timeElapsed > TimeSpan.FromSeconds(lifetime))
+            if (timeElapsed > TimeSpan.FromSeconds(_heartsLifetime))
             {
                 _hearts.RemoveAt(i);
                 continue;
             }
 
-            var progress = timeElapsed / TimeSpan.FromSeconds(lifetime);
+            var progress = timeElapsed / TimeSpan.FromSeconds(_heartsLifetime);
 
+            // Переменная позиция (поднимается вверх)
             var offset = new Vector2(0, (float)-progress * RiseDistance);
             var position = heart.Position + offset;
 
-            var pulse = 1f + 0.1f * MathF.Sin((float)lifeTime * MathF.PI * 2f);
+            // Пульсация по синусоиде
+            var pulse = 1f + 0.1f * MathF.Sin((float)timeElapsed.TotalSeconds * MathF.PI * 2f);
             var pulsingSize = heart.BaseSize * pulse;
 
-            var alpha = 1.0f - timeElapsed / TimeSpan.FromSeconds(lifetime);
-            alpha = Math.Clamp(alpha, 0.0f, 1f);
-
+            // Постепенная прозрачность
+            var alpha = 1.0f - (float)progress;
             var modulate = new Color(255, 100, 180, (byte)(alpha * 255));
 
             var drawBox = new UIBox2(position, position + pulsingSize);
+
             screen.DrawTextureRect(_heartTexture, drawBox, modulate);
         }
     }
@@ -208,7 +208,7 @@ public sealed class LoveVisionOverlay : Overlay
             var pulse = MathF.Max(0f, MathF.Sin(adjustedTime));
 
             _gradient.SetParameter("time", pulse);
-            _gradient.SetParameter("color", new Robust.Shared.Maths.Vector3(1.0f, 0.3f, 0.7f)); // Розово-фиолетовый
+            _gradient.SetParameter("color", GradientColor);
             _gradient.SetParameter("darknessAlphaOuter", 2f);
 
             _gradient.SetParameter("outerCircleRadius", outerRadius);
@@ -221,7 +221,12 @@ public sealed class LoveVisionOverlay : Overlay
             worldHandle.UseShader(null);
         }
     }
-    private Vector2 GetRandomSpawnPosition(in OverlayDrawArgs args)
+    /// <summary>
+    /// Используется для вычисления расстояния от центра Viewport, на котором будут появляться сердечки
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
+    private Vector2 GetRandomSpawnPosition(in OverlayDrawArgs args, float width, float height)
     {
         var viewport = args.Viewport;
         var screenWidth = viewport.Size.X;
@@ -230,12 +235,9 @@ public sealed class LoveVisionOverlay : Overlay
         var centerX = screenWidth / 2f;
         var centerY = screenHeight / 2f;
 
-        const float exclusionWidth = 600f;
-        const float exclusionHeight = 600f;
-
         var exclusionRect = new Box2(
-            new Vector2(centerX - exclusionWidth / 2f, centerY - exclusionHeight / 2f),
-            new Vector2(centerX + exclusionWidth / 2f, centerY + exclusionHeight / 2f)
+            new Vector2(centerX - width / 2f, centerY - height / 2f),
+            new Vector2(centerX + width / 2f, centerY + height / 2f)
         );
 
         Vector2 randomPos;
@@ -252,6 +254,14 @@ public sealed class LoveVisionOverlay : Overlay
             tries++;
         }
         while (exclusionRect.Contains(randomPos) && tries < maxTries);
+
+        if (exclusionRect.Contains(randomPos))
+        {
+            randomPos = new Vector2(
+                _random.NextFloat(exclusionRect.Left - 50f, exclusionRect.Right + 50f),
+                _random.NextFloat(0, screenHeight)
+            );
+        }
 
         return randomPos;
     }
