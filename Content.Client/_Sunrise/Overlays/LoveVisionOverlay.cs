@@ -33,7 +33,7 @@ public sealed class LoveVisionOverlay : Overlay
     private readonly Robust.Client.Graphics.Texture _heartTexture;
     private const string HeartTexturePath = "/Textures/_Sunrise/Interface/LoveVision/hearts.png";
 
-    private readonly Robust.Shared.Maths.Vector3 GradientColor = new(1.0f, 0.3f, 0.7f); // Розово-фиолетовый
+    private readonly Robust.Shared.Maths.Vector3 _gradientColor = new(1.0f, 0.3f, 0.7f); // Розово-фиолетовый
     private readonly List<HeartData> _hearts = [];
 
     private struct HeartData
@@ -208,7 +208,7 @@ public sealed class LoveVisionOverlay : Overlay
             var pulse = MathF.Max(0f, MathF.Sin(adjustedTime));
 
             _gradient.SetParameter("time", pulse);
-            _gradient.SetParameter("color", GradientColor);
+            _gradient.SetParameter("color", _gradientColor);
             _gradient.SetParameter("darknessAlphaOuter", 2f);
 
             _gradient.SetParameter("outerCircleRadius", outerRadius);
@@ -258,7 +258,9 @@ public sealed class LoveVisionOverlay : Overlay
         if (exclusionRect.Contains(randomPos))
         {
             randomPos = new Vector2(
-                _random.NextFloat(exclusionRect.Left - 50f, exclusionRect.Right + 50f),
+                _random.Next(2) == 0
+                    ? _random.NextFloat(0, exclusionRect.Left - 50f)
+                    : _random.NextFloat(exclusionRect.Right + 50f, screenWidth),
                 _random.NextFloat(0, screenHeight)
             );
         }
