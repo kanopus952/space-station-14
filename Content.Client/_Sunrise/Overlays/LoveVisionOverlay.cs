@@ -8,14 +8,9 @@ using Content.Shared.CCVar;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
-using Robust.Shared.ContentPack;
 using Robust.Client.GameObjects;
 using Robust.Shared.Utility;
-using Robust.Shared.Toolshed.TypeParsers;
 using Robust.Shared.Random;
-using Robust.Shared.Input;
-using Content.Client.Guidebook.Richtext;
-using Robust.Client.Input;
 
 namespace Content.Client._Sunrise.LoveVision;
 
@@ -27,18 +22,16 @@ public sealed class LoveVisionOverlay : Overlay
     [Dependency] private readonly IEntitySystemManager _sysMan = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IInputManager _input = default!;
 
     private readonly SpriteSystem _sprite;
 
     public override bool RequestScreenTexture => true;
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+    public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
     private readonly ShaderInstance _loveVisionShader;
     private readonly ShaderInstance _gradient;
-
+    private const float RiseDistance = 100f;
     private readonly Robust.Client.Graphics.Texture _heartTexture;
 
     private readonly List<HeartData> _hearts = [];
@@ -47,15 +40,11 @@ public sealed class LoveVisionOverlay : Overlay
     {
         public Vector2 Position;
         public TimeSpan SpawnTime;
+        public Vector2 BaseSize;
     }
     private float _strength = 0.0f;
     private float _timeTicker = 0.0f;
-    private Vector2 _position;
-
     private TimeSpan _nextHeartTime;
-
-    private readonly float _maxStrength = 15f;
-    private readonly float _minStrength = 0f;
 
     // private float EffectScale => Math.Clamp((_strength - _minStrength) / _maxStrength, 0.0f, 1.0f);
 
@@ -65,7 +54,7 @@ public sealed class LoveVisionOverlay : Overlay
         _sprite = _entityManager.System<SpriteSystem>();
         _loveVisionShader = _prototypeManager.Index<ShaderPrototype>("LoveVision").InstanceUnique();
         _gradient = _prototypeManager.Index<ShaderPrototype>("GradientCircleMask").InstanceUnique();
-        _heartTexture = _sprite.Frame0(new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Nano/lock.svg.192dpi.png")));
+        _heartTexture = _sprite.Frame0(new SpriteSpecifier.Texture(new ResPath("/Textures/_Sunrise/Interface/LoveVision/hearts.png")));
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -94,29 +83,10 @@ public sealed class LoveVisionOverlay : Overlay
         var peakFactor = 1f - normalizedTime;
 
         // Adjust strength based on peakFactor
-        _strength += (peakFactor * args.DeltaSeconds);
+        _strength += peakFactor * args.DeltaSeconds;
 
         // Optional: Clamp _strength to a reasonable range if needed, e.g., between 0 and 1
         _strength = Math.Clamp(_strength, 0f, 1f);
-
-        var curTime = _timing.CurTime;
-
-        if (curTime >= _nextHeartTime)
-        {
-            var viewportSize = _eyeManager.GetWorldViewport();
-            var random = new Random();
-            var x = (float)(random.NextDouble() * viewportSize.Size.X);
-            var y = (float)(random.NextDouble() * viewportSize.Size.Y);
-
-            _hearts.Add(new HeartData
-            {
-                Position = new Vector2(x, y),
-                SpawnTime = _timing.CurTime
-            });
-
-            var delay = _random.NextFloat() * 2.0 + 1.0; // от 1.0 до 3.0 сек
-            _nextHeartTime = curTime + TimeSpan.FromSeconds(delay);
-        }
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -135,6 +105,77 @@ public sealed class LoveVisionOverlay : Overlay
         if (_config.GetCVar(CCVars.ReducedMotion))
             return;
 
+        switch (args.Space)
+        {
+            case OverlaySpace.ScreenSpace:
+                DrawScreen(args);
+                break;
+            case OverlaySpace.WorldSpace:
+                DrawWorld(args);
+                break;
+        }
+    }
+    private void DrawScreen(in OverlayDrawArgs args)
+    {
+        if (_strength < 0.5f)
+            return;
+
+        var curTime = _timing.CurTime;
+
+        if (curTime >= _nextHeartTime)
+        {
+
+            var baseSize = new Vector2(100, 100);
+            var scale = _random.NextFloat(0.8f, 1.2f);
+            var finalSize = baseSize * scale;
+
+            _hearts.Add(new HeartData
+            {
+                Position = GetRandomSpawnPosition(args),
+                SpawnTime = _timing.CurTime,
+                BaseSize = finalSize
+            });
+
+            var delay = _random.NextFloat() * 0.2f + 0.1;
+            _nextHeartTime = curTime + TimeSpan.FromSeconds(delay);
+        }
+
+        var screen = args.ScreenHandle;
+
+        for (var i = _hearts.Count - 1; i >= 0; i--)
+        {
+            var heart = _hearts[i];
+            var timeElapsed = curTime - heart.SpawnTime;
+
+            var lifetime = 1.5f;
+
+            var lifeTime = (curTime - heart.SpawnTime).TotalSeconds;
+
+            if (timeElapsed > TimeSpan.FromSeconds(lifetime))
+            {
+                _hearts.RemoveAt(i);
+                continue;
+            }
+
+            var progress = timeElapsed / TimeSpan.FromSeconds(lifetime);
+
+            var offset = new Vector2(0, (float)-progress * RiseDistance);
+            var position = heart.Position + offset;
+
+            var pulse = 1f + 0.1f * MathF.Sin((float)lifeTime * MathF.PI * 2f);
+            var pulsingSize = heart.BaseSize * pulse;
+
+            var alpha = 1.0f - timeElapsed / TimeSpan.FromSeconds(lifetime);
+            alpha = Math.Clamp(alpha, 0.0f, 1f);
+
+            var modulate = new Color(255, 100, 180, (byte)(alpha * 255));
+
+            var drawBox = new UIBox2(position, position + pulsingSize);
+            screen.DrawTextureRect(_heartTexture, drawBox, modulate);
+        }
+    }
+    private void DrawWorld(in OverlayDrawArgs args)
+    {
         if (ScreenTexture == null)
             return;
 
@@ -150,7 +191,7 @@ public sealed class LoveVisionOverlay : Overlay
         worldHandle.DrawRect(viewport, Color.White);
         worldHandle.UseShader(null);
 
-        if (_strength > 0f) // Условие, если надо
+        if (_strength > 0f)
         {
             var level = _strength / 2f;
             var pulseRate = 6f;
@@ -180,31 +221,39 @@ public sealed class LoveVisionOverlay : Overlay
             worldHandle.DrawRect(viewport, Color.White);
             worldHandle.UseShader(null);
         }
+    }
+    private Vector2 GetRandomSpawnPosition(in OverlayDrawArgs args)
+    {
+        var viewport = args.Viewport;
+        var screenWidth = viewport.Size.X;
+        var screenHeight = viewport.Size.Y;
 
-        var curTime = _timing.CurTime;
-        var screen = args.ScreenHandle;
+        var centerX = screenWidth / 2f;
+        var centerY = screenHeight / 2f;
 
-        for (var i = _hearts.Count - 1; i >= 0; i--)
+        const float exclusionWidth = 600f;
+        const float exclusionHeight = 600f;
+
+        var exclusionRect = new Box2(
+            new Vector2(centerX - exclusionWidth / 2f, centerY - exclusionHeight / 2f),
+            new Vector2(centerX + exclusionWidth / 2f, centerY + exclusionHeight / 2f)
+        );
+
+        Vector2 randomPos;
+
+        var maxTries = 20;
+        var tries = 0;
+
+        do
         {
-            var heart = _hearts[i];
-            var timeElapsed = curTime - heart.SpawnTime;
-
-            var lifetime = TimeSpan.FromSeconds(1.5f);
-
-            if (timeElapsed > lifetime)
-            {
-                _hearts.RemoveAt(i);
-                continue;
-            }
-
-            var pos = heart.Position - new Vector2(0, 30 * timeElapsed.Seconds);
-
-            var alpha = 1.0f - timeElapsed / lifetime;
-            alpha = Math.Clamp(alpha, 0f, 1f);
-
-            var modulate = new Color(255, 100, 180, (byte)(alpha * 255));
-
-            screen.DrawTexture(_heartTexture, pos, modulate);
+            randomPos = new Vector2(
+                _random.NextFloat(0, screenWidth),
+                _random.NextFloat(0, screenHeight)
+            );
+            tries++;
         }
+        while (exclusionRect.Contains(randomPos) && tries < maxTries);
+
+        return randomPos;
     }
 }
