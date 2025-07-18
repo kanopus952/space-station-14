@@ -210,7 +210,6 @@ public sealed class LoveVisionOverlay : Overlay
             _gradient.SetParameter("time", pulse);
             _gradient.SetParameter("color", new Robust.Shared.Maths.Vector3(1.0f, 0.3f, 0.7f)); // Розово-фиолетовый
             _gradient.SetParameter("darknessAlphaOuter", 2f);
-            _gradient.SetParameter("ratioMultiplier", 1f);
 
             _gradient.SetParameter("outerCircleRadius", outerRadius);
             _gradient.SetParameter("outerCircleMaxRadius", outerRadius + 0.2f * distance);
