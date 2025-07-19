@@ -280,10 +280,7 @@ public sealed class PullingSystem : EntitySystem
         }
         // Sunrise-start
         if (TryComp<CarriableComponent>(component.Pulling, out var carriable))
-        {
             args.ModifySpeed(carriable.WalkSpeedModifier, carriable.SprintSpeedModifier);
-            _popup.PopupPredicted(Loc.GetString("can-carry"), uid, uid, PopupType.SmallCaution);
-        }
         // Sunrise-end
 
         args.ModifySpeed(component.WalkSpeedModifier, component.SprintSpeedModifier);
@@ -492,6 +489,12 @@ public sealed class PullingSystem : EntitySystem
         {
             return false;
         }
+        // Sunrise-start
+        if (HasComp<CarriableComponent>(pullableUid))
+        {
+            _popup.PopupClient(Loc.GetString("can-carry"), pullerUid, PopupType.Small);
+        }
+        // Sunrise-end
 
         if (pullerComp.Pulling == pullableUid)
             return true;
