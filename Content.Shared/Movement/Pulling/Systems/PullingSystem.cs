@@ -514,10 +514,6 @@ public sealed class PullingSystem : EntitySystem
             if (!TryStopPull(pullableUid, pullableComp, pullableComp.Puller))
                 return false;
         }
-        // Sunrise-start
-        if (HasComp<CarriableComponent>(pullableUid))
-            _popup.PopupClient(Loc.GetString("can-carry"), pullerUid, PopupType.Small);
-        // Sunrise-end
 
         var pullAttempt = new PullAttemptEvent(pullerUid, pullableUid);
         RaiseLocalEvent(pullerUid, pullAttempt);
