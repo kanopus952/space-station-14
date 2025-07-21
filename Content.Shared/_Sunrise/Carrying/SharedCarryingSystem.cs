@@ -63,7 +63,6 @@ public sealed class SharedCarryingSystem : EntitySystem
         SubscribeLocalEvent<CarryingComponent, VirtualItemDeletedEvent>(OnVirtualItemDeleted);
         SubscribeLocalEvent<CarryingComponent, EntParentChangedMessage>(OnParentChanged);
         SubscribeLocalEvent<CarryingComponent, MobStateChangedEvent>(OnMobStateChanged);
-        SubscribeLocalEvent<CarryingComponent, DownAttemptEvent>(OnDownAttempt);
 
         SubscribeLocalEvent<BeingCarriedComponent, UpdateCanMoveEvent>(OnMoveAttempt);
         SubscribeLocalEvent<BeingCarriedComponent, StandAttemptEvent>(OnStandAttempt);
@@ -224,13 +223,6 @@ public sealed class SharedCarryingSystem : EntitySystem
     {
         DropCarried(uid, component.Carried);
     }
-
-
-    private void OnDownAttempt(EntityUid uid, CarryingComponent comp, DownAttemptEvent args)
-    {
-        args.Cancel();
-    }
-
 
     private void OnMoveAttempt(EntityUid uid, BeingCarriedComponent component, UpdateCanMoveEvent args)
     {
