@@ -1,3 +1,4 @@
+# БЕЗ МОЕГО РАЗРЕШЕНИЯ НЕ МЕНЯТЬ БАЛАНС ЭТОЙ РАСЫ!!! SplikZerys
 - type: entity
   save: false
   name: Urist McFelinid
@@ -446,12 +447,12 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      75: Critical
-      150: Dead
+      100: Critical
+      200: Dead
   - type: SlowOnDamage
     speedModifierThresholds:
-      30: 0.7
-      40: 0.5
+      60: 0.7
+      80: 0.5
   - type: MeleeWeapon
     hidden: true
     soundHit:
@@ -470,7 +471,7 @@
     soundHit:
       path: /Audio/Effects/hit_kick.ogg
   - type: Stamina
-    critThreshold: 50
+    critThreshold: 100
   - type: FootprintEmitter
   - type: Vocal
     sounds:
@@ -506,12 +507,12 @@
         showInChat: true
         probability: 0.35
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.0
-    baseSprintSpeed: 4.0
-  - type: Item
-    size: Huge
-    shape:
-    - 0,0,3,3
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4.5
+#  - type: Item
+#    size: Huge
+#    shape:
+#    - 0,0,3,3
   - type: ItemRepickupCooldown
     cooldown: 5
   - type: Felinid
