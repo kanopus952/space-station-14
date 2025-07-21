@@ -1,4 +1,3 @@
-# БЕЗ МОЕГО РАЗРЕШЕНИЯ НЕ МЕНЯТЬ БАЛАНС ЭТОЙ РАСЫ!!! SplikZerys
 - type: entity
   save: false
   name: Urist McFelinid
@@ -462,11 +461,6 @@
     damage:
       types:
         Slash: 3
-#  - type: DamageOnHighSpeedImpact Ушла эпоха
-#    minimumSpeed: 10
-#    damage:
-#      types:
-#        Blunt: 5
     soundHit:
       path: /Audio/Effects/hit_kick.ogg
   - type: Stamina
