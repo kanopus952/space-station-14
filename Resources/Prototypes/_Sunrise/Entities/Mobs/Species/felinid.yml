@@ -408,7 +408,7 @@
       fix1:
         shape:
           !type:PhysShapeCircle
-          radius: 0.20
+          radius: 0.35
         density: 100
         restitution: 0.0
         mask:
@@ -521,9 +521,7 @@
         Blunt: 5
     damageSound: /Audio/Effects/hit_kick.ogg
   - type: ScaleSprite
-    scale: 0.72, 0.72
-  - type: ToggleableNightVision
-    effect: EffectNightVisioSpecies
+    scale: 0.80, 0.80
 
 - type: entity
   save: false
