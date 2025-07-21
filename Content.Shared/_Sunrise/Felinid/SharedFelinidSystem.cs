@@ -82,7 +82,7 @@ public abstract class SharedFelinidSystem : EntitySystem
         {
             BreakOnMove = true,
             NeedHand = true,
-            MovementThreshold = 0.01f
+            MovementThreshold = 0.5f
         };
 
         _doAfterSystem.TryStartDoAfter(args);
