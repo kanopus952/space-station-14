@@ -509,10 +509,10 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4.5
-#  - type: Item
-#    size: Huge
-#    shape:
-#    - 0,0,3,3
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,3,3
   - type: ItemRepickupCooldown
     cooldown: 5
   - type: Felinid
