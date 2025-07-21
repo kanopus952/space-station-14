@@ -6,9 +6,7 @@
   id: MobFelinidBase
   abstract: true
   components:
-  # SUNRISE EDIT
   - type: Interactions
-  # SUNRISE EDIT
   - type: MultiHandedItem
   - type: Absorbable
   - type: OwOAccent
@@ -514,8 +512,6 @@
     size: Huge
     shape:
     - 0,0,3,3
-  - type: ItemRepickupCooldown
-    cooldown: 5
   - type: Felinid
     damageBonus:
       types:
