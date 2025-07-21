@@ -9,6 +9,7 @@
   # SUNRISE EDIT
   - type: Interactions
   # SUNRISE EDIT
+  - type: MultiHandedItem
   - type: Absorbable
   - type: OwOAccent
   - type: Speech
@@ -447,8 +448,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      100: Critical
-      200: Dead
+      80: Critical
+      160: Dead
   - type: SlowOnDamage
     speedModifierThresholds:
       60: 0.7
