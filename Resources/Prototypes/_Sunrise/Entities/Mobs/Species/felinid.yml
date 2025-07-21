@@ -462,11 +462,11 @@
     damage:
       types:
         Slash: 3
-  - type: DamageOnHighSpeedImpact
-    minimumSpeed: 5
-    damage:
-      types:
-        Blunt: 10
+#  - type: DamageOnHighSpeedImpact Ушла эпоха
+#    minimumSpeed: 10
+#    damage:
+#      types:
+#        Blunt: 5
     soundHit:
       path: /Audio/Effects/hit_kick.ogg
   - type: Stamina

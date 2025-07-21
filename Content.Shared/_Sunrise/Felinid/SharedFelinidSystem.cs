@@ -103,7 +103,7 @@ public abstract class SharedFelinidSystem : EntitySystem
             return;
 
         if (TryComp<MultiHandedItemComponent>(args.Args.Target.Value, out var multiHanded)
-            && hands.CountFreeHands() != multiHanded!.HandsNeeded)
+            && hands.CountFreeHands() < multiHanded!.HandsNeeded)
         {
             _popup.PopupPredictedCursor(Loc.GetString("multi-handed-item-pick-up-fail",
                 ("number", multiHanded.HandsNeeded - 1), ("item", ent.Owner)), args.Args.User);

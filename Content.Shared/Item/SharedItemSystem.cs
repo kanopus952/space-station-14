@@ -116,7 +116,7 @@ public abstract class SharedItemSystem : EntitySystem
 
     private void AddPickupVerb(EntityUid uid, ItemComponent component, GetVerbsEvent<InteractionVerb> args)
     {
-        // Sunrise-start. Иначе фелиниды начинают подбираться от открытия вербов
+        // Sunrise-start. Предотвращаем появление стандартного верба подбора для фелинидов
         if (HasComp<FelinidComponent>(uid))
             return;
         // Sunrise-end
