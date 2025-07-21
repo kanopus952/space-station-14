@@ -1,3 +1,8 @@
+using Content.Shared.ActionBlocker;
+using Content.Shared.Carrying;
+using Content.Shared.DoAfter;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
@@ -9,10 +14,13 @@ namespace Content.Shared._Sunrise.Felinid;
 
 public abstract class SharedFelinidSystem : EntitySystem
 {
+    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<FelinidComponent, GettingPickedUpAttemptEvent>(OnGettingPickupAttempt);
         SubscribeLocalEvent<FelinidComponent, PickupAttemptEvent>(OnPickupAttempt);
         SubscribeLocalEvent<FelinidComponent, BeingEquippedAttemptEvent>(OnBeingEquippedAttempt);
         SubscribeLocalEvent<FelinidComponent, ContainerIsInsertingAttemptEvent>(OnHandEquippedAttempt);
@@ -21,6 +29,7 @@ public abstract class SharedFelinidSystem : EntitySystem
         SubscribeLocalEvent<FelinidComponent, InteractionAttemptEvent>(OnInteractAttempt);
         SubscribeLocalEvent<FelinidComponent, PullAttemptEvent>(OnPullAttempt);
         SubscribeLocalEvent<FelinidComponent, AttackAttemptEvent>(OnAttempt);
+        SubscribeLocalEvent<FelinidComponent, FelinidPickupDoAfterEvent>(OnDoAfter);
     }
 
     private void OnInteractAttempt(Entity<FelinidComponent> ent, ref InteractionAttemptEvent args)
@@ -61,5 +70,40 @@ public abstract class SharedFelinidSystem : EntitySystem
     {
         if (HasComp<FelinidComponent>(args.Item) || component.InContainer)
             args.Cancel();
+    }
+
+    private void OnGettingPickupAttempt(EntityUid uid, FelinidComponent component, ref GettingPickedUpAttemptEvent args)
+    {
+        args.Cancel();
+        StartFelinidPickupDoAfter(args.User, args.Item);
+    }
+    private void StartFelinidPickupDoAfter(EntityUid user, EntityUid item)
+    {
+        var ev = new FelinidPickupDoAfterEvent();
+        var args = new DoAfterArgs(EntityManager, user, 3f, ev, item, target: item)
+        {
+            BreakOnMove = true,
+            NeedHand = true,
+            MovementThreshold = 0.01f
+        };
+
+        _doAfterSystem.TryStartDoAfter(args);
+    }
+    private void OnDoAfter(Entity<FelinidComponent> ent, ref FelinidPickupDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
+            return;
+
+        if (args.Args.Target == null)
+            return;
+
+        if (!TryComp<HandsComponent>(args.Args.User, out var hands))
+            return;
+
+        if (!_hands.TryGetEmptyHand(args.Args.User, out var emptyHand, hands))
+            return;
+
+        _hands.TryPickup(args.Args.User, args.Args.Target.Value, emptyHand, checkActionBlocker: false, handsComp: hands);
+        args.Handled = true;
     }
 }
