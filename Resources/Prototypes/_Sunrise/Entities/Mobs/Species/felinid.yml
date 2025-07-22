@@ -5,9 +5,7 @@
   id: MobFelinidBase
   abstract: true
   components:
-  # SUNRISE EDIT
   - type: Interactions
-  # SUNRISE EDIT
   - type: MultiHandedItem
     requiredHands: 2
   - type: Absorbable
