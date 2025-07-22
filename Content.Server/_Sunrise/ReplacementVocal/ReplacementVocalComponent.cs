@@ -6,15 +6,16 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server._Sunrise.ReplacementVocal;
 
 /// <summary>
-/// Заменяет VocalComponent
+/// Компонент для замены вокальных звуков и эмоций сущности.
+/// Сохраняет предыдущие настройки для возможности восстановления.
 /// </summary>
 [RegisterComponent]
 public sealed partial class ReplacementVocalComponent : Component
 {
     [DataField(customTypeSerializer: typeof(PrototypeIdValueDictionarySerializer<Sex, EmoteSoundsPrototype>), required: true)]
-    public Dictionary<Sex, string>? Vocal;
+    public Dictionary<Sex, string> Vocal;
 
-    [ViewVariables]
+    [DataField]
     public HashSet<string> AddedEmotes = new();
 
     [DataField(customTypeSerializer: typeof(PrototypeIdValueDictionarySerializer<Sex, EmoteSoundsPrototype>))]

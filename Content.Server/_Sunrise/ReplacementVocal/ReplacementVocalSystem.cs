@@ -19,7 +19,7 @@ public sealed class ReplacementVocalSystem : EntitySystem
         if (!TryComp<VocalComponent>(uid, out var vocalComponent))
             return;
 
-        if (component.Vocal == vocalComponent.Sounds)
+        if (component.Vocal.Keys == vocalComponent.Sounds?.Keys)
             return;
 
         if (!TryComp<SpeechComponent>(uid, out var speechComponent))
@@ -49,7 +49,8 @@ public sealed class ReplacementVocalSystem : EntitySystem
         if (!TryComp<VocalComponent>(uid, out var vocal))
             return;
 
-        vocal.Sounds = component.PreviousVocal;
+        if (component.PreviousVocal != null)
+            vocal.Sounds = component.PreviousVocal;
 
         LoadEmotes(uid, vocal);
 

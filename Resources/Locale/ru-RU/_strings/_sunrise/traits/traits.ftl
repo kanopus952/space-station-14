@@ -18,5 +18,5 @@ trait-tall-quirk-name = высокий
 trait-tall-quirk-desc = Делает вас немного выше (Только визуально!).
 trait-short-quirk-name = низкий
 trait-short-quirk-desc = Делает вас немного ниже (Только визуально!).
-trait-felinid-vocal-name = Мурлыкание
+trait-felinid-vocal-name = мурлыкание
 trait-felinid-vocal-desc = Заменяет ваши звуки эмоций фелинидскими. Ня!
