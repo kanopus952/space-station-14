@@ -5,8 +5,11 @@
   id: MobFelinidBase
   abstract: true
   components:
+  # SUNRISE EDIT
   - type: Interactions
+  # SUNRISE EDIT
   - type: MultiHandedItem
+    requiredHands: 2
   - type: Absorbable
   - type: OwOAccent
   - type: Speech
@@ -461,8 +464,6 @@
     damage:
       types:
         Slash: 3
-    soundHit:
-      path: /Audio/Effects/hit_kick.ogg
   - type: Stamina
     critThreshold: 100
   - type: FootprintEmitter
