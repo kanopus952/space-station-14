@@ -451,7 +451,7 @@
   - type: SlowOnDamage
     speedModifierThresholds:
       60: 0.7
-      80: 0.5
+      70: 0.5
   - type: MeleeWeapon
     hidden: true
     soundHit:
