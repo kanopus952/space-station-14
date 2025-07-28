@@ -32,10 +32,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      120: Critical
-      220: Dead
+      100: Critical
+      200: Dead
   - type: Stamina
-    critThreshold: 150
+    critThreshold: 100
   - type: Fixtures
     fixtures:
       fix1:
