@@ -10,19 +10,15 @@
       organs:
         brain: OrganHumanBrain
         eyes: OrganHumanEyes
-        # Sunrise-start
         tongue: OrganHumanTongue
         eye_implant: null
-        # Sunrise-end
     torso:
       part: TorsoVulpkanin
-      # Sunrise-start
       connections:
       - right arm
       - left arm
       - right leg
       - left leg
-      # Sunrise-end
       organs:
         heart: OrganAnimalHeart
         lungs: OrganHumanLungs
@@ -30,7 +26,6 @@
         liver: OrganAnimalLiver
         kidneys: OrganHumanKidneys
         cavity: null
-    # Sunrise-start
     right arm:
       part: RightArmVulpkanin
       connections:
@@ -55,4 +50,3 @@
       part: RightFootVulpkanin
     left foot:
       part: LeftFootVulpkanin
-    # Sunrise-end
