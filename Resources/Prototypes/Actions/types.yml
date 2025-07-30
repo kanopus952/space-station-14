@@ -218,7 +218,7 @@
   description: Randomly teleports you within a large distance.
   components:
   - type: LimitedCharges
-    maxCharges: 1
+    maxCharges: 1 # Sunrise-edit
   # Sunrise-Start
   - type: AutoRecharge
     rechargeDuration: 360
