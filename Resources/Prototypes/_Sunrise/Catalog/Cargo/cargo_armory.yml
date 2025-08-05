@@ -104,6 +104,6 @@
     sprite: _Sunrise/Structures/Storage/Crates/woodcrate_ussp_small.rsi
     state: icon
   product: CrateAmmunitionSmallLightRifle
-  cost: 500
+  cost: 925 # Sunrise-edit
   category: cargoproduct-category-name-armory
   group: market
