@@ -1,25 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Content.Server.Humanoid;
 using Content.Shared.Damage;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
-using Content.Shared.Interaction;
 using Content.Shared.Speech.Muting;
 using Content.Shared._Sunrise.Antags.Abductor;
-using Content.Shared._Sunrise.Medical.Surgery.Effects.Step;
 using Content.Shared._Sunrise.Medical.Surgery.Events;
 using Content.Shared._Sunrise.Medical.Surgery.Steps.Parts;
-using Content.Shared._Sunrise.VentCraw;
-using Content.Shared.CombatMode.Pacification;
-using Robust.Shared.Prototypes;
-using Content.Server.Speech.Components;
-using Robust.Shared.Timing;
 
 namespace Content.Server._Sunrise.Medical.Surgery;
+
 public sealed partial class OrganSystem : EntitySystem
 {
 
@@ -27,9 +16,6 @@ public sealed partial class OrganSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly IComponentFactory _compFactory = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-
-    [Dependency] private readonly IGameTiming _timing = default!;
-
 
     public override void Initialize()
     {
@@ -42,9 +28,6 @@ public sealed partial class OrganSystem : EntitySystem
 
         SubscribeLocalEvent<OrganTongueComponent, SurgeryOrganImplantationCompleted>(OnTongueImplanted);
         SubscribeLocalEvent<OrganTongueComponent, SurgeryOrganExtracted>(OnTongueExtracted);
-
-        SubscribeLocalEvent<AbductorOrganComponent, SurgeryOrganImplantationCompleted>(OnAbductorOrganImplanted);
-        SubscribeLocalEvent<AbductorOrganComponent, SurgeryOrganExtracted>(OnAbductorOrganExtracted);
 
         SubscribeLocalEvent<DamageableComponent, SurgeryOrganImplantationCompleted>(OnOrganImplanted);
         SubscribeLocalEvent<DamageableComponent, SurgeryOrganExtracted>(OnOrganExtracted);
@@ -89,55 +72,6 @@ public sealed partial class OrganSystem : EntitySystem
         if (change is not null)
             _damageableSystem.TryChangeDamage(ent.Owner, change.Invert(), true, false, ent.Comp);
     }
-
-    //
-
-    private void OnAbductorOrganImplanted(Entity<AbductorOrganComponent> ent, ref SurgeryOrganImplantationCompleted args)
-    {
-
-        EnsureComp<AbductorVictimComponent>(args.Body, out var victim);
-        victim.Organ = ent.Comp.Organ;
-
-        if (ent.Comp.Organ == AbductorOrganType.Vent)
-            AddComp<VentCrawlerComponent>(args.Body);
-
-        if (ent.Comp.Organ == AbductorOrganType.Pacified)
-            AddComp<PacifiedComponent>(args.Body);
-
-        if (ent.Comp.Organ == AbductorOrganType.Liar)
-        {
-            EnsureComp<ReplacementAccentComponent>(args.Body, out var accent);
-            accent.Accent = "liar";
-        }
-
-        if (ent.Comp.Organ == AbductorOrganType.Owo)
-            victim.TransformationTime += _timing.CurTime;
-    }
-    private void OnAbductorOrganExtracted(Entity<AbductorOrganComponent> ent, ref SurgeryOrganExtracted args)
-    {
-        if (TryComp<AbductorVictimComponent>(args.Body, out var victim))
-            if (victim.Organ == ent.Comp.Organ)
-                victim.Organ = AbductorOrganType.None;
-
-        if (ent.Comp.Organ == AbductorOrganType.Vent)
-            RemComp<VentCrawlerComponent>(args.Body);
-
-        if (ent.Comp.Organ == AbductorOrganType.Pacified)
-            RemComp<PacifiedComponent>(args.Body);
-
-        if (ent.Comp.Organ == AbductorOrganType.Liar)
-            RemComp<ReplacementAccentComponent>(args.Body);
-
-        if (ent.Comp.Organ == AbductorOrganType.Owo)
-        {
-            RemComp<AbductorOwoTransformatedComponent>(args.Body);
-            RemComp<OwOAccentComponent>(args.Body);
-            _humanoid.RemoveMarking(args.Body, "CatEars");
-            _humanoid.RemoveMarking(args.Body, "CatTail");
-        }
-    }
-
-    //
 
     private void OnTongueImplanted(Entity<OrganTongueComponent> ent, ref SurgeryOrganImplantationCompleted args)
     {
