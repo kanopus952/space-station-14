@@ -15,6 +15,13 @@ using Content.Server.Speech.Components;
 using Content.Server.Humanoid;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Coordinates;
+using Content.Server.Mind;
+using Content.Server.Roles;
+using Content.Server.Antag;
+using Content.Shared._Sunrise.VentCraw;
+using Content.Shared.CombatMode.Pacification;
+using Content.Shared.Starlight.Medical.Surgery.Events;
+using Content.Server.Objectives.Components;
 
 namespace Content.Server._Sunrise.Antags.Abductor;
 
@@ -29,9 +36,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly RoleSystem _role = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string DefaultRule = "AbductorVictim";
+    private static readonly EntProtoId DefaultRule = "AbductorVictim";
 
 
     private float _delayAccumulator = 0f;
