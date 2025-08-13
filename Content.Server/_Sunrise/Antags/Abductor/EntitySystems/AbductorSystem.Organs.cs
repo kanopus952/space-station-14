@@ -1,4 +1,7 @@
 using Content.Shared._Sunrise.Antags.Abductor;
+using Content.Shared.Actions;
+using Content.Shared.DoAfter;
+using Content.Shared.Effects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared.Popups;
@@ -12,14 +15,6 @@ using Content.Server.Speech.Components;
 using Content.Server.Humanoid;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Coordinates;
-using Content.Shared._Sunrise.Felinid;
-using Content.Server.Roles;
-using Content.Shared._Sunrise.Medical.Surgery.Events;
-using Content.Shared._Sunrise.VentCraw;
-using Content.Shared.CombatMode.Pacification;
-using Content.Server.Mind;
-using Content.Server.Antag;
-using Content.Server.Objectives.Components;
 
 namespace Content.Server._Sunrise.Antags.Abductor;
 
@@ -212,7 +207,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
             case AbductorOrganType.Owo:
                 if (curTime > victim.TransformationTime)
                 {
-                    if (HasComp<FelinidComponent>(uid))
+                    if (HasComp<OwOAccentComponent>(uid))
                         return;
                     EnsureComp<AbductorOwoTransformatedComponent>(uid);
                     _popup.PopupEntity(Loc.GetString("owo-organ-transformation"), uid, PopupType.LargeCaution);
