@@ -1,23 +1,12 @@
-using System.Numerics;
 using Content.Shared._Sunrise.Jump;
-using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
-using Content.Shared.DoAfter;
 using Content.Shared.Gravity;
-using Content.Shared.Hands.Components;
-using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Humanoid;
-using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
-using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
-using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
-using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Stunnable;
-using Content.Shared.Throwing;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
@@ -30,10 +19,9 @@ namespace Content.Shared._Sunrise.SunriseStanding;
 public sealed class SunriseStandingStateSystem : EntitySystem
 {
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly StatusEffectNew.StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
@@ -83,8 +71,7 @@ public sealed class SunriseStandingStateSystem : EntitySystem
 
     private void OnDown(EntityUid uid, CrawlerComponent comp, DownedEvent ev)
     {
-        if (!TryComp<StandingStateComponent>(uid, out var standingStateComponent)
-            || _gravity.IsWeightless(uid))
+        if (_gravity.IsWeightless(uid))
             return;
 
         Fall(uid);
