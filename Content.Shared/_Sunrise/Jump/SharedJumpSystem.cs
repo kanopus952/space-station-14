@@ -30,7 +30,7 @@ public abstract partial class SharedJumpSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
+    [Dependency] private readonly StandingStateSystem _standingState = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
     [Dependency] private readonly ClimbSystem _climb = default!;
