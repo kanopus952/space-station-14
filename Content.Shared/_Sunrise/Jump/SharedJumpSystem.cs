@@ -1,6 +1,8 @@
+using Content.Shared._Sunrise.Animations;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Climbing.Systems;
+using Content.Shared.Emoting;
 using Content.Shared.Gravity;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
@@ -44,6 +46,7 @@ public abstract partial class SharedJumpSystem : EntitySystem
     private EntityQuery<FixturesComponent> _fixturesQuery;
 
     private static readonly ProtoId<StatusEffectPrototype> JumpStatusEffectKey = "Jump";
+    private static readonly ProtoId<EmotePrototype> EmoteJumpProto = "Jump";
     private static readonly ProtoId<EmotePrototype> EmoteFallOnNeckProto = "FallOnNeck";
 
     private static readonly SoundSpecifier JumpSound = new SoundPathSpecifier("/Audio/_Sunrise/jump_mario.ogg");
@@ -58,6 +61,7 @@ public abstract partial class SharedJumpSystem : EntitySystem
         SubscribeLocalEvent<JumpComponent, ComponentShutdown>(OnShutdown);
         SubscribeNetworkEvent<ClientOptionDisableJumpSoundEvent>(OnClientOptionJumpSound);
         SubscribeLocalEvent<BunnyHopComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
+        SubscribeLocalEvent<EmoteAnimationComponent, BeforeEmoteEvent>(CheckEmote);
 
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
@@ -69,6 +73,12 @@ public abstract partial class SharedJumpSystem : EntitySystem
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopSpeedBoostWindow, OnBunnyHopSpeedBoostWindowChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopSpeedUpPerJump, OnBunnyHopSpeedUpPerJumpChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopSpeedLimit, OnBunnyHopSpeedLimitChanged, true);
+    }
+
+    private void CheckEmote(EntityUid uid, EmoteAnimationComponent component, BeforeEmoteEvent args)
+    {
+        if (args.Emote== EmoteJumpProto && !CanJump(uid))
+            args.Cancel();
     }
 
     private static void OnRefreshMoveSpeed(Entity<BunnyHopComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
