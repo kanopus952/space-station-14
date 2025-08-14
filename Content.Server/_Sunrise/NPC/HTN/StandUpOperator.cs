@@ -4,6 +4,7 @@ using Content.Server.NPC;
 using Content.Shared.Standing;
 using Content.Shared.DoAfter;
 using System.Linq;
+using Content.Shared.Stunnable;
 
 namespace Content.Server._Sunrise.NPC.HTN;
 
@@ -39,7 +40,7 @@ public sealed partial class StandUpOperator : HTNOperator
             return;
 
         if (_doAfterQuery.TryGetComponent(owner, out var doAfter) &&
-            doAfter.DoAfters.Values.Any(x => x.Args.Event is StandUpDoAfterEvent && !x.Cancelled && !x.Completed))
+            doAfter.DoAfters.Values.Any(x => x.Args.Event is TryStandDoAfterEvent && !x.Cancelled && !x.Completed))
             return;
 
         _entManager.Dirty(owner, standing);
@@ -56,7 +57,7 @@ public sealed partial class StandUpOperator : HTNOperator
             return HTNOperatorStatus.Finished;
 
         if (_doAfterQuery.TryGetComponent(owner, out var doAfter) &&
-            doAfter.DoAfters.Values.Any(x => x.Args.Event is StandUpDoAfterEvent && !x.Cancelled && !x.Completed))
+            doAfter.DoAfters.Values.Any(x => x.Args.Event is TryStandDoAfterEvent && !x.Cancelled && !x.Completed))
             return HTNOperatorStatus.Continuing;
 
         _entManager.Dirty(owner, standing);

@@ -1,13 +1,8 @@
-﻿using Content.Shared.Input;
-using Content.Shared.Rotation;
 using Content.Shared.Standing;
 using Robust.Client.GameObjects;
-using Robust.Client.Graphics;
-using Robust.Shared.Input.Binding;
-using Robust.Shared.Player;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
-namespace Content.Client.Standing;
+namespace Content.Client._Sunrise.SunriseStanding;
 
 public sealed class StandingStateSystem : EntitySystem
 {
