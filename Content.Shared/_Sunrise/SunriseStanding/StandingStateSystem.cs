@@ -38,7 +38,7 @@ public sealed class SunriseStandingStateSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CrawlerComponent, DownedEvent>(OnDown);
+        SubscribeLocalEvent<CrawlerComponent, KnockedDownEvent>(OnDown);
         SubscribeLocalEvent<FallComponent, TileFrictionEvent>(OnFallTileFriction);
         SubscribeLocalEvent<FallComponent, UpdateCanMoveEvent>(OnMoveAttempt);
         SubscribeLocalEvent<FallComponent, ComponentStartup>(UpdateCanMove);
@@ -69,7 +69,7 @@ public sealed class SunriseStandingStateSystem : EntitySystem
         args.Modifier *= FallModifier;
     }
 
-    private void OnDown(EntityUid uid, CrawlerComponent comp, DownedEvent ev)
+    private void OnDown(EntityUid uid, CrawlerComponent comp, KnockedDownEvent ev)
     {
         if (_gravity.IsWeightless(uid))
             return;
@@ -82,14 +82,16 @@ public sealed class SunriseStandingStateSystem : EntitySystem
         if (!TryComp<PhysicsComponent>(uid, out var physics) || HasComp<JumpComponent>(uid))
             return;
 
-        var velocity = physics.LinearVelocity;
-        if (velocity.LengthSquared() < 0.1f)
-        {
-            _standing.Down(uid, dropHeldItems: false);
+        if (!TryComp<KnockedDownComponent>(uid, out var knockedDown))
             return;
-        }
 
-        _standing.Down(uid, dropHeldItems: false);
+        if (knockedDown.AutoStand)
+            return;
+
+        var velocity = physics.LinearVelocity;
+
+        if (velocity.LengthSquared() < 0.1f)
+            return;
 
         _physics.SetLinearVelocity(uid, physics.LinearVelocity * 4f, body: physics);
         _statusEffects.TryAddStatusEffectDuration(uid,
