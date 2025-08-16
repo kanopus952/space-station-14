@@ -38,9 +38,6 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
     private readonly EntProtoId _nanoStation = "StandardNanotrasenStation";
-
-    private EntityUid? _opener;
-
     public override void Initialize()
     {
         SubscribeLocalEvent<AbductorHumanObservationConsoleComponent, BeforeActivatableUIOpenEvent>(OnBeforeActivatableUIOpen);
@@ -66,11 +63,11 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
     private void OnAbductorBeaconChosenBuiMsg(Entity<AbductorHumanObservationConsoleComponent> ent, ref AbductorBeaconChosenBuiMsg args)
     {
-        OnCameraExit(args.Actor);
+        OnCameraExit(args.Actor, ent.Comp);
 
         EntityUid eye;
 
-        _opener = args.Actor;
+        ent.Comp.Opener = args.Actor;
         var beacon = _entityManager.GetEntity(args.Beacon.NetEnt);
         var beaconCoords = Transform(beacon).Coordinates;
 
@@ -99,7 +96,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         SetEye(args.Actor, eye, args);
         Dirty(ent);
     }
-    private void OnCameraExit(EntityUid actor)
+    private void OnCameraExit(EntityUid actor, AbductorHumanObservationConsoleComponent comp)
     {
         if (!HasComp<RelayInputMoverComponent>(actor))
             return;
@@ -118,7 +115,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         RemoveEye(actor);
         _virtualItem.DeleteInHandsMatching(actor, console.Value);
 
-        _opener = null;
+        comp.Opener = null;
     }
 
     private void OnActivatableUIOpenAttemptEvent(Entity<AbductorHumanObservationConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
@@ -126,7 +123,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         if (!HasComp<AbductorScientistComponent>(args.User) && !HasComp<AbductorAgentComponent>(args.User))
             args.Cancel();
 
-        if (_opener != null && _opener != args.User)
+        if (ent.Comp.Opener != null && ent.Comp.Opener != args.User)
         {
             _popup.PopupEntity(Loc.GetString("console-occupied"), args.User, args.User);
             args.Cancel();
