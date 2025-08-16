@@ -298,6 +298,8 @@ namespace Content.Client.Paper.UI
                     ImageContent.TextureScale = state.ImageScale.Value;
                 BlankPaperIndicator.Visible = false;
             }
+            else
+                ImageContent.Visible = false;
             // Sunrise-End
 
             StampDisplay.RemoveAllChildren();
