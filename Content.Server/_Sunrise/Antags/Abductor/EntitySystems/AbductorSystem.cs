@@ -63,11 +63,23 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
     private void OnAbductorBeaconChosenBuiMsg(Entity<AbductorHumanObservationConsoleComponent> ent, ref AbductorBeaconChosenBuiMsg args)
     {
-        OnCameraExit(args.Actor, ent.Comp);
+        OnCameraExit(args.Actor);
 
         EntityUid eye;
 
         ent.Comp.Opener = args.Actor;
+
+        if (!TryComp<UserInterfaceComponent>(ent, out var bound))
+            return;
+
+        foreach (var uids in bound.Actors.Values)
+        {
+            foreach (var uid in uids)
+            {
+                _uiSystem.CloseUserUis<AbductorCameraConsoleUIKey>(uid);
+            }
+        }
+
         var beacon = _entityManager.GetEntity(args.Beacon.NetEnt);
         var beaconCoords = Transform(beacon).Coordinates;
 
@@ -96,7 +108,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         SetEye(args.Actor, eye, args);
         Dirty(ent);
     }
-    private void OnCameraExit(EntityUid actor, AbductorHumanObservationConsoleComponent comp)
+    private void OnCameraExit(EntityUid actor)
     {
         if (!HasComp<RelayInputMoverComponent>(actor))
             return;
@@ -112,10 +124,13 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         if (console == null)
             return;
 
-        RemoveEye(actor);
-        _virtualItem.DeleteInHandsMatching(actor, console.Value);
+        if (!TryComp<AbductorHumanObservationConsoleComponent>(console, out var comp))
+            return;
 
         comp.Opener = null;
+
+        RemoveEye(actor);
+        _virtualItem.DeleteInHandsMatching(actor, console.Value);
     }
 
     private void OnActivatableUIOpenAttemptEvent(Entity<AbductorHumanObservationConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
