@@ -166,7 +166,6 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
         component.CurrentFireMode = index;
         Dirty(uid, component);
 
-        var firemodes = component.FireModes[index];
         if (fireMode.Conditions != null && user != null)
         {
             var conditionArgs = new FireModeConditionConditionArgs(user.Value, uid, fireMode, EntityManager);
@@ -174,7 +173,7 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
 
             if (!conditionsMet)
             {
-                if (user != null && TryComp<ActorComponent>(user, out var actor))
+                if (TryComp<ActorComponent>(user, out var actor))
                     _popupSystem.PopupEntity(Loc.GetString("gun-alert-level-condition"),
                 uid, actor.PlayerSession);
                 return;
@@ -197,8 +196,7 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
                 projectileAmmo.Capacity = (int)Math.Round(projectileAmmo.Capacity / fireCostDiff);
                 Dirty(uid, projectileAmmo);
 
-                if (user != null && TryComp<ActorComponent>(user, out var actor))
-                    _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", prototype.Name)), uid, actor.PlayerSession.AttachedEntity);
+                _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", prototype.Name)), uid, uid);
             }
             else if (ammoProvider is HitscanBatteryAmmoProviderComponent hitscanAmmo)
             {
@@ -214,8 +212,7 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
                 hitscanAmmo.Capacity = (int)Math.Round(hitscanAmmo.Capacity / fireCostDiff);
                 Dirty(uid, hitscanAmmo);
 
-                if (user != null && TryComp<ActorComponent>(user, out var actor))
-                    _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", hitscan.Name)), uid, actor.PlayerSession.AttachedEntity);
+                _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", hitscan.Name)), uid, uid);
             }
 
             var updateClientAmmoEvent = new UpdateClientAmmoEvent();
