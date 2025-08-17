@@ -76,6 +76,9 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         {
             foreach (var uid in uids)
             {
+                if (uid == args.Actor)
+                    continue;
+
                 _uiSystem.CloseUserUis<AbductorCameraConsoleUIKey>(uid);
             }
         }

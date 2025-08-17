@@ -123,7 +123,6 @@ public sealed class InnateItemSystem : EntitySystem
     }
 }
 
-
 public sealed partial class InnateEntityTargetActionEvent : WorldTargetActionEvent
 {
     public EntityUid Item;
@@ -133,7 +132,6 @@ public sealed partial class InnateEntityTargetActionEvent : WorldTargetActionEve
         Item = item;
     }
 }
-
 
 public sealed partial class InnateInstantActionEvent : InstantActionEvent
 {

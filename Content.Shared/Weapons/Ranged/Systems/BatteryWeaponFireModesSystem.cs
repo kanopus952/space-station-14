@@ -196,7 +196,7 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
                 projectileAmmo.Capacity = (int)Math.Round(projectileAmmo.Capacity / fireCostDiff);
                 Dirty(uid, projectileAmmo);
 
-                _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", prototype.Name)), uid, uid);
+                _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", prototype.Name)), uid, user);
             }
             else if (ammoProvider is HitscanBatteryAmmoProviderComponent hitscanAmmo)
             {
@@ -212,7 +212,7 @@ public sealed class BatteryWeaponFireModesSystem : EntitySystem
                 hitscanAmmo.Capacity = (int)Math.Round(hitscanAmmo.Capacity / fireCostDiff);
                 Dirty(uid, hitscanAmmo);
 
-                _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", hitscan.Name)), uid, uid);
+                _popupSystem.PopupPredicted(Loc.GetString("gun-set-fire-mode", ("mode", hitscan.Name)), uid, user);
             }
 
             var updateClientAmmoEvent = new UpdateClientAmmoEvent();

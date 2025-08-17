@@ -41,5 +41,6 @@ public sealed class ToggleableThermalVisionSystem : EntitySystem
             RemComp<ThermalVisionComponent>(ent);
 
         args.Handled = true;
+        Dirty(ent, ent.Comp);
     }
 }

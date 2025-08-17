@@ -296,6 +296,7 @@ namespace Content.Client.Paper.UI
                 ImageContent.Texture = sprite.Frame0(state.ImageContent);
                 if (state.ImageScale != null)
                     ImageContent.TextureScale = state.ImageScale.Value;
+                ImageContent.Visible = true;
                 BlankPaperIndicator.Visible = false;
             }
             else
