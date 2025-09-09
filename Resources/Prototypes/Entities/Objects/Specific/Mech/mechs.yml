@@ -212,6 +212,7 @@
     damageCoefficient: 0.8 # Sunrise-Edit
   - type: ProtectedFromStepTriggers # Sunrise-added
   - type: ComplexInteraction # Sunrise-added
+  - type: ActiveInputMover # Starlight
 
 # Ripley MK-I
 - type: entity

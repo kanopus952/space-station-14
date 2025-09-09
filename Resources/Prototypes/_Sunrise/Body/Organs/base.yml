@@ -5,6 +5,7 @@
   - type: OrganBrain
   - type: BlockMovement
     blockInteraction: false
+  - type: ActiveInputMover # Starlight
 
 - type: entity
   id: BaseOrganEyes
@@ -144,3 +145,4 @@
         Cold: 60
   - type: Damageable
     damageContainer: Biological
+

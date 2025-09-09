@@ -82,6 +82,7 @@
       enum.GhostThemeUiKey.Key:
         type: GhostThemeBoundUserInterface
         requireInputValidation: false
+  - type: ActiveInputMover # Starlight
   # Sunrise-End
 
 # proto for player ghosts specifically
