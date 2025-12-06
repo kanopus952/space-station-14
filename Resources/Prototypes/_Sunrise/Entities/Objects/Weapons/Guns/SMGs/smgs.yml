@@ -5,8 +5,6 @@
   components:
   - type: Item
     size: Large
-    shape:
-    - 0,0,3,2
   - type: Sprite
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/p90.rsi
     layers:
@@ -81,8 +79,7 @@
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/mp38/tiny.rsi
   - type: Item
     size: Large
-    shape:
-    - 0,0,3,2
+    storedOffset: 0,-5
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/mp38/tiny.rsi
   - type: GunWieldBonus
     minAngle: -3
@@ -138,8 +135,7 @@
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/mp7/tiny.rsi
   - type: Item
     size: Large
-    shape:
-    - 0,0,2,2
+    storedOffset: 0,-2
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/mp7/tiny.rsi
   - type: GunWieldBonus
     minAngle: -5
@@ -197,9 +193,8 @@
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/mp5/tiny.rsi
   - type: Item
     size: Large
-    shape:
-    - 0,0,3,2
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/mp5/tiny.rsi
+    storedOffset: 0,-2
   - type: GunWieldBonus
     minAngle: -5
     maxAngle: -18
@@ -259,8 +254,6 @@
   components:
   - type: Item
     size: Normal
-    shape:
-    - 0,0,2,1
   - type: Sprite
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/skorpion.rsi
     layers:
@@ -329,8 +322,6 @@
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/vector/tiny.rsi
   - type: Item
     size: Large
-    shape:
-    - 0,0,3,2
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/vector/tiny.rsi
   - type: Gun
     burstFireRate: 22
@@ -380,8 +371,6 @@
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/ppsh41/tiny.rsi
   - type: Item
     size: Large
-    shape:
-    - 0,0,4,2
     sprite: _Sunrise/Objects/Weapons/Guns/SMGs/ppsh41/tiny.rsi
   - type: GunWieldBonus
     minAngle: -7
@@ -693,3 +682,62 @@
           whitelist:
             tags:
             - CartridgePistol
+
+- type: entity
+  name: C-40r submachine gun
+  parent: [BaseWeaponSubMachineGun, BaseSyndicateContraband]
+  id: WeaponSubMachineGunC40r
+  description: Early model of classic 20-round bullpup submachine gun by "Waffle Corp" chambered for .40 high-stopping-power rounds. Previously widely used by the Gorlex Marauders. Effective at short to medium ranges, capable of 2-round burst or fully automatic fire.
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Objects/Weapons/Guns/SMGs/c40r.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    sprite: _Sunrise/Objects/Weapons/Guns/SMGs/c40r.rsi
+  - type: Wieldable
+    unwieldOnUse: false
+  - type: GunWieldBonus
+    minAngle: -19
+    maxAngle: -16
+  - type: Gun
+    minAngle: 21
+    maxAngle: 32
+    shotsPerBurst: 2
+    burstFireRate: 14
+    availableModes:
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: aug
+  - type: ChamberMagazineAmmoProvider
+    autoEject: true
+  - type: MagazineVisuals
+    magState: mag
+    steps: 6
+    zeroVisible: true
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazinePistol40SubMachineGunSP
+        insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - MagazinePistolDPSubMachineGun
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        startingItem: CartridgePistol40SP
+        priority: 1
+        whitelist:
+          tags:
+          - CartridgePistolDP
+  - type: Appearance
+  - type: StaticPrice
+    price: 5000
