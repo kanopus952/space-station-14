@@ -137,9 +137,7 @@
     - RadiationProtection
     - Adrenaline
     - LoveEffect  # Sunrise-Edit
-    - Jump # Sunrise-Edit
     - Flip # Sunrise-Edit
-    - Fall # Sunrise-Edit
   - type: Body
     prototype: Human
     requiredLegs: 2
@@ -249,6 +247,9 @@
   - type: Food
     requiresSpecialDigestion: true
   - type: CognizinFix
+  - type: CanJump
+    isOnlyEmotion: true
+  - type: CanFall
   # Sunrise-End
 
 - type: entity

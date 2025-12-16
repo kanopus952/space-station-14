@@ -511,6 +511,8 @@
     effect: EffectNightVisioSpecies
   - type: FlashModifier
     modifier: 2
+  - type: CanJump
+    isOnlyEmotion: false
   - type: FelinidLicking
     damage:
       types:
