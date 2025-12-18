@@ -1,0 +1,12 @@
+- type: tutorialSequence
+  id: BasicTutorial
+  steps:
+  - ItemsInteraction
+
+- type: tutorialStep
+  id: ItemsInteraction
+  instruction: Делаем то-то то-то, поднимаем предмет и оп ля ля
+  conditions:
+  - type: EquipItemCondition
+    item: ClothingHandsGlovesCombat
+    slot: gloves
