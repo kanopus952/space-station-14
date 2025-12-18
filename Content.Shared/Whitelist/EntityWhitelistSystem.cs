@@ -103,15 +103,12 @@ public sealed class EntityWhitelistSystem : EntitySystem
 
         if (list.StatusEffects != null && TryComp<StatusEffectContainerComponent>(uid, out var statusEffects))
         {
-            if (statusEffects.ActiveStatusEffects == null)
-                return false;
-
-            foreach (var item in statusEffects.ActiveStatusEffects.ContainedEntities)
+            foreach (var item in statusEffects.ActiveStatusEffects!.ContainedEntities)
             {
                 var proto = MetaData(item).EntityPrototype?.ID;
 
                 if (proto == null)
-                    return false;
+                    continue;
 
                 if (list.StatusEffects.Contains(proto))
                 {
