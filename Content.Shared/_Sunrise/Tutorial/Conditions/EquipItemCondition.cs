@@ -8,7 +8,6 @@ namespace Content.Shared.EntityConditions.Conditions;
 ///<summary>
 /// Checks if specified item equipped into slot
 /// </summary>
-/// <inheritdoc cref="EquipItemConditionSystem{InventoryComponent, EquipItemCondition}"/>
 public sealed partial class EquipItemConditionSystem : TutorialConditionSystem<InventoryComponent, EquipItemCondition>
 {
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -33,8 +32,6 @@ public sealed partial class EquipItemConditionSystem : TutorialConditionSystem<I
         }
     }
 }
-
-/// <inheritdoc cref="EntityCondition"/>
 public sealed partial class EquipItemCondition : TutorialConditionBase<EquipItemCondition>
 {
     public EntProtoId Item;
