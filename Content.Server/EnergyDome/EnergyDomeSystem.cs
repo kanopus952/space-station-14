@@ -189,7 +189,7 @@ public sealed partial class EnergyDomeSystem : EntitySystem
 
     private void OnChargeChanged(Entity<EnergyDomeGeneratorComponent> generator, ref ChargeChangedEvent args)
     {
-        if (args.Charge == 0)
+        if (args.CurrentCharge == 0)
             TurnOff(generator, true);
     }
     private void OnDomeDamaged(Entity<EnergyDomeComponent> dome, ref DamageChangedEvent args)
