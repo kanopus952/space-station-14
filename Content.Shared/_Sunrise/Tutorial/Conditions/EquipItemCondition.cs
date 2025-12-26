@@ -4,7 +4,7 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.EntityConditions.Conditions;
+namespace Content.Shared._Sunrise.Tutorial.Conditions;
 ///<summary>
 /// Checks if specified item equipped into slot
 /// </summary>
@@ -25,7 +25,7 @@ public sealed partial class EquipItemConditionSystem : TutorialConditionSystem<I
                 continue;
 
             if (meta.EntityPrototype == null)
-                return;
+                continue;
 
             if (meta.EntityPrototype.ID == args.Condition.Item)
                 args.Result = true;
@@ -34,6 +34,9 @@ public sealed partial class EquipItemConditionSystem : TutorialConditionSystem<I
 }
 public sealed partial class EquipItemCondition : TutorialConditionBase<EquipItemCondition>
 {
+    [DataField]
     public EntProtoId Item;
+
+    [DataField]
     public SlotFlags Slot;
 }

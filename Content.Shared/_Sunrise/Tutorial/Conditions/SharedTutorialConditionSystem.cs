@@ -1,9 +1,11 @@
+using Content.Shared._Sunrise.Tutorial.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Toolshed.Commands.Generic.ListGeneration;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
 /// <summary>
-/// This handles entity effects.
+/// This handles tutorials.
 /// Specifically it handles the receiving of events for causing entity effects, and provides
 /// public API for other systems to take advantage of entity effects.
 /// </summary>
@@ -80,7 +82,6 @@ public sealed partial class SharedTutorialConditionsSystem : EntitySystem, ITuto
 /// <typeparam name="TCon">The Condition we're testing</typeparam>
 public abstract partial class TutorialConditionSystem<T, TCon> : EntitySystem where T : Component where TCon : TutorialConditionBase<TCon>
 {
-    /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<T, TutorialConditionEvent<TCon>>(Condition);

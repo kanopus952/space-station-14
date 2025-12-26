@@ -1,4 +1,5 @@
 using Content.Client._Sunrise.Roadmap;
+using Content.Client._Sunrise.Tutorial;
 using Content.Client.Changelog;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.EscapeMenu;
@@ -57,8 +58,15 @@ namespace Content.Client.Info
                 Text = Loc.GetString("server-info-roadmap-button"),
                 StyleClasses = { StyleBase.ButtonCaution },
             };
+            var tutorialButton = new Button
+            {
+                Text = Loc.GetString("ui-tutorial"),
+                StyleClasses = { StyleBase.ButtonCaution },
+            };
+            tutorialButton.OnPressed += _ => UserInterfaceManager.GetUIController<TutorialUIController>().ToggleTutorial();
             roadmapButton.OnPressed += _ => UserInterfaceManager.GetUIController<RoadmapUIController>().ToggleRoadmap();
             buttons.AddChild(roadmapButton);
+            buttons.AddChild(tutorialButton);
             AddInfoButton("ui-lobby-replays-button", SunriseCCVars.InfoLinksReplays);
             // Sunrise-End
 
