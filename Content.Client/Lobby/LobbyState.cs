@@ -22,17 +22,15 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Client.Changelog;
 using Content.Client.Parallax.Managers;
-using Content.Server.GameTicking.Prototypes;
 using Content.Shared._Sunrise.Lobby;
 using Content.Shared._Sunrise.ServersHub;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.GameTicking;
-using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
+using Content.Shared.GameTicking.Prototypes;
 
 namespace Content.Client.Lobby
 {
