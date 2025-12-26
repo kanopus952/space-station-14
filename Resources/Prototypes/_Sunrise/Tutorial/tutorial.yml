@@ -1,12 +1,33 @@
 - type: tutorialSequence
   id: BasicTutorial
+  name: basic tutorial
+  texture: /Textures/_Sunrise/Interface/Tutorial/image.png
+  tooltip: bla bla
   steps:
   - ItemsInteraction
+  - ItemsInteraction1
 
 - type: tutorialStep
   id: ItemsInteraction
-  instruction: Делаем то-то то-то, поднимаем предмет и оп ля ля
+  bubble:
+    text: ЛяляляS
+    target:
+     type: Self
+  chatMessage: ХУЯУ
   conditions:
-  - type: EquipItemCondition
-    item: ClothingHandsGlovesCombat
-    slot: gloves
+  - !type:EquipItemCondition
+    item: ClothingUniformJumpsuitColorGrey
+    slot: INNERCLOTHING
+
+- type: tutorialStep
+  id: ItemsInteraction1
+  bubble:
+    text: Ляляля
+    target:
+     type: Entity
+     prototype: ClothingUniformJumpsuitColorWhite
+  chatMessage: ХУЯУ
+  conditions:
+  - !type:EquipItemCondition
+    item: ClothingUniformJumpsuitColorWhite
+    slot: INNERCLOTHING
