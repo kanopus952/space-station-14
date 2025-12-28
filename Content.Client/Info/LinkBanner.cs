@@ -56,7 +56,7 @@ namespace Content.Client.Info
             var roadmapButton = new Button
             {
                 Text = Loc.GetString("server-info-roadmap-button"),
-                StyleClasses = { StyleBase.ButtonCaution },
+                StyleClasses = { StyleClass.ButtonSquare },
             };
             var tutorialButton = new Button
             {

@@ -49,6 +49,12 @@
 - type: Tag
   id: TrayScanner
 
+- type: Tag
+  id: NVDHandcrafted
+
+- type: Tag
+  id: PlantAnalyzer
+
 # Uplinks
 - type: Tag
   id: NTUplink
@@ -67,6 +73,15 @@
 
 - type: Tag
   id: BlueShield
+
+- type: Tag
+  id: PirateUplink
+
+- type: Tag
+  id: Commission
+
+- type: Tag
+  id: NoCommission
 # Catridges:
 
 - type: Tag
@@ -98,6 +113,9 @@
 
 - type: Tag
   id: ImprovisedAmmoBox
+
+- type: Tag
+  id: CannonBallMini
 
 # Weapons
 - type: Tag
@@ -148,9 +166,36 @@
 - type: Tag
   id: GorillaUpgradeKit
 
+- type: Tag
+  id: WeaponPistolTec9
+
 # Magazines:
 - type: Tag
+  id: MagazineCaselessRifle
+
+- type: Tag
+  id: MagazineHeavyRifle
+
+- type: Tag
+  id: SpeedLoaderRifle
+
+- type: Tag
+  id: MagazineLightRiflePan
+
+- type: Tag
+  id: MagazineCannonBallMini
+
+- type: Tag
+  id: MagazineBoxL6Cap
+
+- type: Tag
+  id: MagazinePistolSubMachineGunCap
+
+- type: Tag
   id: MagazinePistolDPSubMachineGun
+
+- type: Tag
+  id: MagazinePistolCaselessRifleTec9
 
 - type: Tag
   id: MagazineM28
@@ -227,6 +272,12 @@
 - type: Tag
   id: SyndicateRapier
 
+- type: Tag
+  id: ShotgunSlug
+
+- type: Tag
+  id: MagazineAsh12
+
 # Material bag:
 
 - type: Tag
@@ -256,10 +307,16 @@
   id: Mauler
 
 - type: Tag
+  id: DollHouse
+
+- type: Tag
   id: Durand
 
 - type: Tag
   id: Phazon
+
+- type: Tag
+  id: PaddyMech
 
 - type: Tag
   id: ClarkeCentralControlModule
@@ -528,3 +585,17 @@
 
 - type: Tag
   id: Table
+
+- type: Tag
+  id: BolaSecurity
+
+# Clothing
+- type: Tag
+  id: HardsuitMining
+
+- type: Tag
+  id: NightVisionDevice
+
+# Modsuit
+- type: Tag
+  id: ModsuitCore
