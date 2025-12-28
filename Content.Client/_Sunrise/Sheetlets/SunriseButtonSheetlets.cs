@@ -12,12 +12,11 @@ using static Content.Client.Stylesheets.StylesheetHelpers;
 namespace Content.Client._Sunrise.Sheetlets;
 
 [CommonSheetlet]
-public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet, IButtonConfig, IIconConfig
+public sealed class SunriseButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet, IButtonConfig, IIconConfig
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
-        var rules = new List<StyleRule>
-        {
+        return [
             E<Button>().Class(SunriseStyleClass.StyleClassNoStyle)
                 .Box(new StyleBoxFlat
                 {
@@ -27,8 +26,6 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
                     ContentMarginTopOverride = 12,
                     ContentMarginBottomOverride = 12
                 }),
-        };
-
-        return rules.ToArray();
+        ];
     }
 }
