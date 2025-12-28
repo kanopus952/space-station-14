@@ -37,9 +37,8 @@
     WeaponRifleAK514: 3
     WeaponRifleFamas: 3
     WeaponRifleG36: 3
-    WeaponRifleM28: 3
-    WeaponRifleAR18: 3
-    WeaponRifleScarH: 3
+    WeaponRifleSKM28: 3
+    WeaponRifleSKM24: 3
     WeaponRifleLecterMk2: 3
     WeaponRifleFoam: 3
     WeaponRifleARG: 3
@@ -120,6 +119,9 @@
     WeaponLightMachineGunRPD: 3
     WeaponMachineGunMG42: 3
     PowerpackMinigunMG100: 3
+    PowerpackMinigunMG100Incendiary: 3
+    WeaponLightMachineGunM492Cburn: 3
+    WeaponLightMachineGunM492: 3
     PowerpackDL6902: 3
     WeaponDL6902: 3
     WeaponMinigun: 3
@@ -148,7 +150,6 @@
     WeaponDominator: 3
     WeaponMultiphaseGun: 3
     WeaponIonRifle: 3
-    WeaponIONRifle: 3
     WeaponIonCarbine: 3
     WeaponLaserImmolator: 3
     WeaponGunLaserCarbineSemi: 3
@@ -159,7 +160,7 @@
     WeaponANNIHILATOR: 3
     WeaponToecloner: 3
     WeaponDecloner: 3
-    WeaponMiniEnergyCrossbow: 3
+    WeaponEnergyCrossbowLarge: 3
     WeaponEnergyCrossbow: 3
     WeaponLaserLNT620: 3
     WeaponEnergyGun: 3
@@ -340,7 +341,6 @@
     MagazineBoxHeavyRiflePractice: 3
     MagazineBoxHeavyRifleIncendiary: 3
     MagazineBoxHeavyRifleUranium: 3
-    MagazineScarH: 5
     MagazineBR64: 5
     MagazineDragunov: 5
     MagazineBauer127: 5

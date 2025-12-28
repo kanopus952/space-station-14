@@ -33,6 +33,7 @@
     tags:
     - DoorBumpOpener
     - StunImmune
+  - type: Blindable
 
 - type: entity
   abstract: true
@@ -97,14 +98,16 @@
     - Electrocution
     - TemporaryBlindness
     - Pacified
-    - StaminaModifier
     - Flashed
     - RadiationProtection
     - Adrenaline
     - Flip # Sunrise-Edit
   - type: EmoteAnimation # Sunrise-Edit
   - type: Bloodstream
-    bloodMaxVolume: 150
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 150
   - type: MobPrice
     price: 150
   - type: FloatingVisuals

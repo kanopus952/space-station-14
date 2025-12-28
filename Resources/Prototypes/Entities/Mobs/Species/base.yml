@@ -132,7 +132,6 @@
     - Muted
     - TemporaryBlindness
     - Pacified
-    - StaminaModifier
     - Flashed
     - RadiationProtection
     - Adrenaline
@@ -244,9 +243,10 @@
         reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 25
-  - type: Food
+  - type: Edible
     requiresSpecialDigestion: true
   - type: CognizinFix
+  - type: InjectNeed
   - type: CanJump
     isOnlyEmotion: true
   - type: CanFall
@@ -289,10 +289,11 @@
   - type: Blindable
   # Other
   - type: Temperature
-    heatDamageThreshold: 325
-    coldDamageThreshold: 260
     currentTemperature: 310.15
     specificHeat: 42
+  - type: TemperatureDamage
+    heatDamageThreshold: 325
+    coldDamageThreshold: 260
     coldDamage:
       types:
         Cold: 0.1 #per second, scales with temperature & other constants
