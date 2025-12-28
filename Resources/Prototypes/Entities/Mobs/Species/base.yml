@@ -248,7 +248,6 @@
   - type: CognizinFix
   - type: InjectNeed
   - type: CanJump
-    isOnlyEmotion: true
   - type: CanFall
   # Sunrise-End
 
