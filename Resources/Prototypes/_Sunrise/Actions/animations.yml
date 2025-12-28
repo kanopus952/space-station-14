@@ -10,8 +10,8 @@
     - Ghost
     - Flip
     statusEffects:
-    - JumpStatusEffect
-    - FallStatusEffect
+    - StatusEffectJump
+    - StatusEffectFall
   popupMessages: ["animations-msg-flip"]
   animation: true
 
@@ -27,8 +27,8 @@
     - Ghost
     - Flip
     statusEffects:
-    - JumpStatusEffect
-    - FallStatusEffect
+    - StatusEffectJump
+    - StatusEffectFall
   popupMessages: ["animations-msg-jump"]
   animation: true
 
@@ -44,8 +44,8 @@
     - Ghost
     - Flip
     statusEffects:
-    - JumpStatusEffect
-    - FallStatusEffect
+    - StatusEffectJump
+    - StatusEffectFall
   popupMessages: ["animations-msg-dance"]
   animation: true
 
@@ -61,8 +61,8 @@
     - Ghost
     - Flip
     statusEffects:
-    - JumpStatusEffect
-    - FallStatusEffect
+    - StatusEffectJump
+    - StatusEffectFall
   animation: true
 
 - type: emote
