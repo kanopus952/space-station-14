@@ -61,7 +61,7 @@ namespace Content.Client.Info
             var tutorialButton = new Button
             {
                 Text = Loc.GetString("ui-tutorial"),
-                StyleClasses = { StyleBase.ButtonCaution },
+                StyleClasses = { StyleClass.Negative },
             };
             tutorialButton.OnPressed += _ => UserInterfaceManager.GetUIController<TutorialUIController>().ToggleTutorial();
             roadmapButton.OnPressed += _ => UserInterfaceManager.GetUIController<RoadmapUIController>().ToggleRoadmap();

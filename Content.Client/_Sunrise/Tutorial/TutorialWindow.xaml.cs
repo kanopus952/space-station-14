@@ -1,4 +1,6 @@
 using System.Numerics;
+using System.Text;
+using Content.Client.GameTicking.Managers;
 using Content.Client.Resources;
 using Content.Shared._Sunrise.Roadmap;
 using Content.Shared._Sunrise.SunriseCCVars;
@@ -21,85 +23,42 @@ public sealed partial class TutorialWindow : DefaultWindow
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ILocalizationManager _loc = default!;
     [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private readonly IEntitySystemManager _entSys = default!;
     public Action<TutorialSequencePrototype>? OnTutorialButtonPressed;
-    private readonly Dictionary<string, TutorialButtonEntry> _buttons = new();
+    private readonly ClientGameTicker _gameTicker;
 
     public TutorialWindow()
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
+        _gameTicker = _entSys.GetEntitySystem<ClientGameTicker>();
 
+        _gameTicker.LobbyStatusUpdated += UpdateRoundState;
         PopulateButtons();
     }
 
     private void PopulateButtons()
     {
+        var roundNotStarted = !_gameTicker.IsGameStarted;
+        var deniedText = Loc.GetString("round-is-not-ready");
+
         foreach (var proto in _prototype.EnumeratePrototypes<TutorialSequencePrototype>())
         {
-            var texture = _resourceCache.GetResource<TextureResource>(proto.Texture);
-            AddButton(proto.Name, texture, OnTutorialButtonPressed, proto, proto.Tooltip);
+            var entry = new TutorialEntry(proto, OnTutorialButtonPressed);
+
+            if (roundNotStarted)
+                entry.SetDenied(true, deniedText);
+
+            ButtonContainer.AddChild(entry);
         }
     }
-    public TextureButton AddButton(
-        string name,
-        Texture texture,
-        Action<TutorialSequencePrototype>? onPressed,
-        TutorialSequencePrototype proto,
-        string? tooltip = null)
+
+    private void UpdateRoundState()
     {
-        var button = new TextureButton
+        foreach (var child in ButtonContainer.Children)
         {
-            TextureNormal = texture,
-            StyleClasses = { "ButtonSquare" },
-            ToolTip = tooltip,
-            MinSize = new Vector2(100, 100)
-        };
-
-        var title = new Label
-        {
-            Text = Loc.GetString(name),
-            HorizontalAlignment = HAlignment.Center,
-            VerticalAlignment = VAlignment.Center,
-            Align = Label.AlignMode.Center,
-            FontColorOverride = Color.White,
-            Visible = false
-        };
-
-        var denied = new Label
-        {
-            Text = Loc.GetString("round-is-not-ready"),
-            HorizontalAlignment = HAlignment.Center,
-            VerticalAlignment = VAlignment.Center,
-            Align = Label.AlignMode.Center,
-            FontColorOverride = Color.Red,
-            Visible = false
-        };
-
-        button.OnMouseEntered += _ =>
-        {
-            button.Modulate = new Color(0.7f, 0.7f, 0.7f);
-            title.Visible = true;
-        };
-
-        button.OnMouseExited += _ =>
-        {
-            button.Modulate = Color.White;
-            title.Visible = false;
-        };
-        button.OnPressed += _ => onPressed?.Invoke(proto);
-
-        button.AddChild(denied);
-        button.AddChild(title);
-        ButtonGrid.AddChild(button);
-
-        return button;
-    }
-
-    private sealed class TutorialButtonEntry
-    {
-        public TextureButton? Button;
-        public Label? Title;
-        public Label? Denied;
-        public TutorialSequencePrototype? Proto;
+            if (child is TutorialEntry entry)
+                entry.SetDenied(!_gameTicker.IsGameStarted);
+        }
     }
 }

@@ -21,16 +21,12 @@ public sealed class TutorialWindowEui : BaseEui
         IoCManager.InjectDependencies(this);
         _gameTicker = _entSys.GetEntitySystem<ClientGameTicker>();
         _window = new TutorialWindow();
+
         _window.OnTutorialButtonPressed += OnPressed;
     }
 
     private void OnPressed(TutorialSequencePrototype proto)
     {
-        if (!_gameTicker.IsGameStarted)
-
-
-        _window.Close();
-
         SendMessage(new TutorialButtonPressedEuiMessage(proto.PlayerEntity, proto.Grid));
     }
 

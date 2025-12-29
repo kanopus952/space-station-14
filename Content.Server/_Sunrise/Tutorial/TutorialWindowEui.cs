@@ -8,6 +8,7 @@ using Content.Shared._Sunrise.Tutorial.Eui;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Administration;
 using Content.Shared.Eui;
+using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using JetBrains.Annotations;
 using NetCord;

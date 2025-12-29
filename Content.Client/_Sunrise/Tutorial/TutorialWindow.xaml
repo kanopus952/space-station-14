@@ -24,7 +24,7 @@
                             FontColorOverride="#e3e3e3"/>
             </PanelContainer>
             <customControls:HSeparator HorizontalExpand="True" Color="#404040"/>
-            <Label Text="Доступные туториалы"
+            <Label Text="{Loc 'ui-tutorial-available'}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             Margin="0 10 0 10"
