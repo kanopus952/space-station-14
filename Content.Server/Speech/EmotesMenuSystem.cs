@@ -1,6 +1,7 @@
 ﻿using Content.Shared.Chat;
 using Content.Server.Chat.Systems;
 using Robust.Shared.Prototypes;
+using Content.Shared._Sunrise.Animations;
 
 namespace Content.Server.Speech;
 
@@ -22,8 +23,13 @@ public sealed partial class EmotesMenuSystem : EntitySystem
         if (!player.HasValue)
             return;
 
+        // Sunrise-start
         if (!_prototypeManager.Resolve(msg.ProtoId, out var proto) || proto.ChatTriggers.Count == 0)
-            return;
+        {
+            if (!HasComp<EmoteAnimationComponent>(player))
+                return;
+        }
+        // Sunrise end
 
         _chat.TryEmoteWithChat(player.Value, msg.ProtoId);
     }
