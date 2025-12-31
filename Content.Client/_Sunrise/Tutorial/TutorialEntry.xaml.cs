@@ -19,21 +19,9 @@ public sealed partial class TutorialEntry : BoxContainer
 
         var texture = _resourceCache.GetResource<TextureResource>(proto.Texture);
 
-        Title.Name = proto.Name;
+        Title.Text = proto.Name;
         TutorialButton.ToolTip = proto.Tooltip;
         TutorialButton.TextureNormal = texture;
-
-        TutorialButton.OnMouseEntered += _ =>
-        {
-            TutorialButton.Modulate = new Color(0.7f, 0.7f, 0.7f);
-            Title.Visible = true;
-        };
-
-        TutorialButton.OnMouseExited += _ =>
-        {
-            TutorialButton.Modulate = Color.White;
-            Title.Visible = false;
-        };
 
         TutorialButton.OnPressed += _ => onPressed?.Invoke(proto);
     }
@@ -46,10 +34,30 @@ public sealed partial class TutorialEntry : BoxContainer
         if (reason != null)
             Denied.Text = reason;
 
+        SetMouseHover(!denied);
+
         Title.Visible = false;
 
         TutorialButton.Modulate = denied
-            ? new Color(0.5f, 0.5f, 0.5f)
-            : Color.Red;
+            ? new Color(255, 197, 197)
+            : Color.White;
+    }
+
+    private void SetMouseHover(bool enabled)
+    {
+        if (!enabled)
+            return;
+
+        TutorialButton.OnMouseEntered += _ =>
+        {
+            TutorialButton.Modulate = new Color(0.7f, 0.7f, 0.7f);
+            Title.Visible = true;
+        };
+
+        TutorialButton.OnMouseExited += _ =>
+        {
+            TutorialButton.Modulate = Color.White;
+            Title.Visible = false;
+        };
     }
 }

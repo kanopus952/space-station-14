@@ -42,20 +42,26 @@ public sealed partial class TutorialWindow : DefaultWindow
         var roundNotStarted = !_gameTicker.IsGameStarted;
         var deniedText = Loc.GetString("round-is-not-ready");
 
-        foreach (var proto in _prototype.EnumeratePrototypes<TutorialSequencePrototype>())
+        foreach (var category in _prototype.EnumeratePrototypes<TutorialCategoryPrototype>())
         {
-            var entry = new TutorialEntry(proto, OnTutorialButtonPressed);
+            foreach (var protoId in category.Tutorials)
+            {
+                if (!_prototype.TryIndex(protoId, out var proto))
+                    return;
 
-            if (roundNotStarted)
-                entry.SetDenied(true, deniedText);
+                var entry = new TutorialEntry(proto, OnTutorialButtonPressed);
 
-            ButtonContainer.AddChild(entry);
+                if (roundNotStarted)
+                    entry.SetDenied(true, deniedText);
+
+                ButtonGrid.AddChild(entry);
+            }
         }
     }
 
     private void UpdateRoundState()
     {
-        foreach (var child in ButtonContainer.Children)
+        foreach (var child in ButtonGrid.Children)
         {
             if (child is TutorialEntry entry)
                 entry.SetDenied(!_gameTicker.IsGameStarted);

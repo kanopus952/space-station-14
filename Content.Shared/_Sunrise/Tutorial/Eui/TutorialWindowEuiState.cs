@@ -10,7 +10,10 @@ namespace Content.Shared._Sunrise.Tutorial.Eui;
 public sealed class TutorialWindowEuiState : EuiStateBase
 {
 }
-
+/// <summary>
+///     EUI message sent from the client when a tutorial button is pressed.
+///     Contains data required to start the selected tutorial sequence.
+/// </summary>
 [Serializable, NetSerializable]
 public sealed class TutorialButtonPressedEuiMessage(EntProtoId? playerEntity, ResPath? grid) : EuiMessageBase
 {

@@ -1,3 +1,23 @@
+- type: tutorialCategory
+  id: BasicTutorial
+  name: base
+  tutorials:
+  - BasicTutorial
+
+- type: tutorialCategory
+  id: BasicTutorial1
+  name: basess
+  tutorials:
+  - BasicTutorial
+  - BasicTutorial
+
+- type: tutorialCategory
+  id: BasicTutorial12
+  name: basessww
+  tutorials:
+  - BasicTutorial
+  - BasicTutorial
+
 - type: tutorialSequence
   id: BasicTutorial
   name: basic tutorial

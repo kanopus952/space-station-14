@@ -1,6 +1,5 @@
 <BoxContainer xmlns="https://spacestation14.io">
     <TextureButton Name="TutorialButton"
-                   MinSize="100 100"
                    StyleClasses="ButtonSquare" >
         <Label Name="Title"
             Text="-"
