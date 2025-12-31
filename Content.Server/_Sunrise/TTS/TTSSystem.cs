@@ -110,7 +110,7 @@ public sealed partial class TTSSystem : EntitySystem
             return;
 
         var voiceId = senderComponent.VoicePrototypeId;
-        if (voiceId == null)
+        if (string.IsNullOrWhiteSpace(voiceId))
             return;
 
         var voiceEv = new TransformSpeakerVoiceEvent(args.Source, voiceId);
@@ -139,7 +139,7 @@ public sealed partial class TTSSystem : EntitySystem
             return;
 
         var voiceId = collectiveMindProto.VoiceId;
-        if (voiceId == null)
+        if (string.IsNullOrWhiteSpace(voiceId))
             return;
 
         if (!GetVoicePrototype(voiceId, out var protoVoice))
