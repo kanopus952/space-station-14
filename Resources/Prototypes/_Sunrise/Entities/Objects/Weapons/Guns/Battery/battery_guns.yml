@@ -54,9 +54,9 @@
 
 - type: entity
   name: LNT620 "Spark"
-  parent: [ BaseWeaponAutoPowerCell, BaseRestrictedContraband ]
+  parent: [ BaseWeaponAutoPowerCell, BaseSecurityContraband ]
   id: WeaponLaserLNT620
-  description: "Automatic Laser NanoTrasen LNT620."
+  description: Automatic Laser NanoTrasen LNT620.
   components:
   - type: Sprite
     sprite: _Sunrise/Objects/Weapons/Guns/Battery/smg_laser.rsi
@@ -126,7 +126,7 @@
       fireCost: 60
       name: energy-gun-disable
       visualState: disable
-      heldPrefix: disable
+      heldPrefix: disabler
     - proto: RedLaserBeam
       fireCost: 100
       name: energy-gun-lethal
@@ -177,7 +177,7 @@
       fireCost: 90
       name: energy-gun-disable
       visualState: disable
-      heldPrefix: disable
+      heldPrefix: disabler
     - proto: RedLaserBeam #BulletPulse
       fireCost: 110
       name: energy-gun-lethal
@@ -306,7 +306,7 @@
       fireCost: 50
       name: energy-gun-disable
       visualState: disable
-      heldPrefix: disable
+      heldPrefix: disabler
     - proto: RedLaserBeam
       fireCost: 100
       name: energy-gun-lethal
@@ -358,7 +358,7 @@
       fireCost: 50
       name: energy-gun-disable
       visualState: disable
-      heldPrefix: disable
+      heldPrefix: disabler
     - proto: RedLaserBeam
       fireCost: 100
       name: energy-gun-lethal
@@ -420,7 +420,7 @@
       fireCost: 49
       name: energy-gun-disable
       visualState: disable
-      heldPrefix: disable
+      heldPrefix: disabler
     - proto: RedLaserBeam
       fireCost: 70
       name: energy-gun-lethal
