@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared._Sunrise.TTS;
@@ -15,5 +16,5 @@ public sealed partial class TTSComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("voice")]
-    public string? VoicePrototypeId { get; set; } = string.Empty;
+    public ProtoId<TTSVoicePrototype> VoicePrototypeId { get; set; } = string.Empty;
 }

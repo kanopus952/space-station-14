@@ -1,8 +1,10 @@
+using Content.Server.Database.Migrations.Postgres;
 using Content.Server.UserInterface;
 using Content.Shared._Sunrise.TTS;
 using Content.Shared.Communications;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Communications
@@ -80,7 +82,7 @@ namespace Content.Server.Communications
 
         // Sunrise-Start
         [DataField]
-        public string AnnounceVoice = "Hanson";
+        public ProtoId<TTSVoicePrototype> AnnounceVoice = "Hanson";
 
         [ViewVariables]
         public bool IsRelaying;
