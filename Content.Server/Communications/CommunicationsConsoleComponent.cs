@@ -1,6 +1,7 @@
 using Content.Server.UserInterface;
 using Content.Shared._Sunrise.TTS;
 using Content.Shared.Communications;
+using JetBrains.Annotations;
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
@@ -78,7 +79,7 @@ namespace Content.Server.Communications
         public bool AnnounceSentBy = false;
 
         // Sunrise-Start
-        [DataField("announceVoice", customTypeSerializer:typeof(PrototypeIdSerializer<TTSVoicePrototype>))]
+        [DataField]
         public string AnnounceVoice = "Hanson";
 
         [ViewVariables]
