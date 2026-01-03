@@ -23,13 +23,11 @@ public sealed partial class EmotesMenuSystem : EntitySystem
         if (!player.HasValue)
             return;
 
-        if (!_prototypeManager.Resolve(msg.ProtoId, out var proto) || proto.ChatTriggers.Count == 0)
-            return;
-
-        // Sunrise-start
-        if (!HasComp<EmoteAnimationComponent>(player))
-            return;
-        // Sunrise end
+        if (!_prototypeManager.TryIndex(msg.ProtoId, out var proto) || proto.ChatTriggers.Count == 0)
+        {
+            if (!HasComp<EmoteAnimationComponent>(player))
+                return;
+        }
 
         _chat.TryEmoteWithChat(player.Value, msg.ProtoId);
     }

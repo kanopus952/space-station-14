@@ -15,6 +15,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using Content.Shared._Sunrise.TTS;
 
 namespace Content.Shared.Chat;
 
@@ -512,7 +513,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         string? sender = null,
         bool playDefault = true, // Sunrise
         bool playTts = true, // Sunrise
-        string? announceVoice = null, // Sunrise
+        ProtoId<TTSVoicePrototype>? announceVoice = null, // Sunrise
         bool playDefaultSound = true,
         SoundSpecifier? announcementSound = null,
         Color? colorOverride = null)

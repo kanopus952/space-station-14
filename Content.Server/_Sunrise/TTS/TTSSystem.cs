@@ -110,10 +110,10 @@ public sealed partial class TTSSystem : EntitySystem
             return;
 
         var voiceId = senderComponent.VoicePrototypeId;
-        if (string.IsNullOrWhiteSpace(voiceId))
+        if (voiceId == null || string.IsNullOrWhiteSpace(voiceId.Value))
             return;
 
-        var voiceEv = new TransformSpeakerVoiceEvent(args.Source, voiceId);
+        var voiceEv = new TransformSpeakerVoiceEvent(args.Source, voiceId.Value);
         RaiseLocalEvent(args.Source, voiceEv);
         voiceId = voiceEv.VoiceId;
 
@@ -139,7 +139,7 @@ public sealed partial class TTSSystem : EntitySystem
             return;
 
         var voiceId = collectiveMindProto.VoiceId;
-        if (string.IsNullOrWhiteSpace(voiceId))
+        if (voiceId == null || string.IsNullOrWhiteSpace(voiceId.Value))
             return;
 
         if (!GetVoicePrototype(voiceId, out var protoVoice))
@@ -259,7 +259,7 @@ public sealed partial class TTSSystem : EntitySystem
             string.IsNullOrWhiteSpace(voiceId))
             return;
 
-        var voiceEv = new TransformSpeakerVoiceEvent(uid, voiceId);
+        var voiceEv = new TransformSpeakerVoiceEvent(uid, voiceId.Value);
         RaiseLocalEvent(uid, voiceEv);
         voiceId = voiceEv.VoiceId;
 
@@ -368,10 +368,10 @@ public sealed partial class TTSSystem : EntitySystem
 public sealed class TransformSpeakerVoiceEvent : EntityEventArgs
 {
     public EntityUid Sender;
-    public string VoiceId;
+    public ProtoId<TTSVoicePrototype> VoiceId;
     public string? Effect;
 
-    public TransformSpeakerVoiceEvent(EntityUid sender, string voiceId, string? effect = null)
+    public TransformSpeakerVoiceEvent(EntityUid sender, ProtoId<TTSVoicePrototype> voiceId, string? effect = null)
     {
         Sender = sender;
         VoiceId = voiceId;

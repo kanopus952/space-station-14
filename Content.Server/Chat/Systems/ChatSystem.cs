@@ -40,6 +40,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Replays;
 using Robust.Shared.Utility;
+using Content.Shared._Sunrise.TTS;
 
 namespace Content.Server.Chat.Systems;
 
@@ -432,7 +433,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? sender = null,
         bool playDefault = true, // Sunrise
         bool playTts = true, // Sunrise
-        string? announceVoice = null, // Sunrise
+        ProtoId<TTSVoicePrototype>? announceVoice = null, // Sunrise
         bool playDefaultSound = true,
         SoundSpecifier? announcementSound = null,
         Color? colorOverride = null)
