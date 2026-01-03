@@ -471,7 +471,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         bool playSound = true,
         SoundSpecifier? announcementSound = null,
         bool playTts = true, // Sunrise-edit
-        string? announceVoice = null, // Sunrise-edit
+        ProtoId<TTSVoicePrototype>? announceVoice = null, // Sunrise-edit
         Color? colorOverride = null
         )
     { }
@@ -493,7 +493,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         string? sender = null,
         bool playSound = true,
         bool playTts = true, // Sunrise-edit
-        string? announceVoice = null,  // Sunrise-edit
+        ProtoId<TTSVoicePrototype>? announceVoice = null,  // Sunrise-edit
         SoundSpecifier? announcementSound = null,
         Color? colorOverride = null)
     { }

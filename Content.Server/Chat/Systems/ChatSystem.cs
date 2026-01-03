@@ -347,7 +347,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool playDefault = true,
         SoundSpecifier? announcementSound = null,
         bool playTts = true, // Sunrise-edit,
-        string? announceVoice = null, // Sunrise-edit
+        ProtoId<TTSVoicePrototype>? announceVoice = null, // Sunrise-edit
         Color? colorOverride = null
         )
     {
@@ -387,7 +387,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? sender = null,
         bool playDefault = true, // Sunrise-edit
         bool playTts = true, // Sunrise-edit
-        string? announceVoice = null,  // Sunrise-edit
+        ProtoId<TTSVoicePrototype>? announceVoice = null,  // Sunrise-edit
         SoundSpecifier? announcementSound = null,
         Color? colorOverride = null)
     {
