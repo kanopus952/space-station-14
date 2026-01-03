@@ -82,7 +82,7 @@ namespace Content.Server.Communications
 
         // Sunrise-Start
         [DataField]
-        public ProtoId<TTSVoicePrototype> AnnounceVoice = "Hanson";
+        public ProtoId<TTSVoicePrototype>? AnnounceVoice = "Hanson";
 
         [ViewVariables]
         public bool IsRelaying;

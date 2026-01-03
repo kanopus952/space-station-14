@@ -159,7 +159,7 @@ public sealed partial class TTSSystem : EntitySystem
         RaiseNetworkEvent(new PlayTTSEvent(soundData, null, false), recipients);
     }
 
-    private bool GetVoicePrototype(string voiceId, [NotNullWhen(true)] out TTSVoicePrototype? voicePrototype)
+    private bool GetVoicePrototype(ProtoId<TTSVoicePrototype>? voiceId, [NotNullWhen(true)] out TTSVoicePrototype? voicePrototype)
     {
         if (!_prototypeManager.TryIndex(voiceId, out voicePrototype))
         {
