@@ -15,5 +15,5 @@ public sealed partial class TTSComponent : Component
     /// Prototype of used voice for TTS.
     /// </summary>
     [DataField("voice")]
-    public ProtoId<TTSVoicePrototype>? VoicePrototypeId = new ProtoId<TTSVoicePrototype>(string.Empty);
+    public ProtoId<TTSVoicePrototype>? VoicePrototypeId;
 }
