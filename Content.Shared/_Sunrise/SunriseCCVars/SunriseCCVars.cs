@@ -579,4 +579,8 @@ public sealed partial class SunriseCCVars : CVars
     /// </summary>
     public static readonly CVarDef<bool> MentorHelpAutoOpenOnNewMessage =
         CVarDef.Create("mentor_help.auto_open_on_new_message", false, CVar.ARCHIVE | CVar.CLIENTONLY);
+
+    // Taken from https://github.com/RMC-14/RMC-14
+    public static readonly CVarDef<bool> PhysicsActiveInputMoverEnabled =
+        CVarDef.Create("physics.active_input_mover_enabled", true, CVar.REPLICATED | CVar.SERVER);
 }

@@ -36,17 +36,17 @@ namespace Content.Shared.Movement.Systems;
 public abstract partial class SharedMoverController : VirtualController
 {
     [Dependency] private   readonly IConfigurationManager _configManager = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly ITileDefinitionManager _tileDefinitionManager = default!;
+    [Dependency] protected readonly IGameTiming Timing = default!; // Starlight
+    [Dependency] protected readonly ITileDefinitionManager _tileDefinitionManager = default!; // Starlight
     [Dependency] private   readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] protected readonly EntityLookupSystem _lookup = default!;
+    [Dependency] protected readonly EntityLookupSystem _lookup = default!; // Starlight
     [Dependency] private   readonly InventorySystem _inventory = default!;
     [Dependency] private   readonly MobStateSystem _mobState = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
     [Dependency] private   readonly SharedContainerSystem _container = default!;
-    [Dependency] protected readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] protected readonly SharedGravitySystem _gravity = default!;
-    [Dependency] protected readonly SharedTransformSystem _transform = default!;
+    [Dependency] protected readonly SharedMapSystem _mapSystem = default!; // Starlight
+    [Dependency] protected readonly SharedGravitySystem _gravity = default!; // Starlight
+    [Dependency] protected readonly SharedTransformSystem _transform = default!; // Starlight
     [Dependency] private   readonly TagSystem _tags = default!;
 
     protected EntityQuery<CanMoveInAirComponent> CanMoveInAirQuery;
@@ -69,9 +69,9 @@ public abstract partial class SharedMoverController : VirtualController
     private static readonly ProtoId<TagPrototype> FootstepSoundTag = "FootstepSound";
 
     private bool _relativeMovement;
-    protected float _minDamping;
-    protected float _airDamping;
-    protected float _offGridDamping;
+    protected float _minDamping; // Starlight
+    protected float _airDamping; // Starlight
+    protected float _offGridDamping; // Starlight
 
     /// <summary>
     /// Cache the mob movement calculation to re-use elsewhere.
@@ -482,7 +482,7 @@ public abstract partial class SharedMoverController : VirtualController
     /// <summary>
     /// Used for weightlessness to determine if we are near a wall.
     /// </summary>
-    protected bool IsAroundCollider(EntityLookupSystem lookupSystem, Entity<PhysicsComponent, MobMoverComponent, TransformComponent> entity)
+    protected bool IsAroundCollider(EntityLookupSystem lookupSystem, Entity<PhysicsComponent, MobMoverComponent, TransformComponent> entity) // Starlight
     {
         var (uid, collider, mover, transform) = entity;
         var enlargedAABB = _lookup.GetWorldAABB(entity.Owner, transform).Enlarged(mover.GrabRange);
@@ -522,7 +522,7 @@ public abstract partial class SharedMoverController : VirtualController
         MobMoverComponent mobMover,
         TransformComponent xform,
         [NotNullWhen(true)] out SoundSpecifier? sound,
-        ContentTileDefinition? tileDef = null)
+        ContentTileDefinition? tileDef = null) // Starlight
     {
         sound = null;
 
@@ -636,7 +636,7 @@ public abstract partial class SharedMoverController : VirtualController
         return sound != null;
     }
 
-    protected Vector2 AssertValidWish(InputMoverComponent mover, float walkSpeed, float sprintSpeed)
+    protected Vector2 AssertValidWish(InputMoverComponent mover, float walkSpeed, float sprintSpeed) // Starlight
     {
         var (walkDir, sprintDir) = GetVelocityInput(mover);
 
