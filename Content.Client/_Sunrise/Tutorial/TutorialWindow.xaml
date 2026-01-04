@@ -1,8 +1,8 @@
 <DefaultWindow  xmlns="https://spacestation14.io"
                           xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                           xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
-                          SetSize="1280 720"
-                          MinSize="1280 720"
+                          SetSize="1450 720"
+                          MinSize="1450 720"
                           Name="Window"
                           Title="{Loc ui-tutorial}">
     <PanelContainer>
@@ -24,28 +24,56 @@
                             FontColorOverride="#e3e3e3"/>
             </PanelContainer>
             <customControls:HSeparator HorizontalExpand="True" Color="#404040"/>
-                <Label Text="{Loc 'ui-tutorial-available'}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Margin="0 10 0 10"
-                                StyleClasses="LabelKeyText"
-                                FontColorOverride="#2ecc71"/>
-                <ScrollContainer VScrollEnabled="True" HorizontalExpand="True" VerticalExpand="True">
-                    <BoxContainer Name="ButtonContainer"
-                                Orientation="Horizontal"
-                                HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        Margin="10 0 10 0">
 
-                        <Control HorizontalExpand="True"/>
+                <!-- кпопки категорий туториалов -->
+                <BoxContainer Name="CategoryContainer"
+                            Orientation="Vertical"
+                            MinSize="230 0"
+                            Margin="0 0 10 0">
 
-                        <GridContainer Name="ButtonGrid"
-                                    Columns="2"
-                                    Margin="0 10 0 0"
-                                    HorizontalAlignment="Center"/>
+                    <Control VerticalExpand="True"/>
+                </BoxContainer>
 
-                        <Control HorizontalExpand="True"/>
+                <PanelContainer
+                    VerticalExpand="True"
+                    StyleClasses="TutorialDivider"/>
 
-                    </BoxContainer>
-                </ScrollContainer>
+                <!-- контейнер с кнопками туториалов -->
+                <BoxContainer Orientation="Vertical"
+                            HorizontalExpand="True"
+                            VerticalExpand="True"
+                            Margin="0 0 0 0">
+
+                    <Label Text="{Loc 'ui-tutorial-available'}"
+                        HorizontalAlignment="Center"
+                        Margin="0 10 0 10"
+                        StyleClasses="LabelKeyText"
+                        FontColorOverride="#2ecc71"/>
+
+                    <ScrollContainer VScrollEnabled="True"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True">
+
+                        <BoxContainer Name="ButtonContainer"
+                                    Orientation="Horizontal"
+                                    HorizontalExpand="True">
+
+                            <Control HorizontalExpand="True"/>
+
+                            <GridContainer Name="ButtonGrid"
+                                        Columns="2"
+                                        Margin="0 10 0 0"
+                                        HorizontalAlignment="Center"/>
+
+                            <Control HorizontalExpand="True"/>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+            </BoxContainer>
         </BoxContainer>
     </PanelContainer>
 </DefaultWindow>

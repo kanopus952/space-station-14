@@ -1,0 +1,28 @@
+using System.Numerics;
+using Content.Client._Sunrise.Stylesheets;
+using Robust.Client.Graphics;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using static Content.Client.Stylesheets.StylesheetHelpers;
+
+namespace Content.Client.Stylesheets.Sheetlets;
+
+[CommonSheetlet]
+public sealed class SunriseDividersSheetlet : Sheetlet<PalettedStylesheet>
+{
+    public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
+    {
+        var boxLowDivider = new StyleBoxFlat
+        {
+            BackgroundColor = Color.FromHex("#404040"),
+        };
+
+        return
+        [
+            E<PanelContainer>()
+                .Class(SunriseStyleClass.TutorialDivider)
+                .Panel(new StyleBoxFlat(Color.FromHex("#404040")))
+                .MinSize(new Vector2(2, 2)),
+        ];
+    }
+}
