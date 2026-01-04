@@ -1,6 +1,6 @@
-﻿using Content.Shared.Movement.Components;
+﻿using Content.Shared._Sunrise.SunriseCCVars;
+using Content.Shared.Movement.Components;
 using Content.Shared.NPC;
-using Content.Shared.Starlight.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -35,7 +35,7 @@ public sealed class StarlightInputSystem : EntitySystem
         SubscribeLocalEvent<MovementRelayTargetComponent, ComponentRemove>(OnActiveChanged);
         SubscribeLocalEvent<MovementRelayTargetComponent, MapInitEvent>(OnActiveChanged);
 
-        Subs.CVar(_config, StarlightCCVars.PhysicsActiveInputMoverEnabled, v => _activeInputMoverEnabled = v, true);
+        Subs.CVar(_config, SunriseCCVars.PhysicsActiveInputMoverEnabled, v => _activeInputMoverEnabled = v, true);
     }
 
     private void OnActiveChanged<TComp, TEvent>(Entity<TComp> ent, ref TEvent args) where TComp : IComponent?
