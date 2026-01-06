@@ -111,7 +111,7 @@
       sprite: "Effects/creampie.rsi"
       state: "creampie_vulpkanin"
       visible: false
-    # Sunrise-start
+    # Sunrise-end
   - type: HumanoidAppearance
     species: Vulpkanin
     # Sunrise-Start
