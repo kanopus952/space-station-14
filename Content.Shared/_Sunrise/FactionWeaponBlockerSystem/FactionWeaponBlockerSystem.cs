@@ -25,6 +25,9 @@ public sealed class SharedFactionWeaponBlockerSystem : EntitySystem
 
         var canUse = npcFactionMemberComponent.Factions
             .Any(x => ent.Comp.Factions.Contains(x));
+        // Return when the serialization issues with NpcFactionMemberComponent are fixed
+        // if (ent.Comp.CanUse == canUse)
+        //     return;
 
         ent.Comp.CanUse = canUse;
         Dirty(ent);

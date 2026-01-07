@@ -17,8 +17,9 @@ public sealed class FactionClothingBlockerSystem : EntitySystem
         SubscribeLocalEvent<FactionClothingBlockerComponent, BeingEquippedAttemptEvent>(OnEquippedAttempt);
     }
 
-    private async void OnEquippedAttempt(EntityUid uid, FactionClothingBlockerComponent component, BeingEquippedAttemptEvent args)
+    private void OnEquippedAttempt(EntityUid uid, FactionClothingBlockerComponent component, BeingEquippedAttemptEvent args)
     {
+        // Does not work correctly on the client due to poor serialization of NpcFactionMemberComponent
         if (_net.IsClient)
             return;
 
