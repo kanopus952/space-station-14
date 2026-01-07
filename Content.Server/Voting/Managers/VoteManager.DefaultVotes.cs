@@ -68,8 +68,13 @@ namespace Content.Server.Voting.Managers
                     CreatePresetVote(initiator);
                     break;
                 case StandardVoteType.Map:
+                    // Sunrise-start
                     CreateMapVote(initiator);
                     break;
+                case StandardVoteType.PlanetPrison:
+                    CreateMapVote(initiator, true);
+                    break;
+                // Sunrise-end
                 case StandardVoteType.Votekick:
                     timeoutVote = false; // Allows the timeout to be updated manually in the create method
                     CreateVotekickVote(initiator, args);
@@ -287,7 +292,7 @@ namespace Content.Server.Voting.Managers
             };
         }
 
-        private void CreateMapVote(ICommonSession? initiator)
+        private void CreateMapVote(ICommonSession? initiator, bool isPlanetPrisonVote = false)
         {
             // Sunrise-Start
             var maps = new Dictionary<string, GameMapPrototype>();
@@ -304,8 +309,15 @@ namespace Content.Server.Voting.Managers
             }
 
             var selectedMaps = eligibleMaps.OrderBy(_ => _random.Next()).ToList();
+
+            if (isPlanetPrisonVote)
+            {
+                selectedMaps.Clear();
+                selectedMaps = _gameMapManager.PrisonMaps().OrderBy(_ => _random.Next()).ToList();
+            }
             maps.Clear();
             maps.Add(Loc.GetString("ui-vote-secret-map"), _random.Pick(selectedMaps));
+
             foreach (var map in selectedMaps)
             {
                 maps.Add(map.MapName, map);

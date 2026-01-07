@@ -19,6 +19,7 @@ public enum StandardVoteType : byte
     /// Vote to change the map for the next round.
     /// </summary>
     Map,
+    PlanetPrison, // Sunrise-edit
 
     /// <summary>
     /// Vote to kick a player.

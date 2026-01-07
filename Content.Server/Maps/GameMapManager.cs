@@ -35,6 +35,7 @@ public sealed class GameMapManager : IGameMapManager
     private int _mapQueueDepth = 1;
 
     private readonly HashSet<string> _excludedMaps = new(); // Sunrise-Edit
+    private readonly HashSet<GameMapPrototype> _prisonMaps = new(); // Sunrise-Edit
 
     private ISawmill _log = default!;
 
@@ -120,6 +121,19 @@ public sealed class GameMapManager : IGameMapManager
     public void ClearExcludedMaps()
     {
         _excludedMaps.Clear();
+    }
+
+    public IEnumerable<GameMapPrototype> PrisonMaps()
+    {
+        return _prisonMaps;
+    }
+
+    public void AddPrisonMap(GameMapPrototype mapId)
+    {
+        if (!_configurationManager.GetCVar(SunriseCCVars.ExcludePrisonMaps))
+            return;
+
+        _prisonMaps.Add(mapId);
     }
     // Sunrise-End
 

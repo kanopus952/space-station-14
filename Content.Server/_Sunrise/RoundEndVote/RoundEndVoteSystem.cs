@@ -59,5 +59,8 @@ public sealed class RoundEndVoteSystem : EntitySystem
 
         if (_cfg.GetCVar(SunriseCCVars.RunPresetVoteAfterRestart))
             _voteManager.CreateStandardVote(null, StandardVoteType.Preset);
+
+        if (_cfg.GetCVar(SunriseCCVars.RunPlanetPrisonMapVoteAfterRestart))
+            _voteManager.CreateStandardVote(null, StandardVoteType.PlanetPrison);
     }
 }

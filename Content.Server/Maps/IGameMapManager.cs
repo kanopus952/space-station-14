@@ -16,8 +16,10 @@ public interface IGameMapManager
     IEnumerable<GameMapPrototype> CurrentlyEligibleMaps();
     // Sunrise-Start
     IEnumerable<string> CurrentlyExcludedMaps();
-    public void ClearExcludedMaps();
-    public void AddExcludedMap(string mapId);
+    void ClearExcludedMaps();
+    void AddExcludedMap(string mapId);
+    IEnumerable<GameMapPrototype> PrisonMaps();
+    void AddPrisonMap(GameMapPrototype mapId);
     // Sunrise-End
 
     /// <summary>
