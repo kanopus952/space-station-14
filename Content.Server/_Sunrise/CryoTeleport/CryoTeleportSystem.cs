@@ -89,7 +89,7 @@ public sealed class CryoTeleportationSystem : EntitySystem
                 continue;
 
             if (HasComp<PolymorphedEntityComponent>(uid))
-                return;
+                continue;
 
             // Check if the entity has a brain - if no brain, don't teleport to cryo
             // This prevents brainless bodies (e.g., during brain transplant surgery) from being auto-teleported
