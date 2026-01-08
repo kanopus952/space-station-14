@@ -1,5 +1,6 @@
 ﻿using Content.Server.Bed.Cryostorage;
 using Content.Server.Body.Components;
+using Content.Server.Polymorph.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared._Sunrise.SunriseCCVars;
@@ -86,6 +87,9 @@ public sealed class CryoTeleportationSystem : EntitySystem
                 || HasComp<CryostorageContainedComponent>(uid)
                 || HasComp<ZombieComponent>(uid))
                 continue;
+
+            if (HasComp<PolymorphedEntityComponent>(uid))
+                return;
 
             // Check if the entity has a brain - if no brain, don't teleport to cryo
             // This prevents brainless bodies (e.g., during brain transplant surgery) from being auto-teleported
