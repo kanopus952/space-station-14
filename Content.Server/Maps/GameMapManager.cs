@@ -133,7 +133,7 @@ public sealed class GameMapManager : IGameMapManager
 
     public void AddExcludedPrisonMap(string mapId)
     {
-        if (!_configurationManager.GetCVar(SunriseCCVars.ExcludeMaps))
+        if (!_configurationManager.GetCVar(SunriseCCVars.ExcludePrisonMaps))
             return;
 
         _excludedPrisonMaps.Add(mapId);

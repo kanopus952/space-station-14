@@ -87,7 +87,7 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
             return;
         }
 
-        var station = ChooseType();
+        var station = ChooseType(component);
 
         if (!_protoManager.TryIndex(_random.Pick(component.Biomes), out var biome))
         {
@@ -142,12 +142,12 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
         _shuttle.SetFTLWhitelist(mapUid, component.ShuttleWhitelist);
     }
 
-    private ProtoId<GameMapPrototype> ChooseType()
+    private ProtoId<GameMapPrototype> ChooseType(PlanetPrisonStationComponent comp)
     {
         // If a map was selected by vote via the map manager, consume and use it.
         if (_gameMapManager.TryConsumeNextPrisonMap(out var next) && next != null)
             return next.Value;
 
-        return string.Empty;
+        return comp.FallbackMap;
     }
 }

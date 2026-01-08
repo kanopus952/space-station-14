@@ -11,6 +11,8 @@ namespace Content.Server._Sunrise.PlanetPrison;
 [RegisterComponent]
 public sealed partial class PlanetPrisonStationComponent : Component
 {
+    [DataField(required: true)]
+    public ProtoId<GameMapPrototype> FallbackMap;
     public MapId MapId = MapId.Nullspace;
 
     [DataField]
