@@ -34,11 +34,13 @@ public sealed class GameMapManager : IGameMapManager
     [ViewVariables(VVAccess.ReadOnly)]
     private int _mapQueueDepth = 1;
 
-    private readonly HashSet<string> _excludedMaps = new(); // Sunrise-Edit
-    private readonly HashSet<GameMapPrototype> _prisonMaps = new(); // Sunrise-Edit
+    // Sunrise-start
+    private readonly HashSet<string> _excludedMaps = new();
+    private readonly HashSet<GameMapPrototype> _prisonMaps = new();
     private readonly Queue<string> _previousPrisonMaps = new();
     private string? _nextPrisonSelection;
     private readonly HashSet<string> _excludedPrisonMaps = new();
+    // Sunrise-end
 
     private ISawmill _log = default!;
 
@@ -204,6 +206,17 @@ public sealed class GameMapManager : IGameMapManager
             return;
         }
     }
+    private int GetPrisonRotationQueuePriority(string gameMapProtoName)
+    {
+        var i = 0;
+        foreach (var map in _previousPrisonMaps.Reverse())
+        {
+            if (map == gameMapProtoName)
+                return i;
+            i++;
+        }
+        return _mapQueueDepth;
+    }
     // Sunrise-End
 
     public IEnumerable<GameMapPrototype> AllVotableMaps()
@@ -319,19 +332,6 @@ public sealed class GameMapManager : IGameMapManager
         }
         return _mapQueueDepth;
     }
-
-    private int GetPrisonRotationQueuePriority(string gameMapProtoName)
-    {
-        var i = 0;
-        foreach (var map in _previousPrisonMaps.Reverse())
-        {
-            if (map == gameMapProtoName)
-                return i;
-            i++;
-        }
-        return _mapQueueDepth;
-    }
-
     private GameMapPrototype GetFirstInRotationQueue()
     {
         _log.Info($"map queue: {string.Join(", ", _previousMaps)}");

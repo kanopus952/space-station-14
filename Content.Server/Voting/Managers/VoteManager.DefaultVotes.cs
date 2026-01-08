@@ -293,7 +293,7 @@ namespace Content.Server.Voting.Managers
             };
         }
 
-        private void CreateMapVote(ICommonSession? initiator, bool isPlanetPrisonVote = false)
+        private void CreateMapVote(ICommonSession? initiator, bool isPlanetPrisonVote = false) // Sunrise-edit
         {
             // Sunrise-Start
             var maps = new Dictionary<string, GameMapPrototype>();
