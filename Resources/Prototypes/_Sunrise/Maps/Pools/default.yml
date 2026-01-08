@@ -26,3 +26,9 @@
   #- Kettle
   #- Tortuga
   #- Arena
+
+- type: gameMapPool
+  id: PlanetPrisonMapPool
+  maps:
+  - PlanetPrisonOld
+  - PlanetPrison

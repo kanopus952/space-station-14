@@ -41,6 +41,7 @@ namespace Content.Server.Voting.Managers
             {StandardVoteType.Restart, CCVars.VoteRestartEnabled},
             {StandardVoteType.Preset, CCVars.VotePresetEnabled},
             {StandardVoteType.Map, CCVars.VoteMapEnabled},
+            {StandardVoteType.PlanetPrison, CCVars.VoteMapEnabled}, // Sunrise-edit
             {StandardVoteType.Votekick, CCVars.VotekickEnabled}
         };
 
@@ -296,24 +297,43 @@ namespace Content.Server.Voting.Managers
         {
             // Sunrise-Start
             var maps = new Dictionary<string, GameMapPrototype>();
-            var excludedMaps = _gameMapManager.CurrentlyExcludedMaps();
 
-            var eligibleMaps = _gameMapManager.CurrentlyEligibleMaps()
-                .Where(map => !excludedMaps.Contains(map.ID))
-                .ToList();
+            // Choose the appropriate excluded set depending on vote type
+            var excludedMaps = isPlanetPrisonVote
+                ? _gameMapManager.CurrentlyExcludedPrisonMaps()
+                : _gameMapManager.CurrentlyExcludedMaps();
 
-            if (eligibleMaps.Count == 0)
+            List<GameMapPrototype> selectedMaps;
+
+            if (!isPlanetPrisonVote)
             {
-                _gameMapManager.ClearExcludedMaps();
-                eligibleMaps = _gameMapManager.CurrentlyEligibleMaps().ToList();
+                var eligibleMaps = _gameMapManager.CurrentlyEligibleMaps()
+                    .Where(map => !excludedMaps.Contains(map.ID))
+                    .ToList();
+
+                if (eligibleMaps.Count == 0)
+                {
+                    _gameMapManager.ClearExcludedMaps();
+                    eligibleMaps = _gameMapManager.CurrentlyEligibleMaps().ToList();
+                }
+
+                selectedMaps = eligibleMaps.OrderBy(_ => _random.Next()).ToList();
             }
-
-            var selectedMaps = eligibleMaps.OrderBy(_ => _random.Next()).ToList();
-
-            if (isPlanetPrisonVote)
+            else
             {
-                selectedMaps.Clear();
-                selectedMaps = _gameMapManager.PrisonMaps().OrderBy(_ => _random.Next()).ToList();
+                // Use prison maps ordered by rotation priority, and respect excluded maps
+                selectedMaps = _gameMapManager.PrisonMapsOrderedByRotation()
+                    .Where(map => !excludedMaps.Contains(map.ID))
+                    .OrderBy(_ => _random.Next())
+                    .ToList();
+
+                if (selectedMaps.Count == 0)
+                {
+                    _gameMapManager.ClearExcludedPrisonMaps();
+                    selectedMaps = _gameMapManager.PrisonMapsOrderedByRotation()
+                        .OrderBy(_ => _random.Next())
+                        .ToList();
+                }
             }
             maps.Clear();
             maps.Add(Loc.GetString("ui-vote-secret-map"), _random.Pick(selectedMaps));
@@ -360,10 +380,27 @@ namespace Content.Server.Voting.Managers
                 {
                     picked = (GameMapPrototype) args.Winner;
                 }
-                _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-map-win")); // Sunrise-Edit
 
                 _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Map vote finished: {picked.MapName}");
                 var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+
+                // Sunrise-start
+                if (isPlanetPrisonVote)
+                {
+                    _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-map-win"));
+                    _gameMapManager.SetNextPrisonMap(picked.ID);
+                    _gameMapManager.EnqueuePrisonMap(picked.ID);
+                    // Remove the picked prison map from future prison votes (rotation)
+                    _gameMapManager.AddExcludedPrisonMap(picked.ID);
+
+                    if (ticker.RunLevel == GameRunLevel.PreRoundLobby)
+                        ticker.UpdateInfoText();
+
+                    return;
+                }
+
+                _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-map-win"));
+                // Sunrise-end
                 if (ticker.RunLevel == GameRunLevel.PreRoundLobby)
                 {
                     if (_gameMapManager.TrySelectMapIfEligible(picked.ID))

@@ -34,6 +34,7 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
+    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
 
     public override void Initialize()
     {
@@ -86,7 +87,7 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
             return;
         }
 
-        var station = ChooseType(component);
+        var station = ChooseType();
 
         if (!_protoManager.TryIndex(_random.Pick(component.Biomes), out var biome))
         {
@@ -141,10 +142,12 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
         _shuttle.SetFTLWhitelist(mapUid, component.ShuttleWhitelist);
     }
 
-    private ProtoId<GameMapPrototype> ChooseType(PlanetPrisonStationComponent component)
+    private ProtoId<GameMapPrototype> ChooseType()
     {
-        return _cfg.GetCVar(SunriseCCVars.PlanetPrisonModern)
-            ? _random.Pick(component.StationsModern)
-            : _random.Pick(component.StationsOld);
+        // If a map was selected by vote via the map manager, consume and use it.
+        if (_gameMapManager.TryConsumeNextPrisonMap(out var next) && next != null)
+            return next.Value;
+
+        return string.Empty;
     }
 }

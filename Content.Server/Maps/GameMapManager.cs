@@ -36,6 +36,9 @@ public sealed class GameMapManager : IGameMapManager
 
     private readonly HashSet<string> _excludedMaps = new(); // Sunrise-Edit
     private readonly HashSet<GameMapPrototype> _prisonMaps = new(); // Sunrise-Edit
+    private readonly Queue<string> _previousPrisonMaps = new();
+    private string? _nextPrisonSelection;
+    private readonly HashSet<string> _excludedPrisonMaps = new();
 
     private ISawmill _log = default!;
 
@@ -123,17 +126,83 @@ public sealed class GameMapManager : IGameMapManager
         _excludedMaps.Clear();
     }
 
-    public IEnumerable<GameMapPrototype> PrisonMaps()
+    public IEnumerable<string> CurrentlyExcludedPrisonMaps()
     {
-        return _prisonMaps;
+        return _excludedPrisonMaps;
     }
 
-    public void AddPrisonMap(GameMapPrototype mapId)
+    public void AddExcludedPrisonMap(string mapId)
     {
-        if (!_configurationManager.GetCVar(SunriseCCVars.ExcludePrisonMaps))
+        if (!_configurationManager.GetCVar(SunriseCCVars.ExcludeMaps))
             return;
 
-        _prisonMaps.Add(mapId);
+        _excludedPrisonMaps.Add(mapId);
+    }
+
+    public void ClearExcludedPrisonMaps()
+    {
+        _excludedPrisonMaps.Clear();
+    }
+
+    public IEnumerable<GameMapPrototype> PrisonMapsOrderedByRotation()
+    {
+        var eligible = _prisonMaps
+            .Select(x => (proto: x, weight: GetPrisonRotationQueuePriority(x.ID)))
+            .OrderByDescending(x => x.weight)
+            .ToArray();
+
+        return eligible.Select(x => x.proto);
+    }
+
+    public void EnqueuePrisonMap(string mapProtoName)
+    {
+        if (string.IsNullOrEmpty(mapProtoName))
+            return;
+
+        _previousPrisonMaps.Enqueue(mapProtoName);
+        while (_previousPrisonMaps.Count > _mapQueueDepth)
+        {
+            _previousPrisonMaps.Dequeue();
+        }
+    }
+
+    public void SetNextPrisonMap(string mapProtoName)
+    {
+        _nextPrisonSelection = mapProtoName;
+    }
+
+    public bool TryConsumeNextPrisonMap(out ProtoId<GameMapPrototype>? mapProtoName)
+    {
+        if (_nextPrisonSelection == null)
+        {
+            mapProtoName = null;
+            return false;
+        }
+
+        mapProtoName = _nextPrisonSelection;
+        _nextPrisonSelection = null;
+        return true;
+    }
+
+    public void AddPrisonMap()
+    {
+        var prisonPool = _configurationManager.GetCVar(SunriseCCVars.PlanetPrisonMapPool);
+
+        if (_prototypeManager.TryIndex<GameMapPoolPrototype>(prisonPool, out var pool))
+        {
+            foreach (var map in pool.Maps)
+            {
+                if (!_prototypeManager.TryIndex<GameMapPrototype>(map, out var mapProto))
+                {
+                    _log.Error($"Couldn't index prison map {map} in pool {prisonPool}");
+                    continue;
+                }
+
+                _prisonMaps.Add(mapProto);
+            }
+
+            return;
+        }
     }
     // Sunrise-End
 
@@ -243,6 +312,18 @@ public sealed class GameMapManager : IGameMapManager
     {
         var i = 0;
         foreach (var map in _previousMaps.Reverse())
+        {
+            if (map == gameMapProtoName)
+                return i;
+            i++;
+        }
+        return _mapQueueDepth;
+    }
+
+    private int GetPrisonRotationQueuePriority(string gameMapProtoName)
+    {
+        var i = 0;
+        foreach (var map in _previousPrisonMaps.Reverse())
         {
             if (map == gameMapProtoName)
                 return i;

@@ -232,8 +232,8 @@ public sealed partial class SunriseCCVars : CVars
     public static readonly CVarDef<int> MinPlayersPlanetPrison =
         CVarDef.Create("planet_prison.min_players", 0, CVar.SERVERONLY);
 
-    public static readonly CVarDef<bool> PlanetPrisonModern =
-        CVarDef.Create("planet_prison.modern", true, CVar.SERVERONLY);
+    public static readonly CVarDef<string> PlanetPrisonMapPool =
+        CVarDef.Create("planet_prison.map_pool", "PlanetPrisonMapPool", CVar.SERVERONLY);
 
     /*
      * MaxLoadedChunks

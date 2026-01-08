@@ -1,6 +1,6 @@
 - type: gameMap
   id: PlanetPrison
-  mapName: 'Planet Prison'
+  mapName: 'Metus'
   mapPath: /Maps/_Sunrise/planet_prison.yml
   maxRandomOffset: 0
   randomRotation: false

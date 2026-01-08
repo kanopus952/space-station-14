@@ -1,6 +1,6 @@
 ﻿- type: gameMap
   id: PlanetPrisonOld
-  mapName: 'Planet Prison'
+  mapName: 'Kratos'
   mapPath: /Maps/_Sunrise/planet_prison_old.yml
   maxRandomOffset: 0
   randomRotation: false

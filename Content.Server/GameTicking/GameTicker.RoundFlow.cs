@@ -148,6 +148,7 @@ namespace Content.Server.GameTicking
             // Sunrise-Start
             MapPlayedMetric.WithLabels(mainStationMap.ID).Inc();
             _gameMapManager.AddExcludedMap(mainStationMap.ID);
+            _gameMapManager.AddPrisonMap();
             // Sunrise-End
 
             if (maps.Count == 0)
