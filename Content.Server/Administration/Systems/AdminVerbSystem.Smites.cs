@@ -1,7 +1,5 @@
 using System.Numerics;
 using System.Threading;
-using System.Numerics;
-using System.Threading;
 using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
@@ -31,11 +29,13 @@ using Content.Shared.Clothing.Components;
 using Content.Shared.Clumsy;
 using Content.Shared.Cluwne;
 using Content.Shared.Coordinates;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Electrocution;
+using Content.Shared.Gibbing;
 using Content.Shared.Gravity;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Components;
@@ -67,7 +67,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 using Robust.Shared.Utility;
 using Timer = Robust.Shared.Timing.Timer;
-using Content.Shared.Damage;
 
 namespace Content.Server.Administration.Systems;
 
@@ -105,6 +104,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private readonly SlipperySystem _slipperySystem = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly IAdminLogManager _adminLogManager = default!;
+    [Dependency] private readonly GibbingSystem _gibbing = default!;
 
     private static int _lastTestedEventIndex = 0;
 
@@ -143,7 +143,7 @@ public sealed partial class AdminVerbSystem
                         4, 1, 2, args.Target, maxTileBreak: 0), // it gibs, damage doesn't need to be high.
                     CancellationToken.None);
 
-                _bodySystem.GibBody(args.Target);
+                _gibbing.Gib(args.Target);
             },
             Impact = LogImpact.Extreme,
             Message = string.Join(": ", explodeName, Loc.GetString("admin-smite-explode-description")) // we do this so the description tells admins the Text to run it via console.
