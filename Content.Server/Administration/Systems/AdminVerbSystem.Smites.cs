@@ -36,6 +36,7 @@ using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Electrocution;
+using Content.Shared.Gibbing;
 using Content.Shared.Gravity;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Components;
@@ -103,6 +104,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly SuperBonkSystem _superBonkSystem = default!;
     [Dependency] private readonly SlipperySystem _slipperySystem = default!;
+    [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly IAdminLogManager _adminLogManager = default!;
 
@@ -143,7 +145,7 @@ public sealed partial class AdminVerbSystem
                         4, 1, 2, args.Target, maxTileBreak: 0), // it gibs, damage doesn't need to be high.
                     CancellationToken.None);
 
-                _bodySystem.GibBody(args.Target);
+                _gibbing.Gib(args.Target);
             },
             Impact = LogImpact.Extreme,
             Message = string.Join(": ", explodeName, Loc.GetString("admin-smite-explode-description")) // we do this so the description tells admins the Text to run it via console.
@@ -161,16 +163,11 @@ public sealed partial class AdminVerbSystem
                 _sharedGodmodeSystem.EnableGodmode(args.Target); // So they don't suffocate.
                 EnsureComp<TabletopDraggableComponent>(args.Target);
                 var xform = Transform(args.Target);
-                _popupSystem.PopupEntity(Loc.GetString("admin-smite-chess-self"),
-                    args.Target,
-                    args.Target,
-                    PopupType.LargeCaution);
+                _popupSystem.PopupEntity(Loc.GetString("admin-smite-chess-self"), args.Target,
+                    args.Target, PopupType.LargeCaution);
                 _popupSystem.PopupCoordinates(
-                    Loc.GetString("admin-smite-chess-others", ("name", args.Target)),
-                    xform.Coordinates,
-                    Filter.PvsExcept(args.Target),
-                    true,
-                    PopupType.MediumCaution);
+                    Loc.GetString("admin-smite-chess-others", ("name", args.Target)), xform.Coordinates,
+                    Filter.PvsExcept(args.Target), true, PopupType.MediumCaution);
                 var board = Spawn("ChessBoard", xform.Coordinates);
                 var session = _tabletopSystem.EnsureSession(Comp<TabletopGameComponent>(board));
                 _transformSystem.SetMapCoordinates(args.Target, session.Position);
@@ -195,15 +192,10 @@ public sealed partial class AdminVerbSystem
                     flammable.FireStacks = flammable.MaximumFireStacks;
                     _flammableSystem.Ignite(args.Target, args.User);
                     var xform = Transform(args.Target);
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-set-alight-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
-                    _popupSystem.PopupCoordinates(Loc.GetString("admin-smite-set-alight-others", ("name", args.Target)),
-                        xform.Coordinates,
-                        Filter.PvsExcept(args.Target),
-                        true,
-                        PopupType.MediumCaution);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-set-alight-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
+                    _popupSystem.PopupCoordinates(Loc.GetString("admin-smite-set-alight-others", ("name", args.Target)), xform.Coordinates,
+                        Filter.PvsExcept(args.Target), true, PopupType.MediumCaution);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", flamesName, Loc.GetString("admin-smite-set-alight-description"))
@@ -253,15 +245,12 @@ public sealed partial class AdminVerbSystem
                 Act = () =>
                 {
                     int damageToDeal;
-                    if (!_mobThresholdSystem.TryGetThresholdForState(args.Target,
-                            MobState.Critical,
-                            out var criticalThreshold))
+                    if (!_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Critical, out var criticalThreshold))
                     {
                         // We can't crit them so try killing them.
-                        if (!_mobThresholdSystem.TryGetThresholdForState(args.Target,
-                                MobState.Dead,
+                        if (!_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Dead,
                                 out var deadThreshold))
-                            return; // whelp.
+                            return;// whelp.
                         damageToDeal = deadThreshold.Value.Int() - (int)damageable.TotalDamage;
                     }
                     else
@@ -283,12 +272,8 @@ public sealed partial class AdminVerbSystem
                         }
                     }
 
-                    _electrocutionSystem.TryDoElectrocution(args.Target,
-                        null,
-                        damageToDeal,
-                        TimeSpan.FromSeconds(30),
-                        refresh: true,
-                        ignoreInsulation: true);
+                    _electrocutionSystem.TryDoElectrocution(args.Target, null, damageToDeal,
+                        TimeSpan.FromSeconds(30), refresh: true, ignoreInsulation: true);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", hardElectrocuteName, Loc.GetString("admin-smite-electrocute-description"))
@@ -326,16 +311,10 @@ public sealed partial class AdminVerbSystem
                 {
                     _bloodstreamSystem.SpillAllSolutions((args.Target, bloodstream));
                     var xform = Transform(args.Target);
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-blood-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
-                    _popupSystem.PopupCoordinates(
-                        Loc.GetString("admin-smite-remove-blood-others", ("name", args.Target)),
-                        xform.Coordinates,
-                        Filter.PvsExcept(args.Target),
-                        true,
-                        PopupType.MediumCaution);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-blood-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
+                    _popupSystem.PopupCoordinates(Loc.GetString("admin-smite-remove-blood-others", ("name", args.Target)), xform.Coordinates,
+                        Filter.PvsExcept(args.Target), true, PopupType.MediumCaution);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", bloodRemovalName, Loc.GetString("admin-smite-remove-blood-description"))
@@ -365,16 +344,10 @@ public sealed partial class AdminVerbSystem
                         _transformSystem.PlaceNextTo((organ.Owner, organ.Comp1), (args.Target, baseXform));
                     }
 
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-vomit-organs-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
-                    _popupSystem.PopupCoordinates(
-                        Loc.GetString("admin-smite-vomit-organs-others", ("name", args.Target)),
-                        baseXform.Coordinates,
-                        Filter.PvsExcept(args.Target),
-                        true,
-                        PopupType.MediumCaution);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-vomit-organs-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
+                    _popupSystem.PopupCoordinates(Loc.GetString("admin-smite-vomit-organs-others", ("name", args.Target)), baseXform.Coordinates,
+                        Filter.PvsExcept(args.Target), true, PopupType.MediumCaution);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", vomitOrgansName, Loc.GetString("admin-smite-vomit-organs-description"))
@@ -394,17 +367,10 @@ public sealed partial class AdminVerbSystem
                     {
                         _transformSystem.AttachToGridOrMap(part.Id);
                     }
-
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-hands-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
-                    _popupSystem.PopupCoordinates(
-                        Loc.GetString("admin-smite-remove-hands-other", ("name", args.Target)),
-                        baseXform.Coordinates,
-                        Filter.PvsExcept(args.Target),
-                        true,
-                        PopupType.Medium);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-hands-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
+                    _popupSystem.PopupCoordinates(Loc.GetString("admin-smite-remove-hands-other", ("name", args.Target)), baseXform.Coordinates,
+                        Filter.PvsExcept(args.Target), true, PopupType.Medium);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", handsRemovalName, Loc.GetString("admin-smite-remove-hands-description"))
@@ -425,17 +391,10 @@ public sealed partial class AdminVerbSystem
                         _transformSystem.AttachToGridOrMap(part.Id);
                         break;
                     }
-
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-hands-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
-                    _popupSystem.PopupCoordinates(
-                        Loc.GetString("admin-smite-remove-hands-other", ("name", args.Target)),
-                        baseXform.Coordinates,
-                        Filter.PvsExcept(args.Target),
-                        true,
-                        PopupType.Medium);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-remove-hands-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
+                    _popupSystem.PopupCoordinates(Loc.GetString("admin-smite-remove-hands-other", ("name", args.Target)), baseXform.Coordinates,
+                        Filter.PvsExcept(args.Target), true, PopupType.Medium);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", handRemovalName, Loc.GetString("admin-smite-remove-hand-description"))
@@ -455,10 +414,8 @@ public sealed partial class AdminVerbSystem
                         QueueDel(entity.Owner);
                     }
 
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-stomach-removal-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-stomach-removal-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", stomachRemovalName, Loc.GetString("admin-smite-stomach-removal-description"))
@@ -478,10 +435,8 @@ public sealed partial class AdminVerbSystem
                         QueueDel(entity.Owner);
                     }
 
-                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-lung-removal-self"),
-                        args.Target,
-                        args.Target,
-                        PopupType.LargeCaution);
+                    _popupSystem.PopupEntity(Loc.GetString("admin-smite-lung-removal-self"), args.Target,
+                        args.Target, PopupType.LargeCaution);
                 },
                 Impact = LogImpact.Extreme,
                 Message = string.Join(": ", lungRemovalName, Loc.GetString("admin-smite-lung-removal-description"))
@@ -516,10 +471,7 @@ public sealed partial class AdminVerbSystem
 
                     _fixtures.FixtureUpdate(args.Target, manager: fixtures, body: physics);
 
-                    _physics.SetLinearVelocity(args.Target,
-                        _random.NextVector2(1.5f, 1.5f),
-                        manager: fixtures,
-                        body: physics);
+                    _physics.SetLinearVelocity(args.Target, _random.NextVector2(1.5f, 1.5f), manager: fixtures, body: physics);
                     _physics.SetAngularVelocity(args.Target, MathF.PI * 12, manager: fixtures, body: physics);
                     _physics.SetLinearDamping(args.Target, physics, 0f);
                     _physics.SetAngularDamping(args.Target, physics, 0f);
@@ -550,10 +502,7 @@ public sealed partial class AdminVerbSystem
                         _physics.SetHard(args.Target, fixture, false, manager: fixtures);
                     }
 
-                    _physics.SetLinearVelocity(args.Target,
-                        _random.NextVector2(8.0f, 8.0f),
-                        manager: fixtures,
-                        body: physics);
+                    _physics.SetLinearVelocity(args.Target, _random.NextVector2(8.0f, 8.0f), manager: fixtures, body: physics);
                     _physics.SetAngularVelocity(args.Target, MathF.PI * 12, manager: fixtures, body: physics);
                     _physics.SetLinearDamping(args.Target, physics, 0f);
                     _physics.SetAngularDamping(args.Target, physics, 0f);
@@ -730,9 +679,7 @@ public sealed partial class AdminVerbSystem
             {
                 QueueDel(args.Target);
                 Spawn("Ash", Transform(args.Target).Coordinates);
-                _popupSystem.PopupEntity(Loc.GetString("admin-smite-turned-ash-other", ("name", args.Target)),
-                    args.Target,
-                    PopupType.LargeCaution);
+                _popupSystem.PopupEntity(Loc.GetString("admin-smite-turned-ash-other", ("name", args.Target)), args.Target, PopupType.LargeCaution);
             },
             Impact = LogImpact.Extreme,
             Message = string.Join(": ", dustName, Loc.GetString("admin-smite-dust-description"))
@@ -838,7 +785,6 @@ public sealed partial class AdminVerbSystem
                     _entityStorageSystem.Insert(args.Target, locker, storage);
                     _entityStorageSystem.ToggleOpen(args.Target, locker, storage);
                 }
-
                 _weldableSystem.SetWeldedState(locker, true);
             },
             Impact = LogImpact.Extreme,
@@ -902,15 +848,12 @@ public sealed partial class AdminVerbSystem
             Act = () =>
             {
                 var movementSpeed = EnsureComp<MovementSpeedModifierComponent>(args.Target);
-                (movementSpeed.BaseSprintSpeed, movementSpeed.BaseWalkSpeed) =
-                    (movementSpeed.BaseWalkSpeed, movementSpeed.BaseSprintSpeed);
+                (movementSpeed.BaseSprintSpeed, movementSpeed.BaseWalkSpeed) = (movementSpeed.BaseWalkSpeed, movementSpeed.BaseSprintSpeed);
 
                 Dirty(args.Target, movementSpeed);
 
-                _popupSystem.PopupEntity(Loc.GetString("admin-smite-run-walk-swap-prompt"),
-                    args.Target,
-                    args.Target,
-                    PopupType.LargeCaution);
+                _popupSystem.PopupEntity(Loc.GetString("admin-smite-run-walk-swap-prompt"), args.Target,
+                    args.Target, PopupType.LargeCaution);
             },
             Impact = LogImpact.Extreme,
             Message = string.Join(": ", runWalkSwapName, Loc.GetString("admin-smite-run-walk-swap-description"))
@@ -958,10 +901,8 @@ public sealed partial class AdminVerbSystem
                 var movementSpeed = EnsureComp<MovementSpeedModifierComponent>(args.Target);
                 _movementSpeedModifierSystem?.ChangeBaseSpeed(args.Target, 400, 8000, 40, movementSpeed);
 
-                _popupSystem.PopupEntity(Loc.GetString("admin-smite-super-speed-prompt"),
-                    args.Target,
-                    args.Target,
-                    PopupType.LargeCaution);
+                _popupSystem.PopupEntity(Loc.GetString("admin-smite-super-speed-prompt"), args.Target,
+                    args.Target, PopupType.LargeCaution);
             },
             Impact = LogImpact.Extreme,
             Message = string.Join(": ", superSpeedName, Loc.GetString("admin-smite-super-speed-description"))
