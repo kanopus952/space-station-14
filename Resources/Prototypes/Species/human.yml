@@ -14,7 +14,7 @@
   - HumanDistrofikFemale
   - HumanDistrofikMale
   markingLimits: MobHumanMarkingLimits
-  dollPrototype: MobHumanDummy
+  dollPrototype: AppearanceHuman
   skinColoration: HumanToned
   # Sunrise-Edit
   buttScan:

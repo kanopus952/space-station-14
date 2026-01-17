@@ -14,7 +14,7 @@
   - HumanDistrofikFemale
   - HumanDistrofikMale
   markingLimits: MobHumanMarkingLimits
-  dollPrototype: MobDwarfDummy
+  dollPrototype: AppearanceDwarf
   skinColoration: HumanToned
   defaultHeight: 0.80
   defaultWidth: 1
