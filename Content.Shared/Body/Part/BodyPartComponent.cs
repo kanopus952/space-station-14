@@ -1,5 +1,5 @@
 ﻿using Content.Shared._Starlight.Medical.Limbs;
-using Content.Shared.Body.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.Starlight.Medical.Surgery;
 using Robust.Shared.Containers;

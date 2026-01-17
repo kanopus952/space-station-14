@@ -1,10 +1,9 @@
-using Content.Shared.Body.Components;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Body.Part
 {
     /// <summary>
-    ///     Defines the type of a <see cref="BodyComponent"/>.
+    ///     Defines the type of a body part.
     /// </summary>
     [Serializable, NetSerializable]
     public enum BodyPartType

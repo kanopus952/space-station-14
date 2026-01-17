@@ -6,7 +6,7 @@
   bodyTypes:
   - VoxNormal
   markingLimits: MobVoxMarkingLimits
-  dollPrototype: MobVoxDummy
+  dollPrototype: AppearanceVox
   skinColoration: VoxFeathers
   defaultSkinTone: "#6c741d"
   maleFirstNames: NamesVox
