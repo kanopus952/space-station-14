@@ -1,12 +1,10 @@
-using System.Reflection.Metadata.Ecma335;
-using Content.Shared._Sunrise.Tutorial.Conditions;
-using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
-///<summary>
-/// Checks if specified item equipped into slot
+
+/// <summary>
+/// Checks if specified item equipped into slot.
 /// </summary>
 public sealed partial class EquipItemConditionSystem : TutorialConditionSystem<InventoryComponent, EquipItemCondition>
 {

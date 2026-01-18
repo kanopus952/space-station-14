@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Client._Sunrise.Stylesheets;
+using Content.Client._Sunrise.Sheetlets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -21,7 +21,7 @@ public sealed class SunriseDividersSheetlet : Sheetlet<PalettedStylesheet>
         [
             E<PanelContainer>()
                 .Class(SunriseStyleClass.TutorialDivider)
-                .Panel(new StyleBoxFlat(Color.FromHex("#404040")))
+                .Panel(boxLowDivider)
                 .MinSize(new Vector2(2, 2)),
         ];
     }

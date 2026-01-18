@@ -1,0 +1,82 @@
+﻿<Control xmlns="https://spacestation14.io"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         HorizontalExpand="True">
+
+    <Control HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer Name="Frame"
+                        StyleClasses="FancyCardFrame"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        Margin="0 16 0 0">
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          Margin="8"
+                          SeparationOverride="0">
+                <PanelContainer Name="ContentFrame"
+                                StyleClasses="FancyCardContent"
+                                HorizontalExpand="True"
+                                VerticalExpand="True"
+                                MinHeight="220">
+                    <Control>
+                        <TextureRect Name="Backdrop"
+                                     Stretch="Scale"
+                                     HorizontalExpand="True"
+                                     VerticalExpand="True"/>
+
+                        <BoxContainer Name="BottomStack"
+                                      Orientation="Vertical"
+                                      VerticalAlignment="Bottom">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalAlignment="Center">
+                                <PanelContainer Name="DescOuter"
+                                                StyleClasses="FancyCardDescOuter"
+                                                MinWidth="360"
+                                                MaxWidth="620"
+                                                SetHeight="90">
+                                    <PanelContainer Name="DescInner"
+                                                    StyleClasses="FancyCardDescInner"
+                                                    Margin="2">
+                                        <BoxContainer Orientation="Vertical" Margin="10 8">
+                                            <Label Name="DescLabel"
+                                                   Text="-"
+                                                   StyleClasses="FancyCardDescLabel"/>
+                                        </BoxContainer>
+                                    </PanelContainer>
+                                </PanelContainer>
+                            </BoxContainer>
+                            <PanelContainer Name="ActionPanel"
+                                            StyleClasses="FancyCardActionPanel"
+                                            SetSize="400 30"
+                                            HorizontalAlignment="Center">
+                                <Button Name="ActionButton"
+                                        Text="Start"
+                                        StyleClasses="FancyCardActionButton"
+                                        SetSize="120 30"
+                                        Margin="0 7 0 7"/>
+                            </PanelContainer>
+                        </BoxContainer>
+                    </Control>
+                </PanelContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <PanelContainer Name="TitleBar"
+                        StyleClasses="FancyCardTitleBar"
+                        MinHeight="36"
+                        HorizontalExpand="True"
+                        VerticalAlignment="Top"
+                        Margin="24 0 24 0">
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True"
+                          VerticalAlignment="Center"
+                          Margin="10 6">
+                <Control HorizontalExpand="True"/>
+                <Label Name="TitleLabel"
+                       Text="-"
+                       StyleClasses="FancyCardTitleLabel"/>
+                <Control HorizontalExpand="True"/>
+            </BoxContainer>
+        </PanelContainer>
+    </Control>
+</Control>

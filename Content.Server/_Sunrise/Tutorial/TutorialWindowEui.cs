@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
+using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Components;
@@ -26,6 +28,7 @@ public sealed class TutorialWindowEui : BaseEui
 {
     [Dependency] private readonly IEntityManager _entity = default!;
     [Dependency] private readonly IEntitySystemManager _entSys = default!;
+    [Dependency] private readonly IServerDbManager _db = default!;
     private readonly SharedMapSystem _mapSystem;
     private readonly SharedMindSystem _mind;
     private readonly MetaDataSystem _meta;
@@ -37,6 +40,7 @@ public sealed class TutorialWindowEui : BaseEui
     private readonly Dictionary<EntityUid, Vector2> _gridOffsets = new();
     private static readonly string MapName = "Tutorial Map (DO NOT TOUCH)";
     private static readonly Vector2 CoordinateStep = new Vector2(0, 200);
+    private List<string> _completedTutorials = new();
 
     public TutorialWindowEui()
     {
@@ -47,6 +51,26 @@ public sealed class TutorialWindowEui : BaseEui
         _transform = _entSys.GetEntitySystem<SharedTransformSystem>();
         _mapLoader = _entSys.GetEntitySystem<MapLoaderSystem>();
         _sawmill = IoCManager.Resolve<ILogManager>().GetSawmill("explosion");
+    }
+
+    public override void Opened()
+    {
+        base.Opened();
+        _ = RefreshCompletedTutorials();
+    }
+
+    public override EuiStateBase GetNewState()
+    {
+        return new TutorialWindowEuiState
+        {
+            CompletedTutorials = _completedTutorials
+        };
+    }
+
+    private async Task RefreshCompletedTutorials()
+    {
+        _completedTutorials = await _db.GetTutorial(Player.UserId.UserId);
+        StateDirty();
     }
 
     public override void HandleMessage(EuiMessageBase msg)

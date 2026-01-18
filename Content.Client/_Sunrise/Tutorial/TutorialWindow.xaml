@@ -27,15 +27,13 @@
             <BoxContainer Orientation="Horizontal"
                         HorizontalExpand="True"
                         VerticalExpand="True"
-                        Margin="10 0 10 0">
+                        Margin="0 0 10 0">
 
                 <!-- кпопки категорий туториалов -->
                 <BoxContainer Name="CategoryContainer"
                             Orientation="Vertical"
                             MinSize="230 0"
-                            Margin="0 0 10 0">
-
-                    <Control VerticalExpand="True"/>
+                            Margin="0 0 0 0">
                 </BoxContainer>
 
                 <PanelContainer

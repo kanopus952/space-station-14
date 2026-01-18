@@ -1,19 +1,12 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Content.Server._Sunrise.TTS;
 using Content.Server.Chat.Managers;
-using Content.Server.Chat.Systems;
 using Content.Shared._Sunrise.TTS;
 using Content.Shared._Sunrise.Tutorial.Components;
-using Content.Shared._Sunrise.Tutorial.Conditions;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
-using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Chat;
-using Microsoft.VisualBasic.FileIO;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.Toolshed.Commands.Generic;
 
 namespace Content.Server._Sunrise.Tutorial;
 
@@ -39,7 +32,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!_player.TryGetSessionByEntity(uid, out var session))
             return;
 
-        var step = GetCurrentStep(uid);
+        if (!TryGetCurrentStep((uid, comp), out var step))
+            return;
+
         if (!_proto.TryIndex(step.VoiceId, out var voice))
             return;
 
@@ -66,6 +61,20 @@ public sealed class TutorialSystem : SharedTutorialSystem
             _sawmill.Error($"TTS System error in tutorial generation: {e.Message}");
         }
         return null;
+    }
+    public override void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
+    {
+        base.UpdateTimeCounter(ent, endTime);
+
+        if (endTime == null)
+        {
+            RemComp<TutorialTimeCounterComponent>(ent);
+            return;
+        }
+
+        var counter = EnsureComp<TutorialTimeCounterComponent>(ent);
+        counter.EndTime = endTime;
+        Dirty(ent, counter);
     }
 
 }

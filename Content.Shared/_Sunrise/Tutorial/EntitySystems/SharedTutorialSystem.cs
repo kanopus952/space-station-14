@@ -1,12 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Conditions;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
-using Microsoft.VisualBasic.FileIO;
-using Robust.Shared.Network;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Toolshed.Commands.Generic;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._Sunrise.Tutorial.EntitySystems;
 
@@ -18,7 +20,10 @@ public abstract class SharedTutorialSystem : EntitySystem
     [Dependency] private readonly SharedTutorialConditionsSystem _tutorial = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -33,82 +38,251 @@ public abstract class SharedTutorialSystem : EntitySystem
         var query = EntityQueryEnumerator<TutorialPlayerComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            TryCheck(uid);
+            if (_timing.CurTime > comp.EndTime)
+            {
+                comp.Completed = true;
+                EndTutorial((uid, comp));
+                continue;
+            }
+
+            TryCheckCondition((uid, comp));
         }
     }
     private void OnComponentInit(Entity<TutorialPlayerComponent> ent, ref ComponentInit args)
     {
-        var step = GetCurrentStep(ent);
-        UpdateTutorialBubble(ent, step);
-    }
-    public TutorialStepPrototype GetCurrentStep(EntityUid uid)
-    {
-        var comp = Comp<TutorialPlayerComponent>(uid);
-        var sequence = _proto.Index<TutorialSequencePrototype>(comp.SequenceId);
+        if (!TryGetCurrentStep(ent, out var step))
+            return;
 
-        var stepId = sequence.Steps[comp.StepIndex];
-        return _proto.Index(stepId);
+        ent.Comp.EndTime = _timing.CurTime + _proto.Index(ent.Comp.SequenceId).Duration;
+        UpdateTimeCounter(ent, ent.Comp.EndTime);
+        OnStepChanged(ent, step);
     }
-    public void TryCheck(EntityUid uid)
+
+    public void TryCheckCondition(Entity<TutorialPlayerComponent> ent)
     {
-        var step = GetCurrentStep(uid);
+        if (!TryGetCurrentStep(ent, out var step))
+            return;
 
         foreach (var condition in step.Conditions)
         {
-            if (!_tutorial.TryCondition(uid, condition))
+            if (!_tutorial.TryCondition(ent, condition))
                 return;
         }
 
-        Advance(uid);
+        Advance(ent);
     }
 
-    public void Advance(EntityUid uid)
+    public void Advance(Entity<TutorialPlayerComponent> ent)
     {
-        var comp = Comp<TutorialPlayerComponent>(uid);
-
-        if (!_proto.TryIndex<TutorialSequencePrototype>(comp.SequenceId, out var sequence))
+        if (!_proto.TryIndex(ent.Comp.SequenceId, out var sequence))
             return;
 
-        comp.StepIndex++;
+        ent.Comp.StepIndex++;
 
-        if (comp.StepIndex >= sequence.Steps.Count)
-        {
-            comp.Completed = true;
-            // EndTutorial(uid);
+        if (ent.Comp.StepIndex >= sequence.Steps.Count)
             return;
-        }
 
-        var stepId = sequence.Steps.ElementAt(comp.StepIndex);
+        var stepId = sequence.Steps.ElementAt(ent.Comp.StepIndex);
 
         if (!_proto.TryIndex(stepId, out var step))
             return;
 
-        OnStepChanged((uid, comp), step);
+        OnStepChanged(ent, step);
     }
 
     private void OnStepChanged(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
+        ResetTracking(ent);
         var ev = new TutorialStepChangedEvent();
         RaiseLocalEvent(ent, ev);
 
         UpdateTutorialBubble(ent, step);
     }
 
-    private void UpdateTutorialBubble(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
+    private void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
-        // 1. Удаляем старый bubble (если был)
-        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && Exists(oldTarget))
+        OnTutorialCompleted(ent);
+        RemCompDeferred<TutorialPlayerComponent>(ent);
+        UpdateTimeCounter(ent, null);
+    }
+
+    protected virtual void OnTutorialCompleted(Entity<TutorialPlayerComponent> ent)
+    {
+    }
+    private void ResetTracking(Entity<TutorialPlayerComponent> ent)
+    {
+        var tracker = EnsureComp<TutorialTrackerComponent>(ent.Owner);
+        tracker.Counters.Clear();
+        UpdateObservedEntities(ent, tracker);
+    }
+
+    private void UpdateObservedEntities(Entity<TutorialPlayerComponent> ent, TutorialTrackerComponent tracker)
+    {
+        foreach (var observed in tracker.ObservedEntities)
         {
-            RemComp<TutorialBubbleComponent>(oldTarget);
+            RemoveObserver(ent.Owner, observed);
         }
 
+        tracker.ObservedEntities.Clear();
+        tracker.TargetPrototypes.Clear();
+        tracker.ObserveAnyUseInHand = false;
+        tracker.ObserveAnyDrop = false;
+        tracker.ObserveAnyAttack = false;
+        tracker.ObserveAnyExamine = false;
+
+        if (!TryGetCurrentStep(ent, out var step))
+            return;
+
+        foreach (var condition in step.Conditions)
+        {
+            if (condition is not EventListenedCondition listened)
+                continue;
+
+            if (listened.Target != null)
+            {
+                tracker.TargetPrototypes.Add(listened.Target.Value);
+                continue;
+            }
+
+            switch (listened.Event)
+            {
+                case TutorialEventType.Use:
+                    tracker.ObserveAnyUseInHand = true;
+                    break;
+                case TutorialEventType.Drop:
+                    tracker.ObserveAnyDrop = true;
+                    break;
+                case TutorialEventType.Attack:
+                    tracker.ObserveAnyAttack = true;
+                    break;
+                case TutorialEventType.Examine:
+                    tracker.ObserveAnyExamine = true;
+                    break;
+            }
+        }
+
+        ObserveNearbyEntities(ent.Owner, tracker, step);
+        ObserveEquippedEntities(ent.Owner, tracker);
+    }
+
+    private void ObserveNearbyEntities(EntityUid user, TutorialTrackerComponent tracker, TutorialStepPrototype step)
+    {
+        if (tracker.TargetPrototypes.Count == 0 && !ObservesAny(tracker))
+            return;
+
+        foreach (var uid in _lookupSystem.GetEntitiesInRange(user, step.ObserveRange))
+        {
+            TryObserveEntity(user, uid, tracker);
+        }
+    }
+
+    private void ObserveEquippedEntities(EntityUid user, TutorialTrackerComponent tracker)
+    {
+        if (tracker.TargetPrototypes.Count == 0 && !ObservesAny(tracker))
+            return;
+
+        if (TryComp(user, out HandsComponent? hands))
+        {
+            foreach (var held in _hands.EnumerateHeld((user, hands)))
+            {
+                TryObserveEntity(user, held, tracker);
+            }
+        }
+
+        if (!TryComp(user, out InventoryComponent? inventory))
+            return;
+
+        foreach (var slot in inventory.Slots)
+        {
+            if (!_inventory.TryGetSlotEntity(user, slot.Name, out var item, inventory))
+                continue;
+
+            TryObserveEntity(user, item.Value, tracker);
+        }
+    }
+
+    public void TryObserveEntity(EntityUid user, EntityUid target, TutorialTrackerComponent tracker)
+    {
+        if (!ShouldObserveEntity(target, tracker))
+            return;
+
+        if (!tracker.ObservedEntities.Add(target))
+            return;
+
+        var observable = EnsureComp<TutorialObservableComponent>(target);
+        observable.Observers.Add(user);
+    }
+
+    private void RemoveObserver(EntityUid user, EntityUid target)
+    {
+        if (!TryComp(target, out TutorialObservableComponent? observable))
+            return;
+
+        observable.Observers.Remove(user);
+        if (observable.Observers.Count == 0)
+            RemComp<TutorialObservableComponent>(target);
+    }
+
+    private bool ShouldObserveEntity(EntityUid target, TutorialTrackerComponent tracker)
+    {
+        if (ObservesAny(tracker))
+            return true;
+
+        if (!TryGetPrototypeId(target, out var protoId))
+            return false;
+
+        return tracker.TargetPrototypes.Contains(protoId);
+    }
+
+    private static bool ObservesAny(TutorialTrackerComponent tracker)
+    {
+        return tracker.ObserveAnyUseInHand || tracker.ObserveAnyDrop || tracker.ObserveAnyAttack || tracker.ObserveAnyExamine;
+    }
+
+    public bool TryGetCurrentStep(Entity<TutorialPlayerComponent> ent, [NotNullWhen(true)] out TutorialStepPrototype? step)
+    {
+        step = null;
+
+        if (!_proto.TryIndex(ent.Comp.SequenceId, out var sequence))
+            return false;
+
+        if (ent.Comp.StepIndex < 0 || ent.Comp.StepIndex >= sequence.Steps.Count)
+            return false;
+
+        var stepId = sequence.Steps[ent.Comp.StepIndex];
+        return _proto.TryIndex(stepId, out step);
+    }
+    public bool TryGetPrototypeId(EntityUid? uid, out EntProtoId protoId)
+    {
+        if (uid is not { } target)
+        {
+            protoId = default;
+            return false;
+        }
+
+        var proto = Prototype(target);
+
+        if (proto == null)
+        {
+            protoId = default;
+            return false;
+        }
+
+        protoId = proto.ID;
+        return true;
+    }
+    private void UpdateTutorialBubble(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
+    {
+        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && Exists(oldTarget))
+            RemComp<TutorialBubbleComponent>(oldTarget);
+
         ent.Comp.CurrentBubbleTarget = null;
-        // 2. Если bubble не задан — ничего не показываем
+
         if (step.Bubble == null)
             return;
 
-        // 3. Резолвим цель
-        EntityUid? target = step.Bubble.Target.Type switch
+
+        var target = step.Bubble.Target.Type switch
         {
             TutorialBubbleTargetType.Self => ent,
 
@@ -129,23 +303,25 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         ent.Comp.CurrentBubbleTarget = target;
 
+        Dirty(target.Value, bubble);
         Dirty(ent);
     }
 
+    public virtual void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
+    {
+    }
     private EntityUid? TryFindBubbleEntity(EntityUid uid, TutorialStepPrototype proto)
     {
-        const float range = 10f;
-
         if (proto.Bubble == null)
             return null;
 
         var targetProtoId = proto.Bubble.Target.Prototype;
 
         var origin = _transform.GetMapCoordinates(uid);
-        EntityUid? best = null;
+        var best = EntityUid.Invalid;
         var bestDistSq = float.MaxValue;
 
-        foreach (var ent in _lookupSystem.GetEntitiesInRange(uid, range))
+        foreach (var ent in _lookupSystem.GetEntitiesInRange(uid, proto.ObserveRange))
         {
             var meta = MetaData(ent);
 
@@ -176,10 +352,5 @@ public abstract class SharedTutorialSystem : EntitySystem
 
 [NetSerializable, Serializable]
 public sealed class TutorialStepChangedEvent() : EntityEventArgs
-{
-}
-
-[NetSerializable, Serializable]
-public sealed class UpdateBubbleEvent() : EntityEventArgs
 {
 }

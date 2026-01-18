@@ -1,3 +1,4 @@
+using Content.Server._Sunrise.Auth;
 using Content.Server._Sunrise.Contributors;
 using Content.Server._Sunrise.IoC;
 using Content.Server._Sunrise.PlayerCache;
@@ -89,6 +90,7 @@ internal static class ServerContentIoC
         // Sunrise-Start
         deps.Register<ServersHubManager>();
         deps.Register<ContributorsManager>();
+        deps.Register<AccountCreationManager>();
         deps.Register<PlayerCacheManager>();
         deps.Register<TTSManager>();
         SunriseServerContentIoC.Register();

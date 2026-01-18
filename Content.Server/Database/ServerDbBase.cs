@@ -23,6 +23,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared._Sunrise.Tutorial.Prototypes;
 
 
 namespace Content.Server.Database
@@ -1834,7 +1835,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
 
         # endregion
 
-        # region MentorHelp
+        #region MentorHelp
 
         public async Task AddMentorHelpTicketAsync(MentorHelpTicket ticket)
         {
@@ -1963,9 +1964,99 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .ToListAsync();
         }
 
-        # endregion
-        // Sunrise-End
+        #endregion
 
+        #region Tutorial
+        public async Task<bool> AddTutorial(Guid player, ProtoId<TutorialSequencePrototype> tutorial, TimeSpan? accountAge = null)
+        {
+            await using var db = await GetDb();
+            var entry = await db.DbContext.TutorialComplitions
+                .Where(w => w.PlayerUserId == player)
+                .Where(w => w.TutorialId == tutorial.Id)
+                .SingleOrDefaultAsync();
+
+            var now = DateTimeOffset.UtcNow;
+            var accountAgeDays = accountAge != null ? (double?)accountAge.Value.TotalDays : null;
+            var isNew = entry == null;
+
+            if (isNew)
+            {
+                entry = new TutorialCompletion
+                {
+                    PlayerUserId = player,
+                    TutorialId = tutorial.Id,
+                    CompletedAt = now,
+                    AccountAgeDays = accountAgeDays,
+                    CompletionCount = 1
+                };
+                db.DbContext.TutorialComplitions.Add(entry);
+            }
+            else
+            {
+                entry!.CompletedAt = now;
+                entry.CompletionCount++;
+                if (accountAgeDays != null)
+                    entry.AccountAgeDays = accountAgeDays;
+            }
+
+            await db.DbContext.SaveChangesAsync();
+            return isNew;
+        }
+
+        public async Task<List<string>> GetTutorial(Guid player, CancellationToken cancel)
+        {
+            await using var db = await GetDb(cancel);
+            return await db.DbContext.TutorialComplitions
+                .Where(w => w.PlayerUserId == player)
+                .Select(w => w.TutorialId)
+                .ToListAsync(cancellationToken: cancel);
+        }
+
+        public async Task<bool> IsTutorialCompleted(Guid player, ProtoId<TutorialSequencePrototype> tutorial)
+        {
+            await using var db = await GetDb();
+            return await db.DbContext.TutorialComplitions
+                .Where(w => w.PlayerUserId == player)
+                .Where(w => w.TutorialId == tutorial.Id)
+                .AnyAsync();
+        }
+
+        public async Task<bool> RemoveTutorial(Guid player, ProtoId<TutorialSequencePrototype> tutorial)
+        {
+            await using var db = await GetDb();
+            var entry = await db.DbContext.TutorialComplitions
+                .Where(w => w.PlayerUserId == player)
+                .Where(w => w.TutorialId == tutorial.Id)
+                .SingleOrDefaultAsync();
+
+            if (entry == null)
+                return false;
+
+            db.DbContext.TutorialComplitions.Remove(entry);
+            await db.DbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<int> PruneInvalidTutorialCompletionsAsync(IEnumerable<string> validTutorialIds, CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+            var validList = validTutorialIds.ToList();
+
+            IQueryable<TutorialCompletion> query = db.DbContext.TutorialComplitions;
+            if (validList.Count > 0)
+                query = query.Where(w => !validList.Contains(w.TutorialId));
+
+            var toRemove = await query.ToListAsync(cancellationToken: cancel);
+            if (toRemove.Count == 0)
+                return 0;
+
+            db.DbContext.TutorialComplitions.RemoveRange(toRemove);
+            await db.DbContext.SaveChangesAsync();
+            return toRemove.Count;
+        }
+
+        #endregion
+        // Sunrise-end
         # region IPIntel
 
         public async Task<bool> UpsertIPIntelCache(DateTime time, IPAddress ip, float score)

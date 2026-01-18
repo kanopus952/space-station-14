@@ -1,19 +1,18 @@
 <BoxContainer xmlns="https://spacestation14.io">
     <TextureButton Name="TutorialButton"
-                   StyleClasses="ButtonSquare" >
+                   StyleClasses="ButtonSquare"
+                   SetSize ="570 250">
         <Label Name="Title"
             Text="-"
             Visible="false"
             Align="Center"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontColorOverride="white"/>
+            VerticalAlignment="Center"/>
         <Label Name="Denied"
             Text="{Loc 'round-is-not-ready'}"
             Visible="false"
             Align="Center"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontColorOverride="red"/>
+            VerticalAlignment="Center"/>
     </TextureButton>
 </BoxContainer>

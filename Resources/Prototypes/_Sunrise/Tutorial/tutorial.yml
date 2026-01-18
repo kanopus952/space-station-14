@@ -3,6 +3,8 @@
   name: base
   tutorials:
   - BasicTutorial
+  - BasicTutorial2
+  - BasicTutorial3
 
 - type: tutorialCategory
   id: BasicTutorial1
@@ -20,24 +22,62 @@
 
 - type: tutorialSequence
   id: BasicTutorial
+  duration: 30
   name: basic tutorial
   texture: /Textures/_Sunrise/Interface/Tutorial/image.png
+  tooltip: bla bla bla
+  steps:
+  - ExamineJumpsuitColorGrey
+  - ItemsInteraction1
+  - ItemsInteraction2
+
+- type: tutorialSequence
+  id: BasicTutorial2
+  name: basic tutorial
+  texture: /Textures/_Sunrise/Interface/Tutorial/image1.png
+  tooltip: bla bla
+  steps:
+  - ItemsInteraction
+  - ItemsInteraction1
+
+- type: tutorialSequence
+  id: BasicTutorial3
+  name: basic tutorial
+  texture: /Textures/_Sunrise/Interface/Tutorial/radio.png
   tooltip: bla bla
   steps:
   - ItemsInteraction
   - ItemsInteraction1
 
 - type: tutorialStep
-  id: ItemsInteraction
+  id: ExamineJumpsuitColorGrey
+  # Облачко которое появится над сущностью которая учавствует в осмотре.
   bubble:
-    text: ЛяляляS
+    text: Изучите предмет
+    # Два типа таргета: Self и Entity
     target:
-     type: Self
-  chatMessage: ХУЯУ
+     type: Entity
+     # Ищет все энтити с ClothingUniformJumpsuitColorGrey вокруг и покажет над ближайшем
+     prototype: ClothingUniformJumpsuitColorGrey
+
+  # От чьего лица повествование?
+  sender: Рассказчик
+  # То что появится вначале шага в чате
+  chatMessage: ЙОУ! Начало туториала, осмотри предмет не будь дураком!
+  # То что будет проговрено ТТСом
+  ttsMessage: Здравствуй дорогой игрок!
+  # Айди ттса
+  voiceId: Jirinovsky
+  # Условия!
   conditions:
-  - !type:EquipItemCondition
-    item: ClothingUniformJumpsuitColorGrey
-    slot: INNERCLOTHING
+  # Слушает ивенты соответсвующих типов
+  - !type:EventListenedCondition
+    # Каких энтити слушаем в радиусе (по умолчанию 10 клеток, можно расширить в системе)
+    target: ClothingUniformJumpsuitColorGrey
+    # Тип ивента, в данном случае осмотр чего-то
+    event: Examine
+    # Сколько раз нужно выполнить осмотр
+    count: 1
 
 - type: tutorialStep
   id: ItemsInteraction1
@@ -50,4 +90,17 @@
   conditions:
   - !type:EquipItemCondition
     item: ClothingUniformJumpsuitColorWhite
+    slot: INNERCLOTHING
+
+- type: tutorialStep
+  id: ItemsInteraction2
+  bubble:
+    text: Ляляля
+    target:
+     type: Entity
+     prototype: ClothingUniformJumpsuitColorGrey
+  chatMessage: ХУЯУ
+  conditions:
+  - !type:EquipItemCondition
+    item: ClothingUniformJumpsuitColorGrey
     slot: INNERCLOTHING

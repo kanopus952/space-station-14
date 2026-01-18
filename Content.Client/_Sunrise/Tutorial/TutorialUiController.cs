@@ -13,6 +13,8 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
         if (_shown || _window != null)
             return;
 
+
+
         ToggleTutorial();
     }
 

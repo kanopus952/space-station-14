@@ -1,8 +1,8 @@
 using System.Numerics;
-using Content.Client._Sunrise.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Client.Stylesheets.Palette;
 using Content.Client.Stylesheets.SheetletConfigs;
+using Content.Client.Stylesheets.Sheetlets;
 using Content.Client.Stylesheets.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -26,6 +26,25 @@ public sealed class SunriseButtonSheetlet<T> : Sheetlet<T> where T : PalettedSty
                     ContentMarginTopOverride = 12,
                     ContentMarginBottomOverride = 12
                 }),
+
+            E<Button>().Class(SunriseStyleClass.TutorialCategoryButtonClass)
+                    .Box(StyleBoxHelpers.SquareStyleBox(sheet)),
+            // Normal color
+            E<Button>().Class(SunriseStyleClass.TutorialCategoryButtonClass)
+                    .PseudoNormal()
+                    .Modulate(Color.FromHex("#222222")),
+            // Hover color
+            E<Button>().Class(SunriseStyleClass.TutorialCategoryButtonClass)
+                    .PseudoHovered()
+                    .Modulate(Color.FromHex("#2e2e2e")),
+            // Pressed color
+            E<Button>().Class(SunriseStyleClass.TutorialCategoryButtonClass)
+                    .PseudoPressed()
+                    .Modulate(Color.FromHex("#2e2e2e")),
+            // Disabled color
+            E<Button>().Class(SunriseStyleClass.TutorialCategoryButtonClass)
+                    .PseudoDisabled()
+                    .Modulate(Color.FromHex("#181818")),
         ];
     }
 }

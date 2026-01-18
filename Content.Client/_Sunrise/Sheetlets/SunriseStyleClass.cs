@@ -1,17 +1,22 @@
-namespace Content.Client._Sunrise.Stylesheets;
+namespace Content.Client._Sunrise.Sheetlets;
 
 ///
 /// <summary>
 ///     A collection of public reusable style classes. These should be general purpose (Not specific to only one element
 ///     or Ui).
 /// </summary>
-/// <remarks>
-///     It is named `StyleClass` as opposed to `StyleClasses` because `StyleClasses` is a field on `Control` so it made
-///     it a pain to reference this class from a `Control`. (Weird name is worth typing `StyleClass.OpenBoth` vs.
-///     `Stylesheets.Styleclasses.OpenBoth`)
-/// </remarks>
 public static class SunriseStyleClass
 {
-    public const string StyleClassNoStyle = "NoStyle";  // Sunrise-Edit
-    public const string TutorialDivider = "TutorialDivider";  // Sunrise-Edit
+    public const string StyleClassNoStyle = "NoStyle";
+    public const string TutorialCategoryButtonClass = "TutorialButton";
+    public const string TutorialDivider = "TutorialDivider";
+    public const string FancyCardFrame = "FancyCardFrame";
+    public const string FancyCardContent = "FancyCardContent";
+    public const string FancyCardTitleBar = "FancyCardTitleBar";
+    public const string FancyCardQuoteOuter = "FancyCardDescOuter";
+    public const string FancyCardDescInner = "FancyCardDescInner";
+    public const string FancyCardActionPanel = "FancyCardActionPanel";
+    public const string FancyCardTitleLabel = "FancyCardTitleLabel";
+    public const string FancyCardDescLabel = "FancyCardDescLabel";
+    public const string FancyCardActionButton = "FancyCardActionButton";
 }

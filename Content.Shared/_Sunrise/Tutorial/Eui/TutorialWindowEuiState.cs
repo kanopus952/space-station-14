@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Eui;
 using Robust.Shared.Prototypes;
@@ -9,6 +10,7 @@ namespace Content.Shared._Sunrise.Tutorial.Eui;
 [Serializable, NetSerializable]
 public sealed class TutorialWindowEuiState : EuiStateBase
 {
+    public List<string> CompletedTutorials = new();
 }
 /// <summary>
 ///     EUI message sent from the client when a tutorial button is pressed.

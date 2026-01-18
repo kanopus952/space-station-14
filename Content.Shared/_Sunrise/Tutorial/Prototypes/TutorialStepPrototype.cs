@@ -52,6 +52,12 @@ public sealed partial class TutorialStepPrototype : IPrototype
     public bool Optional;
 
     /// <summary>
+    ///     Range that used for finding entities in conditions
+    /// </summary>
+    [DataField]
+    public int ObserveRange = 10;
+
+    /// <summary>
     ///     Conditions that must be satisfied to complete this tutorial step.
     /// </summary>
     [DataField]

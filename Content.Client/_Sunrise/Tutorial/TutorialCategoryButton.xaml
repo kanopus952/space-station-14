@@ -1,0 +1,13 @@
+<BoxContainer xmlns="https://spacestation14.io"
+             xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
+    <Button Name="CategoryButton"
+            HorizontalExpand="True"
+            StyleClasses="TutorialButton"
+            MinHeight="50">
+        <Label Name="CategoryLabel"
+               Text="-"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontColorOverride="white"/>
+    </Button>
+</BoxContainer>

@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 namespace Content.Client._Sunrise.Tutorial;
 
 [GenerateTypedNameReferences]
-public sealed partial class TutorialEntry : BoxContainer
+public sealed partial class TutorialButtonEntry : BoxContainer
 {
     [Dependency] private readonly IResourceCache _resourceCache = default!;
-    public TutorialEntry(TutorialSequencePrototype proto,
+    public TutorialButtonEntry(TutorialSequencePrototype proto,
         Action<TutorialSequencePrototype>? onPressed)
     {
         RobustXamlLoader.Load(this);
@@ -36,10 +36,10 @@ public sealed partial class TutorialEntry : BoxContainer
 
         SetMouseHover(!denied);
 
-        Title.Visible = false;
+        Title.Visible = !denied;
 
         TutorialButton.Modulate = denied
-            ? new Color(255, 197, 197)
+            ? new Color(0.5f, 0.5f, 0.5f)
             : Color.White;
     }
 

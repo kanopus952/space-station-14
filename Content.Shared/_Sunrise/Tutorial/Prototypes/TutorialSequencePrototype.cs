@@ -45,6 +45,12 @@ public sealed partial class TutorialSequencePrototype : IPrototype
     public ResPath Texture;
 
     /// <summary>
+    ///     Duration of tutorial
+    /// </summary>
+    [DataField]
+    public TimeSpan Duration;
+
+    /// <summary>
     ///     Ordered list of tutorial steps that make up this sequence.
     /// </summary>
     [DataField]

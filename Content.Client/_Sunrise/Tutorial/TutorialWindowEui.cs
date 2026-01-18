@@ -39,4 +39,12 @@ public sealed class TutorialWindowEui : BaseEui
     {
         _window.Close();
     }
+
+    public override void HandleState(EuiStateBase state)
+    {
+        if (state is not TutorialWindowEuiState tutorialState)
+            return;
+
+        _window.SetCompletedTutorials(tutorialState.CompletedTutorials);
+    }
 }
