@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Conditions;
+using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -99,15 +100,12 @@ public abstract class SharedTutorialSystem : EntitySystem
         UpdateTutorialBubble(ent, step);
     }
 
-    private void EndTutorial(Entity<TutorialPlayerComponent> ent)
+    public void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
-        OnTutorialCompleted(ent);
-        RemCompDeferred<TutorialPlayerComponent>(ent);
         UpdateTimeCounter(ent, null);
-    }
 
-    protected virtual void OnTutorialCompleted(Entity<TutorialPlayerComponent> ent)
-    {
+        var ev = new TutorialEndedEvent();
+        RaiseLocalEvent(ent, ev);
     }
     private void ResetTracking(Entity<TutorialPlayerComponent> ent)
     {
@@ -343,14 +341,4 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         return best;
     }
-}
-
-/// <summary>
-/// Event that is raised whenever an implant is removed from someone.
-/// Raised on the the implant entity.
-/// </summary>
-
-[NetSerializable, Serializable]
-public sealed class TutorialStepChangedEvent() : EntityEventArgs
-{
 }

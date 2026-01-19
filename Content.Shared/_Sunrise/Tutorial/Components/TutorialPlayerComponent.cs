@@ -10,15 +10,18 @@ public sealed partial class TutorialPlayerComponent : Component
     [DataField]
     public ProtoId<TutorialSequencePrototype> SequenceId = "BasicTutorial";
 
-    [DataField, AutoNetworkedField]
+    [ViewVariables, AutoNetworkedField]
     public int StepIndex;
 
-    [DataField]
+    [ViewVariables]
     public bool Completed;
 
-    [DataField, AutoNetworkedField]
+    [ViewVariables, AutoNetworkedField]
     public EntityUid? CurrentBubbleTarget;
 
-    [DataField, AutoPausedField]
+    [ViewVariables, AutoPausedField]
     public TimeSpan? EndTime;
+
+    [ViewVariables]
+    public EntityUid? Grid;
 }

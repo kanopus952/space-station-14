@@ -3,8 +3,10 @@ using System.Numerics;
 using Content.Client.Chat.UI;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Client.Viewport;
+using Content.Client._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
+using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Content.Shared.Timing;
 using Robust.Client.Graphics;
@@ -22,8 +24,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
 {
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
-    private readonly Dictionary<EntityUid, TutorialBubble> _activeTutorialBubbles = new();
-    private readonly Dictionary<EntityUid, TimeCounter> _activeTimeCounters = new();
+    private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
+    private EntityQuery<TutorialTimeCounterUiComponent> _timeCounterUiQuery;
     private LayoutContainer _speechBubbleRoot = default!;
     public override void Initialize()
     {
@@ -37,6 +39,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeLocalEvent<TutorialTimeCounterComponent, ComponentShutdown>(OnTimeCounterShutdown);
 
         _speechBubbleRoot = new LayoutContainer();
+        _bubbleUiQuery = GetEntityQuery<TutorialBubbleUiComponent>();
+        _timeCounterUiQuery = GetEntityQuery<TutorialTimeCounterUiComponent>();
     }
 
     private void AfterAutoHandleState(Entity<TutorialBubbleComponent> ent, ref AfterAutoHandleStateEvent ev)
@@ -59,9 +63,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
             return;
         }
 
-        if (_activeTutorialBubbles.TryGetValue(ent.Owner, out var existing))
+        if (_bubbleUiQuery.TryGetComponent(ent.Owner, out var uiComp) && uiComp.Bubble != null)
         {
-            var labels = existing.GetControlOfType<RichTextLabel>();
+            var labels = uiComp.Bubble.GetControlOfType<RichTextLabel>();
 
             foreach (var item in labels)
             {
@@ -78,7 +82,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         SetSpeechBubbleRoot(viewportContainer, bubble);
 
-        _activeTutorialBubbles[ent.Owner] = bubble;
+        var bubbleUi = EnsureComp<TutorialBubbleUiComponent>(ent.Owner);
+        bubbleUi.Bubble = bubble;
     }
 
     public void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
@@ -91,10 +96,11 @@ public sealed class TutorialSystem : SharedTutorialSystem
     }
     private void RemoveBubble(EntityUid uid)
     {
-        if (!_activeTutorialBubbles.Remove(uid, out var bubble))
+        if (!_bubbleUiQuery.TryGetComponent(uid, out var bubbleUi) || bubbleUi.Bubble == null)
             return;
 
-        bubble.DisposeAllChildren();
+        bubbleUi.Bubble.DisposeAllChildren();
+        RemComp<TutorialBubbleUiComponent>(uid);
     }
 
     private void OnTimeCounterState(Entity<TutorialTimeCounterComponent> ent, ref AfterAutoHandleStateEvent ev)
@@ -140,23 +146,26 @@ public sealed class TutorialSystem : SharedTutorialSystem
             CriticalTime = ent.Comp.CriticalTime
         };
 
-        if (_activeTimeCounters.Remove(ent.Owner, out var existing))
-        {
-            existing.Orphan();
-            existing.Dispose();
-        }
+        if (_timeCounterUiQuery.TryGetComponent(ent.Owner, out var timeUi) && timeUi.Counter != null)
+            timeUi.Counter.Orphan();
 
         var counter = new TimeCounter(ent.Comp.EndTime, style, position);
         _ui.PopupRoot.AddChild(counter);
-        _activeTimeCounters[ent.Owner] = counter;
+        var counterUi = EnsureComp<TutorialTimeCounterUiComponent>(ent.Owner);
+        counterUi.Counter = counter;
     }
 
     private void RemoveTimeCounter(EntityUid uid)
     {
-        if (!_activeTimeCounters.Remove(uid, out var counter))
+        if (!_timeCounterUiQuery.TryGetComponent(uid, out var counterUi) || counterUi.Counter == null)
             return;
 
-        counter.Orphan();
-        counter.Dispose();
+        counterUi.Counter.Orphan();
+        RemComp<TutorialTimeCounterUiComponent>(uid);
+    }
+
+    public void RequestQuitTutorial()
+    {
+        RaiseNetworkEvent(new TutorialQuitRequestEvent());
     }
 }

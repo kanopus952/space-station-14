@@ -6,6 +6,7 @@ using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Eui;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Administration;
@@ -14,8 +15,12 @@ using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using JetBrains.Annotations;
 using NetCord;
+using Robust.Server.GameObjects;
+using Robust.Server.Player;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server._Sunrise.Tutorial;
@@ -29,7 +34,10 @@ public sealed class TutorialWindowEui : BaseEui
     [Dependency] private readonly IEntityManager _entity = default!;
     [Dependency] private readonly IEntitySystemManager _entSys = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
     private readonly SharedMapSystem _mapSystem;
+    private readonly SharedTutorialSystem _tutorial;
     private readonly SharedMindSystem _mind;
     private readonly MetaDataSystem _meta;
     private readonly MapLoaderSystem _mapLoader;
@@ -50,6 +58,7 @@ public sealed class TutorialWindowEui : BaseEui
         _meta = _entSys.GetEntitySystem<MetaDataSystem>();
         _transform = _entSys.GetEntitySystem<SharedTransformSystem>();
         _mapLoader = _entSys.GetEntitySystem<MapLoaderSystem>();
+        _tutorial = _entSys.GetEntitySystem<SharedTutorialSystem>();
         _sawmill = IoCManager.Resolve<ILogManager>().GetSawmill("explosion");
     }
 
@@ -61,10 +70,7 @@ public sealed class TutorialWindowEui : BaseEui
 
     public override EuiStateBase GetNewState()
     {
-        return new TutorialWindowEuiState
-        {
-            CompletedTutorials = _completedTutorials
-        };
+        return new TutorialWindowEuiState(_completedTutorials);
     }
 
     private async Task RefreshCompletedTutorials()
@@ -76,6 +82,14 @@ public sealed class TutorialWindowEui : BaseEui
     public override void HandleMessage(EuiMessageBase msg)
     {
         base.HandleMessage(msg);
+
+        if (msg is TutorialQuitButtonPressedMessage)
+        {
+            if (!_entity.TryGetComponent<TutorialPlayerComponent>(Player.AttachedEntity, out var comp))
+                return;
+
+            _tutorial.EndTutorial((Player.AttachedEntity.Value, comp));
+        }
 
         if (msg is not TutorialButtonPressedEuiMessage request)
             return;
@@ -90,6 +104,10 @@ public sealed class TutorialWindowEui : BaseEui
         if (!_entity.TrySpawnNextTo(request.PlayerEntity, spawnPoint, out var uid))
             return;
 
+        if (!_entity.TryGetComponent<TutorialPlayerComponent>(uid, out var tutorial))
+            return;
+
+        tutorial.Grid = gridUid;
         var (mindId, _) = _mind.CreateMind(Player.UserId);
         _mind.SetUserId(mindId, Player.UserId);
         _mind.TransferTo(mindId, uid);

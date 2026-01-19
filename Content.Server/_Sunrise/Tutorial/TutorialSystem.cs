@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
 using Content.Server._Sunrise.TTS;
 using Content.Server.Chat.Managers;
+using Content.Server.GameTicking;
 using Content.Shared._Sunrise.TTS;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
+using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared.Chat;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -19,6 +21,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private readonly GameTicker _ticker = default!;
     private ISawmill _sawmill = default!;
     public override void Initialize()
     {
@@ -26,6 +29,30 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         _sawmill = Logger.GetSawmill("tutorial");
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepChangedEvent>(OnStepChanged);
+        SubscribeLocalEvent<TutorialPlayerComponent, TutorialEndedEvent>(OnTutorialComplete);
+        SubscribeNetworkEvent<TutorialQuitRequestEvent>(OnTutorialQuitRequest);
+    }
+
+    private void OnTutorialComplete(Entity<TutorialPlayerComponent> ent, ref TutorialEndedEvent args)
+    {
+        if (!_player.TryGetSessionByEntity(ent, out var session))
+            return;
+
+        QueueDel(ent.Comp.Grid);
+        QueueDel(ent);
+
+        _ticker.Respawn(session);
+    }
+
+    private void OnTutorialQuitRequest(TutorialQuitRequestEvent msg, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not { } entity)
+            return;
+
+        if (!TryComp(entity, out TutorialPlayerComponent? comp))
+            return;
+
+        EndTutorial((entity, comp));
     }
     private async void OnStepChanged(EntityUid uid, TutorialPlayerComponent comp, TutorialStepChangedEvent args)
     {

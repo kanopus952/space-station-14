@@ -12,17 +12,21 @@ namespace Content.Client._Sunrise.Tutorial;
 
 public sealed class TutorialWindowEui : BaseEui
 {
-    [Dependency] private readonly IEntitySystemManager _entSys = default!;
+    [Dependency] private readonly TutorialUIController _tutorialUIController = default!;
     private readonly TutorialWindow _window;
-    private readonly ClientGameTicker _gameTicker;
 
     public TutorialWindowEui()
     {
         IoCManager.InjectDependencies(this);
-        _gameTicker = _entSys.GetEntitySystem<ClientGameTicker>();
         _window = new TutorialWindow();
 
         _window.OnTutorialButtonPressed += OnPressed;
+        _tutorialUIController.OnTutorialQuit += OnTutorialQuit;
+    }
+
+    private void OnTutorialQuit()
+    {
+        SendMessage(new TutorialQuitButtonPressedMessage());
     }
 
     private void OnPressed(TutorialSequencePrototype proto)

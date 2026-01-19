@@ -1,5 +1,6 @@
 using Content.Client.Lobby;
 using Robust.Client.UserInterface.Controllers;
+using Robust.Shared.Player;
 
 namespace Content.Client._Sunrise.Tutorial;
 
@@ -13,11 +14,8 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
         if (_shown || _window != null)
             return;
 
-
-
         ToggleTutorial();
     }
-
     public void ToggleTutorial()
     {
         if (_window != null)

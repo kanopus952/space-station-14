@@ -8,3 +8,4 @@ tutorial-completed = Пройдено
 tutorial-is-not-completed = Не пройдено
 round-is-not-ready = Раунд еще не начался!
 fancy-card-default = Начать
+ui-escape-quit-tutorial = Покинуть обучение

@@ -58,11 +58,7 @@ public sealed partial class TutorialWindow : DefaultWindow
 
     private void OnCategorySelected(TutorialCategoryButton categoryButton)
     {
-        // Deselect previous category
-        if (_selectedCategory != null)
-        {
-            _selectedCategory.SetSelected(false);
-        }
+        _selectedCategory?.SetSelected(false);
 
         _selectedCategory = categoryButton;
         _selectedCategory.SetSelected(true);
