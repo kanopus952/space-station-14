@@ -1,5 +1,4 @@
 using Content.Shared.Maps;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Maps;
 
@@ -19,29 +18,6 @@ public interface IGameMapManager
     IEnumerable<string> CurrentlyExcludedMaps();
     void ClearExcludedMaps();
     void AddExcludedMap(string mapId);
-    // Prison-specific excluded maps to avoid cross-contamination between station and prison rotations
-    IEnumerable<string> CurrentlyExcludedPrisonMaps();
-    void ClearExcludedPrisonMaps();
-    void AddExcludedPrisonMap(string mapId);
-    void AddPrisonMap();
-    /// <summary>
-    /// Enqueue a played prison map into the prison rotation memory.
-    /// </summary>
-    void EnqueuePrisonMap(string mapProtoName);
-
-    /// <summary>
-    /// Returns prison maps ordered by rotation priority (least recently played first).
-    /// </summary>
-    IEnumerable<GameMapPrototype> PrisonMapsOrderedByRotation();
-    /// <summary>
-    /// Set the next prison map selection (used by votes) which will be consumed when prison is spawned.
-    /// </summary>
-    void SetNextPrisonMap(string mapProtoName);
-
-    /// <summary>
-    /// Try to consume the next set prison map selection. Returns true and outputs the proto name if one was set.
-    /// </summary>
-    bool TryConsumeNextPrisonMap(out ProtoId<GameMapPrototype>? mapProto);
     // Sunrise-End
 
     /// <summary>

@@ -2,6 +2,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Content.Server._Sunrise.PlanetPrison; // Sunrise-edit
 using Content.Server._Sunrise.Presets;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
@@ -31,6 +32,9 @@ namespace Content.Server.Voting.Managers
         [Dependency] private readonly ILogManager _logManager = default!;
         [Dependency] private readonly IBanManager _bans = default!;
         [Dependency] private readonly VoteWebhooks _voteWebhooks = default!;
+        // Sunrise-start
+        [Dependency] private readonly PlanetPrisonMapManager _planetPrisonMapManager = default!;
+        // Sunrise-end
 
         private VotingSystem? _votingSystem;
         private RoleSystem? _roleSystem;
@@ -298,9 +302,8 @@ namespace Content.Server.Voting.Managers
             // Sunrise-Start
             var maps = new Dictionary<string, GameMapPrototype>();
 
-            // Choose the appropriate excluded set depending on vote type
             var excludedMaps = isPlanetPrisonVote
-                ? _gameMapManager.CurrentlyExcludedPrisonMaps()
+                ? _planetPrisonMapManager.CurrentlyExcludedPrisonMaps()
                 : _gameMapManager.CurrentlyExcludedMaps();
 
             List<GameMapPrototype> selectedMaps;
@@ -321,21 +324,30 @@ namespace Content.Server.Voting.Managers
             }
             else
             {
-                // Use prison maps ordered by rotation priority, and respect excluded maps
-                selectedMaps = _gameMapManager.PrisonMapsOrderedByRotation()
+                if (!_planetPrisonMapManager.HasPrisonMaps())
+                    _planetPrisonMapManager.AddPrisonMap();
+
+                selectedMaps = _planetPrisonMapManager.PrisonMapsOrderedByRotation()
                     .Where(map => !excludedMaps.Contains(map.ID))
                     .OrderBy(_ => _random.Next())
                     .ToList();
 
                 if (selectedMaps.Count == 0)
                 {
-                    _gameMapManager.ClearExcludedPrisonMaps();
-                    selectedMaps = _gameMapManager.PrisonMapsOrderedByRotation()
+                    _planetPrisonMapManager.ClearExcludedPrisonMaps();
+                    selectedMaps = _planetPrisonMapManager.PrisonMapsOrderedByRotation()
                         .OrderBy(_ => _random.Next())
                         .ToList();
                 }
             }
             maps.Clear();
+
+            if (selectedMaps.Count == 0)
+            {
+                _logManager.GetSawmill("vote").Warning("No prison maps available for planet prison vote.");
+                return;
+            }
+
             maps.Add(Loc.GetString("ui-vote-secret-map"), _random.Pick(selectedMaps));
 
             foreach (var map in selectedMaps)
@@ -388,10 +400,10 @@ namespace Content.Server.Voting.Managers
                 if (isPlanetPrisonVote)
                 {
                     _chatManager.DispatchServerAnnouncement(Loc.GetString("ui-vote-map-win"));
-                    _gameMapManager.SetNextPrisonMap(picked.ID);
-                    _gameMapManager.EnqueuePrisonMap(picked.ID);
+                    _planetPrisonMapManager.SetNextPrisonMap(picked.ID);
+                    _planetPrisonMapManager.EnqueuePrisonMap(picked.ID);
                     // Remove the picked prison map from future prison votes (rotation)
-                    _gameMapManager.AddExcludedPrisonMap(picked.ID);
+                    _planetPrisonMapManager.AddExcludedPrisonMap(picked.ID);
 
                     if (ticker.RunLevel == GameRunLevel.PreRoundLobby)
                         ticker.UpdateInfoText();

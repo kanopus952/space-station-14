@@ -1,5 +1,6 @@
 using Content.Server._Sunrise.Contributors;
 using Content.Server._Sunrise.Entry;
+using Content.Server._Sunrise.PlanetPrison; // Sunrise-edit
 using Content.Server._Sunrise.PlayerCache;
 using Content.Server._Sunrise.ServersHub;
 using Content.Server._Sunrise.TTS;
@@ -91,6 +92,9 @@ namespace Content.Server.Entry
         [Dependency] private readonly PlayerCacheManager _playerCacheManager = default!; // Sunrise-Edit
         [Dependency] private readonly TTSManager _ttsManager = default!; // Sunrise-Edit
         [Dependency] private readonly DiscordWebhook _discord = default!; // Sunrise-Edit
+        // Sunrise-start
+        [Dependency] private readonly PlanetPrisonMapManager _planetPrisonMapManager = default!;
+        // Sunrise-end
         [Dependency] private readonly IIPBlockingSystem _ipBlockingSystem = default!;
         private ISharedSponsorsManager? _sponsorsManager; // Sunrise-Sponsors
 
@@ -197,6 +201,9 @@ namespace Content.Server.Entry
             _contributorsManager.Initialize(); // Sunrise-Edit
             _serversHubManager.Initialize(); // Sunrise-Edit
             _playerCacheManager.Initialize(); // Sunrise-Edit
+            // Sunrise-start
+            _planetPrisonMapManager.Initialize();
+            // Sunrise-end
 
             // Sunrise-Sponsors-Start
             SunriseServerEntry.PostInit();

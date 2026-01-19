@@ -1,6 +1,6 @@
 ﻿- type: gameMap
   id: PlanetPrisonOld
-  mapName: 'Kratos'
+  mapName: 'Nox'
   mapPath: /Maps/_Sunrise/planet_prison_old.yml
   maxRandomOffset: 0
   randomRotation: false
@@ -10,7 +10,7 @@
       stationProto: NanotrasenPrison
       components:
       - type: StationNameSetup
-        mapNameTemplate: '{0} Планетарная тюрьма Kratos {1}'
+        mapNameTemplate: '{0} Планетарная тюрьма Nox {1}'
         nameGenerator:
           !type:NanotrasenNameGenerator
           prefixCreator: 'TG'

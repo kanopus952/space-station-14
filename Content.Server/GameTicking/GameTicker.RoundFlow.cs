@@ -27,6 +27,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Content.Server.StatsBoard;
 using Content.Shared._Sunrise.SunriseCCVars;
+using Content.Server._Sunrise.PlanetPrison;
 
 namespace Content.Server.GameTicking
 {
@@ -36,6 +37,7 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly RoleSystem _role = default!;
         [Dependency] private readonly ITaskManager _taskManager = default!;
         [Dependency] private readonly StatsBoardSystem _statsBoardSystem = default!;
+        [Dependency] private readonly PlanetPrisonMapManager _prison = default!;
 
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
@@ -148,7 +150,7 @@ namespace Content.Server.GameTicking
             // Sunrise-Start
             MapPlayedMetric.WithLabels(mainStationMap.ID).Inc();
             _gameMapManager.AddExcludedMap(mainStationMap.ID);
-            _gameMapManager.AddPrisonMap();
+            _prison.AddPrisonMap();
             // Sunrise-End
 
             if (maps.Count == 0)

@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.Maps;
 using Content.Server.Parallax;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._Sunrise.Shuttles;
@@ -34,7 +33,7 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
-    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
+    [Dependency] private readonly PlanetPrisonMapManager _planetPrisonMapManager = default!;
 
     public override void Initialize()
     {
@@ -145,7 +144,7 @@ public sealed class PlanetPrisonStationSystem : EntitySystem
     private ProtoId<GameMapPrototype> ChooseType(PlanetPrisonStationComponent comp)
     {
         // If a map was selected by vote via the map manager, consume and use it.
-        if (_gameMapManager.TryConsumeNextPrisonMap(out var next) && next != null)
+        if (_planetPrisonMapManager.TryConsumeNextPrisonMap(out var next) && next != null)
             return next.Value;
 
         return comp.FallbackMap;
