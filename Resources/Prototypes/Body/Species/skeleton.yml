@@ -211,7 +211,7 @@
       group: Skeleton
 
 - type: entity
-  parent: [ OrganBaseTorso, OrganSkeletonPersonExternal ]
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganSkeletonPersonExternal ]
   id: OrganSkeletonPersonTorso
 
 - type: entity

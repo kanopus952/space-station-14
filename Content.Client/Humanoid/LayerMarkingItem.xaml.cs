@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Guidebook.Controls;
+using Content.Sunrise.Interfaces.Shared;
 using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -20,6 +21,7 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
     [Dependency] private readonly IEntityManager _entity = default!;
 
     private readonly SpriteSystem _sprite;
+    private ISharedSponsorsManager? _sponsorsManager;
 
     private readonly MarkingsViewModel _markingsModel;
     private readonly MarkingPrototype _markingPrototype;
@@ -37,6 +39,7 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        IoCManager.Instance!.TryResolveType(out _sponsorsManager);
 
         _sprite = _entity.System<SpriteSystem>();
 
@@ -89,6 +92,13 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
     {
         MarkingTexture.Textures = _markingPrototype.Sprites.Select(layer => _sprite.Frame0(layer)).ToList();
         SelectButton.Text = Loc.GetString($"marking-{_markingPrototype.ID}");
+
+        if (!_markingPrototype.SponsorOnly)
+            return;
+
+        SelectButton.Text = Loc.GetString("sponsor-marking", ("name", SelectButton.Text));
+        SelectButton.Disabled = _sponsorsManager == null ||
+                                !_sponsorsManager.GetClientPrototypes().Contains(_markingPrototype.ID);
     }
 
     private void UpdateSelection()

@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Numerics;
+using Content.Shared._Sunrise.MarkingEffects;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
@@ -81,7 +83,22 @@ public sealed partial class HumanoidCharacterProfileV1
 
     public HumanoidCharacterProfile ToV2()
     {
-        return new(Name, FlavorText, Species, Age, Sex, Gender, Appearance.ToV2(Species), SpawnPriority, JobPriorities, PreferenceUnavailable, AntagPreferences, TraitPreferences, Loadouts);
+        return new(
+            Name,
+            FlavorText,
+            Species,
+            SharedHumanoidAppearanceSystem.DefaultVoice,
+            SharedHumanoidAppearanceSystem.DefaultBodyType,
+            Age,
+            Sex,
+            Gender,
+            Appearance.ToV2(Species),
+            SpawnPriority,
+            JobPriorities,
+            PreferenceUnavailable,
+            AntagPreferences,
+            TraitPreferences,
+            Loadouts);
     }
 }
 
@@ -113,13 +130,37 @@ public sealed partial class HumanoidCharacterAppearanceV1
     public HumanoidCharacterAppearance ToV2(ProtoId<SpeciesPrototype> species)
     {
         var markingManager = IoCManager.Resolve<MarkingManager>();
+        var protoMan = IoCManager.Resolve<IPrototypeManager>();
+        var speciesPrototype = protoMan.Index<SpeciesPrototype>(species);
 
         var incomingMarkings = Markings.ShallowClone();
-        if (HairStyleId != string.Empty)
-            incomingMarkings.Add(new(HairStyleId, new List<Color>() { HairColor }));
-        if (FacialHairStyleId != string.Empty)
-            incomingMarkings.Add(new(FacialHairStyleId, new List<Color>() { FacialHairColor }));
+        AddLegacyMarking(incomingMarkings, HairStyleId, HairColor, markingManager);
+        AddLegacyMarking(incomingMarkings, FacialHairStyleId, FacialHairColor, markingManager);
 
-        return new HumanoidCharacterAppearance(EyeColor, SkinColor, markingManager.ConvertMarkings(incomingMarkings, species));
+        return new HumanoidCharacterAppearance(
+            HairStyleId,
+            HairColor,
+            FacialHairStyleId,
+            FacialHairColor,
+            EyeColor,
+            SkinColor,
+            markingManager.ConvertMarkings(incomingMarkings, species),
+            MarkingEffectType.Color,
+            null,
+            MarkingEffectType.Color,
+            null,
+            speciesPrototype.DefaultWidth,
+            speciesPrototype.DefaultHeight);
+    }
+
+    private static void AddLegacyMarking(List<Marking> markings, string markingId, Color color, MarkingManager markingManager)
+    {
+        if (markingId == string.Empty ||
+            !markingManager.Markings.TryGetValue(markingId, out var markingProto))
+        {
+            return;
+        }
+
+        markings.Add(new Marking(markingId, Enumerable.Repeat(color, markingProto.Sprites.Count).ToList()));
     }
 }
