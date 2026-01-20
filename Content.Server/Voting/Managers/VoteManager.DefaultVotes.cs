@@ -344,7 +344,7 @@ namespace Content.Server.Voting.Managers
 
             if (selectedMaps.Count == 0)
             {
-                _logManager.GetSawmill("vote").Warning("No prison maps available for planet prison vote.");
+                _logManager.GetSawmill("vote").Warning("No maps available for vote.");
                 return;
             }
 

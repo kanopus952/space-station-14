@@ -60,6 +60,7 @@ public sealed class PlanetPrisonMapManager
         var eligible = _prisonMaps
             .Select(x => (proto: x, weight: GetPrisonRotationQueuePriority(x.ID)))
             .OrderByDescending(x => x.weight)
+            .ThenBy(x => x.proto.ID)
             .ToArray();
 
         return eligible.Select(x => x.proto);
