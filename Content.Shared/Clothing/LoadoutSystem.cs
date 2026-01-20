@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Body;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
@@ -180,11 +181,8 @@ public sealed partial class LoadoutSystem : EntitySystem // Sunrise-edit Доб�
 
     public HumanoidCharacterProfile GetProfile(EntityUid? uid)
     {
-        if (TryComp(uid, out HumanoidAppearanceComponent? appearance))
-        {
-            return HumanoidCharacterProfile.DefaultWithSpecies(appearance.Species);
-        }
-
-        return HumanoidCharacterProfile.Random();
+        return TryComp<HumanoidProfileComponent>(uid, out var profile)
+            ? HumanoidCharacterProfile.DefaultWithSpecies(profile.Species, profile.Sex)
+            : HumanoidCharacterProfile.Random();
     }
 }

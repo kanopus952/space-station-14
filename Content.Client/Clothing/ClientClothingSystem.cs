@@ -295,7 +295,7 @@ public sealed class ClientClothingSystem : ClothingSystem
         var displacementData = inventory.Displacements.GetValueOrDefault(slot); //Default unsexed map
 
         string? bodyTypeName = null;
-        if (TryComp(equipee, out HumanoidAppearanceComponent? humanoid))
+        if (TryComp(equipee, out HumanoidProfileComponent? humanoid))
         {
             bodyTypeName = _prototype.Index(humanoid.BodyType).Name;
 

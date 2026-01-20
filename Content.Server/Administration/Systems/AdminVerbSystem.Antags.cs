@@ -249,6 +249,8 @@ public sealed partial class AdminVerbSystem
         };
         args.Verbs.Add(assaultOperative);
 
+        if (HasComp<HumanoidProfileComponent>(args.Target)) // only humanoids can be cloned
+            args.Verbs.Add(paradox);
         Verb fleshCultist = new()
         {
             Text = "Make Flesh Cultist",

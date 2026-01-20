@@ -2,11 +2,14 @@ using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 using Content.Shared.Humanoid.Markings; // Sunrise-Edit
 
-namespace Content.Server.CharacterAppearance.Components;
+namespace Content.Server.Humanoid.Components;
 
 [RegisterComponent]
 public sealed partial class RandomHumanoidAppearanceComponent : Component
 {
+    [DataField]
+    public bool RandomizeName = true;
+
     [DataField("randomizeName")] public bool RandomizeName = true;
 
     /// <summary>
@@ -18,7 +21,7 @@ public sealed partial class RandomHumanoidAppearanceComponent : Component
     /// <summary>
     /// Настраивает цвет кожи в HEX формате. Учитывайте что только бежевые и темные цвета могут подойти человекоподобным. Советую подбирать цвет прям в игре.
     /// </summary>
-    [DataField] 
+    [DataField]
     public Color? SkinColor = null;
 
     /// <summary>
