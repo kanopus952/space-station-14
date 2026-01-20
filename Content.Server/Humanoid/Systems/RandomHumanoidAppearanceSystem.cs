@@ -1,14 +1,17 @@
-using Content.Server.CharacterAppearance.Components;
+using Content.Server.Humanoid;
+using Content.Server.Humanoid.Components;
+using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
-using Content.Shared.Humanoid.Markings; // Sunrise-Edit
 
 namespace Content.Server.Humanoid.Systems;
 
 public sealed class RandomHumanoidAppearanceSystem : EntitySystem
 {
+    [Dependency] private readonly HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly SharedVisualBodySystem _visualBody = default!;
 
     public override void Initialize()
     {
@@ -20,52 +23,34 @@ public sealed class RandomHumanoidAppearanceSystem : EntitySystem
     private void OnMapInit(EntityUid uid, RandomHumanoidAppearanceComponent component, MapInitEvent args)
     {
         // If we have an initial profile/base layer set, do not randomize this humanoid.
-        if (!TryComp(uid, out HumanoidAppearanceComponent? humanoid) || !string.IsNullOrEmpty(humanoid.Initial))
-        {
+        if (!TryComp<HumanoidProfileComponent>(uid, out var humanoid))
             return;
-        }
 
         var profile = HumanoidCharacterProfile.RandomWithSpecies(humanoid.Species);
-        //If we have a specified hair style, change it to this
-        if(component.Hair != null)
-            profile = profile.WithCharacterAppearance(profile.Appearance.WithHairStyleName(component.Hair));
+        var appearance = profile.Appearance;
 
-        _humanoid.LoadProfile(uid, profile, humanoid);
+        // Sunrise-Start
+        if (component.Hair != null)
+            appearance = appearance.WithHairStyleName(component.Hair);
+
+        if (component.SkinColor != null)
+            appearance = appearance.WithSkinColor(component.SkinColor.Value);
+
+        if (component.HairColor != null)
+            appearance = appearance.WithHairColor(component.HairColor.Value);
+
+        if (component.FacialHairColor != null)
+            appearance = appearance.WithFacialHairColor(component.FacialHairColor.Value);
+        // Sunrise-End
+
+        appearance = HumanoidCharacterAppearance.EnsureValid(appearance, profile.Species, profile.Sex);
+        profile = profile.WithCharacterAppearance(appearance);
+
+        _visualBody.ApplyProfileTo(uid, profile);
+        _humanoidProfile.ApplyProfileTo(uid, profile);
+        _humanoid.LoadProfile(uid, profile);
 
         if (component.RandomizeName)
             _metaData.SetEntityName(uid, profile.Name);
-
-        // Sunrise-Start
-        if (TryComp<HumanoidAppearanceComponent>(uid, out var humanoidAppearance))
-        {
-            if (component.SkinColor != null)
-                _humanoid.SetSkinColor(uid, component.SkinColor.Value, humanoid: humanoidAppearance);
-            
-            if (component.HairColor != null)
-                SetMarkingColor(uid, MarkingCategories.Hair, component.HairColor.Value, humanoidAppearance);
-            
-            if (component.FacialHairColor != null) // Да, цвет бороды, йоу.
-                SetMarkingColor(uid, MarkingCategories.FacialHair, component.FacialHairColor.Value, humanoidAppearance);
-        }
-        // Sunrise-End
     }
-
-    // Sunrise-Start
-    private void SetMarkingColor(EntityUid uid, MarkingCategories category, Color color, 
-        HumanoidAppearanceComponent humanoid)
-    {
-        if (!humanoid.MarkingSet.Markings.TryGetValue(category, out var markings))
-            return;
-
-        foreach (var marking in markings)
-        {
-            for (var i = 0; i < marking.MarkingColors.Count; i++)
-            {
-                marking.SetColor(i, color);
-            }
-        }
-        
-        Dirty(uid, humanoid);
-    }
-    // Sunrise-End
 }

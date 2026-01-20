@@ -93,7 +93,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
     public DataNode ToDataNode(HumanoidCharacterProfile profile)
     {
-        var export = new HumanoidProfileExport()
+        var export = new HumanoidProfileExportV2()
         {
             ForkId = _cfgManager.GetCVar(CVars.BuildForkId),
             Profile = profile,
@@ -110,13 +110,21 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         yamlStream.Load(reader);
 
         var root = yamlStream.Documents[0].RootNode;
-        var export = _serManager.Read<HumanoidProfileExport>(root.ToDataNode(), notNullableOverride: true);
-
-        /*
-         * Add custom handling here for forks / version numbers if you care.
-         */
-
-        var profile = export.Profile;
+        HumanoidCharacterProfile profile;
+        if (root["version"].Equals(new YamlScalarNode("1")))
+        {
+            var export = _serManager.Read<HumanoidProfileExportV1>(root.ToDataNode(), notNullableOverride: true);
+            profile = export.ToV2().Profile;
+        }
+        else if (root["version"].Equals(new YamlScalarNode("2")))
+        {
+            var export = _serManager.Read<HumanoidProfileExportV2>(root.ToDataNode(), notNullableOverride: true);
+            profile = export.Profile;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Unknown version {root["version"]}");
+        }
         var collection = IoCManager.Instance;
         var sponsorPrototypes = _sponsors?.GetClientPrototypes().ToArray() ?? []; // Sunrise-Sponsors
         profile.EnsureValid(session, collection!, sponsorPrototypes);
@@ -447,10 +455,13 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
         // Add markings that doesn't need coloring. We store them until we add all other markings that doesn't need it.
         var markingFColored = new Dictionary<Marking, MarkingPrototype>();
-        foreach (var marking in profile.Appearance.Markings)
+        foreach (var marking in profile.Appearance.GetFlatMarkings())
         {
             if (_markingManager.TryGetMarking(marking, out var prototype))
             {
+                if (prototype.MarkingCategory is MarkingCategories.Hair or MarkingCategories.FacialHair)
+                    continue;
+
                 if (!prototype.ForcedColoring)
                 {
                     AddMarking(uid, marking.MarkingId, marking.MarkingColors, false);

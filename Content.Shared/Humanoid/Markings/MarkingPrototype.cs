@@ -24,11 +24,17 @@ namespace Content.Shared.Humanoid.Markings
         [DataField("bodyPart", required: true)]
         public HumanoidVisualLayers BodyPart { get; private set; } = default!;
 
-        [DataField("markingCategory", required: true)]
-        public MarkingCategories MarkingCategory { get; private set; } = default!;
+        [DataField]
+        public List<ProtoId<MarkingsGroupPrototype>>? GroupWhitelist;
 
         [DataField("speciesRestriction")]
         public List<string>? SpeciesRestrictions { get; private set; }
+
+        [DataField("markingCategory")]
+        private MarkingCategories? _markingCategory;
+
+        public MarkingCategories MarkingCategory =>
+            _markingCategory ?? MarkingCategoriesConversion.FromHumanoidVisualLayers(BodyPart);
 
         [DataField("sexRestriction")]
         public Sex? SexRestriction { get; private set; }

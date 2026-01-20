@@ -274,7 +274,7 @@
     mechToPilotDamageMultiplier: 0.75
     pilotWhitelist:
       components:
-        - HumanoidAppearance
+        - HumanoidProfile
   - type: MeleeWeapon
     hidden: true
     attackRate: 1
@@ -476,6 +476,7 @@
     pilotWhitelist:
       components:
       - HumanoidAppearance
+      - HumanoidProfile
   - type: Reflect
     reflectProb: 0.05
     spread: 180

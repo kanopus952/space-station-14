@@ -4,7 +4,6 @@ using Content.Client._Sunrise.MarkingEffectsClient;
 using Content.Client.DisplacementMap;
 using Content.Shared.CCVar;
 using Content.Shared.Humanoid;
-using Content.Shared.CCVar;
 using Content.Shared._Sunrise;
 using Content.Shared._Sunrise.MarkingEffects;
 using Content.Shared.DisplacementMap;
@@ -162,10 +161,13 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 
         // Add markings that doesn't need coloring. We store them until we add all other markings that doesn't need it.
         var markingFColored = new Dictionary<Marking, MarkingPrototype>();
-        foreach (var marking in profile.Appearance.Markings)
+        foreach (var marking in profile.Appearance.GetFlatMarkings())
         {
             if (_markingManager.TryGetMarking(marking, out var prototype))
             {
+                if (prototype.MarkingCategory is MarkingCategories.Hair or MarkingCategories.FacialHair)
+                    continue;
+
                 if (!prototype.ForcedColoring)
                 {
                     markings.AddBack(prototype.MarkingCategory, marking);

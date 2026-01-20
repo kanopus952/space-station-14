@@ -1,32 +1,76 @@
+using System.Linq;
+using Content.Shared._Sunrise.MarkingEffects;
+using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
-using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
-using Content.Shared.Verbs;
-using Robust.Shared.GameObjects.Components.Localization;
 
 namespace Content.Server.Humanoid;
 
 public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 {
     [Dependency] private readonly MarkingManager _markingManager = default!;
+    [Dependency] private readonly SharedVisualBodySystem _visualBody = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+    }
 
-        SubscribeLocalEvent<HumanoidAppearanceComponent, HumanoidMarkingModifierMarkingSetMessage>(OnMarkingsSet);
-        SubscribeLocalEvent<HumanoidAppearanceComponent, HumanoidMarkingModifierBaseLayersSetMessage>(OnBaseLayersSet);
-        SubscribeLocalEvent<HumanoidAppearanceComponent, GetVerbsEvent<Verb>>(OnVerbsRequest);
+    public override void LoadProfile(EntityUid uid, HumanoidCharacterProfile? profile, HumanoidAppearanceComponent? humanoid = null)
+    {
+        base.LoadProfile(uid, profile, humanoid);
+
+        if (profile != null)
+            _visualBody.ApplyProfileTo(uid, profile);
+    }
+
+    public override void SetSkinColor(EntityUid uid, Color skinColor, bool sync = true, bool verify = true, HumanoidAppearanceComponent? humanoid = null)
+    {
+        base.SetSkinColor(uid, skinColor, sync, verify, humanoid);
+
+        if (!Resolve(uid, ref humanoid))
+            return;
+
+        _visualBody.ApplyProfile(uid, new OrganProfileData
+        {
+            Sex = humanoid.Sex,
+            EyeColor = humanoid.EyeColor,
+            SkinColor = humanoid.SkinColor,
+        });
+        SyncVisualBodyMarkings(uid, humanoid);
+    }
+
+    public new void AddMarking(EntityUid uid,
+        string marking,
+        Color? color = null,
+        bool sync = true,
+        bool forced = false,
+        HumanoidAppearanceComponent? humanoid = null,
+        MarkingEffect? markingEffect = null)
+    {
+        base.AddMarking(uid, marking, color, sync, forced, humanoid, markingEffect);
+
+        if (Resolve(uid, ref humanoid))
+            SyncVisualBodyMarkings(uid, humanoid);
+    }
+
+    public new void AddMarking(EntityUid uid,
+        string marking,
+        IReadOnlyList<Color> colors,
+        bool sync = true,
+        bool forced = false,
+        HumanoidAppearanceComponent? humanoid = null)
+    {
+        base.AddMarking(uid, marking, colors, sync, forced, humanoid);
+
+        if (Resolve(uid, ref humanoid))
+            SyncVisualBodyMarkings(uid, humanoid);
     }
 
     /// <summary>
     ///     Removes a marking from a humanoid by ID.
     /// </summary>
-    /// <param name="uid">Humanoid mob's UID</param>
-    /// <param name="marking">The marking to try and remove.</param>
-    /// <param name="sync">Whether to immediately sync this to the humanoid</param>
-    /// <param name="humanoid">Humanoid component of the entity</param>
     public void RemoveMarking(EntityUid uid, string marking, bool sync = true, HumanoidAppearanceComponent? humanoid = null)
     {
         if (!Resolve(uid, ref humanoid)
@@ -39,15 +83,13 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
 
         if (sync)
             Dirty(uid, humanoid);
+
+        SyncVisualBodyMarkings(uid, humanoid);
     }
 
     /// <summary>
     ///     Removes a marking from a humanoid by category and index.
     /// </summary>
-    /// <param name="uid">Humanoid mob's UID</param>
-    /// <param name="category">Category of the marking</param>
-    /// <param name="index">Index of the marking</param>
-    /// <param name="humanoid">Humanoid component of the entity</param>
     public void RemoveMarking(EntityUid uid, MarkingCategories category, int index, HumanoidAppearanceComponent? humanoid = null)
     {
         if (index < 0
@@ -60,16 +102,12 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
 
         humanoid.MarkingSet.Remove(category, index);
         Dirty(uid, humanoid);
+        SyncVisualBodyMarkings(uid, humanoid);
     }
 
     /// <summary>
     ///     Sets the marking ID of the humanoid in a category at an index in the category's list.
     /// </summary>
-    /// <param name="uid">Humanoid mob's UID</param>
-    /// <param name="category">Category of the marking</param>
-    /// <param name="index">Index of the marking</param>
-    /// <param name="markingId">The marking ID to use</param>
-    /// <param name="humanoid">Humanoid component of the entity</param>
     public void SetMarkingId(EntityUid uid, MarkingCategories category, int index, string markingId, HumanoidAppearanceComponent? humanoid = null)
     {
         if (index < 0
@@ -89,16 +127,12 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
 
         humanoid.MarkingSet.Replace(category, index, marking);
         Dirty(uid, humanoid);
+        SyncVisualBodyMarkings(uid, humanoid);
     }
 
     /// <summary>
     ///     Sets the marking colors of the humanoid in a category at an index in the category's list.
     /// </summary>
-    /// <param name="uid">Humanoid mob's UID</param>
-    /// <param name="category">Category of the marking</param>
-    /// <param name="index">Index of the marking</param>
-    /// <param name="colors">The marking colors to use</param>
-    /// <param name="humanoid">Humanoid component of the entity</param>
     public void SetMarkingColor(EntityUid uid, MarkingCategories category, int index, List<Color> colors,
         HumanoidAppearanceComponent? humanoid = null)
     {
@@ -116,5 +150,15 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         }
 
         Dirty(uid, humanoid);
+        SyncVisualBodyMarkings(uid, humanoid);
+    }
+
+    private void SyncVisualBodyMarkings(EntityUid uid, HumanoidAppearanceComponent humanoid)
+    {
+        if (!HasComp<VisualBodyComponent>(uid))
+            return;
+
+        var markings = _markingManager.ConvertMarkings(humanoid.MarkingSet.GetForwardEnumerator().ToList(), humanoid.Species);
+        _visualBody.ApplyMarkings(uid, markings);
     }
 }
