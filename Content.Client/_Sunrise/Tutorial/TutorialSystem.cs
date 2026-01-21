@@ -58,12 +58,16 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
             foreach (var item in labels)
             {
-                item.SetMessage(TutorialBubble.FormatSpeech(Loc.GetString(ent.Comp.Instruction)));
+                item.SetMessage(TutorialBubble.FormatSpeech(Loc.GetString(ent.Comp.Instruction)), TutorialBubble.BubbleTags, Color.White);
             }
 
             return;
         }
-        var viewportContainer = _ui.ActiveScreen!.FindControl<LayoutContainer>("ViewportContainer");
+
+        if (_ui.ActiveScreen == null)
+            return;
+
+        var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
 
         var bubble = TutorialBubble.CreateTutorialBubble(
             Loc.GetString(ent.Comp.Instruction),

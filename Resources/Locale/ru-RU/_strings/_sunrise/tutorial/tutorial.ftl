@@ -13,4 +13,4 @@ tutorial-status-loading = Загрузка...
 fancy-card-default = Начать
 ui-escape-quit-tutorial = Покинуть обучение
 
-examine-something = Изучите предмет { KEYBIND("ExamineEntity") }
+examine-something = Изучите предмет [tutkeybind="UIClick"/]

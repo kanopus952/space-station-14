@@ -1,9 +1,12 @@
+using System;
 using System.Numerics;
 using Content.Shared.CCVar;
 using Content.Shared.Speech;
+using Content.Client._Sunrise.UserInterface.RichText;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -21,12 +24,21 @@ public abstract class TutorialBubble : Control
     ///     The distance in world space to offset the speech bubble from the center of the entity.
     ///     i.e. greater -> higher above the mob's head.
     /// </summary>
-    private const float EntityVerticalOffset = 0.5f;
+    private const float EntityVerticalOffset = 0.3f;
 
     /// <summary>
-    ///     The default maximum width for speech bubbles.
+    ///     Allowed rich text tags for tutorial bubble content.
     /// </summary>
-    public const float SpeechMaxWidth = 256;
+    public static readonly Type[] BubbleTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ColorTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(TutorialKeybindTag),
+    ];
 
     private readonly EntityUid _senderEntity;
 
@@ -103,59 +115,9 @@ public sealed class TutorialMainBubble : TutorialBubble
 
     protected override Control BuildBubble(string message, string speechStyleClass, Color? fontColor = null)
     {
-
-        // var bubbleContent = new RichTextLabel
-        // {
-        //     MaxWidth = SpeechMaxWidth,
-        //     StyleClasses = { "bubbleContent" },
-        // };
-
-        // var bubbleHeader = new RichTextLabel
-        // {
-        //     Margin = new Thickness(1, 1, 1, 1),
-        // };
-
-
-        // bubbleContent.SetMessage(FormatSpeech(message, fontColor));
-
-        // //As for below: Some day this could probably be converted to xaml. But that is not today. -Myr
-        // var mainPanel = new PanelContainer
-        // {
-        //     StyleClasses = { "speechBox", speechStyleClass },
-        //     Children = { bubbleContent },
-        //     HorizontalAlignment = HAlignment.Center,
-        //     VerticalAlignment = VAlignment.Bottom,
-        //     Margin = new Thickness(4, 14, 4, 2)
-        // };
-
-        // var headerPanel = new PanelContainer
-        // {
-        //     StyleClasses = { "speechBox", speechStyleClass },
-        //     Children = { bubbleHeader },
-        //     HorizontalAlignment = HAlignment.Center,
-        //     VerticalAlignment = VAlignment.Top
-        // };
-
-        // var panel = new PanelContainer
-        // {
-        //     Children = { mainPanel, headerPanel }
-        // };
-
-        // return panel;
-
-        var label = new RichTextLabel
-        {
-            MaxWidth = SpeechMaxWidth,
-        };
-
-        label.SetMessage(FormatSpeech(message, fontColor));
-
-        var panel = new PanelContainer
-        {
-            StyleClasses = { "speechBox", speechStyleClass },
-            Children = { label },
-            ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity))
-        };
+        var panel = new TutorialBubbleControl();
+        panel.BubbleFrame.StyleClasses.Add(speechStyleClass);
+        panel.BubbleText.SetMessage(FormatSpeech(message, fontColor), BubbleTags);
 
         return panel;
     }
