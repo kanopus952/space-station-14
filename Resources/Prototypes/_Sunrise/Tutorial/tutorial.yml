@@ -53,7 +53,7 @@
   id: ExamineJumpsuitColorGrey
   # Облачко которое появится над сущностью которая учавствует в осмотре.
   bubble:
-    text: Изучите предмет
+    text: examine-something
     # Два типа таргета: Self и Entity
     target:
      type: Entity

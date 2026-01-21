@@ -12,3 +12,5 @@ tap-to-start-tutorial-label = Нажмите чтобы начать!
 tutorial-status-loading = Загрузка...
 fancy-card-default = Начать
 ui-escape-quit-tutorial = Покинуть обучение
+
+examine-something = Изучите предмет { KEYBIND("ExamineEntity") }
