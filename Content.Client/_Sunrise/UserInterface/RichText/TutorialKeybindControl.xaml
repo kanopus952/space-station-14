@@ -3,7 +3,7 @@
                 HorizontalExpand="True"
                 VerticalExpand="True">
     <Label Name="KeybindLabel"
-              StyleClasses="TutorialBubbleText"
+              StyleClasses="LabelKeyText"
               Access="Public"
               Margin="3 0 3 0"
               VAlign="Center"/>

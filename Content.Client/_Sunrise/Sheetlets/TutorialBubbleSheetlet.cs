@@ -8,6 +8,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
+using YamlDotNet.Core.Tokens;
 using static Content.Client.Stylesheets.StylesheetHelpers;
 
 namespace Content.Client._Sunrise.Sheetlets;
@@ -20,24 +21,27 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
 
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
+        var frameColor = Color.DarkGoldenrod;
+        var fillColor = new Color(0f, 0f, 0f, 0.8f);
+        var keybindBorderColor = Color.Goldenrod;
+
         var bubbleFrameTexture = ResCache.GetTexture("/Textures/_Sunrise/Interface/Tutorial/border.svg.96dpi.png");
         var bubbleFrameBox = new StyleBoxTexture
         {
             Texture = bubbleFrameTexture,
-            Modulate = Color.OrangeRed
+            Modulate = frameColor,
         };
         bubbleFrameBox.SetPatchMargin(StyleBox.Margin.All, 2);
 
-        var bubbleFillColor = new Color(0f, 0f, 0f, 0.8f);
         var bubbleFillBox = new StyleBoxFlat
         {
-            BackgroundColor = bubbleFillColor,
+            BackgroundColor = fillColor,
         };
 
         var keybindBox = new StyleBoxFlat
         {
             BackgroundColor = KeybindPalette.Background.WithAlpha(0.8f),
-            BorderColor = Color.Goldenrod,
+            BorderColor = keybindBorderColor,
             BorderThickness = new Thickness(1),
         };
 
@@ -52,20 +56,23 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
 
             E<TutorialBubbleTail>()
                 .Class(SunriseStyleClass.TutorialBubbleTail)
-                .Prop(TutorialBubbleTail.StylePropertyFillColor, Color.Goldenrod)
+                .Prop(TutorialBubbleTail.StylePropertyFillColor, keybindBorderColor)
                 .Prop(TutorialBubbleTail.StylePropertyBorderThickness, 0f),
 
             E<PanelContainer>()
                 .Class(SunriseStyleClass.TutorialKeybindFrame)
-                .Panel(keybindBox),
+                .Panel(keybindBox)
+                .Margin(new Thickness(5, 0)),
 
-            E<Label>()
-                .Class(SunriseStyleClass.TutorialBubbleText)
-                .FontColor(Color.Goldenrod)
+            E<PanelContainer>()
+                .Class(SunriseStyleClass.TutorialKeybindFrame)
+                .ParentOf(E<Label>().Class(StyleClass.LabelKeyText))
+                .FontColor(keybindBorderColor)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold)),
 
-            E<RichTextLabel>()
-                .Class(SunriseStyleClass.TutorialBubbleText)
+            E<PanelContainer>()
+                .Class(SunriseStyleClass.TutorialBubbleFill)
+                .ParentOf(E<RichTextLabel>().Class(StyleClass.LabelKeyText))
                 .FontColor(Color.White)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
         ];

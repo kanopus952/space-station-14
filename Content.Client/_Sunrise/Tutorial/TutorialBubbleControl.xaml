@@ -12,7 +12,7 @@
                                   MaxWidth="320"
                                   Margin="10,8,10,8"
                                   Access="Public"
-                                  StyleClasses="TutorialBubbleText"/>
+                                  StyleClasses="LabelKeyText"/>
             </PanelContainer>
         </PanelContainer>
         <tutorial:TutorialBubbleTail Name="BubbleTail"

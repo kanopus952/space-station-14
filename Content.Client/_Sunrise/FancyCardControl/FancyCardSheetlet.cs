@@ -1,13 +1,13 @@
+using Content.Client._Sunrise.Sheetlets;
 using Content.Client.Stylesheets;
+using Content.Client.Stylesheets.Fonts;
 using Content.Client.Stylesheets.Palette;
-using Content.Client.Stylesheets.Sheetlets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Shared.Maths;
 using static Content.Client.Stylesheets.StylesheetHelpers;
 
-namespace Content.Client._Sunrise.Sheetlets;
+namespace Content.Client._Sunrise.FancyCardControl;
 
 [CommonSheetlet]
 public sealed class FancyCardSheetlet : Sheetlet<PalettedStylesheet>
@@ -22,6 +22,9 @@ public sealed class FancyCardSheetlet : Sheetlet<PalettedStylesheet>
 
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
+        var titleFont = sheet.BaseFont.GetFont(12, FontKind.Bold);
+        var bodyFont = sheet.BaseFont.GetFont(12);
+
         var frameBox = new StyleBoxFlat
         {
             BackgroundColor = CardPalette.Background
@@ -83,12 +86,16 @@ public sealed class FancyCardSheetlet : Sheetlet<PalettedStylesheet>
                 .Class(SunriseStyleClass.FancyCardActionPanel)
                 .Panel(actionPanelBox),
 
-            E<Label>()
-                .Class(SunriseStyleClass.FancyCardTitleLabel)
-                .FontColor(CardTextPalette.Text),
-            E<Label>()
-                .Class(SunriseStyleClass.FancyCardDescLabel)
-                .FontColor(CardTextPalette.Text),
+            E<PanelContainer>()
+                .Class(SunriseStyleClass.FancyCardTitleBar)
+                .ParentOf(E<Label>().Class(StyleClass.LabelHeading))
+                .FontColor(CardTextPalette.Text)
+                .Font(titleFont),
+            E<PanelContainer>()
+                .Class(SunriseStyleClass.FancyCardDescInner)
+                .ParentOf(E<Label>().Class(StyleClass.LabelKeyText))
+                .FontColor(CardTextPalette.Text)
+                .Font(bodyFont),
 
             E<Button>()
                 .Class(SunriseStyleClass.FancyCardActionButton)

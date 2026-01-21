@@ -39,7 +39,7 @@
                                         <BoxContainer Orientation="Vertical" Margin="10 8">
                                             <Label Name="DescLabel"
                                                    Text="-"
-                                                   StyleClasses="FancyCardDescLabel"/>
+                                                   FontColorOverride="#babfc2"/>
                                         </BoxContainer>
                                     </PanelContainer>
                                 </PanelContainer>
@@ -73,7 +73,8 @@
                 <Control HorizontalExpand="True"/>
                 <Label Name="TitleLabel"
                        Text="-"
-                       StyleClasses="FancyCardTitleLabel"/>
+                       StyleClasses="LabelHeading"
+                       FontColorOverride="#babfc2"/>
                 <Control HorizontalExpand="True"/>
             </BoxContainer>
         </PanelContainer>

@@ -16,8 +16,6 @@ public static class SunriseStyleClass
     public const string FancyCardQuoteOuter = "FancyCardDescOuter";
     public const string FancyCardDescInner = "FancyCardDescInner";
     public const string FancyCardActionPanel = "FancyCardActionPanel";
-    public const string FancyCardTitleLabel = "FancyCardTitleLabel";
-    public const string FancyCardDescLabel = "FancyCardDescLabel";
     public const string FancyCardActionButton = "FancyCardActionButton";
     public const string TutorialBubbleFrame = "TutorialBubbleFrame";
     public const string TutorialBubbleFill = "TutorialBubbleFill";
