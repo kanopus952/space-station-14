@@ -6,7 +6,7 @@ using Robust.Shared.Maths;
 namespace Content.Shared._Sunrise.Tutorial.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-public sealed partial class TutorialTimeCounterComponent : Component
+public sealed partial class TimeCounterComponent : Component
 {
     [DataField, AutoNetworkedField]
     public TimeSpan? EndTime;

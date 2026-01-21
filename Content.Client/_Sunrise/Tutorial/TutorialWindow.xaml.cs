@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Content.Client._Sunrise.FancyCardControl;
 using Content.Client.GameTicking.Managers;
 using Content.Client.Resources;
 using Content.Shared._Sunrise.Roadmap;
@@ -24,10 +26,14 @@ public sealed partial class TutorialWindow : DefaultWindow
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IResourceCache _resourceCache = default!;
     [Dependency] private readonly IEntitySystemManager _entSys = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     public Action<TutorialSequencePrototype>? OnTutorialButtonPressed;
+    public Action? OnRequestCompletedTutorials;
     private readonly ClientGameTicker _gameTicker;
     private TutorialCategoryButton? _selectedCategory;
     private readonly HashSet<string> _completedTutorials = new();
+    private bool _completedTutorialsLoaded;
+    private bool _updatingAutoOpen;
 
     public TutorialWindow()
     {
@@ -36,6 +42,9 @@ public sealed partial class TutorialWindow : DefaultWindow
         _gameTicker = _entSys.GetEntitySystem<ClientGameTicker>();
 
         _gameTicker.LobbyStatusUpdated += UpdateRoundState;
+        AutoOpenCheckbox.OnToggled += OnAutoOpenToggled;
+        OnOpen += () => OnRequestCompletedTutorials?.Invoke();
+        OnOpen += SyncAutoOpenCheckbox;
         GenerateCategories();
     }
 
@@ -86,8 +95,15 @@ public sealed partial class TutorialWindow : DefaultWindow
 
             if (!roundNotStarted)
             {
-                var completed = _completedTutorials.Contains(proto.ID);
-                status = completed ? Loc.GetString("tutorial-completed") : Loc.GetString("tutorial-is-not-completed");
+                if (_completedTutorialsLoaded)
+                {
+                    var completed = _completedTutorials.Contains(proto.ID);
+                    status = completed ? Loc.GetString("tutorial-completed") : Loc.GetString("tutorial-is-not-completed");
+                }
+                else
+                {
+                    status = Loc.GetString("tutorial-status-loading");
+                }
             }
 
             sb.AppendLine(Loc.GetString("tutorial-status", ("status", status)));
@@ -110,10 +126,26 @@ public sealed partial class TutorialWindow : DefaultWindow
         }
     }
 
+    private void SyncAutoOpenCheckbox()
+    {
+        _updatingAutoOpen = true;
+        AutoOpenCheckbox.Pressed = _cfg.GetCVar(SunriseCCVars.TutorialWindowAutoOpen);
+        _updatingAutoOpen = false;
+    }
+
+    private void OnAutoOpenToggled(BaseButton.ButtonToggledEventArgs args)
+    {
+        if (_updatingAutoOpen)
+            return;
+
+        _cfg.SetCVar(SunriseCCVars.TutorialWindowAutoOpen, args.Pressed);
+    }
+
     public void SetCompletedTutorials(IEnumerable<string> completedTutorials)
     {
         _completedTutorials.Clear();
         _completedTutorials.UnionWith(completedTutorials);
+        _completedTutorialsLoaded = true;
 
         if (_selectedCategory != null)
             RebuildButtonsForCategory(_selectedCategory.Category);

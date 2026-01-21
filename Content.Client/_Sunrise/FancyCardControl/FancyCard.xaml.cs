@@ -7,7 +7,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using System.Text;
 
-namespace Content.Client._Sunrise.Tutorial;
+namespace Content.Client._Sunrise.FancyCardControl;
 
 [GenerateTypedNameReferences]
 public sealed partial class FancyCard : Control

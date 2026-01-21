@@ -579,4 +579,10 @@ public sealed partial class SunriseCCVars : CVars
     /// </summary>
     public static readonly CVarDef<bool> MentorHelpAutoOpenOnNewMessage =
         CVarDef.Create("mentor_help.auto_open_on_new_message", false, CVar.ARCHIVE | CVar.CLIENTONLY);
+
+    /*
+     * Tutorial
+     */
+    public static readonly CVarDef<bool> TutorialWindowAutoOpen =
+        CVarDef.Create("tutorial.window_auto_open", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

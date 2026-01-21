@@ -16,12 +16,18 @@
                     <gfx:StyleBoxFlat
                     BackgroundColor="#2b2b2b"/>
                 </PanelContainer.PanelOverride>
-                <Label Text="{Loc 'ui-tutorial-text'}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Margin="15"
-                            StyleClasses="LabelKeyText"
-                            FontColorOverride="#e3e3e3"/>
+                <BoxContainer Orientation="Vertical">
+                    <Label Text="{Loc 'ui-tutorial-text'}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Margin="0 15 0 0"
+                                StyleClasses="LabelKeyText"
+                                FontColorOverride="#e3e3e3"/>
+                    <CheckBox Name="AutoOpenCheckbox"
+                              Text="{Loc 'ui-tutorial-auto-open'}"
+                              HorizontalAlignment="Center"
+                              Margin="5"/>
+                </BoxContainer>
             </PanelContainer>
             <customControls:HSeparator HorizontalExpand="True" Color="#404040"/>
             <BoxContainer Orientation="Horizontal"
