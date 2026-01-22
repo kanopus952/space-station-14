@@ -5,6 +5,7 @@ using Content.Shared._Sunrise.Tutorial.Components;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Content.Client._Sunrise.TimeCounterContainer;
+using Content.Client.UserInterface.Screens;
 
 namespace Content.Client._Sunrise.Tutorial;
 
@@ -13,6 +14,11 @@ public sealed class TimeCounterSystem : EntitySystem
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
     private EntityQuery<TimeCounterUiComponent> _timeCounterUiQuery;
+    /// <summary>
+    /// Why? The scaling viewport is not initialized after OnScreenChanged.
+    /// Soo we have to wait
+    /// </summary>
+    private bool _pendingRefresh;
     public override void Initialize()
     {
         base.Initialize();
@@ -22,6 +28,25 @@ public sealed class TimeCounterSystem : EntitySystem
         SubscribeLocalEvent<TimeCounterComponent, ComponentShutdown>(OnTimeCounterShutdown);
 
         _timeCounterUiQuery = GetEntityQuery<TimeCounterUiComponent>();
+        _ui.OnScreenChanged += OnScreenChanged;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _ui.OnScreenChanged -= OnScreenChanged;
+    }
+
+    private void OnScreenChanged((UIScreen? Old, UIScreen? New) ev)
+    {
+        if (ev.New is not InGameScreen)
+        {
+            RemoveAllCounters();
+            _pendingRefresh = false;
+            return;
+        }
+
+        _pendingRefresh = true;
     }
 
     private void OnTimeCounterState(Entity<TimeCounterComponent> ent, ref AfterAutoHandleStateEvent ev)
@@ -46,6 +71,9 @@ public sealed class TimeCounterSystem : EntitySystem
             RemoveTimeCounter(ent.Owner);
             return;
         }
+
+        if (_ui.ActiveScreen is not InGameScreen)
+            return;
 
         if (_eye.MainViewport is not ScalingViewport vp)
             return;
@@ -83,5 +111,42 @@ public sealed class TimeCounterSystem : EntitySystem
 
         counterUi.Counter.Orphan();
         RemComp<TimeCounterUiComponent>(uid);
+    }
+
+    private void RefreshCounters()
+    {
+        var query = EntityQueryEnumerator<TimeCounterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            UpdateTimeCounter((uid, comp));
+        }
+    }
+
+    private void RemoveAllCounters()
+    {
+        var query = EntityQueryEnumerator<TimeCounterUiComponent>();
+        while (query.MoveNext(out var uid, out var ui))
+        {
+            if (ui.Counter != null)
+                ui.Counter.Orphan();
+            RemCompDeferred<TimeCounterUiComponent>(uid);
+        }
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (!_pendingRefresh)
+            return;
+
+        if (_ui.ActiveScreen is not InGameScreen)
+            return;
+
+        if (_eye.MainViewport is not ScalingViewport)
+            return;
+
+        _pendingRefresh = false;
+        RefreshCounters();
     }
 }

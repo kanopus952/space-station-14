@@ -22,7 +22,7 @@
 
 - type: tutorialSequence
   id: BasicTutorial
-  duration: 30
+  duration: 60
   name: basic tutorial
   texture: /Textures/_Sunrise/Interface/Tutorial/image.png
   tooltip: Basic tutorial about base mechanics

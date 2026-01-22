@@ -54,15 +54,29 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private void OnTutorialComplete(Entity<TutorialPlayerComponent> ent, ref TutorialEndedEvent args)
     {
-        if (!_player.TryGetSessionByEntity(ent, out var session))
-            return;
+        if (_player.TryGetSessionByEntity(ent, out var session))
+        {
+            SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
 
-        SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
+            QueueDel(ent.Comp.Grid);
+            QueueDel(ent);
+
+            _ticker.Respawn(session);
+            return;
+        }
+
+        if (_mind.TryGetMind(ent, out var mindId, out var mind) && mind.UserId != null)
+        {
+            SaveTutorialCompletion(mind.UserId.Value, ent.Comp.SequenceId);
+            _mind.WipeMind(mindId, mind);
+        }
+        else
+        {
+            _sawmill.Warning($"Tutorial completed without a session or mind for {ToPrettyString(ent.Owner)}");
+        }
 
         QueueDel(ent.Comp.Grid);
         QueueDel(ent);
-
-        _ticker.Respawn(session);
     }
 
     private async void SaveTutorialCompletion(NetUserId userId, ProtoId<TutorialSequencePrototype> sequenceId)

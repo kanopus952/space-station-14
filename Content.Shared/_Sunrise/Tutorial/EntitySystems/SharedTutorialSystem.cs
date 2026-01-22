@@ -39,9 +39,11 @@ public abstract class SharedTutorialSystem : EntitySystem
         var query = EntityQueryEnumerator<TutorialPlayerComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (_timing.CurTime > comp.EndTime)
+            if (comp.Completed)
+                continue;
+
+            if (comp.EndTime != null && _timing.CurTime > comp.EndTime)
             {
-                comp.Completed = true;
                 EndTutorial((uid, comp));
                 continue;
             }
@@ -102,16 +104,48 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     public void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
+        if (ent.Comp.Completed)
+            return;
+
+        ent.Comp.Completed = true;
+
+        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && Exists(oldTarget))
+            RemComp<TutorialBubbleComponent>(oldTarget);
+
+        ent.Comp.CurrentBubbleTarget = null;
+
+        ClearTracking(ent);
         UpdateTimeCounter(ent, null);
 
         var ev = new TutorialEndedEvent();
         RaiseLocalEvent(ent, ev);
+        Dirty(ent);
     }
     private void ResetTracking(Entity<TutorialPlayerComponent> ent)
     {
         var tracker = EnsureComp<TutorialTrackerComponent>(ent.Owner);
         tracker.Counters.Clear();
         UpdateObservedEntities(ent, tracker);
+    }
+
+    private void ClearTracking(Entity<TutorialPlayerComponent> ent)
+    {
+        if (!TryComp<TutorialTrackerComponent>(ent.Owner, out var tracker))
+            return;
+
+        foreach (var observed in tracker.ObservedEntities)
+        {
+            RemoveObserver(ent.Owner, observed);
+        }
+
+        tracker.ObservedEntities.Clear();
+        tracker.TargetPrototypes.Clear();
+        tracker.Counters.Clear();
+        tracker.ObserveAnyUseInHand = false;
+        tracker.ObserveAnyDrop = false;
+        tracker.ObserveAnyAttack = false;
+        tracker.ObserveAnyExamine = false;
+        Dirty(ent.Owner, tracker);
     }
 
     private void UpdateObservedEntities(Entity<TutorialPlayerComponent> ent, TutorialTrackerComponent tracker)

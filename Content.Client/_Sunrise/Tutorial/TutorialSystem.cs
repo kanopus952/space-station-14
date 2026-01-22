@@ -1,4 +1,5 @@
 using Content.Client.UserInterface.ControlExtensions;
+using Content.Client.UserInterface.Screens;
 using Content.Client._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
@@ -30,6 +31,24 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         _speechBubbleRoot = new LayoutContainer();
         _bubbleUiQuery = GetEntityQuery<TutorialBubbleUiComponent>();
+        _ui.OnScreenChanged += OnScreenChanged;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _ui.OnScreenChanged -= OnScreenChanged;
+    }
+
+    private void OnScreenChanged((UIScreen? Old, UIScreen? New) ev)
+    {
+        if (ev.New is not InGameScreen)
+        {
+            _speechBubbleRoot.Orphan();
+            return;
+        }
+
+        RefreshBubbles();
     }
 
     private void AfterAutoHandleState(Entity<TutorialBubbleComponent> ent, ref AfterAutoHandleStateEvent ev)
@@ -52,6 +71,11 @@ public sealed class TutorialSystem : SharedTutorialSystem
             return;
         }
 
+        if (_ui.ActiveScreen is not InGameScreen)
+            return;
+
+        var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
+
         if (_bubbleUiQuery.TryGetComponent(ent.Owner, out var uiComp) && uiComp.Bubble != null)
         {
             var labels = uiComp.Bubble.GetControlOfType<RichTextLabel>();
@@ -61,13 +85,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
                 item.SetMessage(TutorialBubble.FormatSpeech(Loc.GetString(ent.Comp.Instruction)), TutorialBubble.BubbleTags, Color.White);
             }
 
+            SetSpeechBubbleRoot(viewportContainer, uiComp.Bubble);
             return;
         }
-
-        if (_ui.ActiveScreen == null)
-            return;
-
-        var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
 
         var bubble = TutorialBubble.CreateTutorialBubble(
             Loc.GetString(ent.Comp.Instruction),
@@ -82,7 +102,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
     public void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
     {
         _speechBubbleRoot.Orphan();
-        _speechBubbleRoot.AddChild(bubble);
+        if (bubble.Parent != _speechBubbleRoot)
+            _speechBubbleRoot.AddChild(bubble);
         root.AddChild(_speechBubbleRoot);
         LayoutContainer.SetAnchorPreset(_speechBubbleRoot, LayoutContainer.LayoutPreset.Wide);
         _speechBubbleRoot.SetPositionLast();
@@ -117,5 +138,14 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _completedTutorials.UnionWith(msg.CompletedTutorials);
         CompletedTutorialsReceived = true;
         WindowDataReceived?.Invoke();
+    }
+
+    private void RefreshBubbles()
+    {
+        var query = EntityQueryEnumerator<TutorialBubbleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            UpdateBubble((uid, comp));
+        }
     }
 }
