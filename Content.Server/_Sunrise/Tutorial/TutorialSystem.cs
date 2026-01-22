@@ -70,10 +70,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
             SaveTutorialCompletion(mind.UserId.Value, ent.Comp.SequenceId);
             _mind.WipeMind(mindId, mind);
         }
-        else
-        {
-            _sawmill.Warning($"Tutorial completed without a session or mind for {ToPrettyString(ent.Owner)}");
-        }
 
         QueueDel(ent.Comp.Grid);
         QueueDel(ent);

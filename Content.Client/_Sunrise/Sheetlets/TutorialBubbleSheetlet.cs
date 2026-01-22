@@ -56,7 +56,7 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
 
             E<TutorialBubbleTail>()
                 .Class(SunriseStyleClass.TutorialBubbleTail)
-                .Prop(TutorialBubbleTail.StylePropertyFillColor, keybindBorderColor)
+                .Prop(TutorialBubbleTail.StylePropertyFillColor, frameColor)
                 .Prop(TutorialBubbleTail.StylePropertyBorderThickness, 0f),
 
             E<PanelContainer>()
