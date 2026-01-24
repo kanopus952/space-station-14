@@ -143,14 +143,13 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!TrySpawnNextTo(sequence.PlayerEntity, spawnPoint, out var uid))
             return;
 
-        if (!TryComp<TutorialPlayerComponent>(uid, out var tutorial))
-            return;
-
-        tutorial.Grid = gridUid;
         var (mindId, _) = _mind.CreateMind(args.SenderSession.UserId);
         _mind.SetUserId(mindId, args.SenderSession.UserId);
         _mind.TransferTo(mindId, uid);
         _ticker.PlayerJoinGame(args.SenderSession, true);
+
+        var tutorial = EnsureComp<TutorialPlayerComponent>(uid.Value);
+        tutorial.Grid = gridUid;
     }
 
     private bool CanStartTutorial()
@@ -185,7 +184,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!_proto.TryIndex(step.VoiceId, out var voice))
             return;
 
-        var message = Loc.GetString(step.Sender) + Loc.GetString(step.ChatMessage);
+        var message = $"{Loc.GetString(step.Sender)} {Loc.GetString(step.ChatMessage)}";
         _chat.ChatMessageToOne(ChatChannel.Emotes, message, message, EntityUid.Invalid, false, session.Channel);
 
         var tts = await GenerateTtsForTutorial(step.TTSMessage, voice);

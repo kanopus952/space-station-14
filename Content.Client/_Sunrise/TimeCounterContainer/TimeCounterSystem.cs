@@ -6,6 +6,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Content.Client._Sunrise.TimeCounterContainer;
 using Content.Client.UserInterface.Screens;
+using Robust.Shared.Player;
 
 namespace Content.Client._Sunrise.Tutorial;
 
@@ -26,6 +27,8 @@ public sealed class TimeCounterSystem : EntitySystem
         SubscribeLocalEvent<TimeCounterComponent, AfterAutoHandleStateEvent>(OnTimeCounterState);
         SubscribeLocalEvent<TimeCounterComponent, ComponentInit>(OnTimeCounterInit);
         SubscribeLocalEvent<TimeCounterComponent, ComponentShutdown>(OnTimeCounterShutdown);
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
 
         _timeCounterUiQuery = GetEntityQuery<TimeCounterUiComponent>();
         _ui.OnScreenChanged += OnScreenChanged;
@@ -47,6 +50,17 @@ public sealed class TimeCounterSystem : EntitySystem
         }
 
         _pendingRefresh = true;
+    }
+
+    private void OnPlayerAttached(LocalPlayerAttachedEvent ev)
+    {
+        _pendingRefresh = true;
+    }
+
+    private void OnPlayerDetached(LocalPlayerDetachedEvent ev)
+    {
+        RemoveAllCounters();
+        _pendingRefresh = false;
     }
 
     private void OnTimeCounterState(Entity<TimeCounterComponent> ent, ref AfterAutoHandleStateEvent ev)

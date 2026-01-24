@@ -7,6 +7,7 @@ using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._Sunrise.Tutorial;
@@ -27,6 +28,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeLocalEvent<TutorialBubbleComponent, AfterAutoHandleStateEvent>(AfterAutoHandleState);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentShutdown>(OnComponentShutdown);
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeNetworkEvent<TutorialWindowDataResponseEvent>(OnWindowDataResponse);
         SubscribeNetworkEvent<TutorialStartDeniedEvent>(OnStartDenied);
 
@@ -50,6 +53,16 @@ public sealed class TutorialSystem : SharedTutorialSystem
         }
 
         RefreshBubbles();
+    }
+
+    private void OnPlayerAttached(LocalPlayerAttachedEvent ev)
+    {
+        RefreshBubbles();
+    }
+
+    private void OnPlayerDetached(LocalPlayerDetachedEvent ev)
+    {
+        _speechBubbleRoot.Orphan();
     }
 
     private void AfterAutoHandleState(Entity<TutorialBubbleComponent> ent, ref AfterAutoHandleStateEvent ev)

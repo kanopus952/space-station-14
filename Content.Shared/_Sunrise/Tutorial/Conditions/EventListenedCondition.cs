@@ -117,7 +117,7 @@ public sealed partial class EventListenedConditionSystem : TutorialConditionSyst
         if (!ent.Comp.Observers.Contains(args.User))
             return;
 
-        RecordEvent(args.User, TutorialEventType.Attack, args.Used);
+        RecordEvent(args.User, TutorialEventType.Attack, ent.Owner, args.Used);
     }
 
     private void RecordEvent(EntityUid user, TutorialEventType type, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
