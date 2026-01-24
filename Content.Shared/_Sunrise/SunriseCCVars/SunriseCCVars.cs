@@ -585,4 +585,7 @@ public sealed partial class SunriseCCVars : CVars
      */
     public static readonly CVarDef<bool> TutorialWindowAutoOpen =
         CVarDef.Create("tutorial.window_auto_open", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<int> TutorialMaxActive =
+        CVarDef.Create("tutorial.max_active", 10, CVar.SERVERONLY);
 }

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.Construction.Conditions;
 
 namespace Content.Server._Sunrise.Tutorial.Components;
 
@@ -6,10 +7,10 @@ namespace Content.Server._Sunrise.Tutorial.Components;
 public sealed partial class TutorialMapComponent : Component
 {
     [ViewVariables]
-    public List<EntityUid> LoadedGrids;
+    public List<EntityUid> LoadedGrids = new();
 
     [ViewVariables]
-    public Dictionary<EntityUid, Vector2> GridOffsets;
+    public Dictionary<EntityUid, Vector2> GridOffsets = new();
 
     [ViewVariables]
     public string MapName = "Tutorial Map (DO NOT TOUCH)";

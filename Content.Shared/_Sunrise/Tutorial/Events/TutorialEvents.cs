@@ -29,6 +29,12 @@ public sealed class TutorialStartRequestEvent(ProtoId<TutorialSequencePrototype>
 }
 
 [NetSerializable, Serializable]
+public sealed class TutorialStartDeniedEvent(string reason) : EntityEventArgs
+{
+    public string Reason = reason;
+}
+
+[NetSerializable, Serializable]
 public sealed class TutorialWindowDataRequestEvent() : EntityEventArgs
 {
 }

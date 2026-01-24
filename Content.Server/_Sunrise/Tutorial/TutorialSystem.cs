@@ -6,6 +6,7 @@ using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server._Sunrise.Auth;
 using Content.Shared._Sunrise.TTS;
+using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
@@ -19,6 +20,7 @@ using Robust.Shared.Utility;
 using Robust.Shared.Map.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._Sunrise.Tutorial.Components;
+using Robust.Shared.Configuration;
 
 namespace Content.Server._Sunrise.Tutorial;
 
@@ -38,6 +40,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     private ISawmill _sawmill = default!;
     private EntityUid? _tutorialMap;
     public override void Initialize()
@@ -125,6 +128,14 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!_proto.TryIndex(msg.SequenceId, out var sequence))
             return;
 
+        if (!CanStartTutorial())
+        {
+            RaiseNetworkEvent(
+                new TutorialStartDeniedEvent("tutorial-start-denied-max-active"),
+                Filter.SinglePlayer(args.SenderSession));
+            return;
+        }
+
         TryCreateMap();
         var gridUid = LoadLocation(sequence.Grid);
         var spawnPoint = GetSpawnPoint(gridUid);
@@ -139,6 +150,28 @@ public sealed class TutorialSystem : SharedTutorialSystem
         var (mindId, _) = _mind.CreateMind(args.SenderSession.UserId);
         _mind.SetUserId(mindId, args.SenderSession.UserId);
         _mind.TransferTo(mindId, uid);
+        _ticker.PlayerJoinGame(args.SenderSession, true);
+    }
+
+    private bool CanStartTutorial()
+    {
+        var maxActive = _cfg.GetCVar(SunriseCCVars.TutorialMaxActive);
+        if (maxActive <= 0)
+            return true;
+
+        var count = 0;
+        var query = EntityQueryEnumerator<TutorialPlayerComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.Completed || TerminatingOrDeleted(uid))
+                continue;
+
+            count++;
+            if (count >= maxActive)
+                return false;
+        }
+
+        return true;
     }
 
     private async void OnStepChanged(EntityUid uid, TutorialPlayerComponent comp, TutorialStepChangedEvent args)
@@ -191,16 +224,18 @@ public sealed class TutorialSystem : SharedTutorialSystem
         Dirty(ent, counter);
     }
 
-    private void TryCreateMap()
+    private EntityUid? TryCreateMap()
     {
         if (Exists(_tutorialMap))
-            return;
+            return _tutorialMap;
 
         var mapUid = _mapSystem.CreateMap();
 
         var comp = EnsureComp<TutorialMapComponent>(mapUid);
         _meta.SetEntityName(mapUid, comp.MapName);
         _tutorialMap = mapUid;
+
+        return mapUid;
     }
 
     private EntityUid LoadLocation(ResPath gridPath)
@@ -250,6 +285,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private void CleanupDeletedGrids(TutorialMapComponent comp)
     {
+        if (comp.LoadedGrids.Count == 0)
+            return;
+
         for (var i = comp.LoadedGrids.Count - 1; i >= 0; i--)
         {
             var grid = comp.LoadedGrids[i];

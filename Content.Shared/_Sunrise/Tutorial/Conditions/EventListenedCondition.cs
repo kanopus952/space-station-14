@@ -26,7 +26,7 @@ public sealed partial class EventListenedConditionSystem : TutorialConditionSyst
         SubscribeLocalEvent<TutorialPlayerComponent, DidEquipHandEvent>(OnDidEquipHand);
         SubscribeLocalEvent<TutorialObservableComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<TutorialObservableComponent, DroppedEvent>(OnDropped);
-        SubscribeLocalEvent<TutorialObservableComponent, MeleeHitEvent>(OnMeleeHit);
+        SubscribeLocalEvent<TutorialObservableComponent, AttackedEvent>(OnMeleeHit);
         SubscribeLocalEvent<TutorialObservableComponent, ExaminedEvent>(OnExamined);
     }
 
@@ -109,18 +109,15 @@ public sealed partial class EventListenedConditionSystem : TutorialConditionSyst
         RecordEvent(args.Examiner, TutorialEventType.Examine, args.Examined);
     }
 
-    private void OnMeleeHit(Entity<TutorialObservableComponent> ent, ref MeleeHitEvent args)
+    private void OnMeleeHit(Entity<TutorialObservableComponent> ent, ref AttackedEvent args)
     {
-        if (!args.IsHit)
-            return;
-
         if (!HasComp<TutorialTrackerComponent>(args.User))
             return;
 
         if (!ent.Comp.Observers.Contains(args.User))
             return;
 
-        RecordEvent(args.User, TutorialEventType.Attack, args.HitEntities);
+        RecordEvent(args.User, TutorialEventType.Attack, args.Used);
     }
 
     private void RecordEvent(EntityUid user, TutorialEventType type, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)

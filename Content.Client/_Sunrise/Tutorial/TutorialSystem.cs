@@ -28,6 +28,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentShutdown>(OnComponentShutdown);
         SubscribeNetworkEvent<TutorialWindowDataResponseEvent>(OnWindowDataResponse);
+        SubscribeNetworkEvent<TutorialStartDeniedEvent>(OnStartDenied);
 
         _speechBubbleRoot = new LayoutContainer();
         _bubbleUiQuery = GetEntityQuery<TutorialBubbleUiComponent>();
@@ -138,6 +139,14 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _completedTutorials.UnionWith(msg.CompletedTutorials);
         CompletedTutorialsReceived = true;
         WindowDataReceived?.Invoke();
+    }
+
+    private void OnStartDenied(TutorialStartDeniedEvent msg, EntitySessionEventArgs args)
+    {
+        if (string.IsNullOrEmpty(msg.Reason))
+            return;
+
+        _ui.Popup(Loc.GetString(msg.Reason));
     }
 
     private void RefreshBubbles()
