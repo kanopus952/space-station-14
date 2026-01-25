@@ -68,6 +68,18 @@ public sealed partial class TutorialStepPrototype : IPrototype
     /// </summary>
     [DataField]
     public List<TutorialCondition> AnyConditions = new();
+
+    /// <summary>
+    ///     Conditions that must be met before this step is considered active.
+    /// </summary>
+    [DataField]
+    public List<TutorialCondition> Preconditions = new();
+
+    /// <summary>
+    ///     Optional step to jump to if <see cref="Preconditions"/> are not met.
+    /// </summary>
+    [DataField]
+    public ProtoId<TutorialStepPrototype>? PreconditionFailStep;
 }
 
 /// <summary>
