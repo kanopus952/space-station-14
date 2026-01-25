@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Conditions;
 using Content.Shared.Interaction;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._Sunrise.Tutorial.Conditions;
+namespace Content.Server._Sunrise.Tutorial.Conditions;
 
 public sealed partial class InteractListenedConditionSystem : EventListenedConditionSystemBase<InteractListenedCondition>
 {

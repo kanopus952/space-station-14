@@ -78,9 +78,6 @@ public abstract class SharedTutorialSystem : EntitySystem
             return;
         }
 
-        if (ent.Comp.CurrentBubbleTarget == null && step.Bubble != null)
-            UpdateTutorialBubble(ent, step);
-
         foreach (var condition in step.Conditions)
         {
             if (!_tutorial.TryCondition(ent, condition))
@@ -401,8 +398,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         {
             var existing = EnsureComp<TutorialBubbleComponent>(oldTarget);
             existing.Instruction = step.Bubble.Text;
-            Dirty(oldTarget, existing);
-            Dirty(ent);
+            Dirty(ent, ent.Comp);
             return;
         }
 
@@ -414,8 +410,7 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         ent.Comp.CurrentBubbleTarget = target;
 
-        Dirty(target.Value, bubble);
-        Dirty(ent);
+        Dirty(ent, ent.Comp);
     }
 
     private void ClearTutorialBubble(Entity<TutorialPlayerComponent> ent)
