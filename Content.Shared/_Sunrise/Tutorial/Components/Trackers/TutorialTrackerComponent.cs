@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Content.Shared._Sunrise.Tutorial.Conditions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -8,16 +7,12 @@ namespace Content.Shared._Sunrise.Tutorial.Components;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TutorialTrackerComponent : Component
 {
-    [AutoNetworkedField]
-    public Dictionary<(TutorialEventType Type, EntProtoId? Target), int> Counters = new();
+    [ViewVariables, AutoNetworkedField]
+    public Dictionary<(string Key, EntProtoId Target), int> Counters = new();
 
-    [AutoNetworkedField]
+    [ViewVariables, AutoNetworkedField]
     public HashSet<EntProtoId> TargetPrototypes = new();
 
-    [AutoNetworkedField]
+    [ViewVariables, AutoNetworkedField]
     public HashSet<EntityUid> ObservedEntities = new();
-    public bool ObserveAnyUseInHand;
-    public bool ObserveAnyDrop;
-    public bool ObserveAnyAttack;
-    public bool ObserveAnyExamine;
 }

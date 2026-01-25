@@ -62,6 +62,12 @@ public sealed partial class TutorialStepPrototype : IPrototype
     /// </summary>
     [DataField]
     public List<TutorialCondition> Conditions = new();
+
+    /// <summary>
+    ///     Alternative conditions. If set, any of these must be satisfied in addition to <see cref="Conditions"/>.
+    /// </summary>
+    [DataField]
+    public List<TutorialCondition> AnyConditions = new();
 }
 
 /// <summary>

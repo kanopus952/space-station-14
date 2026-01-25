@@ -1,36 +1,21 @@
+﻿using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
-using Content.Shared.Examine;
-using Content.Shared.Hands;
-using Content.Shared.Interaction;
-using Content.Shared.Interaction.Events;
-using Content.Shared.Inventory.Events;
-using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
 /// <summary>
-/// Tracks player actions and validates tutorial conditions that depend on them.
+/// Base system for event-listened tutorial conditions.
 /// </summary>
-public sealed partial class EventListenedConditionSystem : TutorialConditionSystem<TutorialPlayerComponent, EventListenedCondition>
+public abstract partial class EventListenedConditionSystemBase<TCondition> : TutorialConditionSystem<TutorialPlayerComponent, TCondition>
+    where TCondition : EventListenedConditionBase<TCondition>
 {
-    [Dependency] private readonly SharedTutorialSystem _tutorial = default!;
-    public override void Initialize()
-    {
-        base.Initialize();
+    [Dependency] protected readonly SharedTutorialSystem Tutorial = default!;
+    protected static readonly EntProtoId AnyTarget = default;
+    protected static readonly string CounterKey = typeof(TCondition).Name;
 
-        SubscribeLocalEvent<TutorialPlayerComponent, UserInteractHandEvent>(OnUserInteractHand);
-        SubscribeLocalEvent<TutorialPlayerComponent, UserInteractUsingEvent>(OnUserInteractUsing);
-        SubscribeLocalEvent<TutorialPlayerComponent, DidEquipEvent>(OnDidEquip);
-        SubscribeLocalEvent<TutorialPlayerComponent, DidEquipHandEvent>(OnDidEquipHand);
-        SubscribeLocalEvent<TutorialObservableComponent, UseInHandEvent>(OnUseInHand);
-        SubscribeLocalEvent<TutorialObservableComponent, DroppedEvent>(OnDropped);
-        SubscribeLocalEvent<TutorialObservableComponent, AttackedEvent>(OnMeleeHit);
-        SubscribeLocalEvent<TutorialObservableComponent, ExaminedEvent>(OnExamined);
-    }
-
-    protected override void Condition(Entity<TutorialPlayerComponent> entity, ref TutorialConditionEvent<EventListenedCondition> args)
+    protected override void Condition(Entity<TutorialPlayerComponent> entity, ref TutorialConditionEvent<TCondition> args)
     {
         if (args.Condition.Count <= 0)
         {
@@ -38,144 +23,49 @@ public sealed partial class EventListenedConditionSystem : TutorialConditionSyst
             return;
         }
 
-        if (!TryComp<TutorialTrackerComponent>(entity.Owner, out var tracker))
+        if (!TryComp<TutorialTrackerComponent>(entity, out var tracker))
             return;
 
-        var key = (args.Condition.Event, args.Condition.Target);
-        if (tracker.Counters.TryGetValue(key, out var count) && count >= args.Condition.Count)
-            args.Result = true;
+        var target = args.Condition.Target ?? AnyTarget;
+        args.Result = HasCount(tracker.Counters, args.Condition.CounterKey, target, args.Condition.Count);
     }
 
-    private void OnUserInteractHand(Entity<TutorialPlayerComponent> ent, ref UserInteractHandEvent args)
+    protected void RecordEvent(EntityUid user, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
     {
-        RecordEvent(ent.Owner, TutorialEventType.Interact, args.Target);
+        RecordEvent(user, CounterKey, primaryTarget, secondaryTarget);
     }
 
-    private void OnUserInteractUsing(Entity<TutorialPlayerComponent> ent, ref UserInteractUsingEvent args)
-    {
-        RecordEvent(ent.Owner, TutorialEventType.Use, args.Target, args.Used);
-    }
-
-    private void OnDidEquip(Entity<TutorialPlayerComponent> ent, ref DidEquipEvent args)
-    {
-        RecordEvent(ent.Owner, TutorialEventType.Equip, args.Equipment);
-
-        if (!TryComp<TutorialTrackerComponent>(ent, out var tracker))
-            return;
-
-        _tutorial.TryObserveEntity(ent, args.Equipment, tracker);
-    }
-
-    private void OnDidEquipHand(Entity<TutorialPlayerComponent> ent, ref DidEquipHandEvent args)
-    {
-        RecordEvent(ent.Owner, TutorialEventType.Equip, args.Equipped);
-
-        if (!TryComp<TutorialTrackerComponent>(ent, out var tracker))
-            return;
-
-        _tutorial.TryObserveEntity(ent, args.Equipped, tracker);
-    }
-
-    private void OnUseInHand(Entity<TutorialObservableComponent> ent, ref UseInHandEvent args)
-    {
-        if (!HasComp<TutorialTrackerComponent>(args.User))
-            return;
-
-        if (!ent.Comp.Observers.Contains(args.User))
-            return;
-
-        RecordEvent(args.User, TutorialEventType.Use, ent.Owner);
-    }
-
-    private void OnDropped(Entity<TutorialObservableComponent> ent, ref DroppedEvent args)
-    {
-        if (!HasComp<TutorialTrackerComponent>(args.User))
-            return;
-
-        if (!ent.Comp.Observers.Contains(args.User))
-            return;
-
-        RecordEvent(args.User, TutorialEventType.Drop, ent.Owner);
-    }
-
-    private void OnExamined(Entity<TutorialObservableComponent> ent, ref ExaminedEvent args)
-    {
-        if (!HasComp<TutorialTrackerComponent>(args.Examiner))
-            return;
-
-        if (!ent.Comp.Observers.Contains(args.Examiner))
-            return;
-
-        RecordEvent(args.Examiner, TutorialEventType.Examine, args.Examined);
-    }
-
-    private void OnMeleeHit(Entity<TutorialObservableComponent> ent, ref AttackedEvent args)
-    {
-        if (!HasComp<TutorialTrackerComponent>(args.User))
-            return;
-
-        if (!ent.Comp.Observers.Contains(args.User))
-            return;
-
-        RecordEvent(args.User, TutorialEventType.Attack, ent.Owner, args.Used);
-    }
-
-    private void RecordEvent(EntityUid user, TutorialEventType type, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
+    protected void RecordEvent(EntityUid user, string key, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
     {
         var tracker = EnsureComp<TutorialTrackerComponent>(user);
-
-        IncrementConditionCounters((user, tracker), type, null);
-
-        if (_tutorial.TryGetPrototypeId(primaryTarget, out var primaryProto))
-            IncrementConditionCounters((user, tracker), type, primaryProto);
-
-        if (_tutorial.TryGetPrototypeId(secondaryTarget, out var secondaryProto) && secondaryProto != primaryProto)
-            IncrementConditionCounters((user, tracker), type, secondaryProto);
+        IncrementConditionCounters((user, tracker), key, primaryTarget, secondaryTarget);
     }
 
-    private void RecordEvent(EntityUid user, TutorialEventType type, IReadOnlyList<EntityUid> targets)
+    private void IncrementConditionCounters(Entity<TutorialTrackerComponent> ent,
+        string key,
+        EntityUid? primaryTarget,
+        EntityUid? secondaryTarget)
     {
-        var tracker = EnsureComp<TutorialTrackerComponent>(user);
+        IncrementCounter(ent.Comp.Counters, key, AnyTarget);
 
-        IncrementConditionCounters((user, tracker), type, null);
+        if (Tutorial.TryGetPrototypeId(primaryTarget, out var primaryProto))
+            IncrementCounter(ent.Comp.Counters, key, primaryProto);
 
-        foreach (var target in targets)
-        {
-            if (_tutorial.TryGetPrototypeId(target, out var protoId))
-                IncrementConditionCounters((user, tracker), type, protoId);
-        }
-    }
+        if (Tutorial.TryGetPrototypeId(secondaryTarget, out var secondaryProto) && secondaryProto != primaryProto)
+            IncrementCounter(ent.Comp.Counters, key, secondaryProto);
 
-    private void IncrementConditionCounters(Entity<TutorialTrackerComponent> ent, TutorialEventType type, EntProtoId? target)
-    {
-        var key = (type, target);
-        ent.Comp.Counters.TryGetValue(key, out var count);
-        ent.Comp.Counters[key] = count + 1;
         Dirty(ent);
     }
-}
 
-/// <summary>
-/// Checks if the player has performed an action a required number of times.
-/// </summary>
-public sealed partial class EventListenedCondition : TutorialConditionBase<EventListenedCondition>
-{
-    [DataField]
-    public EntProtoId? Target;
+    private static void IncrementCounter(Dictionary<(string Key, EntProtoId Target), int> counters, string key, EntProtoId target)
+    {
+        var dictKey = (key, target);
+        counters.TryGetValue(dictKey, out var count);
+        counters[dictKey] = count + 1;
+    }
 
-    [DataField(required: true)]
-    public TutorialEventType Event;
-
-    [DataField]
-    public int Count = 1;
-}
-
-public enum TutorialEventType
-{
-    Interact,
-    Attack,
-    Use,
-    Examine,
-    Equip,
-    Drop
+    protected static bool HasCount(Dictionary<(string Key, EntProtoId Target), int> counters, string key, EntProtoId target, int count)
+    {
+        return counters.TryGetValue((key, target), out var value) && value >= count;
+    }
 }

@@ -8,7 +8,6 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._Sunrise.Tutorial.EntitySystems;
@@ -72,6 +71,22 @@ public abstract class SharedTutorialSystem : EntitySystem
                 return;
         }
 
+        if (step.AnyConditions.Count > 0)
+        {
+            var any = false;
+            foreach (var condition in step.AnyConditions)
+            {
+                if (_tutorial.TryCondition(ent, condition))
+                {
+                    any = true;
+                    break;
+                }
+            }
+
+            if (!any)
+                return;
+        }
+
         Advance(ent);
     }
 
@@ -123,51 +138,43 @@ public abstract class SharedTutorialSystem : EntitySystem
     }
     private void ResetTracking(Entity<TutorialPlayerComponent> ent)
     {
-        var tracker = EnsureComp<TutorialTrackerComponent>(ent.Owner);
+        var tracker = EnsureComp<TutorialTrackerComponent>(ent);
         tracker.Counters.Clear();
         UpdateObservedEntities(ent, tracker);
     }
 
     private void ClearTracking(Entity<TutorialPlayerComponent> ent)
     {
-        if (!TryComp<TutorialTrackerComponent>(ent.Owner, out var tracker))
+        if (!TryComp<TutorialTrackerComponent>(ent, out var tracker))
             return;
 
         foreach (var observed in tracker.ObservedEntities)
         {
-            RemoveObserver(ent.Owner, observed);
+            RemoveObserver(ent, observed);
         }
 
         tracker.ObservedEntities.Clear();
         tracker.TargetPrototypes.Clear();
         tracker.Counters.Clear();
-        tracker.ObserveAnyUseInHand = false;
-        tracker.ObserveAnyDrop = false;
-        tracker.ObserveAnyAttack = false;
-        tracker.ObserveAnyExamine = false;
-        Dirty(ent.Owner, tracker);
+        Dirty(ent, tracker);
     }
 
     private void UpdateObservedEntities(Entity<TutorialPlayerComponent> ent, TutorialTrackerComponent tracker)
     {
         foreach (var observed in tracker.ObservedEntities)
         {
-            RemoveObserver(ent.Owner, observed);
+            RemoveObserver(ent, observed);
         }
 
         tracker.ObservedEntities.Clear();
         tracker.TargetPrototypes.Clear();
-        tracker.ObserveAnyUseInHand = false;
-        tracker.ObserveAnyDrop = false;
-        tracker.ObserveAnyAttack = false;
-        tracker.ObserveAnyExamine = false;
 
         if (!TryGetCurrentStep(ent, out var step))
             return;
 
         foreach (var condition in step.Conditions)
         {
-            if (condition is not EventListenedCondition listened)
+            if (condition is not IEventListenedCondition listened)
                 continue;
 
             if (listened.Target != null)
@@ -176,25 +183,27 @@ public abstract class SharedTutorialSystem : EntitySystem
                 continue;
             }
 
-            switch (listened.Event)
-            {
-                case TutorialEventType.Use:
-                    tracker.ObserveAnyUseInHand = true;
-                    break;
-                case TutorialEventType.Drop:
-                    tracker.ObserveAnyDrop = true;
-                    break;
-                case TutorialEventType.Attack:
-                    tracker.ObserveAnyAttack = true;
-                    break;
-                case TutorialEventType.Examine:
-                    tracker.ObserveAnyExamine = true;
-                    break;
-            }
+            if (listened.ObserveAnyWithoutTarget)
+                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
         }
 
-        ObserveNearbyEntities(ent.Owner, tracker, step);
-        ObserveEquippedEntities(ent.Owner, tracker);
+        foreach (var condition in step.AnyConditions)
+        {
+            if (condition is not IEventListenedCondition listened)
+                continue;
+
+            if (listened.Target != null)
+            {
+                tracker.TargetPrototypes.Add(listened.Target.Value);
+                continue;
+            }
+
+            if (listened.ObserveAnyWithoutTarget)
+                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
+        }
+
+        ObserveNearbyEntities(ent, tracker, step);
+        ObserveEquippedEntities(ent, tracker);
     }
 
     private void ObserveNearbyEntities(EntityUid user, TutorialTrackerComponent tracker, TutorialStepPrototype step)
@@ -268,7 +277,28 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     private static bool ObservesAny(TutorialTrackerComponent tracker)
     {
-        return tracker.ObserveAnyUseInHand || tracker.ObserveAnyDrop || tracker.ObserveAnyAttack || tracker.ObserveAnyExamine;
+        return HasAnyObserveCounter(tracker);
+    }
+
+    private static bool HasAnyObserveCounter(TutorialTrackerComponent tracker)
+    {
+        foreach (var (key, target) in tracker.Counters.Keys)
+        {
+            if (!target.Equals(default(EntProtoId)))
+                continue;
+
+            if (key.EndsWith(EventListenedConditionKeys.ObserveSuffix, StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static void EnsureObserveAnyCounter(TutorialTrackerComponent tracker, string key)
+    {
+        var counterKey = (key, default(EntProtoId));
+        if (!tracker.Counters.ContainsKey(counterKey))
+            tracker.Counters[counterKey] = 0;
     }
 
     public bool TryGetCurrentStep(Entity<TutorialPlayerComponent> ent, [NotNullWhen(true)] out TutorialStepPrototype? step)
@@ -305,14 +335,8 @@ public abstract class SharedTutorialSystem : EntitySystem
     }
     private void UpdateTutorialBubble(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
-        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && Exists(oldTarget))
-            RemComp<TutorialBubbleComponent>(oldTarget);
-
-        ent.Comp.CurrentBubbleTarget = null;
-
         if (step.Bubble == null)
             return;
-
 
         var target = step.Bubble.Target.Type switch
         {
@@ -330,6 +354,18 @@ public abstract class SharedTutorialSystem : EntitySystem
             return;
         }
 
+        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && oldTarget == target.Value)
+        {
+            var existing = EnsureComp<TutorialBubbleComponent>(oldTarget);
+            existing.Instruction = step.Bubble.Text;
+            Dirty(oldTarget, existing);
+            Dirty(ent);
+            return;
+        }
+
+        if (ent.Comp.CurrentBubbleTarget is { } previous && Exists(previous))
+            RemComp<TutorialBubbleComponent>(previous);
+
         var bubble = EnsureComp<TutorialBubbleComponent>(target.Value);
         bubble.Instruction = step.Bubble.Text;
 
@@ -337,10 +373,6 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         Dirty(target.Value, bubble);
         Dirty(ent);
-    }
-
-    public virtual void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
-    {
     }
     private EntityUid? TryFindBubbleEntity(EntityUid uid, TutorialStepPrototype proto)
     {
@@ -374,5 +406,8 @@ public abstract class SharedTutorialSystem : EntitySystem
         }
 
         return best;
+    }
+    public virtual void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
+    {
     }
 }

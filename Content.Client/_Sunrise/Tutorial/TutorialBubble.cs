@@ -1,6 +1,4 @@
-using System;
 using System.Numerics;
-using Content.Shared.CCVar;
 using Content.Shared.Speech;
 using Content.Client._Sunrise.UserInterface.RichText;
 using Robust.Client.Graphics;
@@ -8,6 +6,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Configuration;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -72,7 +71,8 @@ public abstract class TutorialBubble : Control
     {
         base.FrameUpdate(args);
 
-        if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform) || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
+        if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform)
+            || ResolveMapId(xform) != _eyeManager.CurrentEye.Position.MapId)
         {
             Modulate = Color.White.WithAlpha(0);
             return;
@@ -93,6 +93,25 @@ public abstract class TutorialBubble : Control
         // Round to nearest 0.5
         screenPos = (screenPos * 2).Rounded() / 2;
         LayoutContainer.SetPosition(this, screenPos);
+    }
+
+    private MapId? ResolveMapId(TransformComponent? xform)
+    {
+        var mapId = xform?.MapID;
+        if (mapId != MapId.Nullspace)
+            return mapId;
+
+        var parent = xform?.ParentUid;
+        while (parent != EntityUid.Invalid && _entityManager.TryGetComponent(parent, out xform))
+        {
+            mapId = xform.MapID;
+            if (mapId != MapId.Nullspace)
+                return mapId;
+
+            parent = xform.ParentUid;
+        }
+
+        return MapId.Nullspace;
     }
     public static FormattedMessage FormatSpeech(string message, Color? fontColor = null)
     {

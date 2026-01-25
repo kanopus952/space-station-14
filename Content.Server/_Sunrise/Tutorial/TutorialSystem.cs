@@ -186,6 +186,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         var message = $"{Loc.GetString(step.Sender)} {Loc.GetString(step.ChatMessage)}";
         _chat.ChatMessageToOne(ChatChannel.Emotes, message, message, EntityUid.Invalid, false, session.Channel);
+        RemComp<TutorialDistanceTrackerComponent>(uid);
 
         var tts = await GenerateTtsForTutorial(step.TTSMessage, voice);
 
