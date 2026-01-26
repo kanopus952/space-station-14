@@ -13,7 +13,7 @@ namespace Content.Shared.Humanoid;
 
 [DataDefinition]
 [Serializable, NetSerializable]
-public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, IEquatable<HumanoidCharacterAppearance>
+public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCharacterAppearance>
 {
     // Sunrise gradient edit start
     [DataField]
@@ -449,14 +449,6 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
             appearance.FacialHairMarkingEffect,
             width,
             height);
-    }
-
-    public bool MemberwiseEquals(ICharacterAppearance maybeOther)
-    {
-        if (maybeOther is not HumanoidCharacterAppearance other)
-            return false;
-
-        return Equals(other);
     }
 
     public bool Equals(HumanoidCharacterAppearance? other)

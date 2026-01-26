@@ -31,7 +31,7 @@ namespace Content.Shared.Preferences
     /// </summary>
     [DataDefinition]
     [Serializable, NetSerializable]
-    public sealed partial class HumanoidCharacterProfile : ICharacterProfile
+    public sealed partial class HumanoidCharacterProfile
     {
         public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
         private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яA-Za-zёЁ0-9, ,\\-,'.]"); // Sunrise-edit
@@ -107,11 +107,6 @@ namespace Content.Shared.Preferences
 
         [DataField]
         public string BodyType { get; set; } = SharedHumanoidAppearanceSystem.DefaultBodyType;
-
-        /// <summary>
-        /// <see cref="Appearance"/>
-        /// </summary>
-        public ICharacterAppearance CharacterAppearance => Appearance;
 
         /// <summary>
         /// Stores markings, eye colors, etc for the profile.
@@ -541,9 +536,8 @@ namespace Content.Shared.Preferences
                 ("age", Age)
             );
 
-        public bool MemberwiseEquals(ICharacterProfile maybeOther)
+        public bool MemberwiseEquals(HumanoidCharacterProfile other)
         {
-            if (maybeOther is not HumanoidCharacterProfile other) return false;
             if (Name != other.Name) return false;
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
@@ -558,7 +552,12 @@ namespace Content.Shared.Preferences
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
-            return Appearance.MemberwiseEquals(other.Appearance);
+            return Appearance.Equals(other.Appearance);
+        }
+
+        public void EnsureValid(ICommonSession session, IDependencyCollection collection)
+        {
+            EnsureValid(session, collection, []);
         }
 
         public void EnsureValid(ICommonSession session, IDependencyCollection collection, string[] sponsorPrototypes)
@@ -826,7 +825,12 @@ namespace Content.Shared.Preferences
         }
         // Sunrise-TTS-End
 
-        public ICharacterProfile Validated(ICommonSession session, IDependencyCollection collection, string[] sponsorPrototypes)
+        public HumanoidCharacterProfile Validated(ICommonSession session, IDependencyCollection collection)
+        {
+            return Validated(session, collection, []);
+        }
+
+        public HumanoidCharacterProfile Validated(ICommonSession session, IDependencyCollection collection, string[] sponsorPrototypes)
         {
             var profile = new HumanoidCharacterProfile(this);
             profile.EnsureValid(session, collection, sponsorPrototypes);
