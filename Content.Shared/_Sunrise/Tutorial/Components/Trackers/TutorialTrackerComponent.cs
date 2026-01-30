@@ -13,6 +13,6 @@ public sealed partial class TutorialTrackerComponent : Component
     [ViewVariables, AutoNetworkedField]
     public HashSet<EntProtoId> TargetPrototypes = new();
 
-    [ViewVariables, AutoNetworkedField]
+    [ViewVariables]
     public HashSet<EntityUid> ObservedEntities = new();
 }

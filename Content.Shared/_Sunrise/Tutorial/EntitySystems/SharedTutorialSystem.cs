@@ -7,6 +7,7 @@ using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -251,7 +252,9 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (tracker.TargetPrototypes.Count == 0 && !ObservesAny(tracker))
             return;
 
-        foreach (var uid in _lookupSystem.GetEntitiesInRange(user, step.ObserveRange))
+        var entities = _lookupSystem.GetEntitiesInRange(user, step.ObserveRange);
+
+        foreach (var uid in entities)
         {
             TryObserveEntity(user, uid, tracker);
         }
@@ -431,7 +434,9 @@ public abstract class SharedTutorialSystem : EntitySystem
         var best = EntityUid.Invalid;
         var bestDistSq = float.MaxValue;
 
-        foreach (var ent in _lookupSystem.GetEntitiesInRange(uid, proto.ObserveRange))
+        var entities = _lookupSystem.GetEntitiesInRange(uid, proto.ObserveRange);
+
+        foreach (var ent in entities)
         {
             var meta = MetaData(ent);
 

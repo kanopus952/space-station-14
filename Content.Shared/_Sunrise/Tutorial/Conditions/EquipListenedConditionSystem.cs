@@ -13,7 +13,6 @@ public sealed partial class EquipListenedConditionSystem : EventListenedConditio
     {
         base.Initialize();
         SubscribeLocalEvent<TutorialPlayerComponent, DidEquipEvent>(OnDidEquip);
-        SubscribeLocalEvent<TutorialPlayerComponent, DidEquipHandEvent>(OnDidEquipHand);
     }
 
     private void OnDidEquip(Entity<TutorialPlayerComponent> ent, ref DidEquipEvent args)
@@ -23,14 +22,6 @@ public sealed partial class EquipListenedConditionSystem : EventListenedConditio
 
         if (TryComp(ent, out TutorialTrackerComponent? tracker))
             Tutorial.TryObserveEntity(ent, args.Equipment, tracker);
-    }
-
-    private void OnDidEquipHand(Entity<TutorialPlayerComponent> ent, ref DidEquipHandEvent args)
-    {
-        RecordEvent(ent, args.Equipped);
-
-        if (TryComp(ent, out TutorialTrackerComponent? tracker))
-            Tutorial.TryObserveEntity(ent, args.Equipped, tracker);
     }
 }
 

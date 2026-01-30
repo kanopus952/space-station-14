@@ -99,7 +99,7 @@ public sealed class TutorialProgressBarSystem : EntitySystem
         if (total <= 0)
             return;
 
-        var current = Math.Clamp(player.StepIndex + 1, 0, total);
+        var current = Math.Clamp(player.StepIndex, 0, total);
         var progress = (float)current / total;
 
         if (_progressUiQuery.TryGetComponent(uid, out var ui) && ui.Bar != null)

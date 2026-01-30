@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._Sunrise.Tutorial.Components;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TutorialObservableComponent : Component
 {
-    [ViewVariables]
+    [ViewVariables, AutoNetworkedField]
     public readonly HashSet<EntityUid> Observers = new();
 }
