@@ -7,6 +7,7 @@ using Robust.Client.UserInterface;
 using Content.Client._Sunrise.TimeCounterContainer;
 using Content.Client.UserInterface.Screens;
 using Robust.Shared.Player;
+using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client._Sunrise.Tutorial;
 
@@ -15,6 +16,7 @@ public sealed class TimeCounterSystem : EntitySystem
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
     private EntityQuery<TimeCounterUiComponent> _timeCounterUiQuery;
+    private LayoutContainer _timeCounterRoot = default!;
     /// <summary>
     /// Why? The scaling viewport is not initialized after OnScreenChanged.
     /// Soo we have to wait
@@ -31,6 +33,7 @@ public sealed class TimeCounterSystem : EntitySystem
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
 
         _timeCounterUiQuery = GetEntityQuery<TimeCounterUiComponent>();
+        _timeCounterRoot = new LayoutContainer();
         _ui.OnScreenChanged += OnScreenChanged;
     }
 
@@ -44,6 +47,7 @@ public sealed class TimeCounterSystem : EntitySystem
     {
         if (ev.New is not InGameScreen)
         {
+            _timeCounterRoot.Orphan();
             RemoveAllCounters();
             _pendingRefresh = false;
             return;
@@ -59,6 +63,7 @@ public sealed class TimeCounterSystem : EntitySystem
 
     private void OnPlayerDetached(LocalPlayerDetachedEvent ev)
     {
+        _timeCounterRoot.Orphan();
         RemoveAllCounters();
         _pendingRefresh = false;
     }
@@ -92,6 +97,7 @@ public sealed class TimeCounterSystem : EntitySystem
         if (_eye.MainViewport is not ScalingViewport vp)
             return;
 
+        var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
         var screenSize = vp.SizeBox;
 
         var position = ent.Comp.ScreenPosition ?? new Vector2(screenSize.Center.X, 1);
@@ -113,9 +119,19 @@ public sealed class TimeCounterSystem : EntitySystem
             timeUi.Counter.Orphan();
 
         var counter = new TimeCounter(ent.Comp.EndTime, style, position);
-        _ui.PopupRoot.AddChild(counter);
+        SetTimeCounterRoot(viewportContainer, counter);
         var counterUi = EnsureComp<TimeCounterUiComponent>(ent.Owner);
         counterUi.Counter = counter;
+    }
+
+    private void SetTimeCounterRoot(LayoutContainer root, TimeCounter counter)
+    {
+        _timeCounterRoot.Orphan();
+        if (counter.Parent != _timeCounterRoot)
+            _timeCounterRoot.AddChild(counter);
+        root.AddChild(_timeCounterRoot);
+        LayoutContainer.SetAnchorPreset(_timeCounterRoot, LayoutContainer.LayoutPreset.Wide);
+        _timeCounterRoot.SetPositionLast();
     }
 
     private void RemoveTimeCounter(EntityUid uid)

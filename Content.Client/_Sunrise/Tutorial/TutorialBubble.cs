@@ -1,12 +1,10 @@
 using System.Numerics;
-using Content.Shared.Speech;
 using Content.Client._Sunrise.UserInterface.RichText;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Configuration;
-using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -46,16 +44,16 @@ public abstract class TutorialBubble : Control
 
     public static TutorialBubble CreateTutorialBubble(string message, EntityUid senderEntity)
     {
-        return new TutorialMainBubble(message, senderEntity, "sayBox");
+        return new TutorialMainBubble(message, senderEntity, string.Empty);
     }
 
-    public TutorialBubble(string message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
+    public TutorialBubble(string message, EntityUid senderEntity, string styleClass, Color? fontColor = null)
     {
         IoCManager.InjectDependencies(this);
         _senderEntity = senderEntity;
         _transformSystem = _entityManager.System<SharedTransformSystem>();
 
-        var bubble = BuildBubble(message, speechStyleClass, fontColor);
+        var bubble = BuildBubble(message, styleClass, fontColor);
 
         AddChild(bubble);
 
@@ -65,14 +63,14 @@ public abstract class TutorialBubble : Control
         ContentSize = bubble.DesiredSize;
     }
 
-    protected abstract Control BuildBubble(string message, string speechStyleClass, Color? fontColor = null);
+    protected abstract Control BuildBubble(string message, string styleClass, Color? fontColor = null);
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
 
         if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform)
-            || ResolveMapId(xform) != _eyeManager.CurrentEye.Position.MapId)
+            || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
         {
             Modulate = Color.White.WithAlpha(0);
             return;
@@ -80,12 +78,7 @@ public abstract class TutorialBubble : Control
 
         Modulate = Color.White;
 
-        var baseOffset = 0f;
-
-        if (_entityManager.TryGetComponent<SpeechComponent>(_senderEntity, out var speech))
-            baseOffset = speech.SpeechBubbleOffset;
-
-        var offset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -(EntityVerticalOffset + baseOffset);
+        var offset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -EntityVerticalOffset;
         var worldPos = _transformSystem.GetWorldPosition(xform) + offset;
 
         var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale;
@@ -93,25 +86,6 @@ public abstract class TutorialBubble : Control
         // Round to nearest 0.5
         screenPos = (screenPos * 2).Rounded() / 2;
         LayoutContainer.SetPosition(this, screenPos);
-    }
-
-    private MapId? ResolveMapId(TransformComponent? xform)
-    {
-        var mapId = xform?.MapID;
-        if (mapId != MapId.Nullspace)
-            return mapId;
-
-        var parent = xform?.ParentUid;
-        while (parent != EntityUid.Invalid && _entityManager.TryGetComponent(parent, out xform))
-        {
-            mapId = xform.MapID;
-            if (mapId != MapId.Nullspace)
-                return mapId;
-
-            parent = xform.ParentUid;
-        }
-
-        return MapId.Nullspace;
     }
     public static FormattedMessage FormatSpeech(string message, Color? fontColor = null)
     {
@@ -127,15 +101,15 @@ public abstract class TutorialBubble : Control
 public sealed class TutorialMainBubble : TutorialBubble
 {
 
-    public TutorialMainBubble(string message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
-        : base(message, senderEntity, speechStyleClass, fontColor)
+    public TutorialMainBubble(string message, EntityUid senderEntity, string styleClass, Color? fontColor = null)
+        : base(message, senderEntity, styleClass, fontColor)
     {
     }
 
-    protected override Control BuildBubble(string message, string speechStyleClass, Color? fontColor = null)
+    protected override Control BuildBubble(string message, string styleClass, Color? fontColor = null)
     {
         var panel = new TutorialBubbleControl();
-        panel.BubbleFrame.StyleClasses.Add(speechStyleClass);
+        panel.BubbleFrame.StyleClasses.Add(styleClass);
         panel.BubbleText.SetMessage(FormatSpeech(message, fontColor), BubbleTags);
 
         return panel;

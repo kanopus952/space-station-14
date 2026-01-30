@@ -150,6 +150,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         var tutorial = EnsureComp<TutorialPlayerComponent>(uid.Value);
         tutorial.Grid = gridUid;
+        EnsureComp<TutorialProgressBarComponent>(uid.Value);
     }
 
     private bool CanStartTutorial()

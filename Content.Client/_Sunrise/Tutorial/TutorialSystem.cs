@@ -17,10 +17,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     public event Action? WindowDataReceived;
     public bool CompletedTutorialsReceived { get; private set; }
-    public IReadOnlyCollection<string> CompletedTutorials => _completedTutorials;
+    public HashSet<string> CompletedTutorials = new();
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer _speechBubbleRoot = default!;
-    private readonly HashSet<string> _completedTutorials = new();
     public override void Initialize()
     {
         base.Initialize();
@@ -28,8 +27,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeLocalEvent<TutorialBubbleComponent, AfterAutoHandleStateEvent>(AfterAutoHandleState);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentShutdown>(OnComponentShutdown);
-        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
-        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<TutorialBubbleComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<TutorialBubbleComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeNetworkEvent<TutorialWindowDataResponseEvent>(OnWindowDataResponse);
         SubscribeNetworkEvent<TutorialStartDeniedEvent>(OnStartDenied);
 
@@ -37,13 +36,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _bubbleUiQuery = GetEntityQuery<TutorialBubbleUiComponent>();
         _ui.OnScreenChanged += OnScreenChanged;
     }
-
-    public override void Shutdown()
-    {
-        base.Shutdown();
-        _ui.OnScreenChanged -= OnScreenChanged;
-    }
-
     private void OnScreenChanged((UIScreen? Old, UIScreen? New) ev)
     {
         if (ev.New is not InGameScreen)
@@ -54,13 +46,19 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         RefreshBubbles();
     }
+    private void OnStartDenied(TutorialStartDeniedEvent msg, EntitySessionEventArgs args)
+    {
+        if (string.IsNullOrEmpty(msg.Reason))
+            return;
 
-    private void OnPlayerAttached(LocalPlayerAttachedEvent ev)
+        _ui.Popup(Loc.GetString(msg.Reason), null, false);
+    }
+    private void OnPlayerAttached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerAttachedEvent ev)
     {
         RefreshBubbles();
     }
 
-    private void OnPlayerDetached(LocalPlayerDetachedEvent ev)
+    private void OnPlayerDetached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
         _speechBubbleRoot.Orphan();
     }
@@ -76,6 +74,22 @@ public sealed class TutorialSystem : SharedTutorialSystem
     private void OnComponentShutdown(Entity<TutorialBubbleComponent> ent, ref ComponentShutdown ev)
     {
         RemoveBubble(ent);
+    }
+    private void RefreshBubbles()
+    {
+        var query = EntityQueryEnumerator<TutorialBubbleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            UpdateBubble((uid, comp));
+        }
+    }
+    private void RemoveBubble(EntityUid uid)
+    {
+        if (!_bubbleUiQuery.TryGetComponent(uid, out var bubbleUi) || bubbleUi.Bubble == null)
+            return;
+
+        bubbleUi.Bubble.DisposeAllChildren();
+        RemComp<TutorialBubbleUiComponent>(uid);
     }
     private void UpdateBubble(Entity<TutorialBubbleComponent> ent)
     {
@@ -122,14 +136,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
         LayoutContainer.SetAnchorPreset(_speechBubbleRoot, LayoutContainer.LayoutPreset.Wide);
         _speechBubbleRoot.SetPositionLast();
     }
-    private void RemoveBubble(EntityUid uid)
-    {
-        if (!_bubbleUiQuery.TryGetComponent(uid, out var bubbleUi) || bubbleUi.Bubble == null)
-            return;
-
-        bubbleUi.Bubble.DisposeAllChildren();
-        RemComp<TutorialBubbleUiComponent>(uid);
-    }
 
     public void RequestQuitTutorial()
     {
@@ -148,26 +154,14 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private void OnWindowDataResponse(TutorialWindowDataResponseEvent msg, EntitySessionEventArgs args)
     {
-        _completedTutorials.Clear();
-        _completedTutorials.UnionWith(msg.CompletedTutorials);
+        CompletedTutorials.Clear();
+        CompletedTutorials.UnionWith(msg.CompletedTutorials);
         CompletedTutorialsReceived = true;
         WindowDataReceived?.Invoke();
     }
-
-    private void OnStartDenied(TutorialStartDeniedEvent msg, EntitySessionEventArgs args)
+    public override void Shutdown()
     {
-        if (string.IsNullOrEmpty(msg.Reason))
-            return;
-
-        _ui.Popup(Loc.GetString(msg.Reason));
-    }
-
-    private void RefreshBubbles()
-    {
-        var query = EntityQueryEnumerator<TutorialBubbleComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            UpdateBubble((uid, comp));
-        }
+        base.Shutdown();
+        _ui.OnScreenChanged -= OnScreenChanged;
     }
 }

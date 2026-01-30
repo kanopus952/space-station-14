@@ -1,7 +1,7 @@
-using System;
 using Content.Client.Lobby;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
@@ -10,10 +10,9 @@ namespace Content.Client._Sunrise.Tutorial;
 
 public sealed class TutorialUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
 {
-    [Dependency] private readonly IEntitySystemManager _entSys = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [UISystemDependency] private readonly TutorialSystem _tutorialSystem = default!;
     private TutorialWindow? _window;
-    private TutorialSystem? _tutorialSystem;
     private Action<TutorialSequencePrototype>? _startTutorialHandler;
     private bool _shown;
     private bool _autoOpenEnabled = true;
@@ -29,8 +28,6 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
     {
         if (!_autoOpenEnabled)
             return;
-
-        _tutorialSystem ??= _entSys.GetEntitySystem<TutorialSystem>();
 
         if (!_windowDataSubscribed)
         {
@@ -53,7 +50,7 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
 
         _shown = true;
         _window = new TutorialWindow();
-        _tutorialSystem ??= _entSys.GetEntitySystem<TutorialSystem>();
+
         if (!_windowDataSubscribed)
         {
             _tutorialSystem.WindowDataReceived += OnWindowDataReceived;
@@ -68,12 +65,8 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
 
         _window.OnClose += () =>
         {
-            if (_tutorialSystem != null)
-            {
-                if (_startTutorialHandler != null)
-                    _window.OnTutorialButtonPressed -= _startTutorialHandler;
-                _window.OnRequestCompletedTutorials -= _tutorialSystem.RequestWindowData;
-            }
+            _window.OnTutorialButtonPressed -= _startTutorialHandler;
+            _window.OnRequestCompletedTutorials -= _tutorialSystem.RequestWindowData;
 
             _startTutorialHandler = null;
             _window = null;
@@ -84,11 +77,7 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
 
     public void OnStateExited(LobbyState state)
     {
-        if (_window != null)
-        {
-            _window.Close();
-            _window = null;
-        }
+        _window?.Close();
 
         _shown = false;
 
@@ -101,9 +90,6 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
 
     private void OnWindowDataReceived()
     {
-        if (_tutorialSystem == null)
-            return;
-
         if (_tutorialSystem.CompletedTutorialsReceived)
             _window?.SetCompletedTutorials(_tutorialSystem.CompletedTutorials);
 

@@ -33,7 +33,6 @@ public sealed partial class TutorialWindow : DefaultWindow
     private TutorialCategoryButton? _selectedCategory;
     private readonly HashSet<string> _completedTutorials = new();
     private bool _completedTutorialsLoaded;
-    private bool _updatingAutoOpen;
 
     public TutorialWindow()
     {
@@ -52,6 +51,9 @@ public sealed partial class TutorialWindow : DefaultWindow
     {
         var categories = _prototype.EnumeratePrototypes<TutorialCategoryPrototype>().ToList();
 
+        categories.Sort((a, b)
+            => string.Compare(Loc.GetString(a.Name), Loc.GetString(b.Name), StringComparison.Ordinal));
+
         foreach (var category in categories)
         {
             var button = new TutorialCategoryButton(category, OnCategorySelected);
@@ -59,10 +61,8 @@ public sealed partial class TutorialWindow : DefaultWindow
         }
 
         // Select the first category by default
-        if (CategoryContainer.Children.FirstOrDefault() is TutorialCategoryButton firstCategory)
-        {
+        if (CategoryContainer.Children[0] is TutorialCategoryButton firstCategory)
             OnCategorySelected(firstCategory);
-        }
     }
 
     private void OnCategorySelected(TutorialCategoryButton categoryButton)
@@ -128,16 +128,11 @@ public sealed partial class TutorialWindow : DefaultWindow
 
     private void SyncAutoOpenCheckbox()
     {
-        _updatingAutoOpen = true;
         AutoOpenCheckbox.Pressed = _cfg.GetCVar(SunriseCCVars.TutorialWindowAutoOpen);
-        _updatingAutoOpen = false;
     }
 
     private void OnAutoOpenToggled(BaseButton.ButtonToggledEventArgs args)
     {
-        if (_updatingAutoOpen)
-            return;
-
         _cfg.SetCVar(SunriseCCVars.TutorialWindowAutoOpen, args.Pressed);
     }
 

@@ -18,8 +18,5 @@ public static class SunriseStyleClass
     public const string FancyCardActionPanel = "FancyCardActionPanel";
     public const string FancyCardActionButton = "FancyCardActionButton";
     public const string TutorialBubbleFrame = "TutorialBubbleFrame";
-    public const string TutorialBubbleFill = "TutorialBubbleFill";
-    public const string TutorialBubbleTail = "TutorialBubbleTail";
     public const string TutorialKeybindFrame = "TutorialKeybindFrame";
-    public const string TutorialBubbleText = "TutorialBubbleText";
 }
