@@ -271,7 +271,7 @@ namespace Content.Server.Database
 
                     if (parsed is null) continue;
 
-                    markingsList.Add(parsed);
+                    markingsList.Add(parsed.Value);
                 }
 
                 if (Marking.ParseFromDbString($"{profile.FacialHairName}@{profile.FacialHairColor}") is { } facialMarking)
@@ -391,7 +391,7 @@ namespace Content.Server.Database
 
             // support for downgrades - at some point this should be removed
             var legacyMarkings = appearance.GetFlatMarkings()
-                .Select(marking => marking.ToString())
+                .Select(marking => marking.ToLegacyDbString())
                 .ToList();
             profile.Markings = JsonSerializer.SerializeToDocument(legacyMarkings);
 
