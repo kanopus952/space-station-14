@@ -486,6 +486,135 @@
   - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
     state: dalmatian_wag
 
+# Hidden wagging helper markings. WaggingComponent appends "Animated" to the applied tail marking ID.
+- type: marking
+  id: VulpTailAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag-fade
+
+- type: marking
+  id: VulpTailTipAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag-tip
+
+- type: marking
+  id: VulpTailWagAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag-tip
+
+- type: marking
+  id: VulpTailWagTipAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: vulp_wag-tip
+
+- type: marking
+  id: VulpTailFoxAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag-fade
+
+- type: marking
+  id: VulpTailFoxTipAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag-tip
+
+- type: marking
+  id: VulpTailFoxWagAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag-fade
+
+- type: marking
+  id: VulpTailFoxWagTipAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: fox_wag-tip
+
+- type: marking
+  id: VulpTailBushyAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: bushfluff_wag
+
+- type: marking
+  id: VulpTailBushyWagAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: bushfluff_wag
+
+- type: marking
+  id: VulpTailCoyoteWagAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: coyote_wag
+
+- type: marking
+  id: VulpTailCorgiWagAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: corgi_wag
+
+- type: marking
+  id: VulpTailHuskyAltAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: husky-wagging
+
+- type: marking
+  id: VulpTailDalmatianWagAnimated
+  bodyPart: Tail
+  groupWhitelist: []
+  sprites:
+  - sprite: _Sunrise/Mobs/Customization/Vulpkanin/tail_markings.rsi
+    state: dalmatian_wag
+
 # Body Markings (Chest)
 - type: marking
   id: VulpBellyCrest

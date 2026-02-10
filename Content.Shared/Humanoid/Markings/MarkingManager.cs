@@ -110,10 +110,12 @@ public sealed class MarkingManager
                 continue;
             }
 
-            if ((markingPoints.OnlyWhitelisted || point.OnlyWhitelisted) && marking.SpeciesRestrictions == null)
+            if ((markingPoints.OnlyWhitelisted || point.OnlyWhitelisted)
+                && marking.SpeciesRestrictions == null
+                && marking.GroupWhitelist == null)
                 continue;
 
-            if (marking.SpeciesRestrictions != null && !marking.SpeciesRestrictions.Contains(species))
+            if (!CanApplyToSpecies(species, marking))
                 continue;
 
             res.Add(key, marking);
@@ -148,10 +150,10 @@ public sealed class MarkingManager
 
         foreach (var (key, marking) in MarkingsByCategory(category))
         {
-            if (onlyWhitelisted && marking.SpeciesRestrictions == null)
+            if (onlyWhitelisted && marking.SpeciesRestrictions == null && marking.GroupWhitelist == null)
                 continue;
 
-            if (marking.SpeciesRestrictions != null && !marking.SpeciesRestrictions.Contains(species))
+            if (!CanApplyToSpecies(species, marking))
                 continue;
 
             if (marking.SexRestriction != null && marking.SexRestriction != sex)
@@ -180,7 +182,7 @@ public sealed class MarkingManager
             return false;
 
         if (proto.MarkingCategory != category ||
-            proto.SpeciesRestrictions != null && !proto.SpeciesRestrictions.Contains(species) ||
+            !CanApplyToSpecies(species, proto) ||
             proto.SexRestriction != null && proto.SexRestriction != sex)
             return false;
 
@@ -243,13 +245,29 @@ public sealed class MarkingManager
         var speciesProto = prototypeManager.Index<SpeciesPrototype>(species);
         var onlyWhitelisted = prototypeManager.Index(speciesProto.MarkingPoints).OnlyWhitelisted;
 
-        if (onlyWhitelisted && prototype.SpeciesRestrictions == null)
+        if (onlyWhitelisted && prototype.SpeciesRestrictions == null && prototype.GroupWhitelist == null)
             return false;
 
-        if (prototype.SpeciesRestrictions != null && !prototype.SpeciesRestrictions.Contains(species))
+        if (!CanApplyToSpecies(species, prototype))
             return false;
 
         return prototype.SexRestriction == null || prototype.SexRestriction == sex;
+    }
+
+    private static bool CanApplyToSpecies(string species, MarkingPrototype prototype)
+    {
+        if (prototype.GroupWhitelist != null)
+        {
+            foreach (var group in prototype.GroupWhitelist)
+            {
+                if (group.Id == species)
+                    return true;
+            }
+
+            return false;
+        }
+
+        return prototype.SpeciesRestrictions == null || prototype.SpeciesRestrictions.Contains(species);
     }
 
     public bool MustMatchSkin(string species, HumanoidVisualLayers layer, out float alpha, IPrototypeManager? prototypeManager = null)
