@@ -1,35 +1,31 @@
-- type: tutorialCategory
+﻿- type: tutorialCategory
   id: BasicTutorial
   name: base
   tutorials:
   - BasicTutorial
-  - BasicTutorial2
-  - BasicTutorial3
-
-- type: tutorialCategory
-  id: BasicTutorial1
-  name: basess
-  tutorials:
-  - BasicTutorial
-  - BasicTutorial
-
-- type: tutorialCategory
-  id: BasicTutorial12
-  name: basessww
-  tutorials:
-  - BasicTutorial
-  - BasicTutorial
 
 - type: tutorialSequence
   id: BasicTutorial
-  duration: 60
+  duration: 180
   name: basic tutorial
   texture: /Textures/_Sunrise/Interface/Tutorial/image.png
+  grid: /Maps/_Sunrise/Tutorials/base_tutorial.yml
+  playerEntity: BaseTutorialPlayer
   tooltip: Basic tutorial about base mechanics
   steps:
-  - ExamineJumpsuitColorGrey
-  - ItemsInteraction1
-  - ItemsInteraction2
+  - BasicTutorialWalk
+  - BasicTutorialEquipJumpsuit
+  - BasicTutorialEquipMask
+  - BasicTutorialEquipShoes
+  - BasicTutorialOpenMaint
+  - BasicTutorialPickupFlashlight
+  - BasicTutorialTurnOnFlashlight
+  - BasicTutorialTryOpenLockedAirlock
+  - BasicTutorialPressSignalButton
+  - BasicTutorialOpenUnlockedAirlock
+  - BasicTutorialDropFlashlight
+  - BasicTutorialPickupKnife
+  - BasicTutorialAttackClown
 
 - type: tutorialSequence
   id: BasicTutorial2
@@ -50,57 +46,290 @@
   - ItemsInteraction1
 
 - type: tutorialStep
-  id: ExamineJumpsuitColorGrey
-  # Облачко которое появится над сущностью которая учавствует в осмотре.
-  bubble:
-    text: examine-something
-    # Два типа таргета: Self и Entity
-    target:
-     type: Entity
-     # Ищет все энтити с ClothingUniformJumpsuitColorGrey вокруг и покажет над ближайшем
-     prototype: ClothingUniformJumpsuitColorGrey
+  id: BasicTutorialStepBase
+  abstract: true
+  sender: base-tutorial-sender
 
-  # От чьего лица повествование?
-  sender: Рассказчик
-  # То что появится вначале шага в чате
-  chatMessage: ЙОУ! Начало туториала, осмотри предмет не будь дураком!
-  # То что будет проговрено ТТСом
-  ttsMessage: Здравствуй дорогой игрок!
-  # Айди ттса
-  voiceId: Jirinovsky
-  # Условия!
+- type: tutorialStep
+  id: BasicTutorialWalk
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-walk-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-walk-chat
+  ttsMessage: tutorial-basic-walk-tts
   conditions:
-  # Слушает ивенты соответсвующих типов
-  - !type:EventListenedCondition
-    # Каких энтити слушаем в радиусе (по умолчанию 10 клеток, можно расширить в системе)
-    target: ClothingUniformJumpsuitColorGrey
-    # Тип ивента, в данном случае осмотр чего-то
-    event: Examine
-    # Сколько раз нужно выполнить осмотр
-    count: 1
+  - !type:TravelDistanceCondition
+    distance: 10
+
+- type: tutorialStep
+  id: ExamineJumpsuitColorGrey
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-step-examine-bubble
+    target:
+     type: Self
+     prototype: ClothingUniformJumpsuitColorGrey
+  chatMessage: tutorial-basic-step-examine-chat
+  ttsMessage: tutorial-basic-step-examine-tts
+  conditions:
+  - !type:ExamineListenedCondition
+    target: BaseTutorialPlayer
 
 - type: tutorialStep
   id: ItemsInteraction1
+  parent: BasicTutorialStepBase
   bubble:
-    text: Ляляля
-    target:
-     type: Entity
-     prototype: ClothingUniformJumpsuitColorWhite
-  chatMessage: ХУЯУ
-  conditions:
-  - !type:EquipItemCondition
-    item: ClothingUniformJumpsuitColorWhite
-    slot: INNERCLOTHING
-
-- type: tutorialStep
-  id: ItemsInteraction2
-  bubble:
-    text: Ляляля
+    text: tutorial-basic-step-pickup-bubble
     target:
      type: Entity
      prototype: ClothingUniformJumpsuitColorGrey
-  chatMessage: ХУЯУ
+  chatMessage: tutorial-basic-step-pickup-chat
+  ttsMessage: tutorial-basic-step-pickup-tts
   conditions:
-  - !type:EquipItemCondition
-    item: ClothingUniformJumpsuitColorGrey
+  - !type:PickupListenedCondition
+    target: ClothingUniformJumpsuitColorGrey
+
+- type: tutorialStep
+  id: BasicTutorialUseInHand
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-step-use-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-step-use-chat
+  ttsMessage: tutorial-basic-step-use-tts
+  conditions:
+  - !type:UseListenedCondition
+    target: ClothingUniformJumpsuitColorGrey
+
+- type: tutorialStep
+  id: BasicTutorialDropItem
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-step-drop-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-step-drop-chat
+  ttsMessage: tutorial-basic-step-drop-tts
+  conditions:
+  - !type:DropListenedCondition
+    target: ClothingUniformJumpsuitColorGrey
+
+- type: tutorialStep
+  id: BasicTutorialAttack
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-step-attack-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-step-attack-chat
+  ttsMessage: tutorial-basic-step-attack-tts
+  conditions:
+  - !type:AttackListenedCondition
+
+- type: tutorialStep
+  id: ItemsInteraction2
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-step-equip-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-step-equip-chat
+  ttsMessage: tutorial-basic-step-equip-tts
+  conditions:
+  - !type:EquipListenedCondition
+    target: ClothingUniformJumpsuitColorGrey
     slot: INNERCLOTHING
+
+- type: tutorialStep
+  id: BasicTutorialEquipJumpsuit
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-equip-jumpsuit-bubble
+    target:
+     type: Entity
+     prototype: ClothingUniformJumpsuitColorGrey
+  chatMessage: tutorial-basic-equip-jumpsuit-chat
+  ttsMessage: tutorial-basic-equip-jumpsuit-tts
+  conditions:
+  - !type:EquipListenedCondition
+    target: ClothingUniformJumpsuitColorGrey
+    slot: INNERCLOTHING
+
+- type: tutorialStep
+  id: BasicTutorialEquipMask
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-equip-mask-bubble
+    target:
+     type: Entity
+     prototype: ClothingMaskGas
+  chatMessage: tutorial-basic-equip-mask-chat
+  ttsMessage: tutorial-basic-equip-mask-tts
+  conditions:
+  - !type:EquipListenedCondition
+    target: ClothingMaskGas
+    slot: MASK
+
+- type: tutorialStep
+  id: BasicTutorialEquipShoes
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-equip-shoes-bubble
+    target:
+     type: Entity
+     prototype: ClothingShoesColorBlack
+  chatMessage: tutorial-basic-equip-shoes-chat
+  ttsMessage: tutorial-basic-equip-shoes-tts
+  conditions:
+  - !type:EquipListenedCondition
+    target: ClothingShoesColorBlack
+    slot: FEET
+
+- type: tutorialStep
+  id: BasicTutorialOpenMaint
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-open-maint-bubble
+    target:
+     type: Entity
+     prototype: AirlockMaint
+  chatMessage: tutorial-basic-open-maint-chat
+  ttsMessage: tutorial-basic-open-maint-tts
+  anyConditions:
+  - !type:InteractListenedCondition
+    target: AirlockMaint
+  - !type:ActivateInWorldListenedCondition
+    target: AirlockMaint
+
+- type: tutorialStep
+  id: BasicTutorialPickupFlashlight
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-pickup-flashlight-bubble
+    target:
+     type: Entity
+     prototype: FlashlightLantern
+  chatMessage: tutorial-basic-pickup-flashlight-chat
+  ttsMessage: tutorial-basic-pickup-flashlight-tts
+  conditions:
+  - !type:PickupListenedCondition
+    target: FlashlightLantern
+
+- type: tutorialStep
+  id: BasicTutorialTurnOnFlashlight
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-turn-on-flashlight-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-turn-on-flashlight-chat
+  ttsMessage: tutorial-basic-turn-on-flashlight-tts
+  conditions:
+  - !type:UseListenedCondition
+    target: FlashlightLantern
+
+- type: tutorialStep
+  id: BasicTutorialTryOpenLockedAirlock
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-try-open-locked-bubble
+    target:
+     type: Entity
+     prototype: Airlock
+  chatMessage: tutorial-basic-try-open-locked-chat
+  ttsMessage: tutorial-basic-try-open-locked-tts
+  observeRange: 15
+  conditions:
+  - !type:InteractListenedCondition
+    target: Airlock
+
+- type: tutorialStep
+  id: BasicTutorialPressSignalButton
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-press-signal-bubble
+    target:
+     type: Entity
+     prototype: SignalButton
+  chatMessage: tutorial-basic-press-signal-chat
+  ttsMessage: tutorial-basic-press-signal-tts
+  conditions:
+  - !type:InteractListenedCondition
+    target: SignalButton
+
+- type: tutorialStep
+  id: BasicTutorialOpenUnlockedAirlock
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-open-unlocked-bubble
+    target:
+     type: Entity
+     prototype: Airlock
+  chatMessage: tutorial-basic-open-unlocked-chat
+  ttsMessage: tutorial-basic-open-unlocked-tts
+  conditions:
+  - !type:InteractListenedCondition
+    target: Airlock
+
+- type: tutorialStep
+  id: BasicTutorialDropFlashlight
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-drop-flashlight-bubble
+    target:
+     type: Self
+  chatMessage: tutorial-basic-drop-flashlight-chat
+  ttsMessage: tutorial-basic-drop-flashlight-tts
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: FlashlightLantern
+  conditions:
+  - !type:DropListenedCondition
+    target: FlashlightLantern
+
+- type: tutorialStep
+  id: BasicTutorialPickupKnife
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-pickup-knife-bubble
+    target:
+     type: Entity
+     prototype: KitchenKnife
+  chatMessage: tutorial-basic-pickup-knife-chat
+  ttsMessage: tutorial-basic-pickup-knife-tts
+  conditions:
+  - !type:PickupListenedCondition
+    target: KitchenKnife
+
+- type: tutorialStep
+  id: BasicTutorialAttackClown
+  parent: BasicTutorialStepBase
+  bubble:
+    text: tutorial-basic-attack-clown-bubble
+    target:
+     type: Entity
+     prototype: TargetClown
+  chatMessage: tutorial-basic-attack-clown-chat
+  ttsMessage: tutorial-basic-attack-clown-tts
+  conditions:
+  - !type:AttackListenedCondition
+    target: TargetClown
+
+- type: entity
+  name: tutorial spawn point
+  id: TutorialSpawnPoint
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    state: green
+  - type: TutorialSpawnPoint
+
+
+- type: entity
+  save: false
+  name: You!
+  parent: BaseMobHuman
+  id: BaseTutorialPlayer
