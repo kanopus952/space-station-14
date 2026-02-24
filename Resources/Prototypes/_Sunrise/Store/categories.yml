@@ -114,10 +114,6 @@
   id: DiseaseEvolutionCategory
   name: shop-disease-category-evolution
 
-- type: storeCategory
-  id: DiseaseInfectionCategory
-  name: shop-disease-category-infection
-
 
 - type: currency
   id: DiseasePoints
