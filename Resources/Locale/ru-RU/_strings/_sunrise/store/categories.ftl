@@ -19,10 +19,6 @@ store-category-engineering = Инженерный отдел
 store-category-cargo = Отдел снабжения
 store-category-security = Служба Безопасности
 store-category-paint = Краска
-# disease
-shop-disease-category-infect = Передача
-shop-disease-category-symptoms = Симптомы
-shop-disease-category-evolution = Улучшение
 # Uplink
 store-category-objectives = Цели
 store-category-mechs = Мехи

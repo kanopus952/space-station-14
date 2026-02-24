@@ -19,10 +19,6 @@ store-category-engineering = Engineering
 store-category-cargo = Cargo
 store-category-security = Security
 store-category-paint = Paint
-# disease
-shop-disease-category-infect = Infect
-shop-disease-category-symptoms = Symptoms
-shop-disease-category-evolution = Evolution
 # Uplink
 store-category-objectives = Objectives
 # ntUplink
