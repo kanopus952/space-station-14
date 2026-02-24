@@ -42,7 +42,7 @@ public sealed class DiseaseRoleSystem : SharedDiseaseRoleSystem
     {
         if (!TryRemoveMoney(uid, 15))
         {
-            _popup.PopupEntity(Loc.GetString("disease-not-enough-evolution-points"), uid, uid);
+            _popup.PopupEntity($"Вам не хватает очков эволюции", uid, uid);
             return;
         }
         component.Lethal += 1;
@@ -56,7 +56,7 @@ public sealed class DiseaseRoleSystem : SharedDiseaseRoleSystem
     {
         if (!TryRemoveMoney(uid, 15))
         {
-            _popup.PopupEntity(Loc.GetString("disease-not-enough-evolution-points"), uid, uid);
+            _popup.PopupEntity($"Вам не хватает очков эволюции", uid, uid);
             return;
         }
         component.Shield += 1;
@@ -70,7 +70,7 @@ public sealed class DiseaseRoleSystem : SharedDiseaseRoleSystem
     {
         if (!TryRemoveMoney(uid, 20))
         {
-            _popup.PopupEntity(Loc.GetString("disease-not-enough-evolution-points"), uid, uid);
+            _popup.PopupEntity($"Вам не хватает очков эволюции", uid, uid);
             return;
         }
         if (component.BaseInfectChance < 0.9f)
@@ -86,7 +86,7 @@ public sealed class DiseaseRoleSystem : SharedDiseaseRoleSystem
     {
         if (!TryRemoveMoney(uid, 15))
         {
-            _popup.PopupEntity(Loc.GetString("disease-not-enough-evolution-points"), uid, uid);
+            _popup.PopupEntity($"Вам не хватает очков эволюции", uid, uid);
             return;
         }
         if (component.CoughInfectChance < 0.85f)
