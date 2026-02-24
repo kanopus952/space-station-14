@@ -23,6 +23,11 @@ public sealed class TutorialEndedEvent() : EntityEventArgs
 }
 
 [NetSerializable, Serializable]
+public sealed class TutorialStepsCompletedEvent() : EntityEventArgs
+{
+}
+
+[NetSerializable, Serializable]
 public sealed class TutorialStartRequestEvent(ProtoId<TutorialSequencePrototype> sequenceId) : EntityEventArgs
 {
     public ProtoId<TutorialSequencePrototype> SequenceId = sequenceId;

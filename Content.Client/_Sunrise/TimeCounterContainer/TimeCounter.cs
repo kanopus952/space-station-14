@@ -37,7 +37,7 @@ public sealed partial class TimeCounter : PanelContainer
             Padding = _style.Padding
         };
 
-        CounterLabel.Align = _style.Centered ? Label.AlignMode.Center : Label.AlignMode.Left;
+        CounterLabel.Align = _style.Centered ? Label.AlignMode.Center : Label.AlignMode.Right;
         CounterLabel.VAlign = _style.Centered ? Label.VAlignMode.Center : Label.VAlignMode.Top;
         CounterLabel.FontOverride = fontOverride;
         CounterLabel.FontColorOverride = _style.DefaultColor;

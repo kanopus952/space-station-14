@@ -1,13 +1,16 @@
 using System.Numerics;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server._Sunrise.TTS;
 using Content.Server.Chat.Managers;
+using Content.Server.EUI;
 using Content.Server.GameTicking;
 using Content.Server._Sunrise.Auth;
 using Content.Shared._Sunrise.TTS;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Eui;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
@@ -38,41 +41,45 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly AccountCreationManager _accountCreation = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly EuiManager _eui = default!;
     [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     private ISawmill _sawmill = default!;
     private EntityUid? _tutorialMap;
+    private readonly Dictionary<ICommonSession, TutorialCompletionEui> _completionEuis = new();
     public override void Initialize()
     {
         base.Initialize();
 
         _sawmill = Logger.GetSawmill("tutorial");
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepChangedEvent>(OnStepChanged);
+        SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepsCompletedEvent>(OnStepsCompleted);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialEndedEvent>(OnTutorialComplete);
         SubscribeNetworkEvent<TutorialQuitRequestEvent>(OnTutorialQuitRequest);
         SubscribeNetworkEvent<TutorialStartRequestEvent>(OnStartRequest);
         SubscribeNetworkEvent<TutorialWindowDataRequestEvent>(OnWindowDataRequest);
     }
 
+    private void OnStepsCompleted(Entity<TutorialPlayerComponent> ent, ref TutorialStepsCompletedEvent args)
+    {
+        if (!_player.TryGetSessionByEntity(ent, out var session))
+            return;
+
+        SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
+        ShowCompletionEui(ent.Owner, session);
+    }
+
     private void OnTutorialComplete(Entity<TutorialPlayerComponent> ent, ref TutorialEndedEvent args)
     {
-        if (_player.TryGetSessionByEntity(ent, out var session))
-        {
-            SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
-
-            QueueDel(ent.Comp.Grid);
-            QueueDel(ent);
-
-            _ticker.Respawn(session);
+        if (!_player.TryGetSessionByEntity(ent, out var session))
             return;
-        }
 
-        if (_mind.TryGetMind(ent, out var mindId, out var mind) && mind.UserId != null)
-        {
-            SaveTutorialCompletion(mind.UserId.Value, ent.Comp.SequenceId);
-            _mind.WipeMind(mindId, mind);
-        }
+        CloseCompletionEui(session);
+        QueueDel(ent.Comp.Grid);
+        QueueDel(ent);
+
+        _ticker.Respawn(session);
 
         QueueDel(ent.Comp.Grid);
         QueueDel(ent);
@@ -91,6 +98,40 @@ public sealed class TutorialSystem : SharedTutorialSystem
         {
             _sawmill.Error($"Failed to save tutorial completion for {userId}: {e}");
         }
+    }
+
+    private void ShowCompletionEui(EntityUid player, ICommonSession session)
+    {
+        CloseCompletionEui(session);
+
+        var eui = new TutorialCompletionEui(player);
+        _completionEuis[session] = eui;
+        _eui.OpenEui(eui, session);
+    }
+
+    private void CloseCompletionEui(ICommonSession session)
+    {
+        if (!_completionEuis.Remove(session, out var eui))
+            return;
+
+        if (!eui.IsShutDown)
+            eui.Close();
+    }
+
+    public void OnCompletionEuiClosed(ICommonSession session)
+    {
+        _completionEuis.Remove(session);
+    }
+
+    public void HandleCompletionAction(EntityUid player, string actionId)
+    {
+        if (actionId != TutorialCompletionActions.Leave)
+            return;
+
+        if (!TryComp(player, out TutorialPlayerComponent? comp))
+            return;
+
+        EndTutorial((player, comp));
     }
 
     private void OnTutorialQuitRequest(TutorialQuitRequestEvent msg, EntitySessionEventArgs args)
@@ -161,11 +202,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         var count = 0;
         var query = EntityQueryEnumerator<TutorialPlayerComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        while (query.MoveNext(out _))
         {
-            if (comp.Completed || TerminatingOrDeleted(uid))
-                continue;
-
             count++;
             if (count >= maxActive)
                 return false;
@@ -249,13 +287,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         CleanupDeletedGrids(tutorialMap);
 
-        Vector2 offset;
+        var offset = Vector2.Zero;
 
-        if (tutorialMap.LoadedGrids.Count == 0)
-        {
-            offset = Vector2.Zero;
-        }
-        else
+        if (tutorialMap.LoadedGrids.Count != 0)
         {
             var lastGrid = tutorialMap.LoadedGrids[^1];
             offset = tutorialMap.GridOffsets[lastGrid] + tutorialMap.CoordinateStep;

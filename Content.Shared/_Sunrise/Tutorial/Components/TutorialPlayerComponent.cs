@@ -13,9 +13,6 @@ public sealed partial class TutorialPlayerComponent : Component
     [ViewVariables, AutoNetworkedField]
     public int StepIndex;
 
-    [ViewVariables]
-    public bool Completed;
-
     [ViewVariables, AutoNetworkedField]
     public EntityUid? CurrentBubbleTarget;
 

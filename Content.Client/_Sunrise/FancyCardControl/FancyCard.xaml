@@ -3,17 +3,16 @@
 
     <Control HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer Name="Frame"
-                        StyleClasses="FancyCardFrame"
+                        StyleClasses="FancyCardPrimary"
                         HorizontalExpand="True"
                         VerticalExpand="True"
                         Margin="0 16 0 0">
-            <BoxContainer Orientation="Vertical"
-                          HorizontalExpand="True"
+            <BoxContainer HorizontalExpand="True"
                           VerticalExpand="True"
                           Margin="8"
                           SeparationOverride="0">
                 <PanelContainer Name="ContentFrame"
-                                StyleClasses="FancyCardContent"
+                                StyleClasses="FancyCardSecondary"
                                 HorizontalExpand="True"
                                 VerticalExpand="True"
                                 MinHeight="220">
@@ -29,30 +28,31 @@
                             <BoxContainer Orientation="Horizontal"
                                           HorizontalAlignment="Center">
                                 <PanelContainer Name="DescOuter"
-                                                StyleClasses="FancyCardDescOuter"
+                                                StyleClasses="FancyCardPrimary"
                                                 MinWidth="360"
-                                                MaxWidth="620"
-                                                SetHeight="90">
+                                                MaxWidth="400"
+                                                MinHeight="90"
+                                                VerticalExpand="True">
                                     <PanelContainer Name="DescInner"
                                                     StyleClasses="FancyCardDescInner"
                                                     Margin="2">
                                         <BoxContainer Orientation="Vertical" Margin="10 8">
-                                            <Label Name="DescLabel"
-                                                   Text="-"
-                                                   FontColorOverride="#babfc2"/>
+                                            <RichTextLabel Name="DescLabel"
+                                                           Text="-"
+                                                           HorizontalExpand="True"
+                                                           VerticalAlignment="Top"/>
                                         </BoxContainer>
                                     </PanelContainer>
                                 </PanelContainer>
                             </BoxContainer>
                             <PanelContainer Name="ActionPanel"
-                                            StyleClasses="FancyCardActionPanel"
+                                            StyleClasses="FancyCardPrimary"
                                             SetSize="400 30"
                                             HorizontalAlignment="Center">
-                                <Button Name="ActionButton"
-                                        Text="Start"
-                                        StyleClasses="FancyCardActionButton"
-                                        SetSize="120 30"
-                                        Margin="0 7 0 7"/>
+                                <BoxContainer Name="ActionButtons"
+                                              Orientation="Horizontal"
+                                              HorizontalAlignment="Center"
+                                              SeparationOverride="6"/>
                             </PanelContainer>
                         </BoxContainer>
                     </Control>
@@ -73,8 +73,7 @@
                 <Control HorizontalExpand="True"/>
                 <Label Name="TitleLabel"
                        Text="-"
-                       StyleClasses="LabelHeading"
-                       FontColorOverride="#babfc2"/>
+                       StyleClasses="LabelHeading"/>
                 <Control HorizontalExpand="True"/>
             </BoxContainer>
         </PanelContainer>

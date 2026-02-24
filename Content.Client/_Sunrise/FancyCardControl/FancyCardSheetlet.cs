@@ -2,6 +2,7 @@ using Content.Client._Sunrise.Sheetlets;
 using Content.Client.Stylesheets;
 using Content.Client.Stylesheets.Fonts;
 using Content.Client.Stylesheets.Palette;
+using Content.Shared._Sunrise.Boss.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -12,115 +13,46 @@ namespace Content.Client._Sunrise.FancyCardControl;
 [CommonSheetlet]
 public sealed class FancyCardSheetlet : Sheetlet<PalettedStylesheet>
 {
-    private static readonly ColorPalette CardPalette =
-        ColorPalette.FromHexBase("#2d3e46", lightnessShift: 0.07f, chromaShift: 0.004f);
-
-    private static readonly ColorPalette AccentPalette =
-        ColorPalette.FromHexBase("#455563", lightnessShift: 0.07f, chromaShift: 0.004f);
-    private static readonly ColorPalette CardTextPalette =
-        ColorPalette.FromHexBase("#babfc2", lightnessShift: 0.07f, chromaShift: 0.004f);
-
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
-        var titleFont = sheet.BaseFont.GetFont(12, FontKind.Bold);
-        var bodyFont = sheet.BaseFont.GetFont(12);
-
-        var frameBox = new StyleBoxFlat
+        var background = new StyleBoxFlat
         {
-            BackgroundColor = CardPalette.Background
+            BackgroundColor = sheet.SecondaryPalette.Background
         };
 
-        var contentBox = new StyleBoxFlat
+        var backgroundLight = new StyleBoxFlat
         {
-            BackgroundColor = CardPalette.BackgroundDark
+            BackgroundColor = sheet.SecondaryPalette.BackgroundLight
         };
 
         var titleBarBox = new StyleBoxFlat
         {
-            BackgroundColor = CardPalette.BackgroundLight,
-            BorderColor = AccentPalette.Element,
+            BackgroundColor = sheet.SecondaryPalette.BackgroundLight,
+            BorderColor = sheet.SecondaryPalette.Background,
             BorderThickness = new Thickness(2)
-        };
-
-        var quoteOuterBox = new StyleBoxFlat
-        {
-            BackgroundColor = AccentPalette.Background
         };
 
         var quoteInnerBox = new StyleBoxFlat
         {
-            BackgroundColor = CardPalette.Background,
-            BorderColor = AccentPalette.Background,
+            BackgroundColor = sheet.SecondaryPalette.BackgroundDark,
+            BorderColor = sheet.SecondaryPalette.Background,
             BorderThickness = new Thickness(1)
-        };
-
-        var actionPanelBox = new StyleBoxFlat
-        {
-            BackgroundColor = CardPalette.BackgroundLight
-        };
-
-        var actionButtonBox = new StyleBoxFlat
-        {
-            BackgroundColor = Color.White,
-            Padding = new Thickness(6, 2)
         };
 
         return
         [
             E<PanelContainer>()
-                .Class(SunriseStyleClass.FancyCardFrame)
-                .Panel(frameBox),
+                .Class(SunriseStyleClass.FancyCardPrimary)
+                .Panel(background),
             E<PanelContainer>()
-                .Class(SunriseStyleClass.FancyCardContent)
-                .Panel(contentBox),
+                .Class(SunriseStyleClass.FancyCardSecondary)
+                .Panel(backgroundLight),
             E<PanelContainer>()
                 .Class(SunriseStyleClass.FancyCardTitleBar)
                 .Panel(titleBarBox),
             E<PanelContainer>()
-                .Class(SunriseStyleClass.FancyCardQuoteOuter)
-                .Panel(quoteOuterBox),
-            E<PanelContainer>()
                 .Class(SunriseStyleClass.FancyCardDescInner)
                 .Panel(quoteInnerBox),
-            E<PanelContainer>()
-                .Class(SunriseStyleClass.FancyCardActionPanel)
-                .Panel(actionPanelBox),
-
-            E<PanelContainer>()
-                .Class(SunriseStyleClass.FancyCardTitleBar)
-                .ParentOf(E<Label>().Class(StyleClass.LabelHeading))
-                .FontColor(CardTextPalette.Text)
-                .Font(titleFont),
-            E<PanelContainer>()
-                .Class(SunriseStyleClass.FancyCardDescInner)
-                .ParentOf(E<Label>().Class(StyleClass.LabelKeyText))
-                .FontColor(CardTextPalette.Text)
-                .Font(bodyFont),
-
-            E<Button>()
-                .Class(SunriseStyleClass.FancyCardActionButton)
-                .Box(actionButtonBox)
-                .FontColor(AccentPalette.Text),
-            E<Button>()
-                .Class(SunriseStyleClass.FancyCardActionButton)
-                .ParentOf(E<Label>())
-                .FontColor(CardTextPalette.Text),
-            E<Button>()
-                .Class(SunriseStyleClass.FancyCardActionButton)
-                .PseudoNormal()
-                .Modulate(AccentPalette.Element),
-            E<Button>()
-                .Class(SunriseStyleClass.FancyCardActionButton)
-                .PseudoHovered()
-                .Modulate(AccentPalette.HoveredElement),
-            E<Button>()
-                .Class(SunriseStyleClass.FancyCardActionButton)
-                .PseudoPressed()
-                .Modulate(AccentPalette.PressedElement),
-            E<Button>()
-                .Class(SunriseStyleClass.FancyCardActionButton)
-                .PseudoDisabled()
-                .Modulate(CardPalette.DisabledElement),
         ];
     }
 }

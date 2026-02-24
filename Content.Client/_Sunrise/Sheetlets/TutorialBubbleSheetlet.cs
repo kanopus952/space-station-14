@@ -31,7 +31,7 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
 
         var keybindBox = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#2c2c2c").WithAlpha(0.8f),
+            BackgroundColor = Color.FromHex("#252525").WithAlpha(0.8f),
             BorderColor = keybindBorderColor,
             BorderThickness = new Thickness(1),
         };
@@ -46,6 +46,11 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
                 .Class(SunriseStyleClass.TutorialKeybindFrame)
                 .Panel(keybindBox)
                 .Margin(new Thickness(5, 0)),
+
+            E<RichTextLabel>()
+                .Class(SunriseStyleClass.TutorialKeybindFrame)
+                .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
+                .FontColor(Color.White)
         ];
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using Content.Client._Sunrise.FancyCardControl;
@@ -24,7 +25,6 @@ namespace Content.Client._Sunrise.Tutorial;
 public sealed partial class TutorialWindow : DefaultWindow
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
     [Dependency] private readonly IEntitySystemManager _entSys = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     public Action<TutorialSequencePrototype>? OnTutorialButtonPressed;
@@ -106,21 +106,30 @@ public sealed partial class TutorialWindow : DefaultWindow
                 }
             }
 
-            sb.AppendLine(Loc.GetString("tutorial-status", ("status", status)));
+            sb.Append(Loc.GetString("tutorial-status", ("status", status)));
 
 
-            var texture = _resourceCache.GetResource<TextureResource>(proto.Texture);
+            var buttons = new List<FancyCardButton>
+            {
+                new(
+                    "start",
+                    Loc.GetString("fancy-card-default"),
+                    null,
+                    null,
+                    false,
+                    () => OnTutorialButtonPressed?.Invoke(proto))
+            };
             var config = new FancyCardConfig
             {
                 TitleText = proto.Name,
                 DescText = sb.ToString(),
-                BackdropTexture = texture,
-                Size = new Vector2(570, 350)
+                BackdropTexture = proto.Texture,
+                CardSize = new Vector2(570, 350),
+                Buttons = buttons
             };
 
             var entry = new FancyCard(config);
-            entry.ActionPressed += () => OnTutorialButtonPressed?.Invoke(proto);
-            entry.SetDenied(roundNotStarted, deniedText);
+            entry.SetDenied(roundNotStarted);
 
             ButtonGrid.AddChild(entry);
         }

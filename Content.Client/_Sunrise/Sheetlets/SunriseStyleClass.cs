@@ -10,13 +10,10 @@ public static class SunriseStyleClass
     public const string StyleClassNoStyle = "NoStyle";
     public const string TutorialCategoryButtonClass = "TutorialButton";
     public const string TutorialDivider = "TutorialDivider";
-    public const string FancyCardFrame = "FancyCardFrame";
-    public const string FancyCardContent = "FancyCardContent";
+    public const string FancyCardPrimary = "FancyCardPrimary";
+    public const string FancyCardSecondary = "FancyCardSecondary";
     public const string FancyCardTitleBar = "FancyCardTitleBar";
-    public const string FancyCardQuoteOuter = "FancyCardDescOuter";
     public const string FancyCardDescInner = "FancyCardDescInner";
-    public const string FancyCardActionPanel = "FancyCardActionPanel";
-    public const string FancyCardActionButton = "FancyCardActionButton";
     public const string TutorialBubbleFrame = "TutorialBubbleFrame";
     public const string TutorialKeybindFrame = "TutorialKeybindFrame";
 }

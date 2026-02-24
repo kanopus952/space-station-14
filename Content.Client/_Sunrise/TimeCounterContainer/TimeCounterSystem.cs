@@ -130,7 +130,7 @@ public sealed class TimeCounterSystem : EntitySystem
         if (counter.Parent != _timeCounterRoot)
             _timeCounterRoot.AddChild(counter);
         root.AddChild(_timeCounterRoot);
-        LayoutContainer.SetAnchorPreset(_timeCounterRoot, LayoutContainer.LayoutPreset.Wide);
+        LayoutContainer.SetAnchorPreset(_timeCounterRoot, LayoutContainer.LayoutPreset.TopWide);
         _timeCounterRoot.SetPositionLast();
     }
 

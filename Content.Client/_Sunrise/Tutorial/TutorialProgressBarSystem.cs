@@ -25,9 +25,9 @@ public sealed class TutorialProgressBarSystem : EntitySystem
 
         SubscribeLocalEvent<TutorialProgressBarComponent, ComponentInit>(OnProgressInit);
         SubscribeLocalEvent<TutorialProgressBarComponent, ComponentShutdown>(OnProgressShutdown);
-        SubscribeLocalEvent<TutorialProgressBarComponent, TutorialStepChangedEvent>(OnProgressChange);
-        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
-        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<TutorialProgressBarComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<TutorialProgressBarComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<TutorialProgressBarComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleState);
 
         _progressUiQuery = GetEntityQuery<ProgressBarUiComponent>();
         _progressBarRoot = new LayoutContainer();
@@ -53,35 +53,32 @@ public sealed class TutorialProgressBarSystem : EntitySystem
         _pendingRefresh = true;
     }
 
-    private void OnPlayerAttached(LocalPlayerAttachedEvent ev)
+    private void OnPlayerAttached(Entity<TutorialProgressBarComponent> ent, ref LocalPlayerAttachedEvent ev)
     {
         _pendingRefresh = true;
     }
-
-    private void OnPlayerDetached(LocalPlayerDetachedEvent ev)
+    private void OnPlayerDetached(Entity<TutorialProgressBarComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
         _progressBarRoot.Orphan();
         RemoveAllBars();
         _pendingRefresh = false;
     }
-
+    private void OnAfterAutoHandleState(Entity<TutorialProgressBarComponent> ent, ref AfterAutoHandleStateEvent ev)
+    {
+        UpdateProgressBar(ent.Owner);
+    }
     private void OnProgressInit(Entity<TutorialProgressBarComponent> ent, ref ComponentInit ev)
     {
         UpdateProgressBar(ent.Owner);
     }
 
-    private void OnProgressChange(Entity<TutorialProgressBarComponent> ent, ref TutorialStepChangedEvent ev)
-    {
-        UpdateProgressBar(ent.Owner);
-    }
     private void OnProgressShutdown(Entity<TutorialProgressBarComponent> ent, ref ComponentShutdown ev)
     {
         RemoveProgressBar(ent.Owner);
     }
-
     private void UpdateProgressBar(EntityUid uid)
     {
-        if (!TryComp(uid, out TutorialProgressBarComponent? _))
+        if (!TryComp(uid, out TutorialProgressBarComponent? progressComp))
             return;
 
         if (!TryComp(uid, out TutorialPlayerComponent? player))
@@ -99,41 +96,35 @@ public sealed class TutorialProgressBarSystem : EntitySystem
         if (total <= 0)
             return;
 
-        var current = Math.Clamp(player.StepIndex, 0, total);
+        var current = Math.Clamp(progressComp.CurrentStepIndex, 0, total);
         var progress = (float)current / total;
 
         if (_progressUiQuery.TryGetComponent(uid, out var ui) && ui.Bar != null)
         {
             ui.Bar.SetLabel(Loc.GetString("tutorial-progress-label"));
             ui.Bar.SetProgress(progress);
-            PositionBar(ui.Bar);
+            LayoutContainer.SetAnchorAndMarginPreset(ui.Bar, LayoutContainer.LayoutPreset.BottomWide, margin: 80);
             SetProgressBarRoot(viewportContainer, ui.Bar);
             return;
         }
 
         var bar = new TutorialProgressBar();
+
         bar.SetLabel(Loc.GetString("tutorial-progress-label"));
         bar.SetProgress(progress);
-        PositionBar(bar);
+        LayoutContainer.SetAnchorAndMarginPreset(bar, LayoutContainer.LayoutPreset.BottomWide, margin: 80);
         SetProgressBarRoot(viewportContainer, bar);
 
         var uiComp = EnsureComp<ProgressBarUiComponent>(uid);
         uiComp.Bar = bar;
     }
-
-    private static void PositionBar(TutorialProgressBar bar)
-    {
-        LayoutContainer.SetAnchorAndMarginPreset(
-            bar,
-            LayoutContainer.LayoutPreset.BottomWide,
-            margin: 80);
-    }
-
     private void SetProgressBarRoot(LayoutContainer root, TutorialProgressBar bar)
     {
         _progressBarRoot.Orphan();
+
         if (bar.Parent != _progressBarRoot)
             _progressBarRoot.AddChild(bar);
+
         root.AddChild(_progressBarRoot);
         LayoutContainer.SetAnchorPreset(_progressBarRoot, LayoutContainer.LayoutPreset.Wide);
         _progressBarRoot.SetPositionLast();

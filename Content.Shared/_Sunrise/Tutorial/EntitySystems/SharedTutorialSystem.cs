@@ -7,7 +7,6 @@ using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -39,9 +38,6 @@ public abstract class SharedTutorialSystem : EntitySystem
         var query = EntityQueryEnumerator<TutorialPlayerComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.Completed)
-                continue;
-
             if (comp.EndTime != null && _timing.CurTime > comp.EndTime)
             {
                 EndTutorial((uid, comp));
@@ -111,10 +107,14 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         if (stepId == null)
         {
-            ent.Comp.StepIndex++;
+            var nextIndex = ent.Comp.StepIndex + 1;
 
-            if (ent.Comp.StepIndex >= sequence.Steps.Count)
+            UpdateProgressBar(ent, nextIndex);
+            if (nextIndex >= sequence.Steps.Count)
+            {
+                CompleteTutorial(ent, sequence);
                 return;
+            }
 
             stepId = sequence.Steps.ElementAt(ent.Comp.StepIndex);
         }
@@ -133,6 +133,13 @@ public abstract class SharedTutorialSystem : EntitySystem
         OnStepChanged(ent, step);
     }
 
+    private void UpdateProgressBar(Entity<TutorialPlayerComponent> ent, int index)
+    {
+        var progressBar = EnsureComp<TutorialProgressBarComponent>(ent);
+        progressBar.CurrentStepIndex = index;
+        ent.Comp.StepIndex = index;
+        Dirty(ent, progressBar);
+    }
     private void OnStepChanged(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
         ResetTracking(ent);
@@ -145,11 +152,6 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     public void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
-        if (ent.Comp.Completed)
-            return;
-
-        ent.Comp.Completed = true;
-
         if (ent.Comp.CurrentBubbleTarget is { } oldTarget && Exists(oldTarget))
             RemComp<TutorialBubbleComponent>(oldTarget);
 
@@ -161,6 +163,15 @@ public abstract class SharedTutorialSystem : EntitySystem
         var ev = new TutorialEndedEvent();
         RaiseLocalEvent(ent, ev);
         Dirty(ent);
+    }
+
+    public void CompleteTutorial(Entity<TutorialPlayerComponent> ent, TutorialSequencePrototype sequence)
+    {
+        ent.Comp.StepIndex = sequence.Steps.Count;
+        ClearTutorialBubble(ent);
+        ClearTracking(ent);
+        RaiseLocalEvent(ent, new TutorialStepsCompletedEvent());
+        Dirty(ent, ent.Comp);
     }
     private void ResetTracking(Entity<TutorialPlayerComponent> ent)
     {

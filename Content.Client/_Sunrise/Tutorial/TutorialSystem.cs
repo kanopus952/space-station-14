@@ -5,15 +5,18 @@ using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared._Sunrise.AnnouncementSpeaker.Events;
 
 namespace Content.Client._Sunrise.Tutorial;
 
 public sealed class TutorialSystem : SharedTutorialSystem
 {
+    [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     public event Action? WindowDataReceived;
     public bool CompletedTutorialsReceived { get; private set; }
@@ -27,6 +30,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeLocalEvent<TutorialBubbleComponent, AfterAutoHandleStateEvent>(AfterAutoHandleState);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentShutdown>(OnComponentShutdown);
+        SubscribeLocalEvent<TutorialPlayerComponent, AfterAutoHandleStateEvent>(OnTutorialPlayerState);
         SubscribeLocalEvent<TutorialBubbleComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<TutorialBubbleComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeNetworkEvent<TutorialWindowDataResponseEvent>(OnWindowDataResponse);
@@ -53,6 +57,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         _ui.Popup(Loc.GetString(msg.Reason), null, false);
     }
+
     private void OnPlayerAttached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerAttachedEvent ev)
     {
         RefreshBubbles();
@@ -61,6 +66,14 @@ public sealed class TutorialSystem : SharedTutorialSystem
     private void OnPlayerDetached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
         _speechBubbleRoot.Orphan();
+    }
+
+    private void OnTutorialPlayerState(Entity<TutorialPlayerComponent> ent, ref AfterAutoHandleStateEvent ev)
+    {
+        if (_player.LocalEntity != ent.Owner)
+            return;
+
+        RefreshBubbles();
     }
 
     private void AfterAutoHandleState(Entity<TutorialBubbleComponent> ent, ref AfterAutoHandleStateEvent ev)
@@ -126,7 +139,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
         var bubbleUi = EnsureComp<TutorialBubbleUiComponent>(ent.Owner);
         bubbleUi.Bubble = bubble;
     }
-
     public void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
     {
         _speechBubbleRoot.Orphan();
