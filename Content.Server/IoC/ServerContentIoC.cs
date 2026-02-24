@@ -1,4 +1,5 @@
 using Content.Server._Sunrise.Auth;
+using Content.Server._Sunrise;
 using Content.Server._Sunrise.Contributors;
 using Content.Server._Sunrise.IoC;
 using Content.Server._Sunrise.PlayerCache;
@@ -11,6 +12,8 @@ using Content.Server.Administration.Notes;
 using Content.Server.Afk;
 using Content.Server.Chat.Managers;
 using Content.Server.Connection;
+using Content.Server.Connection.IPBlocking;
+using Content.Shared.Connection.IPBlocking;
 using Content.Server.Database;
 using Content.Server.Discord;
 using Content.Server.Discord.DiscordLink;
@@ -93,6 +96,8 @@ internal static class ServerContentIoC
         deps.Register<AccountCreationManager>();
         deps.Register<PlayerCacheManager>();
         deps.Register<TTSManager>();
+        deps.Register<NetTexturesManager>();
+        deps.Register<IIPBlockingSystem, IPBlockingSystem>();
         SunriseServerContentIoC.Register();
         // Sunrise-End
     }

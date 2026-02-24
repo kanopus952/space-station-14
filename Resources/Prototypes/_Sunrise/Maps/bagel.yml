@@ -3,6 +3,7 @@
   mapName: 'Bagel'
   mapPath: /Maps/_Sunrise/Station/bagel.yml
   minPlayers: 0
+  maxPlayers: 75
   maxRandomOffset: 0
   randomRotation: false
   stations:
@@ -101,7 +102,7 @@
         - Zoo
         - MiningOutpost
         - Tesla
-        #- XenobiologyRepair
+        - XenobiologyRepair
         - VirusologyAmbusol
         - Containment
         - WeaponsSecurity
@@ -116,7 +117,7 @@
         - Cyborgs
         - Testing
         - Anomaly
-        #- Replenishment
+        - Replenishment
         - IntelWeapons
         - Reports
         - Reconnaissance
@@ -127,4 +128,7 @@
         - HumanitarianAid
         - PersonnelRecovery
         - CrewEducation
+        - Virology
+        - SampleCollection
+        - Examination
         #- VirusFlesh

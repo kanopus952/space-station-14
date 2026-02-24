@@ -242,7 +242,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: HitscanStaminaDamage
-    staminaDamage: 15
+    staminaDamage: 10
   - type: HitscanBasicDamage
     armorPenetration: -0.99
     damage:
@@ -272,7 +272,10 @@
 - type: entity
   parent: BulletTrace
   id: XrayLaserBeam
+  categories: [ HideSpawnMenu ]
   components:
+  - type: HitscanReflect
+    reflectiveType: None
   - type: HitscanPierce
     chance: 0.99
     deviation: 0.005
@@ -303,20 +306,21 @@
 - type: entity
   id: PelletShotgunImprovisedSpreadTraceLarge
   parent: PelletShotgunImprovisedTrace
+  categories: [ HideSpawnMenu ]
   components:
   - type: HitscanBasicDamage
     damage:
       types:
-        Piercing: 2
-        Slash: 2
-        Structural: 3
+        Piercing: 3
+        Slash: 3
+        Structural: 5
   - type: HitscanPierce
-    chance: 0.01
+    chance: 0.05
   - type: HitscanRicochet
     chance: 0.5
   - type: HitscanStaminaDamage
-    staminaDamage: 3
+    staminaDamage: 6
   - type: ProjectileSpread
     proto: PelletShotgunImprovisedSpreadTraceLarge
-    count: 36
-    spread: 45
+    count: 24
+    spread: 50

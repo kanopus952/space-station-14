@@ -94,13 +94,13 @@
           goals:
           - Shuttle
           - Singularity
-          #- SolarPanels Boring, we have more intresting goals
+          - SolarPanels
           - Artifacts
           - Bank
           - Zoo
           - MiningOutpost
           - Tesla
-          #- XenobiologyRepair No Xenobiology
+          - XenobiologyRepair
           - VirusologyAmbusol
           - Containment
           - WeaponsSecurity
@@ -115,7 +115,7 @@
           - Cyborgs
           - Testing
           - Anomaly
-          #- Replenishment
+          - Replenishment
           - IntelWeapons
           - Reports
           - Reconnaissance
@@ -126,5 +126,8 @@
           - HumanitarianAid
           - PersonnelRecovery
           - CrewEducation
+          - Virology
+          - SampleCollection
+          - Examination
           #- VirusFlesh
 
