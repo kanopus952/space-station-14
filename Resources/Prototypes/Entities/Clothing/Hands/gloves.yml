@@ -24,10 +24,6 @@
     tags:
     - Kangaroo
     - WhitelistChameleon
-  # Sunrise-Start
-  - type: DiseaseImmuneClothing
-    prob: 0.2
-  # Sunrise-End
 
 - type: entity
   parent: ClothingHandsGlovesBoxingBase
