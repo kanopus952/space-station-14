@@ -75,7 +75,6 @@
   sprites:
     Head: MobTajaranSlimHead
     Hair: MobHumanoidAnyMarking
-    FacialHair: MobHumanoidAnyMarking
     Chest: MobTajaranSlimTorso
     Eyes: MobTajaranEyes
     LArm: MobTajaranSlimLArm
