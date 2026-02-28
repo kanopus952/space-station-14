@@ -260,6 +260,8 @@
     sound:
       path: /Audio/Items/jumpsuit_equip.ogg
   - type: AbductorHumanObservationConsole # Спаси и сохрани
+  - type: Physics
+    bodyType: Static
 
 #Table
 - type: entityTable

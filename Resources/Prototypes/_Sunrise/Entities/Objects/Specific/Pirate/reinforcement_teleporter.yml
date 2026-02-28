@@ -50,6 +50,8 @@
   - type: GhostRoleMobSpawner
     prototype: MobHumanPirateScoonerReinforcement
     selectablePrototypes: ["PirateScoonerHuman", "PirateScoonerReptilian", "PirateScoonerDwarf", "PirateScoonerVox", "PirateScoonerVulpkanin"]
+  - type: Physics
+    bodyType: Static
 
 - type: entity
   parent: ReinforcementPirateScooner
