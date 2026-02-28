@@ -55,7 +55,7 @@
         layer:
         - MachineLayer
   - type: StaticPrice
-    price: 50
+    price: 75
 
 - type: entity
   parent: CrateAmmunitionSmall
