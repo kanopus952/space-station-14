@@ -20,7 +20,6 @@
   id: BunnyShoesFilled
   suffix: Bunny, Filled
   components:
-  - type: EntityTableContainerFill
   - type: ContainerFill
     containers:
       item:

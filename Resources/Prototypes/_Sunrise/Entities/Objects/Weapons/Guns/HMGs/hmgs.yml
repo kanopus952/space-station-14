@@ -193,6 +193,9 @@
       storagebase: !type:AllSelector
         children:
         - id: CrazyGlue
+      weapon_slot: !type:AllSelector
+        children:
+        - id: WeaponDL6902PowerPack
   - type: ItemSlots
     slots:
       weapon_slot:
@@ -200,10 +203,6 @@
         whitelist:
           components:
           - ClothingSlotAmmoProvider
-  - type: ContainerFill
-    containers:
-      weapon_slot:
-      - WeaponDL6902PowerPack
   - type: StaticPrice
     price: 5500
   - type: Tag
