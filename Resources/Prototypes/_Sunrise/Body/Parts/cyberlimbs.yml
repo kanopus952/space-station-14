@@ -245,7 +245,7 @@
       items:
         - AdvMopCyber
         - BorgMegaSprayBottle
-        - HoloprojectorJanitorBorg
+        - HoloprojectorBorg
         - LightReplacer
     - type: WithAttachedBodyParts
       parts:
@@ -276,7 +276,7 @@
       items:
         - AdvMopCyber
         - BorgMegaSprayBottle
-        - HoloprojectorJanitorBorg
+        - HoloprojectorBorg
         - LightReplacer
     - type: WithAttachedBodyParts
       parts:
