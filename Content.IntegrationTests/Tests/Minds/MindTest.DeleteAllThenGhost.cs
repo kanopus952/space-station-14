@@ -34,7 +34,17 @@ public sealed partial class MindTests
         {
             Console.WriteLine(pair.Client.EntMan.ToPrettyString(ent));
         }
+        // Why? We have a GreetingsSystem, which triggers the ahelp sound here.
+        // We wait until this sound entity disappears.
+        for (var i = 0; i < 120; i++) // ~4 sec when 30 tps
+        {
+            await pair.RunTicksSync(1);
 
+            if (pair.Server.EntMan.EntityCount == 0 &&
+                pair.Client.EntMan.EntityCount == 0)
+                break;
+        }
+        // Sunrise-end
         Assert.That(pair.Client.EntMan.EntityCount, Is.EqualTo(0));
 
         // Create a new map.
