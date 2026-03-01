@@ -52,6 +52,7 @@
     selectablePrototypes: ["PirateScoonerHuman", "PirateScoonerReptilian", "PirateScoonerDwarf", "PirateScoonerVox", "PirateScoonerVulpkanin"]
   - type: Physics
     bodyType: Static
+    canCollide: false
 
 - type: entity
   parent: ReinforcementPirateScooner

@@ -91,6 +91,8 @@
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
+      storagebase: !type:Container
+      weapon_slot: !type:ContainerSlot
   - type: Sprite
     sprite: _Sunrise/Objects/Weapons/Guns/Powerpacks/Powerpacks/backpack.rsi
     layers:

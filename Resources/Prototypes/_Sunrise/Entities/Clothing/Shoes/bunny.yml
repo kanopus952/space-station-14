@@ -14,6 +14,9 @@
           tags:
           - Knife
           - Sidearm
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
 
 - type: entity
   parent: BunnyShoes
