@@ -485,7 +485,7 @@
 ## Pirate end
 
 - type: entity
-  parent: ClothingOuterHardsuitEVA
+  parent: [ ClothingOuterHardsuitEVA, BaseChameleon ]
   id: ClothingOuterHardsuitChameleon
   name: syndicate chameleon
   description: Looking at his material, Sci-fi images inadvertently pop up in your head.

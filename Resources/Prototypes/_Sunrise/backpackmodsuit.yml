@@ -20,11 +20,6 @@
     grid:
     - 0,0,6,3
     maxItemSize: Huge
-  - type: ContainerContainer
-    containers:
-      storagebase: !type:Container
-        ents: []
-      toggleable-clothing: !type:ContainerSlot
   - type: UserInterface
     interfaces:
       enum.StorageUiKey.Key:
@@ -47,6 +42,11 @@
         whitelist:
           tags:
             - ModsuitCore
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+      toggleable-clothing: !type:ContainerSlot
+      modsuit_core: !type:ContainerSlot
   - type: Modsuit
     roundStartBiocode: true
 
