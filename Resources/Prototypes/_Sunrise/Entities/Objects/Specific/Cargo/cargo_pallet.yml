@@ -1,0 +1,8 @@
+- type: entity
+  id: PiratePalletSell
+  parent: CargoPalletSell
+  name: pirate selling pallet
+  description: Designates valid items to exchange for doubloons.
+  suffix: Pirate
+  components:
+  - type: PirateSellPallet

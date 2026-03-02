@@ -1,0 +1,9 @@
+pirate-pallet-console-menu-title = Pirate sale console
+pirate-pallet-menu-appraisal-label = Estimated value:{" "}
+pirate-pallet-menu-doubloons-label = Doubloons:{" "}
+pirate-pallet-menu-count-label = Number of sale items:{" "}
+pirate-pallet-menu-no-goods-text = None
+pirate-pallet-menu-credits-amount = ${$amount}
+pirate-pallet-menu-doubloons-amount = {$amount}
+pirate-pallet-appraise-button = Appraise
+pirate-pallet-sell-button = Sell

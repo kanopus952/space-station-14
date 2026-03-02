@@ -1,0 +1,9 @@
+pirate-pallet-console-menu-title = Пиратская консоль продажи
+pirate-pallet-menu-appraisal-label = Оценочная стоимость:{" "}
+pirate-pallet-menu-doubloons-label = Дублоны:{" "}
+pirate-pallet-menu-count-label = Кол-во продаваемых товаров:{" "}
+pirate-pallet-menu-no-goods-text = Нет
+pirate-pallet-menu-credits-amount = ${ $amount }
+pirate-pallet-menu-doubloons-amount = { $amount }
+pirate-pallet-appraise-button = Оценить
+pirate-pallet-sell-button = Продать

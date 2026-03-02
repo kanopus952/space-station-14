@@ -223,6 +223,40 @@
     - NoCommission
 
 - type: entity
+  parent: BaseComputerSunrise
+  id: ComputerPiratePalletConsole
+  name: pirate sale console
+  description: Used to appraise goods and exchange sold cargo into doubloons.
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: rusted
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: contraband_sell
+    - map: ["computerLayerKeys"]
+      state: security_key
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#c96842"
+  - type: AccessReader
+    access: [[ "NuclearOperative" ]]
+  - type: PiratePalletConsole
+  - type: ActivatableUI
+    key: enum.PiratePalletConsoleUiKey.Sale
+  - type: UserInterface
+    interfaces:
+      enum.PiratePalletConsoleUiKey.Sale:
+        type: PiratePalletConsoleBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: Computer
+    board: CargoSaleComputerCircuitboard
+
+- type: entity
   parent: [BaseWallmountGlass, StorePresetPirateExchanger]
   id: ComputerPirateExchangerWallmount # Обменник для Шаттла, берет комиссию до 30%
   name: black market exchanger
