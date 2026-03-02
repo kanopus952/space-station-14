@@ -219,10 +219,3 @@
     - type: ContainerContainer
       containers:
         Shard: !type:ContainerSlot
-    - type: ItemSlots
-      slots:
-        Shard:
-          ejectOnBreak: true
-          whitelist:
-            components:
-              - SoulShard
