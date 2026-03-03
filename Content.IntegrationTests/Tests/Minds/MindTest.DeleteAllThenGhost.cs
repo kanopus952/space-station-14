@@ -1,4 +1,6 @@
-﻿#nullable enable
+#nullable enable
+using System.Linq;
+using Robust.Shared.Audio.Components;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -29,22 +31,22 @@ public sealed partial class MindTests
         await pair.RunTicksSync(5);
 
         Assert.That(pair.Server.EntMan.EntityCount, Is.EqualTo(0));
-
-        foreach (var ent in pair.Client.EntMan.GetEntities())
+        // Sunrise-start: GreetingsSystem spawns audio entity
+        await pair.Client.WaitPost(() =>
         {
-            Console.WriteLine(pair.Client.EntMan.ToPrettyString(ent));
-        }
-        // Why? We have a GreetingsSystem, which triggers the ahelp sound here.
-        // We wait until this sound entity disappears.
-        for (var i = 0; i < 120; i++) // ~4 sec when 30 tps
-        {
-            await pair.RunTicksSync(1);
+            var entMan = pair.Client.EntMan;
+            var audioEnts = entMan.GetEntities()
+                .Where(entMan.HasComponent<AudioComponent>)
+                .ToArray();
 
-            if (pair.Server.EntMan.EntityCount == 0 &&
-                pair.Client.EntMan.EntityCount == 0)
-                break;
-        }
+            foreach (var audioEnt in audioEnts)
+            {
+                entMan.DeleteEntity(audioEnt);
+            }
+        });
         // Sunrise-end
+        await pair.RunTicksSync(5);
+
         Assert.That(pair.Client.EntMan.EntityCount, Is.EqualTo(0));
 
         // Create a new map.
@@ -70,3 +72,4 @@ public sealed partial class MindTests
         await pair.CleanReturnAsync();
     }
 }
+
