@@ -25,11 +25,7 @@ public sealed class PiratePalletConsoleSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-
-    private static readonly SoundPathSpecifier ApproveSound = new("/Audio/Effects/Cargo/ping.ogg");
-
     private readonly HashSet<EntityUid> _lookupSet = [];
-
     private EntityQuery<TransformComponent> _xformQuery;
     private EntityQuery<MobStateComponent> _mobQuery;
 
@@ -93,7 +89,7 @@ public sealed class PiratePalletConsoleSystem : EntitySystem
             _stack.SpawnMultipleAtPosition(ent.Comp.DoubloonStack, doubloons, xform.Coordinates);
         }
 
-        _audio.PlayPvs(ApproveSound, ent);
+        _audio.PlayPvs(ent.Comp.ApproveSound, ent);
         UpdateInterface(ent);
     }
 
@@ -170,11 +166,7 @@ public sealed class PiratePalletConsoleSystem : EntitySystem
                 {
                     continue;
                 }
-                var hasComp = RemComp<DontSellComponent>(candidate);
-                var price = _pricing.GetPrice(candidate);
-
-                if (!hasComp)
-                    EnsureComp<DontSellComponent>(candidate);
+                var price = _pricing.GetPriceWithoutEvent(candidate);
 
                 if (price <= 0)
                     continue;

@@ -13,6 +13,9 @@ public sealed partial class PiratePalletConsoleComponent : Component
     [DataField]
     public SoundSpecifier ErrorSound = new SoundCollectionSpecifier("CargoError");
 
+    [DataField]
+    public SoundPathSpecifier ApproveSound = new("/Audio/Effects/Cargo/ping.ogg");
+
     /// <summary>
     /// The time at which the console will be able to play the deny sound.
     /// </summary>
