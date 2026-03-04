@@ -62,6 +62,9 @@ public sealed class StationDontSellingSystems : EntitySystem
 
     private void OnCalculatePrice(Entity<DontSellComponent> ent, ref PriceCalculationEvent args)
     {
+        if (args.IgnoreDontSell)
+            return;
+
         args.Price = 0;
         args.Handled = true;
     }

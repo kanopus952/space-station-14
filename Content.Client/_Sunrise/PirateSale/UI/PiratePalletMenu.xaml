@@ -26,6 +26,5 @@
                 Text="{Loc 'pirate-pallet-appraise-button'}"/>
         <Button Name="SellButton"
                 Text="{Loc 'pirate-pallet-sell-button'}"/>
-        <TextureButton VerticalExpand="True" />
     </BoxContainer>
 </controls:FancyWindow>

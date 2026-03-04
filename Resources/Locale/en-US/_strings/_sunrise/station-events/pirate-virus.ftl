@@ -1,0 +1,1 @@
+station-event-pirate-virus-start-announcement = Abnormal behavior detected in station access and financial control subroutines. Expected temporary system failures and unauthorized account withdrawal of { $amount } credits while diagnostics are running.

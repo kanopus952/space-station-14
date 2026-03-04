@@ -1,4 +1,5 @@
 // Overlaps with existing namespace.
+using Content.Shared.Cargo;
 using Robust.Shared.Containers;
 
 namespace Content.Server.Cargo.Systems;
@@ -6,7 +7,7 @@ namespace Content.Server.Cargo.Systems;
 public sealed partial class PricingSystem
 {
     /// <summary>
-    /// Appraises an entity without firing <see cref="Content.Shared.Cargo.PriceCalculationEvent"/>.
+    /// Appraises an entity while ignoring <c>DontSell</c> event handling.
     /// </summary>
     /// <param name="uid">The entity to appraise.</param>
     /// <param name="includeContents">Whether to include contained entities.</param>
@@ -14,9 +15,18 @@ public sealed partial class PricingSystem
     /// <remarks>
     /// Calculating the price of an entity that somehow contains itself will likely hang.
     /// </remarks>
-    public double GetPriceWithoutEvent(EntityUid uid, bool includeContents = true)
+    public double GetPriceIgnoreDontSell(EntityUid uid, bool includeContents = true)
     {
-        var price = 0.0;
+        var ev = new PriceCalculationEvent
+        {
+            IgnoreDontSell = true
+        };
+        RaiseLocalEvent(uid, ref ev);
+
+        if (ev.Handled)
+            return ev.Price;
+
+        var price = ev.Price;
 
         // TODO: Add an OpaqueToAppraisal component or similar for blocking the recursive descent into containers, or preventing material pricing.
         // DO NOT FORGET TO UPDATE ESTIMATED PRICING
@@ -38,7 +48,7 @@ public sealed partial class PricingSystem
             {
                 foreach (var ent in container.ContainedEntities)
                 {
-                    price += GetPriceWithoutEvent(ent, includeContents: true);
+                    price += GetPriceIgnoreDontSell(ent, includeContents: true);
                 }
             }
         }

@@ -66,6 +66,26 @@
       prob: 0.03
 
 - type: entity
+  id: PirateVirus
+  parent: BaseGameRule
+  components:
+  - type: StationEvent
+    weight: 5
+    minimumPlayers: 25
+    reoccurrenceDelay: 20
+  - type: PirateVirusRule
+
+- type: entity
+  id: ResearchPointVirus
+  parent: BaseStationEventShortDelay
+  components:
+  - type: StationEvent
+    weight: 5
+    minimumPlayers: 25
+    reoccurrenceDelay: 20
+  - type: ResearchPointVirusRule
+
+- type: entity
   parent: BaseGameRule
   id: AbductorsSpawn
   components:

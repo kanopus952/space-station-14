@@ -1,0 +1,1 @@
+station-event-research-point-virus-start-announcement = Abnormal behavior detected in station research networking subroutines. Expected temporary server desynchronization and unauthorized withdrawal of { $amount } research points while diagnostics are running.

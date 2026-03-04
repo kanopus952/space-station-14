@@ -18,3 +18,7 @@ ent-DerelictSyndicateSaboteurCyborgSpawn = { ent-BaseGameRule }
     .desc = { ent-BaseGameRule.desc }
 ent-DerelictSyndicateMedicalCyborgSpawn = { ent-BaseGameRule }
     .desc = { ent-BaseGameRule.desc }
+ent-PirateVirus = { ent-BaseStationEventShortDelay }
+    .desc = { ent-BaseStationEventShortDelay.desc }
+ent-ResearchPointVirus = { ent-BaseStationEventShortDelay }
+    .desc = { ent-BaseStationEventShortDelay.desc }

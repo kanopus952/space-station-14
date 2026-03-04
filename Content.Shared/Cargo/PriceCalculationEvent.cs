@@ -17,6 +17,13 @@ public record struct PriceCalculationEvent()
     /// Whether this event was already handled.
     /// </summary>
     public bool Handled = false;
+
+    // Sunrise-start
+    /// <summary>
+    /// Whether this price request should ignore <c>DontSell</c> logic.
+    /// </summary>
+    public bool IgnoreDontSell = false;
+    // Sunrise-end
 }
 
 /// <summary>

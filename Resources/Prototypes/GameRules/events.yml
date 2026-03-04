@@ -24,6 +24,8 @@
     - id: SpiderClownSpawn
     - id: SpiderSpawn
     - id: VentClog
+    - id: PirateVirus # Sunrise-Edit
+    - id: ResearchPointVirus # Sunrise-Edit
     - id: VentFleshWorms # Sunrise-Edit
     - id: VentbullMigration # Sunrise-Edit
 

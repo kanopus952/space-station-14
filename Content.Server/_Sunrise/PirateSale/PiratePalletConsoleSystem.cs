@@ -166,7 +166,7 @@ public sealed class PiratePalletConsoleSystem : EntitySystem
                 {
                     continue;
                 }
-                var price = _pricing.GetPriceWithoutEvent(candidate);
+                var price = _pricing.GetPriceIgnoreDontSell(candidate);
 
                 if (price <= 0)
                     continue;
