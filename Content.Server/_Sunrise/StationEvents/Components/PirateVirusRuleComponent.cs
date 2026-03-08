@@ -19,6 +19,13 @@ public sealed partial class PirateVirusRuleComponent : Component
     public MinMax CreditTheftRange = new(10000, 30000);
 
     /// <summary>
+    /// Planned credit theft amount for this event instance.
+    /// If null, a random value from <see cref="CreditTheftRange"/> is used.
+    /// </summary>
+    [DataField]
+    public int? CreditTheft;
+
+    /// <summary>
     /// Station bank account to steal funds from.
     /// </summary>
     [DataField]

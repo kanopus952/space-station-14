@@ -17,32 +17,39 @@ public sealed class PirateVirusRule : StationEventSystem<PirateVirusRuleComponen
     [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
+    protected override void Added(EntityUid uid, PirateVirusRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
+    {
+        if (!TryComp<StationEventComponent>(uid, out var stationEvent))
+            return;
+
+        component.CreditTheft ??= component.CreditTheftRange.Next(_random);
+        component.CreditTheft = Math.Max(component.CreditTheft.Value, 0);
+
+        stationEvent.StartAnnouncement = Loc.GetString(
+            "station-event-pirate-virus-start-announcement",
+            ("amount", FormatAmount(component.CreditTheft.Value)));
+
+        base.Added(uid, component, gameRule, args);
+    }
+
     protected override void Started(EntityUid uid, PirateVirusRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
+        base.Started(uid, component, gameRule, args);
+
+        if (component.CreditTheft == null || component.CreditTheft <= 0)
+            return;
+
         if (!TryGetRandomStation(out var randomStation))
             return;
 
         if (!TryComp<StationBankAccountComponent>(randomStation, out var bank))
             return;
 
-        if (!TryComp<StationEventComponent>(uid, out var stationEvent))
-            return;
+        _cargo.UpdateBankAccount((randomStation.Value, bank), -component.CreditTheft.Value, component.CargoAccount);
+    }
 
-        var cargoBalance = _cargo.GetBalanceFromAccount((randomStation.Value, bank), component.CargoAccount);
-        if (cargoBalance <= 0)
-            return;
-
-        var theftMax = component.CreditTheftRange.Next(_random);
-
-        theftMax = Math.Min(theftMax, Math.Max(0, cargoBalance));
-
-        var stolen = Math.Min(theftMax, cargoBalance);
-
-        var amountText = Math.Round((double)stolen, 2).ToString("F2", CultureInfo.InvariantCulture);
-        stationEvent.StartAnnouncement = Loc.GetString("station-event-pirate-virus-start-announcement", ("amount", amountText));
-
-        base.Started(uid, component, gameRule, args);
-
-        _cargo.UpdateBankAccount((randomStation.Value, bank), -stolen, component.CargoAccount);
+    private static string FormatAmount(int amount)
+    {
+        return Math.Round((double)amount, 2).ToString("F2", CultureInfo.InvariantCulture);
     }
 }

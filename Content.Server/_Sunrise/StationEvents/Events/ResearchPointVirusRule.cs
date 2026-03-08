@@ -27,13 +27,7 @@ public sealed class ResearchPointVirusRule : StationEventSystem<ResearchPointVir
         component.PlannedTheft = 0;
 
         if (!TryGetRandomStation(out var station))
-        {
-            stationEvent.StartAnnouncement = Loc.GetString(
-                "station-event-research-point-virus-start-announcement",
-                ("amount", FormatAmount(component.PlannedTheft)));
-            base.Added(uid, component, gameRule, args);
             return;
-        }
 
         component.TargetStation = station.Value;
         var requestedTheft = component.PointTheftRange.Next(_random);
@@ -55,7 +49,7 @@ public sealed class ResearchPointVirusRule : StationEventSystem<ResearchPointVir
             return;
 
         var station = component.TargetStation;
-        if (station == null || Deleted(station.Value))
+        if (station is null)
         {
             if (!TryGetRandomStation(out station))
                 return;
@@ -112,6 +106,6 @@ public sealed class ResearchPointVirusRule : StationEventSystem<ResearchPointVir
 
     private static string FormatAmount(int amount)
     {
-        return Math.Round((double) amount, 2).ToString("F2", CultureInfo.InvariantCulture);
+        return Math.Round((double)amount, 2).ToString("F2", CultureInfo.InvariantCulture);
     }
 }

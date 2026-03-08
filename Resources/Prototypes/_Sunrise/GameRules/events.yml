@@ -70,6 +70,9 @@
   parent: BaseGameRule
   components:
   - type: StationEvent
+    startAnnouncement: station-event-pirate-virus-start-announcement
+    startAudio:
+      path: /Audio/_Sunrise/Announcements/announce_dig.ogg
     weight: 5
     minimumPlayers: 25
     reoccurrenceDelay: 20
@@ -80,6 +83,9 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
+    startAnnouncement: station-event-research-point-virus-start-announcement
+    startAudio:
+      path: /Audio/_Sunrise/Announcements/announce_dig.ogg
     weight: 5
     minimumPlayers: 25
     reoccurrenceDelay: 20
