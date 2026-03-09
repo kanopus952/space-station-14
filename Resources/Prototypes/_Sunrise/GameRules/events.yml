@@ -67,7 +67,7 @@
 
 - type: entity
   id: PirateVirus
-  parent: BaseGameRule
+  parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
     startAnnouncement: station-event-pirate-virus-start-announcement

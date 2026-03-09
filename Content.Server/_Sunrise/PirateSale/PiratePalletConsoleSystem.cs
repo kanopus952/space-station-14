@@ -70,7 +70,10 @@ public sealed class PiratePalletConsoleSystem : EntitySystem
         GetPalletGoods(gridUid, out var toSell, out var rawCreditsValue);
 
         if (toSell.Count == 0)
+        {
+            UpdateInterface(ent);
             return;
+        }
 
         foreach (var sold in toSell)
         {
