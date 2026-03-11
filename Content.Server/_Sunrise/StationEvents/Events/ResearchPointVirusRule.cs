@@ -18,6 +18,14 @@ public sealed class ResearchPointVirusRule : StationEventSystem<ResearchPointVir
     [Dependency] private readonly ResearchSystem _research = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
+    private EntityQuery<StationMemberComponent> _stationMemberQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _stationMemberQuery = GetEntityQuery<StationMemberComponent>();
+    }
+
     protected override void Added(EntityUid uid, ResearchPointVirusRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         if (!TryComp<StationEventComponent>(uid, out var stationEvent))
@@ -73,7 +81,7 @@ public sealed class ResearchPointVirusRule : StationEventSystem<ResearchPointVir
                 continue;
 
             var stolenPoints = Math.Min(server.Comp.Points, remainingToSteal);
-            _research.ModifyServerPoints(server.Uid, -stolenPoints, server.Comp);
+            _research.ModifyServerPoints(server.Owner, -stolenPoints, server.Comp);
             remainingToSteal -= stolenPoints;
         }
     }
@@ -89,13 +97,13 @@ public sealed class ResearchPointVirusRule : StationEventSystem<ResearchPointVir
         return total;
     }
 
-    private List<(EntityUid Uid, ResearchServerComponent Comp)> GetStationResearchServers(EntityUid station)
+    private List<Entity<ResearchServerComponent>> GetStationResearchServers(EntityUid station)
     {
-        var servers = new List<(EntityUid Uid, ResearchServerComponent Comp)>();
+        var servers = new List<Entity<ResearchServerComponent>>();
         var query = EntityQueryEnumerator<ResearchServerComponent, TransformComponent>();
         while (query.MoveNext(out var serverUid, out var serverComp, out var xform))
         {
-            if (CompOrNull<StationMemberComponent>(xform.GridUid)?.Station != station)
+            if (xform.GridUid is not { } gridUid || _stationMemberQuery.CompOrNull(gridUid)?.Station != station)
                 continue;
 
             servers.Add((serverUid, serverComp));
