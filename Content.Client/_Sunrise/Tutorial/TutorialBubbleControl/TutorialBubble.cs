@@ -69,8 +69,7 @@ public abstract class TutorialBubble : Control
     {
         base.FrameUpdate(args);
 
-        if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform)
-            || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
+        if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform))
         {
             Modulate = Color.White.WithAlpha(0);
             return;
