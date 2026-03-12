@@ -89,6 +89,9 @@ public sealed class TutorialProgressBarSystem : EntitySystem
 
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
 
+        if (viewportContainer == null)
+            return;
+
         if (!_proto.TryIndex(player.SequenceId, out var sequence))
             return;
 

@@ -25,15 +25,10 @@ public sealed class AccountCreationManager
     }
     public async Task<DateTimeOffset?> TryGetAccountCreatedTimeAsync(NetUserId userId, CancellationToken cancel = default)
     {
-        if (_httpClient.BaseAddress == null)
-        {
-            _sawmill.Warning("Auth server URL is not set.");
-            return null;
-        }
-
         try
         {
-            var requestUri = $"api/query/userid?userid={WebUtility.UrlEncode(userId.UserId.ToString())}";
+            var authServer = _cfg.GetCVar(CVars.AuthServer);
+            var requestUri = $"{authServer}api/query/userid?userid={WebUtility.UrlEncode(userId.UserId.ToString())}";
             using var resp = await _httpClient.GetAsync(requestUri, cancel);
 
             if (resp.StatusCode == HttpStatusCode.NotFound)
@@ -54,7 +49,7 @@ public sealed class AccountCreationManager
             var responseData = await resp.Content.ReadFromJsonAsync<UserDataResponse>(cancellationToken: cancel);
             return responseData?.CreatedTime;
         }
-        catch (Exception e)
+        catch (HttpRequestException e)
         {
             _sawmill.Error($"Auth server request failed: {e}");
         }

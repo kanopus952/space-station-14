@@ -98,6 +98,10 @@ public sealed class TimeCounterSystem : EntitySystem
             return;
 
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
+
+        if (viewportContainer == null)
+            return;
+
         var screenSize = vp.SizeBox;
 
         var position = ent.Comp.ScreenPosition ?? new Vector2(screenSize.Center.X, 1);

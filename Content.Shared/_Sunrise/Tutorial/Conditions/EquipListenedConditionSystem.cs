@@ -17,7 +17,7 @@ public sealed partial class EquipListenedConditionSystem : EventListenedConditio
 
     private void OnDidEquip(Entity<TutorialPlayerComponent> ent, ref DidEquipEvent args)
     {
-        RecordEvent(ent, args.Equipment);
+        RecordEvent(ent, DefaultKey, args.Equipment);
         RecordEvent(ent, EquipListenedCondition.GetSlotKey(args.SlotFlags), args.Equipment);
 
         if (TryComp(ent, out TutorialTrackerComponent? tracker))

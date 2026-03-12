@@ -13,7 +13,7 @@ public sealed partial class PickupListenedConditionSystem : EventListenedConditi
 
     private void OnDidEquipHand(Entity<TutorialPlayerComponent> ent, ref DidEquipHandEvent args)
     {
-        RecordEvent(ent, args.Equipped);
+        RecordEvent(ent, DefaultKey, args.Equipped);
 
         if (TryComp(ent, out TutorialTrackerComponent? tracker))
             Tutorial.TryObserveEntity(ent, args.Equipped, tracker);

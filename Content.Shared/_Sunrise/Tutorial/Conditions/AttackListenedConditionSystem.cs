@@ -16,7 +16,7 @@ public sealed partial class AttackListenedConditionSystem : EventListenedConditi
         if (!ent.Comp.Observers.Contains(args.User))
             return;
 
-        RecordEvent(args.User, ent, args.Used);
+        RecordEvent(args.User, DefaultKey, ent, args.Used);
     }
 }
 

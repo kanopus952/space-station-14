@@ -18,7 +18,7 @@ public sealed partial class HoldInHandsConditionSystem : TutorialConditionSystem
             var proto = Prototype(held);
 
             if (proto?.ID == null)
-                return;
+                continue;
 
             if (proto.ID == args.Condition.Item)
             {

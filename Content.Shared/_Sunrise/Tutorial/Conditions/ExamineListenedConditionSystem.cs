@@ -18,7 +18,7 @@ public sealed partial class ExamineListenedConditionSystem : EventListenedCondit
         if (!ent.Comp.Observers.Contains(args.Examiner))
             return;
 
-        RecordEvent(args.Examiner, args.Examined);
+        RecordEvent(args.Examiner, DefaultKey, args.Examined);
     }
 }
 

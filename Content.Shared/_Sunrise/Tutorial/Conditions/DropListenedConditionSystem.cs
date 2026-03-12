@@ -16,7 +16,7 @@ public sealed partial class DropListenedConditionSystem : EventListenedCondition
         if (!ent.Comp.Observers.Contains(args.User))
             return;
 
-        RecordEvent(args.User, ent);
+        RecordEvent(args.User, DefaultKey, ent);
     }
 }
 

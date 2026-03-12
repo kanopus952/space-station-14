@@ -17,7 +17,7 @@ public sealed partial class TutorialCategoryButton : BoxContainer
         RobustXamlLoader.Load(this);
         Category = category;
 
-        CategoryLabel.Text = category.Name;
+        CategoryLabel.Text = Loc.GetString(category.Name);
         CategoryButton.OnPressed += _ => OnSelected?.Invoke(this);
         OnSelected += onSelected;
     }

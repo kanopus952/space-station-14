@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server._Sunrise.TTS;
@@ -22,7 +21,6 @@ using Robust.Shared.Network;
 using Robust.Shared.Utility;
 using Robust.Shared.Map.Components;
 using Robust.Shared.EntitySerialization.Systems;
-using Content.Server._Sunrise.Tutorial.Components;
 using Robust.Shared.Configuration;
 
 namespace Content.Server._Sunrise.Tutorial;
@@ -80,9 +78,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
         QueueDel(ent);
 
         _ticker.Respawn(session);
-
-        QueueDel(ent.Comp.Grid);
-        QueueDel(ent);
     }
 
     private async void SaveTutorialCompletion(NetUserId userId, ProtoId<TutorialSequencePrototype> sequenceId)
@@ -90,9 +85,12 @@ public sealed class TutorialSystem : SharedTutorialSystem
         try
         {
             var createdTime = await _accountCreation.TryGetAccountCreatedTimeAsync(userId);
-            var accountAge = DateTimeOffset.UtcNow - createdTime.Value;
 
-            await _db.AddTutorial(userId.UserId, sequenceId);
+            TimeSpan? accountAgeDays = null;
+            if (createdTime.HasValue)
+                accountAgeDays = DateTimeOffset.UtcNow - createdTime.Value;
+
+            await _db.AddTutorial(userId.UserId, sequenceId, accountAgeDays);
         }
         catch (Exception e)
         {
@@ -179,9 +177,16 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         TryCreateMap();
         var gridUid = LoadLocation(sequence.Grid);
+
+        if (gridUid == EntityUid.Invalid)
+            return;
+
         var spawnPoint = GetSpawnPoint(gridUid);
 
         if (!TrySpawnNextTo(sequence.PlayerEntity, spawnPoint, out var uid))
+            return;
+
+        if (spawnPoint == EntityUid.Invalid)
             return;
 
         var (mindId, _) = _mind.CreateMind(args.SenderSession.UserId);
@@ -190,6 +195,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _ticker.PlayerJoinGame(args.SenderSession, true);
 
         var tutorial = EnsureComp<TutorialPlayerComponent>(uid.Value);
+        tutorial.SequenceId = msg.SequenceId;
         tutorial.Grid = gridUid;
         EnsureComp<TutorialProgressBarComponent>(uid.Value);
     }
@@ -214,26 +220,33 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private async void OnStepChanged(EntityUid uid, TutorialPlayerComponent comp, TutorialStepChangedEvent args)
     {
-        if (!_player.TryGetSessionByEntity(uid, out var session))
-            return;
+        try
+        {
+            if (!_player.TryGetSessionByEntity(uid, out var session))
+                return;
 
-        if (!TryGetCurrentStep((uid, comp), out var step))
-            return;
+            if (!TryGetCurrentStep((uid, comp), out var step))
+                return;
 
-        if (!_proto.TryIndex(step.VoiceId, out var voice))
-            return;
+            if (!_proto.TryIndex(step.VoiceId, out var voice))
+                return;
 
-        var message = $"{Loc.GetString(step.Sender)} {Loc.GetString(step.ChatMessage)}";
-        _chat.ChatMessageToOne(ChatChannel.Emotes, message, message, EntityUid.Invalid, false, session.Channel);
-        RemComp<TutorialDistanceTrackerComponent>(uid);
+            var message = $"{Loc.GetString(step.Sender)} {Loc.GetString(step.ChatMessage)}";
+            _chat.ChatMessageToOne(ChatChannel.Emotes, message, message, EntityUid.Invalid, false, session.Channel);
 
-        var tts = await GenerateTtsForTutorial(step.TTSMessage, voice);
+            RemComp<TutorialDistanceTrackerComponent>(uid);
 
-        if (tts == null)
-            return;
+            var tts = await GenerateTtsForTutorial(step.TTSMessage, voice);
+            if (tts == null)
+                return;
 
-        var ev = new PlayTTSEvent(tts);
-        RaiseNetworkEvent(ev, Filter.SinglePlayer(session));
+            var ev = new PlayTTSEvent(tts);
+            RaiseNetworkEvent(ev, Filter.SinglePlayer(session));
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Error in OnStepChanged: {e}");
+        }
     }
 
     private async Task<byte[]?> GenerateTtsForTutorial(string text, TTSVoicePrototype voicePrototype)

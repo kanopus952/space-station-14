@@ -1,7 +1,7 @@
 using System.Numerics;
 using Content.Shared.Construction.Conditions;
 
-namespace Content.Server._Sunrise.Tutorial.Components;
+namespace Content.Shared._Sunrise.Tutorial.Components;
 
 [RegisterComponent]
 public sealed partial class TutorialMapComponent : Component

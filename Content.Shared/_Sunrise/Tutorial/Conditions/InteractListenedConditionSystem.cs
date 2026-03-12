@@ -13,7 +13,7 @@ public sealed partial class InteractListenedConditionSystem : EventListenedCondi
 
     private void OnUserInteractHand(Entity<TutorialPlayerComponent> ent, ref UserInteractHandEvent args)
     {
-        RecordEvent(ent, args.Target);
+        RecordEvent(ent, DefaultKey, args.Target);
     }
 }
 

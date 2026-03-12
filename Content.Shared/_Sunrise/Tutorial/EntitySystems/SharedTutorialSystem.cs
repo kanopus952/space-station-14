@@ -209,53 +209,31 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (!TryGetCurrentStep(ent, out var step))
             return;
 
-        foreach (var condition in step.Conditions)
-        {
-            if (condition is not IEventListenedCondition listened)
-                continue;
-
-            if (listened.Target != null)
-            {
-                tracker.TargetPrototypes.Add(listened.Target.Value);
-                continue;
-            }
-
-            if (listened.ObserveAnyWithoutTarget)
-                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
-        }
-
-        foreach (var condition in step.AnyConditions)
-        {
-            if (condition is not IEventListenedCondition listened)
-                continue;
-
-            if (listened.Target != null)
-            {
-                tracker.TargetPrototypes.Add(listened.Target.Value);
-                continue;
-            }
-
-            if (listened.ObserveAnyWithoutTarget)
-                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
-        }
-
-        foreach (var condition in step.Preconditions)
-        {
-            if (condition is not IEventListenedCondition listened)
-                continue;
-
-            if (listened.Target != null)
-            {
-                tracker.TargetPrototypes.Add(listened.Target.Value);
-                continue;
-            }
-
-            if (listened.ObserveAnyWithoutTarget)
-                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
-        }
+        CollectObservedConditions(tracker, step.Conditions);
+        CollectObservedConditions(tracker, step.AnyConditions);
+        CollectObservedConditions(tracker, step.Preconditions);
 
         ObserveNearbyEntities(ent, tracker, step);
         ObserveEquippedEntities(ent, tracker);
+    }
+    private static void CollectObservedConditions(
+        TutorialTrackerComponent tracker,
+        IEnumerable<TutorialCondition> conditions)
+    {
+        foreach (var condition in conditions)
+        {
+            if (condition is not IEventListenedCondition listened)
+                continue;
+
+            if (listened.Target != null)
+            {
+                tracker.TargetPrototypes.Add(listened.Target.Value);
+                continue;
+            }
+
+            if (listened.ObserveAnyWithoutTarget)
+                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
+        }
     }
 
     private void ObserveNearbyEntities(EntityUid user, TutorialTrackerComponent tracker, TutorialStepPrototype step)

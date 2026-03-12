@@ -102,6 +102,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
             return;
 
         bubbleUi.Bubble.DisposeAllChildren();
+        bubbleUi.Bubble.Orphan();
         RemComp<TutorialBubbleUiComponent>(uid);
     }
     private void UpdateBubble(Entity<TutorialBubbleComponent> ent)
@@ -116,6 +117,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
             return;
 
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
+
+        if (viewportContainer == null)
+            return;
 
         if (_bubbleUiQuery.TryGetComponent(ent.Owner, out var uiComp) && uiComp.Bubble != null)
         {

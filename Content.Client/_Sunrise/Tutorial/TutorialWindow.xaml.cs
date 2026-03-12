@@ -44,6 +44,7 @@ public sealed partial class TutorialWindow : DefaultWindow
         AutoOpenCheckbox.OnToggled += OnAutoOpenToggled;
         OnOpen += () => OnRequestCompletedTutorials?.Invoke();
         OnOpen += SyncAutoOpenCheckbox;
+        OnClose += () => _gameTicker.LobbyStatusUpdated -= UpdateRoundState;
         GenerateCategories();
     }
 
@@ -61,7 +62,7 @@ public sealed partial class TutorialWindow : DefaultWindow
         }
 
         // Select the first category by default
-        if (CategoryContainer.Children[0] is TutorialCategoryButton firstCategory)
+        if (CategoryContainer.ChildCount > 0 && CategoryContainer.Children[0] is TutorialCategoryButton firstCategory)
             OnCategorySelected(firstCategory);
     }
 

@@ -15,7 +15,7 @@ public sealed partial class UseListenedConditionSystem : EventListenedConditionS
 
     private void OnUserInteractUsing(Entity<TutorialPlayerComponent> ent, ref UserInteractUsingEvent args)
     {
-        RecordEvent(ent, args.Target, args.Used);
+        RecordEvent(ent, DefaultKey, args.Target, args.Used);
     }
 
     private void OnUseInHand(Entity<TutorialObservableComponent> ent, ref UseInHandEvent args)
@@ -23,7 +23,7 @@ public sealed partial class UseListenedConditionSystem : EventListenedConditionS
         if (!ent.Comp.Observers.Contains(args.User))
             return;
 
-        RecordEvent(args.User, ent);
+        RecordEvent(args.User, DefaultKey, ent);
     }
 }
 

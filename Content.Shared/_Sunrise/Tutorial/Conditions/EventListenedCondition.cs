@@ -13,7 +13,6 @@ public abstract partial class EventListenedConditionSystemBase<TCondition> : Tut
 {
     [Dependency] protected readonly SharedTutorialSystem Tutorial = default!;
     protected static readonly EntProtoId AnyTarget = default;
-    protected static readonly string CounterKey = typeof(TCondition).Name;
 
     protected override void Condition(Entity<TutorialPlayerComponent> entity, ref TutorialConditionEvent<TCondition> args)
     {
@@ -30,10 +29,12 @@ public abstract partial class EventListenedConditionSystemBase<TCondition> : Tut
         args.Result = HasCount(tracker.Counters, args.Condition.CounterKey, target, args.Condition.Count);
     }
 
-    protected void RecordEvent(EntityUid user, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
-    {
-        RecordEvent(user, CounterKey, primaryTarget, secondaryTarget);
-    }
+    /// <summary>
+    /// The default counter key for this condition type.
+    /// Pass explicitly to <see cref="RecordEvent"/> — do not rely on implicit defaulting,
+    /// so any <see cref="EventListenedConditionBase{T}.CounterKey"/> override stays consistent.
+    /// </summary>
+    protected string DefaultKey => typeof(TCondition).Name;
 
     protected void RecordEvent(EntityUid user, string key, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
     {
