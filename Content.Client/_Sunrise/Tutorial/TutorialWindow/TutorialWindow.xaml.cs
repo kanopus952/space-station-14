@@ -19,7 +19,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._Sunrise.Tutorial;
+namespace Content.Client._Sunrise.Tutorial.TutorialWindow;
 
 [GenerateTypedNameReferences]
 public sealed partial class TutorialWindow : DefaultWindow

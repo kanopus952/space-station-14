@@ -1,5 +1,5 @@
 <PanelContainer xmlns="https://spacestation14.io"
-                xmlns:tutorial="clr-namespace:Content.Client._Sunrise.Tutorial"
+                xmlns:tutorial="clr-namespace:Content.Client._Sunrise.Tutorial.TutorialBubbleControl"
                 xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
     <BoxContainer Orientation="Vertical"
                   HorizontalAlignment="Center">

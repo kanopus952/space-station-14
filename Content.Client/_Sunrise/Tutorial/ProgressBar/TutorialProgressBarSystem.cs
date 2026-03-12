@@ -3,16 +3,18 @@ using Content.Client.UserInterface.Screens;
 using Content.Client._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared._Sunrise.Tutorial.Events;
 
-namespace Content.Client._Sunrise.Tutorial;
+namespace Content.Client._Sunrise.Tutorial.ProgressBar;
 
 public sealed class TutorialProgressBarSystem : EntitySystem
 {
+    [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     private EntityQuery<ProgressBarUiComponent> _progressUiQuery;
@@ -65,11 +67,12 @@ public sealed class TutorialProgressBarSystem : EntitySystem
     }
     private void OnAfterAutoHandleState(Entity<TutorialProgressBarComponent> ent, ref AfterAutoHandleStateEvent ev)
     {
-        UpdateProgressBar(ent.Owner);
+        UpdateProgressBar(ent);
     }
+
     private void OnProgressInit(Entity<TutorialProgressBarComponent> ent, ref ComponentInit ev)
     {
-        UpdateProgressBar(ent.Owner);
+        UpdateProgressBar(ent);
     }
 
     private void OnProgressShutdown(Entity<TutorialProgressBarComponent> ent, ref ComponentShutdown ev)
@@ -78,6 +81,9 @@ public sealed class TutorialProgressBarSystem : EntitySystem
     }
     private void UpdateProgressBar(EntityUid uid)
     {
+        if (_player.LocalEntity != uid)
+            return;
+
         if (!TryComp(uid, out TutorialProgressBarComponent? progressComp))
             return;
 

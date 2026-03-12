@@ -1,6 +1,7 @@
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Client.UserInterface.Screens;
 using Content.Client._Sunrise.Tutorial.Components;
+using Content.Client._Sunrise.Tutorial.Overlays;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
@@ -13,7 +14,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Content.Shared._Sunrise.AnnouncementSpeaker.Events;
+using Content.Client._Sunrise.Tutorial.TutorialBubbleControl;
 
 namespace Content.Client._Sunrise.Tutorial;
 

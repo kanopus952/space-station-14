@@ -8,7 +8,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Client._Sunrise.Tutorial;
+namespace Content.Client._Sunrise.Tutorial.TutorialBubbleControl;
 
 public abstract class TutorialBubble : Control
 {

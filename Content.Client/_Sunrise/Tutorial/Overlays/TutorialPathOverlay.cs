@@ -6,7 +6,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Client._Sunrise.Tutorial;
+namespace Content.Client._Sunrise.Tutorial.Overlays;
 
 /// <summary>
 /// Draws an animated dotted trail from the local player toward the current tutorial bubble target.

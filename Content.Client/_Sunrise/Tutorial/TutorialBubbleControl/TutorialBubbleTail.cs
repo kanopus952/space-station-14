@@ -3,7 +3,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Graphics;
 
-namespace Content.Client._Sunrise.Tutorial;
+namespace Content.Client._Sunrise.Tutorial.TutorialBubbleControl;
 
 public sealed class TutorialBubbleTail : Control
 {

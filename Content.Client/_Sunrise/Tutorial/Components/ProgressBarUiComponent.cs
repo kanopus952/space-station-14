@@ -1,3 +1,5 @@
+using Content.Client._Sunrise.Tutorial.ProgressBar;
+
 namespace Content.Client._Sunrise.Tutorial.Components;
 
 [RegisterComponent]

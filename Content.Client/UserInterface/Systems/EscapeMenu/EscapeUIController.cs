@@ -1,5 +1,6 @@
 ﻿using Content.Client._Sunrise.Roadmap;
 using Content.Client._Sunrise.Tutorial;
+using Content.Client._Sunrise.Tutorial.TutorialWindow;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Guidebook;
