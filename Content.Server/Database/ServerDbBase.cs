@@ -1987,7 +1987,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         public async Task<bool> AddTutorial(Guid player, ProtoId<TutorialSequencePrototype> tutorial, TimeSpan? accountAge = null)
         {
             await using var db = await GetDb();
-            var entry = await db.DbContext.TutorialComplitions
+            var entry = await db.DbContext.TutorialCompletions
                 .Where(w => w.PlayerUserId == player)
                 .Where(w => w.TutorialId == tutorial.Id)
                 .SingleOrDefaultAsync();
@@ -2006,7 +2006,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                     AccountAgeDays = accountAgeDays,
                     CompletionCount = 1
                 };
-                db.DbContext.TutorialComplitions.Add(entry);
+                db.DbContext.TutorialCompletions.Add(entry);
             }
             else
             {
@@ -2023,7 +2023,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         public async Task<List<string>> GetTutorial(Guid player, CancellationToken cancel)
         {
             await using var db = await GetDb(cancel);
-            return await db.DbContext.TutorialComplitions
+            return await db.DbContext.TutorialCompletions
                 .Where(w => w.PlayerUserId == player)
                 .Select(w => w.TutorialId)
                 .ToListAsync(cancellationToken: cancel);
@@ -2032,7 +2032,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         public async Task<bool> IsTutorialCompleted(Guid player, ProtoId<TutorialSequencePrototype> tutorial)
         {
             await using var db = await GetDb();
-            return await db.DbContext.TutorialComplitions
+            return await db.DbContext.TutorialCompletions
                 .Where(w => w.PlayerUserId == player)
                 .Where(w => w.TutorialId == tutorial.Id)
                 .AnyAsync();
@@ -2041,7 +2041,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         public async Task<bool> RemoveTutorial(Guid player, ProtoId<TutorialSequencePrototype> tutorial)
         {
             await using var db = await GetDb();
-            var entry = await db.DbContext.TutorialComplitions
+            var entry = await db.DbContext.TutorialCompletions
                 .Where(w => w.PlayerUserId == player)
                 .Where(w => w.TutorialId == tutorial.Id)
                 .SingleOrDefaultAsync();
@@ -2049,7 +2049,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             if (entry == null)
                 return false;
 
-            db.DbContext.TutorialComplitions.Remove(entry);
+            db.DbContext.TutorialCompletions.Remove(entry);
             await db.DbContext.SaveChangesAsync();
             return true;
         }
@@ -2059,7 +2059,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await using var db = await GetDb(cancel);
             var validList = validTutorialIds.ToList();
 
-            IQueryable<TutorialCompletion> query = db.DbContext.TutorialComplitions;
+            IQueryable<TutorialCompletion> query = db.DbContext.TutorialCompletions;
             if (validList.Count > 0)
                 query = query.Where(w => !validList.Contains(w.TutorialId));
 
@@ -2067,7 +2067,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             if (toRemove.Count == 0)
                 return 0;
 
-            db.DbContext.TutorialComplitions.RemoveRange(toRemove);
+            db.DbContext.TutorialCompletions.RemoveRange(toRemove);
             await db.DbContext.SaveChangesAsync();
             return toRemove.Count;
         }

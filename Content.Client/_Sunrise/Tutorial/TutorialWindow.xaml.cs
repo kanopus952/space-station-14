@@ -53,7 +53,7 @@ public sealed partial class TutorialWindow : DefaultWindow
         var categories = _prototype.EnumeratePrototypes<TutorialCategoryPrototype>().ToList();
 
         categories.Sort((a, b)
-            => string.Compare(Loc.GetString(a.Name), Loc.GetString(b.Name), StringComparison.Ordinal));
+            => string.Compare(Loc.GetString(a.Name), Loc.GetString(b.Name), StringComparison.CurrentCultureIgnoreCase));
 
         foreach (var category in categories)
         {

@@ -30,6 +30,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private ShaderInstance? _shaderInstance;
     private EntityUid? _highlightedTarget;
+    private uint? _highlightedTargetRenderOrder;
     private EntityQuery<SpriteComponent> _spriteQuery;
 
     public event Action? WindowDataReceived;
@@ -64,6 +65,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     {
         if (ev.New is not InGameScreen)
         {
+            SetHighlight(null);
             _speechBubbleRoot.Orphan();
             return;
         }
@@ -86,6 +88,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private void OnPlayerDetached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
+        SetHighlight(null);
         _speechBubbleRoot.Orphan();
     }
 
@@ -94,7 +97,12 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (_player.LocalEntity != ent.Owner)
             return;
 
-        SetHighlight(ent.Comp.CurrentBubbleTarget);
+        // Clear highlight if target changed or was removed.
+        // The new highlight is applied in OnComponentInit/AfterAutoHandleState of TutorialBubbleComponent,
+        // so path and highlight always appear together with the bubble.
+        if (ent.Comp.CurrentBubbleTarget != _highlightedTarget)
+            SetHighlight(null);
+
         RefreshBubbles();
     }
 
@@ -109,11 +117,13 @@ public sealed class TutorialSystem : SharedTutorialSystem
             if (oldSprite.PostShader == _shaderInstance)
             {
                 oldSprite.PostShader = null;
-                oldSprite.RenderOrder = 0;
+                if (_highlightedTargetRenderOrder is { } renderOrder)
+                    oldSprite.RenderOrder = renderOrder;
             }
         }
 
-        _highlightedTarget = target;
+        _highlightedTarget = null;
+        _highlightedTargetRenderOrder = null;
 
         // Apply to new target
         if (target is not { } newTarget || !_spriteQuery.TryGetComponent(newTarget, out var sprite))
@@ -123,22 +133,28 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (sprite.PostShader != null && sprite.PostShader != _shaderInstance)
             return;
 
+        _highlightedTarget = target;
+        _highlightedTargetRenderOrder = sprite.RenderOrder;
         sprite.PostShader = _shaderInstance;
         sprite.RenderOrder = EntityManager.CurrentTick.Value;
     }
 
     private void AfterAutoHandleState(Entity<TutorialBubbleComponent> ent, ref AfterAutoHandleStateEvent ev)
     {
+        SetHighlight(ent);
         UpdateBubble(ent);
     }
 
     private void OnComponentInit(Entity<TutorialBubbleComponent> ent, ref ComponentInit ev)
     {
+        SetHighlight(ent);
         UpdateBubble(ent);
     }
 
     private void OnComponentShutdown(Entity<TutorialBubbleComponent> ent, ref ComponentShutdown ev)
     {
+        if (_highlightedTarget == ent.Owner)
+            SetHighlight(null);
         RemoveBubble(ent);
     }
 

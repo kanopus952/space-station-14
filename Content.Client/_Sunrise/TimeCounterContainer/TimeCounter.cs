@@ -77,7 +77,8 @@ public sealed partial class TimeCounter : PanelContainer
         else
             CounterLabel.FontColorOverride = _style.DefaultColor;
 
-        CounterLabel.TextMemory = FormatHelpers.FormatIntoMem(_textBuffer, $"{remaining:mm\\:ss}");
+        var totalMinutes = (int)remaining.TotalMinutes;
+        CounterLabel.TextMemory = FormatHelpers.FormatIntoMem(_textBuffer, $"{totalMinutes:00}:{remaining:ss}");
     }
 }
 

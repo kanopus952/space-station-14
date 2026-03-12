@@ -124,7 +124,7 @@ public abstract class SharedTutorialSystem : EntitySystem
             if (index < 0 || ent.Comp.StepIndex == index)
                 return;
 
-            ent.Comp.StepIndex = index;
+            UpdateProgressBar(ent, index);
         }
 
         if (!_proto.TryIndex(stepId.Value, out var step))
@@ -143,6 +143,9 @@ public abstract class SharedTutorialSystem : EntitySystem
     private void OnStepChanged(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
         ResetTracking(ent);
+        ClearTutorialBubble(ent);
+        Dirty(ent, ent.Comp);
+
         var ev = new TutorialStepChangedEvent();
         RaiseLocalEvent(ent, ev);
 
@@ -390,6 +393,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         {
             var existing = EnsureComp<TutorialBubbleComponent>(oldTarget);
             existing.Instruction = step.Bubble.Text;
+            Dirty(oldTarget, existing);
             Dirty(ent, ent.Comp);
             return;
         }
@@ -399,6 +403,7 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         var bubble = EnsureComp<TutorialBubbleComponent>(target.Value);
         bubble.Instruction = step.Bubble.Text;
+        Dirty(target.Value, bubble);
 
         ent.Comp.CurrentBubbleTarget = target;
 

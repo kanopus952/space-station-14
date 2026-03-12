@@ -47,7 +47,7 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
                 .Panel(keybindBox)
                 .Margin(new Thickness(5, 0)),
 
-            E<RichTextLabel>()
+            E<Label>()
                 .Class(SunriseStyleClass.TutorialKeybindFrame)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
                 .FontColor(Color.White)

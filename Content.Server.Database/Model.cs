@@ -49,7 +49,7 @@ namespace Content.Server.Database
         public DbSet<AHelpMessage> AHelpMessages { get; set; } = default!;
         public DbSet<MentorHelpTicket> MentorHelpTickets { get; set; } = default!;
         public DbSet<MentorHelpMessage> MentorHelpMessages { get; set; } = default!;
-        public DbSet<TutorialCompletion> TutorialComplitions { get; set; } = default!;
+        public DbSet<TutorialCompletion> TutorialCompletions { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
