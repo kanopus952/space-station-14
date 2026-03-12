@@ -5,11 +5,14 @@ using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
+using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Content.Shared._Sunrise.AnnouncementSpeaker.Events;
 
 namespace Content.Client._Sunrise.Tutorial;
@@ -18,11 +21,23 @@ public sealed class TutorialSystem : SharedTutorialSystem
 {
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private readonly IOverlayManager _overlayManager = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+
+    private static readonly ProtoId<ShaderPrototype> TutorialShader = "TutorialTargetOutline";
+
+    private ShaderInstance? _shaderInstance;
+    private EntityUid? _highlightedTarget;
+    private EntityQuery<SpriteComponent> _spriteQuery;
+
     public event Action? WindowDataReceived;
     public bool CompletedTutorialsReceived { get; private set; }
     public HashSet<string> CompletedTutorials = new();
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer _speechBubbleRoot = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -38,8 +53,13 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         _speechBubbleRoot = new LayoutContainer();
         _bubbleUiQuery = GetEntityQuery<TutorialBubbleUiComponent>();
+        _spriteQuery = GetEntityQuery<SpriteComponent>();
         _ui.OnScreenChanged += OnScreenChanged;
+
+        _shaderInstance = _proto.Index(TutorialShader).InstanceUnique();
+        _overlayManager.AddOverlay(new TutorialPathOverlay(EntityManager, _player, _timing, _transform));
     }
+
     private void OnScreenChanged((UIScreen? Old, UIScreen? New) ev)
     {
         if (ev.New is not InGameScreen)
@@ -50,6 +70,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         RefreshBubbles();
     }
+
     private void OnStartDenied(TutorialStartDeniedEvent msg, EntitySessionEventArgs args)
     {
         if (string.IsNullOrEmpty(msg.Reason))
@@ -73,21 +94,54 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (_player.LocalEntity != ent.Owner)
             return;
 
+        SetHighlight(ent.Comp.CurrentBubbleTarget);
         RefreshBubbles();
+    }
+
+    private void SetHighlight(EntityUid? target)
+    {
+        if (_highlightedTarget == target)
+            return;
+
+        // Remove from old target
+        if (_highlightedTarget is { } old && _spriteQuery.TryGetComponent(old, out var oldSprite))
+        {
+            if (oldSprite.PostShader == _shaderInstance)
+            {
+                oldSprite.PostShader = null;
+                oldSprite.RenderOrder = 0;
+            }
+        }
+
+        _highlightedTarget = target;
+
+        // Apply to new target
+        if (target is not { } newTarget || !_spriteQuery.TryGetComponent(newTarget, out var sprite))
+            return;
+
+        // Don't overwrite an existing unrelated post-shader
+        if (sprite.PostShader != null && sprite.PostShader != _shaderInstance)
+            return;
+
+        sprite.PostShader = _shaderInstance;
+        sprite.RenderOrder = EntityManager.CurrentTick.Value;
     }
 
     private void AfterAutoHandleState(Entity<TutorialBubbleComponent> ent, ref AfterAutoHandleStateEvent ev)
     {
         UpdateBubble(ent);
     }
+
     private void OnComponentInit(Entity<TutorialBubbleComponent> ent, ref ComponentInit ev)
     {
         UpdateBubble(ent);
     }
+
     private void OnComponentShutdown(Entity<TutorialBubbleComponent> ent, ref ComponentShutdown ev)
     {
         RemoveBubble(ent);
     }
+
     private void RefreshBubbles()
     {
         var query = EntityQueryEnumerator<TutorialBubbleComponent>();
@@ -96,6 +150,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
             UpdateBubble((uid, comp));
         }
     }
+
     private void RemoveBubble(EntityUid uid)
     {
         if (!_bubbleUiQuery.TryGetComponent(uid, out var bubbleUi) || bubbleUi.Bubble == null)
@@ -105,6 +160,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         bubbleUi.Bubble.Orphan();
         RemComp<TutorialBubbleUiComponent>(uid);
     }
+
     private void UpdateBubble(Entity<TutorialBubbleComponent> ent)
     {
         if (string.IsNullOrEmpty(ent.Comp.Instruction))
@@ -143,6 +199,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         var bubbleUi = EnsureComp<TutorialBubbleUiComponent>(ent.Owner);
         bubbleUi.Bubble = bubble;
     }
+
     public void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
     {
         _speechBubbleRoot.Orphan();
@@ -175,9 +232,12 @@ public sealed class TutorialSystem : SharedTutorialSystem
         CompletedTutorialsReceived = true;
         WindowDataReceived?.Invoke();
     }
+
     public override void Shutdown()
     {
         base.Shutdown();
+        SetHighlight(null);
         _ui.OnScreenChanged -= OnScreenChanged;
+        _overlayManager.RemoveOverlay<TutorialPathOverlay>();
     }
 }

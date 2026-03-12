@@ -22,6 +22,7 @@ using Robust.Shared.Utility;
 using Robust.Shared.Map.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Configuration;
+using Robust.Server.GameStates;
 
 namespace Content.Server._Sunrise.Tutorial;
 
@@ -57,6 +58,16 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeNetworkEvent<TutorialQuitRequestEvent>(OnTutorialQuitRequest);
         SubscribeNetworkEvent<TutorialStartRequestEvent>(OnStartRequest);
         SubscribeNetworkEvent<TutorialWindowDataRequestEvent>(OnWindowDataRequest);
+        SubscribeLocalEvent<TutorialPlayerComponent, ExpandPvsEvent>(OnExpandPvs);
+    }
+
+    private void OnExpandPvs(Entity<TutorialPlayerComponent> ent, ref ExpandPvsEvent args)
+    {
+        if (ent.Comp.CurrentBubbleTarget is not { } target || !Exists(target))
+            return;
+
+        args.Entities ??= [];
+        args.Entities.Add(target);
     }
 
     private void OnStepsCompleted(Entity<TutorialPlayerComponent> ent, ref TutorialStepsCompletedEvent args)

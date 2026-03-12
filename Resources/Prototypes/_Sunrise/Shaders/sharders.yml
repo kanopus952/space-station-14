@@ -44,3 +44,13 @@
   id: RoughGradient
   kind: source
   path: "/Textures/_Sunrise/Shaders/gradient_rough.swsl"
+
+- type: shader
+  id: TutorialTargetOutline
+  kind: source
+  path: "/Textures/Shaders/outline.swsl"
+  params:
+    outline_color: "#FFD84DCC"
+    light_boost: 2
+    light_gamma: 0.9
+    light_whitepoint: 1
