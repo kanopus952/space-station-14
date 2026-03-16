@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared._Sunrise.Tutorial.Conditions;
 using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
@@ -24,6 +25,7 @@ public abstract class SharedTutorialSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -47,6 +49,7 @@ public abstract class SharedTutorialSystem : EntitySystem
             TryCheckCondition((uid, comp));
         }
     }
+
     private void OnComponentInit(Entity<TutorialPlayerComponent> ent, ref ComponentInit args)
     {
         if (!TryGetCurrentStep(ent, out var step))
@@ -57,7 +60,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         OnStepChanged(ent, step);
     }
 
-    public void TryCheckCondition(Entity<TutorialPlayerComponent> ent)
+    private void TryCheckCondition(Entity<TutorialPlayerComponent> ent)
     {
         if (!TryGetCurrentStep(ent, out var step))
             return;
@@ -65,42 +68,20 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (!_tutorial.TryConditions(ent, step.Preconditions.ToArray()))
         {
             ClearTutorialBubble(ent);
-            if (step.PreconditionFailStep != null)
-            {
-                Advance(ent, step.PreconditionFailStep.Value);
-                return;
-            }
-
-            Advance(ent);
+            Advance(ent, step.PreconditionFailStep);
             return;
         }
 
-        foreach (var condition in step.Conditions)
-        {
-            if (!_tutorial.TryCondition(ent, condition))
-                return;
-        }
+        if (!_tutorial.TryConditions(ent, step.Conditions.ToArray()))
+            return;
 
-        if (step.AnyConditions.Count > 0)
-        {
-            var any = false;
-            foreach (var condition in step.AnyConditions)
-            {
-                if (_tutorial.TryCondition(ent, condition))
-                {
-                    any = true;
-                    break;
-                }
-            }
-
-            if (!any)
-                return;
-        }
+        if (step.AnyConditions.Count > 0 && !_tutorial.TryAnyCondition(ent, step.AnyConditions.ToArray()))
+            return;
 
         Advance(ent);
     }
 
-    public void Advance(Entity<TutorialPlayerComponent> ent, ProtoId<TutorialStepPrototype>? stepId = null)
+    private void Advance(Entity<TutorialPlayerComponent> ent, ProtoId<TutorialStepPrototype>? stepId = null)
     {
         if (!_proto.TryIndex(ent.Comp.SequenceId, out var sequence))
             return;
@@ -110,13 +91,14 @@ public abstract class SharedTutorialSystem : EntitySystem
             var nextIndex = ent.Comp.StepIndex + 1;
 
             UpdateProgressBar(ent, nextIndex);
+
             if (nextIndex >= sequence.Steps.Count)
             {
                 CompleteTutorial(ent, sequence);
                 return;
             }
 
-            stepId = sequence.Steps.ElementAt(ent.Comp.StepIndex);
+            stepId = sequence.Steps[nextIndex];
         }
         else
         {
@@ -140,14 +122,14 @@ public abstract class SharedTutorialSystem : EntitySystem
         ent.Comp.StepIndex = index;
         Dirty(ent, progressBar);
     }
+
     private void OnStepChanged(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
         ResetTracking(ent);
         ClearTutorialBubble(ent);
         Dirty(ent, ent.Comp);
 
-        var ev = new TutorialStepChangedEvent();
-        RaiseLocalEvent(ent, ev);
+        RaiseLocalEvent(ent, new TutorialStepChangedEvent());
 
         if (_tutorial.TryConditions(ent, step.Preconditions.ToArray()))
             UpdateTutorialBubble(ent, step);
@@ -163,8 +145,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         ClearTracking(ent);
         UpdateTimeCounter(ent, null);
 
-        var ev = new TutorialEndedEvent();
-        RaiseLocalEvent(ent, ev);
+        RaiseLocalEvent(ent, new TutorialEndedEvent());
         Dirty(ent);
     }
 
@@ -176,6 +157,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         RaiseLocalEvent(ent, new TutorialStepsCompletedEvent());
         Dirty(ent, ent.Comp);
     }
+
     private void ResetTracking(Entity<TutorialPlayerComponent> ent)
     {
         var tracker = EnsureComp<TutorialTrackerComponent>(ent);
@@ -219,6 +201,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         ObserveNearbyEntities(ent, tracker, step);
         ObserveEquippedEntities(ent, tracker);
     }
+
     private static void CollectObservedConditions(
         TutorialTrackerComponent tracker,
         IEnumerable<TutorialCondition> conditions)
@@ -235,7 +218,7 @@ public abstract class SharedTutorialSystem : EntitySystem
             }
 
             if (listened.ObserveAnyWithoutTarget)
-                EnsureObserveAnyCounter(tracker, listened.ObserveKey);
+                tracker.Counters.TryAdd((listened.ObserveKey, default), 0);
         }
     }
 
@@ -244,9 +227,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (tracker.TargetPrototypes.Count == 0 && !ObservesAny(tracker))
             return;
 
-        var entities = _lookupSystem.GetEntitiesInRange(user, step.ObserveRange);
-
-        foreach (var uid in entities)
+        foreach (var uid in _lookupSystem.GetEntitiesInRange(user, step.ObserveRange))
         {
             TryObserveEntity(user, uid, tracker);
         }
@@ -270,10 +251,10 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         foreach (var slot in inventory.Slots)
         {
-            if (!_inventory.TryGetSlotEntity(user, slot.Name, out var item, inventory))
-                continue;
-
-            TryObserveEntity(user, item.Value, tracker);
+            if (_inventory.TryGetSlotEntity(user, slot.Name, out var item, inventory))
+            {
+                TryObserveEntity(user, item.Value, tracker);
+            }
         }
     }
 
@@ -304,36 +285,14 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (ObservesAny(tracker))
             return true;
 
-        if (!TryGetPrototypeId(target, out var protoId))
-            return false;
-
-        return tracker.TargetPrototypes.Contains(protoId);
+        return TryGetPrototypeId(target, out var protoId) && tracker.TargetPrototypes.Contains(protoId);
     }
 
     private static bool ObservesAny(TutorialTrackerComponent tracker)
     {
-        return HasAnyObserveCounter(tracker);
-    }
-
-    private static bool HasAnyObserveCounter(TutorialTrackerComponent tracker)
-    {
-        foreach (var (key, target) in tracker.Counters.Keys)
-        {
-            if (!target.Equals(default(EntProtoId)))
-                continue;
-
-            if (key.EndsWith(EventListenedConditionKeys.ObserveSuffix, StringComparison.Ordinal))
-                return true;
-        }
-
-        return false;
-    }
-
-    private static void EnsureObserveAnyCounter(TutorialTrackerComponent tracker, string key)
-    {
-        var counterKey = (key, default(EntProtoId));
-        if (!tracker.Counters.ContainsKey(counterKey))
-            tracker.Counters[counterKey] = 0;
+        return tracker.Counters.Keys.Any(k =>
+            k.Target.Equals(default(EntProtoId)) &&
+            k.Key.EndsWith(EventListenedConditionKeys.ObserveSuffix, StringComparison.Ordinal));
     }
 
     public bool TryGetCurrentStep(Entity<TutorialPlayerComponent> ent, [NotNullWhen(true)] out TutorialStepPrototype? step)
@@ -346,28 +305,24 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (ent.Comp.StepIndex < 0 || ent.Comp.StepIndex >= sequence.Steps.Count)
             return false;
 
-        var stepId = sequence.Steps[ent.Comp.StepIndex];
-        return _proto.TryIndex(stepId, out step);
+        return _proto.TryIndex(sequence.Steps[ent.Comp.StepIndex], out step);
     }
+
     public bool TryGetPrototypeId(EntityUid? uid, out EntProtoId protoId)
     {
+        protoId = default;
+
         if (uid is not { } target)
-        {
-            protoId = default;
             return false;
-        }
 
         var proto = Prototype(target);
-
         if (proto == null)
-        {
-            protoId = default;
             return false;
-        }
 
         protoId = proto.ID;
         return true;
     }
+
     private void UpdateTutorialBubble(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
         if (step.Bubble == null)
@@ -376,29 +331,17 @@ public abstract class SharedTutorialSystem : EntitySystem
         var target = step.Bubble.Target.Type switch
         {
             TutorialBubbleTargetType.Self => ent,
-
-            TutorialBubbleTargetType.Entity =>
-                TryFindBubbleEntity(ent, step),
-
-            _ => null
+            TutorialBubbleTargetType.Entity => TryFindBubbleEntity(ent, step),
+            _ => null,
         };
 
         if (target == null || !Exists(target.Value))
         {
-            ent.Comp.CurrentBubbleTarget = null;
+            ClearTutorialBubble(ent);
             return;
         }
 
-        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && oldTarget == target.Value)
-        {
-            var existing = EnsureComp<TutorialBubbleComponent>(oldTarget);
-            existing.Instruction = step.Bubble.Text;
-            Dirty(oldTarget, existing);
-            Dirty(ent, ent.Comp);
-            return;
-        }
-
-        if (ent.Comp.CurrentBubbleTarget is { } previous && Exists(previous))
+        if (ent.Comp.CurrentBubbleTarget is { } previous && previous != target.Value && Exists(previous))
             RemComp<TutorialBubbleComponent>(previous);
 
         var bubble = EnsureComp<TutorialBubbleComponent>(target.Value);
@@ -406,7 +349,6 @@ public abstract class SharedTutorialSystem : EntitySystem
         Dirty(target.Value, bubble);
 
         ent.Comp.CurrentBubbleTarget = target;
-
         Dirty(ent, ent.Comp);
     }
 
@@ -417,42 +359,35 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         ent.Comp.CurrentBubbleTarget = null;
     }
+
     private EntityUid? TryFindBubbleEntity(EntityUid uid, TutorialStepPrototype proto)
     {
         if (proto.Bubble == null)
             return null;
 
         var targetProtoId = proto.Bubble.Target.Prototype;
-
         var origin = _transform.GetMapCoordinates(uid);
         var best = EntityUid.Invalid;
         var bestDistSq = float.MaxValue;
 
-        var entities = _lookupSystem.GetEntitiesInRange(uid, proto.ObserveRange);
-
-        foreach (var ent in entities)
+        foreach (var ent in _lookupSystem.GetEntitiesInRange(uid, proto.ObserveRange))
         {
             var meta = MetaData(ent);
-
-            if (meta.EntityPrototype == null)
+            if (meta.EntityPrototype?.ID != targetProtoId)
                 continue;
 
-            if (meta.EntityPrototype.ID != targetProtoId)
+            var distSq = (_transform.GetMapCoordinates(ent).Position - origin.Position).LengthSquared();
+            if (distSq >= bestDistSq)
                 continue;
 
-            var pos = _transform.GetMapCoordinates(ent);
-            var d = (pos.Position - origin.Position).LengthSquared();
-
-            if (d < bestDistSq)
-            {
-                bestDistSq = d;
-                best = ent;
-            }
+            bestDistSq = distSq;
+            best = ent;
         }
 
         return best;
     }
-    public virtual void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
+
+    protected virtual void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
     {
     }
 }

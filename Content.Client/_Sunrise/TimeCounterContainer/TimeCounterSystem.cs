@@ -99,9 +99,6 @@ public sealed class TimeCounterSystem : EntitySystem
 
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
 
-        if (viewportContainer == null)
-            return;
-
         var screenSize = vp.SizeBox;
 
         var position = ent.Comp.ScreenPosition ?? new Vector2(screenSize.Center.X, 1);
@@ -131,9 +128,12 @@ public sealed class TimeCounterSystem : EntitySystem
     private void SetTimeCounterRoot(LayoutContainer root, TimeCounter counter)
     {
         _timeCounterRoot.Orphan();
+
         if (counter.Parent != _timeCounterRoot)
             _timeCounterRoot.AddChild(counter);
+
         root.AddChild(_timeCounterRoot);
+
         LayoutContainer.SetAnchorPreset(_timeCounterRoot, LayoutContainer.LayoutPreset.TopWide);
         _timeCounterRoot.SetPositionLast();
     }
@@ -161,8 +161,7 @@ public sealed class TimeCounterSystem : EntitySystem
         var query = EntityQueryEnumerator<TimeCounterUiComponent>();
         while (query.MoveNext(out var uid, out var ui))
         {
-            if (ui.Counter != null)
-                ui.Counter.Orphan();
+            ui.Counter?.Orphan();
             RemCompDeferred<TimeCounterUiComponent>(uid);
         }
     }

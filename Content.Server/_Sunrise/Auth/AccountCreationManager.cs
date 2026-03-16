@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server.Discord;
 using Content.Shared.CCVar;
 using Robust.Shared;
 using Robust.Shared.Configuration;
@@ -17,18 +18,21 @@ public sealed class AccountCreationManager
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
 
-    private readonly HttpClient _httpClient = new();
+    private readonly DiscordWebhook _discord = new();
+    private HttpClient _httpClient = default!;
     private ISawmill _sawmill = default!;
+    private string _api = "api/query/userid?userid=";
     public void Initialize()
     {
         _sawmill = _logManager.GetSawmill("auth_created_time_api");
+        _httpClient = _discord.GetClient();
     }
     public async Task<DateTimeOffset?> TryGetAccountCreatedTimeAsync(NetUserId userId, CancellationToken cancel = default)
     {
         try
         {
             var authServer = _cfg.GetCVar(CVars.AuthServer);
-            var requestUri = $"{authServer}api/query/userid?userid={WebUtility.UrlEncode(userId.UserId.ToString())}";
+            var requestUri = $"{authServer}{_api}{WebUtility.UrlEncode(userId.UserId.ToString())}";
             using var resp = await _httpClient.GetAsync(requestUri, cancel);
 
             if (resp.StatusCode == HttpStatusCode.NotFound)

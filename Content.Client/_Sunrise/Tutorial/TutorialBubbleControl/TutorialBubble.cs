@@ -19,7 +19,7 @@ public abstract class TutorialBubble : Control
 
     /// <summary>
     ///     The distance in world space to offset the speech bubble from the center of the entity.
-    ///     i.e. greater -> higher above the mob's head.
+    ///     I.e., greater -> higher above the mob's head.
     /// </summary>
     private const float EntityVerticalOffset = 0.3f;
 

@@ -2,7 +2,7 @@ using System.Numerics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
-namespace Content.Shared._Sunrise.Tutorial.Components;
+namespace Content.Shared._Sunrise.Tutorial.Components.Trackers;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TutorialDistanceTrackerComponent : Component

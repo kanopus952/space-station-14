@@ -18,7 +18,7 @@ public sealed class TutorialProgressBarSystem : EntitySystem
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     private EntityQuery<ProgressBarUiComponent> _progressUiQuery;
-    private LayoutContainer _progressBarRoot = default!;
+    private LayoutContainer? _progressBarRoot;
     private bool _pendingRefresh;
 
     public override void Initialize()
@@ -46,7 +46,7 @@ public sealed class TutorialProgressBarSystem : EntitySystem
     {
         if (ev.New is not InGameScreen)
         {
-            _progressBarRoot.Orphan();
+            _progressBarRoot?.Orphan();
             RemoveAllBars();
             _pendingRefresh = false;
             return;
@@ -61,7 +61,7 @@ public sealed class TutorialProgressBarSystem : EntitySystem
     }
     private void OnPlayerDetached(Entity<TutorialProgressBarComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
-        _progressBarRoot.Orphan();
+        _progressBarRoot?.Orphan();
         RemoveAllBars();
         _pendingRefresh = false;
     }
@@ -95,9 +95,6 @@ public sealed class TutorialProgressBarSystem : EntitySystem
 
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
 
-        if (viewportContainer == null)
-            return;
-
         if (!_proto.TryIndex(player.SequenceId, out var sequence))
             return;
 
@@ -129,10 +126,13 @@ public sealed class TutorialProgressBarSystem : EntitySystem
     }
     private void SetProgressBarRoot(LayoutContainer root, TutorialProgressBar bar)
     {
-        _progressBarRoot.Orphan();
+        _progressBarRoot?.Orphan();
 
         if (bar.Parent != _progressBarRoot)
-            _progressBarRoot.AddChild(bar);
+            _progressBarRoot?.AddChild(bar);
+
+        if (_progressBarRoot == null)
+            return;
 
         root.AddChild(_progressBarRoot);
         LayoutContainer.SetAnchorPreset(_progressBarRoot, LayoutContainer.LayoutPreset.Wide);

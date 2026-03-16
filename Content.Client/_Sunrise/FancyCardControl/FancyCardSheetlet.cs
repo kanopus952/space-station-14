@@ -17,26 +17,26 @@ public sealed class FancyCardSheetlet : Sheetlet<PalettedStylesheet>
     {
         var background = new StyleBoxFlat
         {
-            BackgroundColor = sheet.SecondaryPalette.Background
+            BackgroundColor = sheet.SecondaryPalette.Background,
         };
 
         var backgroundLight = new StyleBoxFlat
         {
-            BackgroundColor = sheet.SecondaryPalette.BackgroundLight
+            BackgroundColor = sheet.SecondaryPalette.BackgroundLight,
         };
 
         var titleBarBox = new StyleBoxFlat
         {
             BackgroundColor = sheet.SecondaryPalette.BackgroundLight,
             BorderColor = sheet.SecondaryPalette.Background,
-            BorderThickness = new Thickness(2)
+            BorderThickness = new Thickness(2),
         };
 
         var quoteInnerBox = new StyleBoxFlat
         {
             BackgroundColor = sheet.SecondaryPalette.BackgroundDark,
             BorderColor = sheet.SecondaryPalette.Background,
-            BorderThickness = new Thickness(1)
+            BorderThickness = new Thickness(1),
         };
 
         return

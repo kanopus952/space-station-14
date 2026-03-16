@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Robust.Shared.Prototypes;
 
@@ -12,7 +13,7 @@ public abstract partial class EventListenedConditionSystemBase<TCondition> : Tut
     where TCondition : EventListenedConditionBase<TCondition>
 {
     [Dependency] protected readonly SharedTutorialSystem Tutorial = default!;
-    protected static readonly EntProtoId AnyTarget = default;
+    protected readonly EntProtoId AnyTarget = default;
 
     protected override void Condition(Entity<TutorialPlayerComponent> entity, ref TutorialConditionEvent<TCondition> args)
     {

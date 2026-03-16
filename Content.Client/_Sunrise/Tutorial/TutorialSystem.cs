@@ -36,9 +36,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     public event Action? WindowDataReceived;
     public bool CompletedTutorialsReceived { get; private set; }
-    public HashSet<string> CompletedTutorials = new();
+    public readonly HashSet<string> CompletedTutorials = [];
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
-    private LayoutContainer _speechBubbleRoot = default!;
+    private LayoutContainer? _tutorialBubbleRoot;
 
     public override void Initialize()
     {
@@ -53,7 +53,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeNetworkEvent<TutorialWindowDataResponseEvent>(OnWindowDataResponse);
         SubscribeNetworkEvent<TutorialStartDeniedEvent>(OnStartDenied);
 
-        _speechBubbleRoot = new LayoutContainer();
+        _tutorialBubbleRoot = new LayoutContainer();
         _bubbleUiQuery = GetEntityQuery<TutorialBubbleUiComponent>();
         _spriteQuery = GetEntityQuery<SpriteComponent>();
         _ui.OnScreenChanged += OnScreenChanged;
@@ -67,7 +67,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (ev.New is not InGameScreen)
         {
             SetHighlight(null);
-            _speechBubbleRoot.Orphan();
+            _tutorialBubbleRoot?.Orphan();
             return;
         }
 
@@ -90,7 +90,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     private void OnPlayerDetached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
         SetHighlight(null);
-        _speechBubbleRoot.Orphan();
+        _tutorialBubbleRoot?.Orphan();
     }
 
     private void OnTutorialPlayerState(Entity<TutorialPlayerComponent> ent, ref AfterAutoHandleStateEvent ev)
@@ -191,9 +191,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
 
-        if (viewportContainer == null)
-            return;
-
         if (_bubbleUiQuery.TryGetComponent(ent.Owner, out var uiComp) && uiComp.Bubble != null)
         {
             var labels = uiComp.Bubble.GetControlOfType<RichTextLabel>();
@@ -217,14 +214,19 @@ public sealed class TutorialSystem : SharedTutorialSystem
         bubbleUi.Bubble = bubble;
     }
 
-    public void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
+    private void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
     {
-        _speechBubbleRoot.Orphan();
-        if (bubble.Parent != _speechBubbleRoot)
-            _speechBubbleRoot.AddChild(bubble);
-        root.AddChild(_speechBubbleRoot);
-        LayoutContainer.SetAnchorPreset(_speechBubbleRoot, LayoutContainer.LayoutPreset.Wide);
-        _speechBubbleRoot.SetPositionLast();
+        if (_tutorialBubbleRoot == null)
+            return;
+
+        _tutorialBubbleRoot.Orphan();
+
+        if (bubble.Parent != _tutorialBubbleRoot)
+            _tutorialBubbleRoot.AddChild(bubble);
+
+        root.AddChild(_tutorialBubbleRoot);
+        LayoutContainer.SetAnchorPreset(_tutorialBubbleRoot, LayoutContainer.LayoutPreset.Wide);
+        _tutorialBubbleRoot.SetPositionLast();
     }
 
     public void RequestQuitTutorial()

@@ -54,5 +54,5 @@ public sealed partial class TutorialSequencePrototype : IPrototype
     ///     Ordered list of tutorial steps that make up this sequence.
     /// </summary>
     [DataField]
-    public List<ProtoId<TutorialStepPrototype>> Steps = new();
+    public List<ProtoId<TutorialStepPrototype>> Steps = [];
 }

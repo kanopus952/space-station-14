@@ -1,4 +1,5 @@
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 

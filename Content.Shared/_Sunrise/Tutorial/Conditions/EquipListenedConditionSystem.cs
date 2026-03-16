@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared.Hands;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -20,8 +21,10 @@ public sealed partial class EquipListenedConditionSystem : EventListenedConditio
         RecordEvent(ent, DefaultKey, args.Equipment);
         RecordEvent(ent, EquipListenedCondition.GetSlotKey(args.SlotFlags), args.Equipment);
 
-        if (TryComp(ent, out TutorialTrackerComponent? tracker))
-            Tutorial.TryObserveEntity(ent, args.Equipment, tracker);
+        if (!TryComp<TutorialTrackerComponent>(ent, out var tracker))
+            return;
+
+        Tutorial.TryObserveEntity(ent, args.Equipment, tracker);
     }
 }
 

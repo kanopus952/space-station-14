@@ -20,11 +20,11 @@ public sealed partial class HoldInHandsConditionSystem : TutorialConditionSystem
             if (proto?.ID == null)
                 continue;
 
-            if (proto.ID == args.Condition.Item)
-            {
-                args.Result = true;
-                return;
-            }
+            if (proto.ID != args.Condition.Item)
+                continue;
+
+            args.Result = true;
+            return;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Toolshed.Commands.Generic.ListGeneration;
@@ -5,42 +6,33 @@ using Robust.Shared.Toolshed.Commands.Generic.ListGeneration;
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
 /// <summary>
-/// This handles tutorials.
-/// Specifically it handles the receiving of events for causing entity effects, and provides
-/// public API for other systems to take advantage of entity effects.
+/// Manages tutorial condition evaluation.
+/// Provides methods to check whether tutorial conditions are satisfied for a given entity.
 /// </summary>
 public sealed partial class SharedTutorialConditionsSystem : EntitySystem, ITutorialConditionRaiser
 {
     /// <summary>
     /// Checks a list of conditions to verify that they all return true.
     /// </summary>
-    /// <param name="target">Target entity we're checking conditions on</param>
-    /// <param name="conditions">Conditions we're checking</param>
-    /// <returns>Returns true if all conditions return true, false if any fail</returns>
+    /// <param name="target">Entity we're checking conditions on.</param>
+    /// <param name="conditions">Conditions to check.</param>
+    /// <returns><c>true</c> if all conditions pass or the list is null; <c>false</c> if any condition fails.</returns>
     public bool TryConditions(EntityUid target, TutorialCondition[]? conditions)
     {
-        // If there's no conditions we can't fail any of them...
         if (conditions == null)
             return true;
 
-        foreach (var condition in conditions)
-        {
-            if (!TryCondition(target, condition))
-                return false;
-        }
-
-        return true;
+        return conditions.All(condition => TryCondition(target, condition));
     }
 
     /// <summary>
-    /// Checks a list of conditions to see if any are true.
+    /// Checks a list of conditions to see if any of them returns true.
     /// </summary>
-    /// <param name="target">Target entity we're checking conditions on</param>
-    /// <param name="conditions">Conditions we're checking</param>
-    /// <returns>Returns true if any conditions return true</returns>
+    /// <param name="target">Entity we're checking conditions on.</param>
+    /// <param name="conditions">Conditions to check.</param>
+    /// <returns><c>true</c> if at least one condition passes; <c>false</c> if none pass or the list is null.</returns>
     public bool TryAnyCondition(EntityUid target, TutorialCondition[]? conditions)
     {
-        // If there's no conditions we can't meet any of them...
         if (conditions == null)
             return false;
 
@@ -54,18 +46,19 @@ public sealed partial class SharedTutorialConditionsSystem : EntitySystem, ITuto
     }
 
     /// <summary>
-    /// Checks a single <see cref="TutorialCondition"/> on an entity.
+    /// Checks a single <see cref="TutorialCondition"/> on an entity, respecting <see cref="TutorialCondition.Inverted"/>.
     /// </summary>
-    /// <param name="target">Target entity we're checking conditions on</param>
-    /// <param name="condition">Condition we're checking</param>
-    /// <returns>Returns true if we meet the condition and false otherwise</returns>
+    /// <param name="target">Entity we're checking the condition on.</param>
+    /// <param name="condition">Condition to check.</param>
+    /// <returns><c>true</c> if the condition passes (after applying inversion).</returns>
     public bool TryCondition(EntityUid target, TutorialCondition condition)
     {
         return condition.Inverted != condition.RaiseEvent(target, this);
     }
 
     /// <summary>
-    /// Raises a condition to an entity. You should not be calling this unless you know what you're doing.
+    /// Raises a <see cref="TutorialConditionEvent{T}"/> on the target entity and returns the result.
+    /// Called internally via <see cref="ITutorialConditionRaiser"/>; prefer <see cref="TryCondition"/> for external use.
     /// </summary>
     public bool RaiseConditionEvent<T>(EntityUid target, T effect) where T : TutorialConditionBase<T>
     {
@@ -76,10 +69,11 @@ public sealed partial class SharedTutorialConditionsSystem : EntitySystem, ITuto
 }
 
 /// <summary>
-/// This is a basic abstract entity effect containing all the data an entity effect needs to affect entities with effects...
+/// Base system for handling a specific <see cref="TutorialConditionBase{TCon}"/> on entities with component <typeparamref name="T"/>.
+/// Subscribe to <see cref="TutorialConditionEvent{TCon}"/> and set <see cref="TutorialConditionEvent{TCon}.Result"/> in the handler.
 /// </summary>
-/// <typeparam name="T">The Component that is required for the effect</typeparam>
-/// <typeparam name="TCon">The Condition we're testing</typeparam>
+/// <typeparam name="T">Component required on the entity for this condition to apply.</typeparam>
+/// <typeparam name="TCon">The condition type being evaluated.</typeparam>
 public abstract partial class TutorialConditionSystem<T, TCon> : EntitySystem where T : Component where TCon : TutorialConditionBase<TCon>
 {
     public override void Initialize()
@@ -90,7 +84,7 @@ public abstract partial class TutorialConditionSystem<T, TCon> : EntitySystem wh
 }
 
 /// <summary>
-/// Used to raise an EntityCondition without losing the type of condition.
+/// Provides a type-safe way to raise <see cref="TutorialConditionEvent{T}"/> without losing the concrete condition type.
 /// </summary>
 public interface ITutorialConditionRaiser
 {
@@ -98,9 +92,11 @@ public interface ITutorialConditionRaiser
 }
 
 /// <summary>
-/// Used to store an <see cref="EntityCondition"/> so it can be raised without losing the type of the condition.
+/// Generic base for <see cref="TutorialCondition"/> implementations.
+/// Preserves the concrete type <typeparamref name="T"/> when raising the condition event,
+/// so the correct <see cref="TutorialConditionSystem{T,TCon}"/> handler receives it.
 /// </summary>
-/// <typeparam name="T">The Condition wer are raising.</typeparam>
+/// <typeparam name="T">The concrete condition type (CRTP pattern).</typeparam>
 public abstract partial class TutorialConditionBase<T> : TutorialCondition where T : TutorialConditionBase<T>
 {
     public override bool RaiseEvent(EntityUid target, ITutorialConditionRaiser raiser)
@@ -108,13 +104,12 @@ public abstract partial class TutorialConditionBase<T> : TutorialCondition where
         if (this is not T type)
             return false;
 
-        // If the result of the event matches the result we're looking for then we pass.
         return raiser.RaiseConditionEvent(target, type);
     }
 }
 
 /// <summary>
-/// A basic condition which can be checked for on an entity via events.
+/// A tutorial condition that is evaluated by raising a <see cref="TutorialConditionEvent{T}"/> on an entity.
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
 public abstract partial class TutorialCondition
@@ -122,27 +117,28 @@ public abstract partial class TutorialCondition
     public abstract bool RaiseEvent(EntityUid target, ITutorialConditionRaiser raiser);
 
     /// <summary>
-    /// If true, invert the result. So false returns true and true returns false!
+    /// If true, inverts the result of the condition check.
     /// </summary>
     [DataField]
     public bool Inverted;
 }
 
 /// <summary>
-/// An Event carrying an entity effect.
+/// By-ref event raised on an entity to evaluate a <see cref="TutorialConditionBase{T}"/>.
+/// The handling system should set <see cref="Result"/> to indicate whether the condition is met.
 /// </summary>
-/// <param name="Condition">The Condition we're checking</param>
+/// <param name="Condition">The condition being evaluated.</param>
 [ByRefEvent]
 public record struct TutorialConditionEvent<T>(T Condition) where T : TutorialConditionBase<T>
 {
     /// <summary>
-    /// The result of our check, defaults to false if nothing handles it.
+    /// Whether the condition is satisfied. Defaults to <c>false</c> if no system handles the event.
     /// </summary>
     [DataField]
     public bool Result;
 
     /// <summary>
-    /// The Condition being raised in this event
+    /// The condition being evaluated in this event.
     /// </summary>
     public readonly T Condition = Condition;
 }

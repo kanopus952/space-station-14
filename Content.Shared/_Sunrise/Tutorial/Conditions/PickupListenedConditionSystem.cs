@@ -1,4 +1,5 @@
 using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared.Hands;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
@@ -15,8 +16,10 @@ public sealed partial class PickupListenedConditionSystem : EventListenedConditi
     {
         RecordEvent(ent, DefaultKey, args.Equipped);
 
-        if (TryComp(ent, out TutorialTrackerComponent? tracker))
-            Tutorial.TryObserveEntity(ent, args.Equipped, tracker);
+        if (!TryComp<TutorialTrackerComponent>(ent, out var tracker))
+            return;
+
+        Tutorial.TryObserveEntity(ent, args.Equipped, tracker);
     }
 }
 

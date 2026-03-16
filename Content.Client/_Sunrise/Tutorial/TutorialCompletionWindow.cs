@@ -14,7 +14,7 @@ namespace Content.Client._Sunrise.Tutorial;
 public sealed class TutorialCompletionWindow : BaseWindow
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    public FancyCard Card { get; }
+    private FancyCard Card { get; }
     public event Action<string>? ActionPressed;
 
     public TutorialCompletionWindow()
@@ -27,7 +27,7 @@ public sealed class TutorialCompletionWindow : BaseWindow
         {
             TitleText = "-",
             DescText = "-",
-            Buttons = []
+            Buttons = [],
         });
 
         MouseFilter = MouseFilterMode.Stop;
@@ -46,7 +46,7 @@ public sealed class TutorialCompletionWindow : BaseWindow
             DescText = Loc.GetString(state.Description),
             Buttons = buttons,
             CardSize = new Vector2(580, 320),
-            BackdropTexture = proto.Texture
+            BackdropTexture = proto.Texture,
         };
 
         Card.ApplyConfig(config);
@@ -56,19 +56,17 @@ public sealed class TutorialCompletionWindow : BaseWindow
     {
         var buttons = new List<FancyCardButton>();
 
-        foreach (var action in actions)
+        buttons.AddRange(actions.Select(action =>
         {
             var id = action.Id;
-            var tooltip = !string.IsNullOrEmpty(action.Tooltip) ? Loc.GetString(action.Tooltip) : null;
-
-            buttons.Add(new FancyCardButton(
+            return new FancyCardButton(
                 id,
                 Loc.GetString(action.Text),
                 new Vector2(150, 30),
-                tooltip,
+                !string.IsNullOrEmpty(action.Tooltip) ? Loc.GetString(action.Tooltip) : null,
                 action.Disabled,
-                id == null ? null : () => ActionPressed?.Invoke(id)));
-        }
+                () => ActionPressed?.Invoke(id));
+        }));
 
         return buttons;
     }

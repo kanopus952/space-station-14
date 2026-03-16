@@ -7,7 +7,7 @@ namespace Content.Shared._Sunrise.Tutorial.Components;
 public sealed partial class TutorialMapComponent : Component
 {
     [ViewVariables]
-    public List<EntityUid> LoadedGrids = new();
+    public List<EntityUid> LoadedGrids = [];
 
     [ViewVariables]
     public Dictionary<EntityUid, Vector2> GridOffsets = new();

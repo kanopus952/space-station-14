@@ -23,6 +23,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Configuration;
 using Robust.Server.GameStates;
+using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 
 namespace Content.Server._Sunrise.Tutorial;
 
@@ -44,14 +45,12 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    private ISawmill _sawmill = default!;
     private EntityUid? _tutorialMap;
     private readonly Dictionary<ICommonSession, TutorialCompletionEui> _completionEuis = new();
     public override void Initialize()
     {
         base.Initialize();
 
-        _sawmill = Logger.GetSawmill("tutorial");
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepChangedEvent>(OnStepChanged);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepsCompletedEvent>(OnStepsCompleted);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialEndedEvent>(OnTutorialComplete);
@@ -105,7 +104,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         }
         catch (Exception e)
         {
-            _sawmill.Error($"Failed to save tutorial completion for {userId}: {e}");
+            Log.Error($"Failed to save tutorial completion for {userId}: {e}");
         }
     }
 
@@ -164,7 +163,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         }
         catch (Exception e)
         {
-            _sawmill.Error($"Failed to fetch tutorial completion list for {args.SenderSession.UserId}: {e}");
+            Log.Error($"Failed to fetch tutorial completion list for {args.SenderSession.UserId}: {e}");
         }
 
         completed ??= [];
@@ -256,7 +255,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         }
         catch (Exception e)
         {
-            _sawmill.Error($"Error in OnStepChanged: {e}");
+            Log.Error($"Error in OnStepChanged: {e}");
         }
     }
 
@@ -268,11 +267,11 @@ public sealed class TutorialSystem : SharedTutorialSystem
         }
         catch (Exception e)
         {
-            _sawmill.Error($"TTS System error in tutorial generation: {e.Message}");
+            Log.Error($"TTS System error in tutorial generation: {e.Message}");
         }
         return null;
     }
-    public override void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
+    protected override void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
     {
         base.UpdateTimeCounter(ent, endTime);
 
@@ -303,10 +302,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private EntityUid LoadLocation(ResPath gridPath)
     {
-        if (!TryComp<MapComponent>(_tutorialMap, out var mapComp))
-            return EntityUid.Invalid;
-
-        if (!TryComp<TutorialMapComponent>(_tutorialMap, out var tutorialMap))
+        if (!TryComp<MapComponent>(_tutorialMap, out var mapComp) ||
+            !TryComp<TutorialMapComponent>(_tutorialMap, out var tutorialMap))
             return EntityUid.Invalid;
 
         CleanupDeletedGrids(tutorialMap);
@@ -350,11 +347,12 @@ public sealed class TutorialSystem : SharedTutorialSystem
         for (var i = comp.LoadedGrids.Count - 1; i >= 0; i--)
         {
             var grid = comp.LoadedGrids[i];
-            if (!Exists(grid))
-            {
-                comp.LoadedGrids.RemoveAt(i);
-                comp.GridOffsets.Remove(grid);
-            }
+
+            if (Exists(grid))
+                continue;
+
+            comp.LoadedGrids.RemoveAt(i);
+            comp.GridOffsets.Remove(grid);
         }
     }
 }

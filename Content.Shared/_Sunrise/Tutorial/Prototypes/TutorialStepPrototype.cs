@@ -4,12 +4,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Sunrise.Tutorial.Prototypes;
 
-[Prototype]
 /// <summary>
 ///     Prototype describing a single step in a tutorial sequence.
 ///     A step may display a tutorial bubble, send chat and/or TTS messages,
 ///     and is completed when all specified conditions are satisfied.
 /// </summary>
+[Prototype]
 public sealed partial class TutorialStepPrototype : IPrototype
 {
     [IdDataField]
@@ -61,19 +61,19 @@ public sealed partial class TutorialStepPrototype : IPrototype
     ///     Conditions that must be satisfied to complete this tutorial step.
     /// </summary>
     [DataField]
-    public List<TutorialCondition> Conditions = new();
+    public List<TutorialCondition> Conditions = [];
 
     /// <summary>
     ///     Alternative conditions. If set, any of these must be satisfied in addition to <see cref="Conditions"/>.
     /// </summary>
     [DataField]
-    public List<TutorialCondition> AnyConditions = new();
+    public List<TutorialCondition> AnyConditions = [];
 
     /// <summary>
     ///     Conditions that must be met before this step is considered active.
     /// </summary>
     [DataField]
-    public List<TutorialCondition> Preconditions = new();
+    public List<TutorialCondition> Preconditions = [];
 
     /// <summary>
     ///     Optional step to jump to if <see cref="Preconditions"/> are not met.

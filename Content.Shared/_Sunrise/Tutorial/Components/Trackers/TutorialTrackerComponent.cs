@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._Sunrise.Tutorial.Components;
+namespace Content.Shared._Sunrise.Tutorial.Components.Trackers;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TutorialTrackerComponent : Component
@@ -11,8 +11,8 @@ public sealed partial class TutorialTrackerComponent : Component
     public Dictionary<(string Key, EntProtoId Target), int> Counters = new();
 
     [ViewVariables, AutoNetworkedField]
-    public HashSet<EntProtoId> TargetPrototypes = new();
+    public HashSet<EntProtoId> TargetPrototypes = [];
 
     [ViewVariables, AutoNetworkedField]
-    public HashSet<EntityUid> ObservedEntities = new();
+    public HashSet<EntityUid> ObservedEntities = [];
 }

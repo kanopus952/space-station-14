@@ -8,6 +8,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
+using Robust.Shared.Toolshed.Commands.Values;
 using YamlDotNet.Core.Tokens;
 using static Content.Client.Stylesheets.StylesheetHelpers;
 
@@ -19,6 +20,7 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
         var frameColor = Color.DarkGoldenrod;
+        var keybindColor = Color.DarkGray.WithAlpha(0.8f);
         var keybindBorderColor = Color.Goldenrod;
 
         var bubbleFrameTexture = ResCache.GetTexture("/Textures/_Sunrise/Interface/Tutorial/border.svg.96dpi.png");
@@ -31,7 +33,7 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
 
         var keybindBox = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#252525").WithAlpha(0.8f),
+            BackgroundColor = keybindColor,
             BorderColor = keybindBorderColor,
             BorderThickness = new Thickness(1),
         };

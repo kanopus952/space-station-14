@@ -20,5 +20,5 @@ public sealed partial class TutorialCategoryPrototype : IPrototype
     ///     List of tutorial sequence prototypes included in this category.
     /// </summary>
     [DataField]
-    public List<ProtoId<TutorialSequencePrototype>> Tutorials = new();
+    public List<ProtoId<TutorialSequencePrototype>> Tutorials =[];
 }

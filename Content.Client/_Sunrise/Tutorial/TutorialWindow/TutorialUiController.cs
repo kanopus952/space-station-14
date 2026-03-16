@@ -18,11 +18,6 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
     private bool _autoOpenEnabled = true;
     private bool _windowDataSubscribed;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        _cfg.OnValueChanged(SunriseCCVars.TutorialWindowAutoOpen, v => _autoOpenEnabled = v, true);
-    }
     public void ToggleTutorial()
     {
         if (_window != null)
@@ -70,6 +65,8 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
     }
     public void OnStateEntered(LobbyState state)
     {
+        _cfg.OnValueChanged(SunriseCCVars.TutorialWindowAutoOpen, OnAutoOpenChanged, true);
+
         if (!_autoOpenEnabled)
             return;
 
@@ -84,15 +81,23 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
 
         TryOpenTutorial();
     }
+
     public void OnStateExited(LobbyState state)
     {
+        _cfg.UnsubValueChanged(SunriseCCVars.TutorialWindowAutoOpen, OnAutoOpenChanged);
+
         _window?.Close();
 
-        if (_tutorialSystem != null && _windowDataSubscribed)
-        {
-            _tutorialSystem.WindowDataReceived -= OnWindowDataReceived;
-            _windowDataSubscribed = false;
-        }
+        if (!_windowDataSubscribed)
+            return;
+
+        _tutorialSystem.WindowDataReceived -= OnWindowDataReceived;
+        _windowDataSubscribed = false;
+    }
+
+    private void OnAutoOpenChanged(bool value)
+    {
+        _autoOpenEnabled = value;
     }
 
     private void OnWindowDataReceived()

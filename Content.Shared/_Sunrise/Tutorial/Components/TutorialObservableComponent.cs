@@ -6,5 +6,5 @@ namespace Content.Shared._Sunrise.Tutorial.Components;
 public sealed partial class TutorialObservableComponent : Component
 {
     [ViewVariables, AutoNetworkedField]
-    public HashSet<EntityUid> Observers = new();
+    public HashSet<EntityUid> Observers = [];
 }
