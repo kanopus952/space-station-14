@@ -46,11 +46,25 @@ public abstract class SharedTutorialSystem : EntitySystem
                 continue;
             }
 
-            TryCheckCondition((uid, comp));
+            CheckCondition((uid, comp));
         }
     }
 
     private void OnComponentInit(Entity<TutorialPlayerComponent> ent, ref ComponentInit args)
+    {
+        // SequenceId may not be set yet if the component was added before the caller
+        // could configure it (e.g. EnsureComp fires ComponentInit synchronously).
+        // In that case the server calls InitializeTutorial() explicitly after setup.
+        InitializeTutorial(ent);
+    }
+
+    /// <summary>
+    /// Performs first-time setup for a tutorial session: starts the timer, initialises
+    /// the first step, and fires all related side-effects.
+    /// Must be called after <see cref="TutorialPlayerComponent.SequenceId"/> and
+    /// <see cref="TutorialPlayerComponent.Grid"/> are fully configured.
+    /// </summary>
+    public void InitializeTutorial(Entity<TutorialPlayerComponent> ent)
     {
         if (!TryGetCurrentStep(ent, out var step))
             return;
@@ -60,7 +74,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         OnStepChanged(ent, step);
     }
 
-    private void TryCheckCondition(Entity<TutorialPlayerComponent> ent)
+    private void CheckCondition(Entity<TutorialPlayerComponent> ent)
     {
         if (!TryGetCurrentStep(ent, out var step))
             return;
@@ -127,6 +141,7 @@ public abstract class SharedTutorialSystem : EntitySystem
     {
         ResetTracking(ent);
         ClearTutorialBubble(ent);
+        ent.Comp.Target = null;
         Dirty(ent, ent.Comp);
 
         RaiseLocalEvent(ent, new TutorialStepChangedEvent());
@@ -137,10 +152,8 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     public void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
-        if (ent.Comp.CurrentBubbleTarget is { } oldTarget && Exists(oldTarget))
-            RemComp<TutorialBubbleComponent>(oldTarget);
-
-        ent.Comp.CurrentBubbleTarget = null;
+        ClearTutorialBubble(ent);
+        ent.Comp.Target = null;
 
         ClearTracking(ent);
         UpdateTimeCounter(ent, null);
@@ -152,8 +165,11 @@ public abstract class SharedTutorialSystem : EntitySystem
     public void CompleteTutorial(Entity<TutorialPlayerComponent> ent, TutorialSequencePrototype sequence)
     {
         ent.Comp.StepIndex = sequence.Steps.Count;
+        ent.Comp.Target = null;
+
         ClearTutorialBubble(ent);
         ClearTracking(ent);
+
         RaiseLocalEvent(ent, new TutorialStepsCompletedEvent());
         Dirty(ent, ent.Comp);
     }
@@ -325,30 +341,35 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     private void UpdateTutorialBubble(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
     {
+        var targetEntity = step.Target != null
+            ? TryFindNearestTargetEntity(ent, step.Target, step)
+            : null;
+
+        ent.Comp.Target = targetEntity;
+
         if (step.Bubble == null)
-            return;
-
-        var target = step.Bubble.Target.Type switch
         {
-            TutorialBubbleTargetType.Self => ent,
-            TutorialBubbleTargetType.Entity => TryFindBubbleEntity(ent, step),
-            _ => null,
-        };
-
-        if (target == null || !Exists(target.Value))
-        {
-            ClearTutorialBubble(ent);
+            Dirty(ent, ent.Comp);
             return;
         }
 
-        if (ent.Comp.CurrentBubbleTarget is { } previous && previous != target.Value && Exists(previous))
+        var bubbleTarget = step.Bubble.AttachToTarget ? targetEntity : ent;
+
+        if (bubbleTarget == null || !Exists(bubbleTarget.Value))
+        {
+            ClearTutorialBubble(ent);
+            Dirty(ent, ent.Comp);
+            return;
+        }
+
+        if (ent.Comp.CurrentBubbleTarget is { } previous && previous != bubbleTarget.Value && Exists(previous))
             RemComp<TutorialBubbleComponent>(previous);
 
-        var bubble = EnsureComp<TutorialBubbleComponent>(target.Value);
+        var bubble = EnsureComp<TutorialBubbleComponent>(bubbleTarget.Value);
         bubble.Instruction = step.Bubble.Text;
-        Dirty(target.Value, bubble);
+        Dirty(bubbleTarget.Value, bubble);
 
-        ent.Comp.CurrentBubbleTarget = target;
+        ent.Comp.CurrentBubbleTarget = bubbleTarget;
         Dirty(ent, ent.Comp);
     }
 
@@ -360,12 +381,8 @@ public abstract class SharedTutorialSystem : EntitySystem
         ent.Comp.CurrentBubbleTarget = null;
     }
 
-    private EntityUid? TryFindBubbleEntity(EntityUid uid, TutorialStepPrototype proto)
+    private EntityUid? TryFindNearestTargetEntity(EntityUid uid, EntProtoId? target, TutorialStepPrototype proto)
     {
-        if (proto.Bubble == null)
-            return null;
-
-        var targetProtoId = proto.Bubble.Target.Prototype;
         var origin = _transform.GetMapCoordinates(uid);
         var best = EntityUid.Invalid;
         var bestDistSq = float.MaxValue;
@@ -373,7 +390,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         foreach (var ent in _lookupSystem.GetEntitiesInRange(uid, proto.ObserveRange))
         {
             var meta = MetaData(ent);
-            if (meta.EntityPrototype?.ID != targetProtoId)
+            if (meta.EntityPrototype?.ID != target)
                 continue;
 
             var distSq = (_transform.GetMapCoordinates(ent).Position - origin.Position).LengthSquared();

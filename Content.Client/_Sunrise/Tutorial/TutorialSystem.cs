@@ -1,4 +1,3 @@
-using Content.Client.UserInterface.ControlExtensions;
 using Content.Client.UserInterface.Screens;
 using Content.Client._Sunrise.Tutorial.Components;
 using Content.Client._Sunrise.Tutorial.Overlays;
@@ -39,6 +38,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
     public readonly HashSet<string> CompletedTutorials = [];
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer? _tutorialBubbleRoot;
+    // Bubbles fading out after removal — kept alive in the UI tree until alpha reaches 0.
+    private readonly List<TutorialBubble> _fadingOut = [];
 
     public override void Initialize()
     {
@@ -59,7 +60,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _ui.OnScreenChanged += OnScreenChanged;
 
         _shaderInstance = _proto.Index(TutorialShader).InstanceUnique();
-        _overlayManager.AddOverlay(new TutorialPathOverlay(EntityManager, _player, _timing, _transform));
+        _overlayManager.AddOverlay(new TutorialPathOverlay(EntityManager, _player, _timing, _transform, _proto));
     }
 
     private void OnScreenChanged((UIScreen? Old, UIScreen? New) ev)
@@ -126,8 +127,11 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _highlightedTarget = null;
         _highlightedTargetRenderOrder = null;
 
-        // Apply to new target
-        if (target is not { } newTarget || !_spriteQuery.TryGetComponent(newTarget, out var sprite))
+        // Apply to new target — never highlight the local player
+        if (target is not { } newTarget || newTarget == _player.LocalEntity)
+            return;
+
+        if (!_spriteQuery.TryGetComponent(newTarget, out var sprite))
             return;
 
         // Don't overwrite an existing unrelated post-shader
@@ -173,9 +177,22 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!_bubbleUiQuery.TryGetComponent(uid, out var bubbleUi) || bubbleUi.Bubble == null)
             return;
 
-        bubbleUi.Bubble.DisposeAllChildren();
-        bubbleUi.Bubble.Orphan();
+        var bubble = bubbleUi.Bubble;
+        bubbleUi.Bubble = null;
         RemComp<TutorialBubbleUiComponent>(uid);
+
+        // Keep bubble alive in the tree until its fade-out completes (SpeechBubble pattern).
+        _fadingOut.Add(bubble);
+        bubble.OnDied += OnBubbleDied;
+        bubble.FadeNow();
+    }
+
+    private void OnBubbleDied(EntityUid _, TutorialBubble bubble)
+    {
+        bubble.OnDied -= OnBubbleDied;
+        _fadingOut.Remove(bubble);
+        bubble.DisposeAllChildren();
+        bubble.Orphan();
     }
 
     private void UpdateBubble(Entity<TutorialBubbleComponent> ent)
@@ -193,18 +210,21 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         if (_bubbleUiQuery.TryGetComponent(ent.Owner, out var uiComp) && uiComp.Bubble != null)
         {
-            var labels = uiComp.Bubble.GetControlOfType<RichTextLabel>();
-
-            foreach (var item in labels)
+            // Only update text and restart the fade-in when the instruction actually changed.
+            // AfterAutoHandleStateEvent fires for any field change on the component,
+            // so guarding here prevents spurious fade restarts.
+            if (uiComp.LastInstruction != ent.Comp.Instruction)
             {
-                item.SetMessage(TutorialBubble.FormatSpeech(Loc.GetString(ent.Comp.Instruction)), TutorialBubble.BubbleTags, Color.White);
+                uiComp.LastInstruction = ent.Comp.Instruction;
+                uiComp.Bubble.SetMessage(Loc.GetString(ent.Comp.Instruction));
+                uiComp.Bubble.ResetFade();
             }
 
             SetSpeechBubbleRoot(viewportContainer, uiComp.Bubble);
             return;
         }
 
-        var bubble = TutorialBubble.CreateTutorialBubble(
+        var bubble = TutorialBubble.Create(
             Loc.GetString(ent.Comp.Instruction),
             ent);
 
@@ -212,6 +232,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         var bubbleUi = EnsureComp<TutorialBubbleUiComponent>(ent.Owner);
         bubbleUi.Bubble = bubble;
+        bubbleUi.LastInstruction = ent.Comp.Instruction;
     }
 
     private void SetSpeechBubbleRoot(LayoutContainer root, TutorialBubble bubble)
@@ -258,5 +279,12 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SetHighlight(null);
         _ui.OnScreenChanged -= OnScreenChanged;
         _overlayManager.RemoveOverlay<TutorialPathOverlay>();
+
+        foreach (var bubble in _fadingOut)
+        {
+            bubble.DisposeAllChildren();
+            bubble.Orphan();
+        }
+        _fadingOut.Clear();
     }
 }

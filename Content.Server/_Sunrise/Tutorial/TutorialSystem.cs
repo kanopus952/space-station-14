@@ -54,19 +54,21 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepChangedEvent>(OnStepChanged);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepsCompletedEvent>(OnStepsCompleted);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialEndedEvent>(OnTutorialComplete);
+        SubscribeLocalEvent<TutorialPlayerComponent, ExpandPvsEvent>(OnExpandPvs);
         SubscribeNetworkEvent<TutorialQuitRequestEvent>(OnTutorialQuitRequest);
         SubscribeNetworkEvent<TutorialStartRequestEvent>(OnStartRequest);
         SubscribeNetworkEvent<TutorialWindowDataRequestEvent>(OnWindowDataRequest);
-        SubscribeLocalEvent<TutorialPlayerComponent, ExpandPvsEvent>(OnExpandPvs);
     }
 
     private void OnExpandPvs(Entity<TutorialPlayerComponent> ent, ref ExpandPvsEvent args)
     {
-        if (ent.Comp.CurrentBubbleTarget is not { } target || !Exists(target))
-            return;
-
         args.Entities ??= [];
-        args.Entities.Add(target);
+
+        if (Exists(ent.Comp.CurrentBubbleTarget))
+            args.Entities.Add(ent.Comp.CurrentBubbleTarget.Value);
+
+        if (Exists(ent.Comp.Target))
+            args.Entities.Add(ent.Comp.Target.Value);
     }
 
     private void OnStepsCompleted(Entity<TutorialPlayerComponent> ent, ref TutorialStepsCompletedEvent args)
@@ -208,6 +210,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         tutorial.SequenceId = msg.SequenceId;
         tutorial.Grid = gridUid;
         EnsureComp<TutorialProgressBarComponent>(uid.Value);
+        InitializeTutorial((uid.Value, tutorial));
     }
 
     private bool CanStartTutorial()
@@ -246,7 +249,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
             RemComp<TutorialDistanceTrackerComponent>(uid);
 
-            var tts = await GenerateTtsForTutorial(step.TTSMessage, voice);
+            var tts = await GenerateTtsForTutorial(step.TtsMessage, voice);
             if (tts == null)
                 return;
 

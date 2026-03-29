@@ -51,6 +51,4 @@
   path: "/Textures/Shaders/outline.swsl"
   params:
     outline_color: "#FFD84DCC"
-    light_boost: 2
-    light_gamma: 0.9
-    light_whitepoint: 1
+    outline_fullbright: true

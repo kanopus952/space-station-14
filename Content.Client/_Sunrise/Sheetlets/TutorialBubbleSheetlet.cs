@@ -20,7 +20,7 @@ public sealed class TutorialBubbleSheetlet : Sheetlet<PalettedStylesheet>
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
         var frameColor = Color.DarkGoldenrod;
-        var keybindColor = Color.DarkGray.WithAlpha(0.8f);
+        var keybindColor = Color.FromHex("#252525");
         var keybindBorderColor = Color.Goldenrod;
 
         var bubbleFrameTexture = ResCache.GetTexture("/Textures/_Sunrise/Interface/Tutorial/border.svg.96dpi.png");

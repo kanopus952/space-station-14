@@ -1,6 +1,7 @@
 using Content.Shared._Sunrise.TTS;
 using Content.Shared._Sunrise.Tutorial.Conditions;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
 namespace Content.Shared._Sunrise.Tutorial.Prototypes;
 
@@ -10,10 +11,25 @@ namespace Content.Shared._Sunrise.Tutorial.Prototypes;
 ///     and is completed when all specified conditions are satisfied.
 /// </summary>
 [Prototype]
-public sealed partial class TutorialStepPrototype : IPrototype
+public sealed partial class TutorialStepPrototype : IPrototype, IInheritingPrototype
 {
     [IdDataField]
     public string ID { get; private set; } = default!;
+
+    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<TutorialStepPrototype>))]
+    public string[]? Parents { get; private set; }
+
+    [NeverPushInheritance]
+    [AbstractDataField]
+    public bool Abstract { get; private set; }
+
+    /// <summary>
+    ///     The primary entity prototype this step is about.
+    ///     Used for navigation (path overlay) and as the bubble anchor when
+    ///     <see cref="TutorialBubbleData.AttachToTarget"/> is set.
+    /// </summary>
+    [DataField]
+    public EntProtoId? Target;
 
     /// <summary>
     ///     Optional tutorial bubble displayed to the player during this step.
@@ -31,7 +47,7 @@ public sealed partial class TutorialStepPrototype : IPrototype
     ///     Text passed to the TTS system when this step becomes active.
     /// </summary>
     [DataField]
-    public string TTSMessage = string.Empty;
+    public string TtsMessage = string.Empty;
 
     /// <summary>
     ///     Sender name used for chat message (like narrator).
@@ -95,42 +111,10 @@ public sealed partial class TutorialBubbleData
     public string Text = string.Empty;
 
     /// <summary>
-    ///     Target that the tutorial bubble is anchored to.
-    /// </summary>
-    [DataField(required: true)]
-    public TutorialBubbleTarget Target;
-}
-
-/// <summary>
-///     Defines the target that a tutorial bubble is attached to.
-/// </summary>
-[DataDefinition]
-public sealed partial class TutorialBubbleTarget
-{
-    /// <summary>
-    ///     Type of the bubble target (self or specific entity).
-    /// </summary>
-    [DataField(required: true)]
-    public TutorialBubbleTargetType Type;
-
-    /// <summary>
-    ///     Entity prototype used as a target when <see cref="Type"/> is Entity.
+    ///     If <c>true</c>, the bubble is anchored to the entity matched by
+    ///     <see cref="TutorialStepPrototype.Target"/>. Otherwise it is anchored
+    ///     to the player.
     /// </summary>
     [DataField]
-    public EntProtoId? Prototype;
-}
-/// <summary>
-///     Specifies how the tutorial bubble target is resolved.
-/// </summary>
-public enum TutorialBubbleTargetType
-{
-    /// <summary>
-    ///     Bubble is attached to the player entity.
-    /// </summary>
-    Self,
-
-    /// <summary>
-    ///     Bubble is attached to an entity matching the specified prototype.
-    /// </summary>
-    Entity
+    public bool AttachToTarget;
 }
