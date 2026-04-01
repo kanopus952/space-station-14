@@ -278,8 +278,8 @@
   - type: GameRule
     minPlayers: 5
     delay:
-      min: 600 # Sunrise-Edit
-      max: 900 # Sunrise-Edit
+      min: 300 # Sunrise-Edit
+      max: 600 # Sunrise-Edit
   - type: AntagSelection
     selectionTime: IntraPlayerSpawn
     definitions:
@@ -577,12 +577,6 @@
   parent: BaseGameRule
   components:
   - type: BasicStationEventScheduler
-    # Sunrise-Start
-    minimumTimeUntilFirstEvent: 600 # 10 mins
-    minMaxEventTiming:
-      min: 600 # 10 mins
-      max: 900 # 15 mins
-    # Sunrise-End
     scheduledGameRules: !type:NestedSelector
       tableId: BasicGameRulesTable
 
