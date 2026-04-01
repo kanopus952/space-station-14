@@ -97,17 +97,18 @@
 - type: roleLoadout
   id: JobBlueShieldOfficer
   groups:
-  - BlueShieldJumpsuit
-  - BlueShieldBackpack
-  - BlueShieldBelt
-  - BlueShieldNeck
+  - ComMaidHead
+  - ComMaidJumpsuit
+  - ComMaidBackpack
+  - ComMaidNeck
+  - ComMaidShoes
+  - ComMaidGloves
   - Trinkets
-  - SurvivalSecurity
+  - Survival
   - GroupSpeciesBreathTool
   - Bra
   - Pants
   - Socks
-  - BlueshieldGun
   - Contributors
 
 - type: roleLoadout
@@ -532,16 +533,15 @@
 - type: roleLoadout
   id: JobComMaid
   groups:
-  - ComMaidHead
-  - ComMaidJumpsuit
-  - ComMaidBackpack
-  - ComMaidNeck
-  - ComMaidShoes
-  - ComMaidGloves
+  - BlueShieldJumpsuit
+  - BlueShieldBackpack
+  - BlueShieldBelt
+  - BlueShieldNeck
   - Trinkets
-  - Survival
+  - SurvivalSecurity
   - GroupSpeciesBreathTool
   - Bra
   - Pants
   - Socks
+  - BlueshieldGun
   - Contributors

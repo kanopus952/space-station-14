@@ -117,3 +117,5 @@ loadout-group-prisoner-loot = Тайник Зека
 loadout-group-prison-security-loot = Привилегии Охраны
 
 loadout-group-prison-jumpsuit = Рабочая униформа
+
+loadout-group-funny-pills = Загадочные таблетки
