@@ -3,8 +3,8 @@
 # =====================
 
 - type: entity
-  name: таблетка
-  description: На таблетке нет никаких надписей. Неизвестно, что в ней.
+  name: funny-pill-name
+  description: funny-pill-desc
   parent: Pill
   id: FunnyPill
   components:
@@ -25,7 +25,7 @@
 # =====================
 
 - type: entity
-  name: загадочная таблетница
+  name: funny-pill-canister-name
   id: PillCanisterFunny
   parent: PillCanister
   suffix: Funny Pills
