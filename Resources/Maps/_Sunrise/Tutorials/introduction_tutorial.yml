@@ -4,8 +4,8 @@ meta:
   engineVersion: 271.1.0
   forkId: ""
   forkVersion: ""
-  time: 03/17/2026 13:55:38
-  entityCount: 625
+  time: 04/07/2026 17:02:05
+  entityCount: 631
 maps: []
 grids:
 - 1
@@ -2237,7 +2237,7 @@ entities:
     - type: Transform
       pos: -1.5,-1.5
       parent: 1
-- proto: PottedPlant26
+- proto: PottedPlant26NoFade
   entities:
   - uid: 241
     components:
@@ -2803,6 +2803,54 @@ entities:
     - type: Airtight
       airBlocked: True
   - uid: 624
+    components:
+    - type: Transform
+      anchored: True
+      pos: -13.5,3.5
+      parent: 1
+    - type: Airtight
+      airBlocked: True
+  - uid: 626
+    components:
+    - type: Transform
+      anchored: True
+      pos: 3.5,8.5
+      parent: 1
+    - type: Airtight
+      airBlocked: True
+  - uid: 627
+    components:
+    - type: Transform
+      anchored: True
+      pos: -2.5,2.5
+      parent: 1
+    - type: Airtight
+      airBlocked: True
+  - uid: 628
+    components:
+    - type: Transform
+      anchored: True
+      pos: 8.5,3.5
+      parent: 1
+    - type: Airtight
+      airBlocked: True
+  - uid: 629
+    components:
+    - type: Transform
+      anchored: True
+      pos: 14.5,3.5
+      parent: 1
+    - type: Airtight
+      airBlocked: True
+  - uid: 630
+    components:
+    - type: Transform
+      anchored: True
+      pos: 3.5,14.5
+      parent: 1
+    - type: Airtight
+      airBlocked: True
+  - uid: 631
     components:
     - type: Transform
       anchored: True

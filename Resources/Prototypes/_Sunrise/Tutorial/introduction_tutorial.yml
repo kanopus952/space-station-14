@@ -7,70 +7,89 @@
   grid: /Maps/_Sunrise/Tutorials/introduction_tutorial.yml
   playerEntity: BaseTutorialPlayer
   steps:
-  # 1. Movement basics
+  #  1. Movement basics
   - IntroTutWalk
-  # 2. Learn to swap hands
+  #  2. Learn to swap hands
   - IntroTutSwapHands
-  # 3. Go to locker room
+  #  3. Go to locker room
   - IntroTutGoLockerRoom
-  # 4. Take clothing from vending machine
+  #  4. Take clothing from vending machine
   - IntroTutTakeClothing
-  # 5. Equip new clothing
+  #  5. Equip new clothing
   - IntroTutEquipClothing
-  # 6. Drop old clothing (skipped if nothing in hand)
+  #  6. Drop old clothing (skipped if nothing in hand)
   - IntroTutDropOldClothing
-  # 7. Go to the center
+  #  7. Go to the center
   - IntroTutGoCenter
-  # 8. Go to the bar
+  #  8. Go to the bar
   - IntroTutGoBar
-  # 9. Sit on a bar stool
+  #  9. Sit on a bar stool
   - IntroTutSitChair
-  # 10. Drink something
+  # 10. Pick up the orange juice
+  - IntroTutPickupDrink
+  # 11. Drink it
   - IntroTutDrink
-  # 11. Go behind the counter
+  # 12. Put the glass back down
+  - IntroTutDropDrink
+  # 13. Go behind the counter
   - IntroTutGoBarCounter
-  # 12. Examine the locked service airlock
+  # 14. Examine the locked service airlock
   - IntroTutExamineAirlock
-  # 13. Rummage in the bush to find the ID card
+  # 15. Rummage in the bush to find the ID card
   - IntroTutRummageBush
-  # 14. Pass through the airlock holding the ID card
+  # 16. Pass through the airlock holding the ID card
   - IntroTutPassAirlock
-  # 15. Open the dresser
+  # 17. Open the dresser
   - IntroTutOpenDresser
-  # 16. Return to center
+  # 18. Return to center
   - IntroTutGoBackCenter
-  # 17. Head toward the dark hallway
+  # 19. Drop the ID card if still holding it
+  - IntroTutDropIdCard
+  # 20. Head toward the dark hallway
   - IntroTutGoHallway
-  # 18. Pick up the flashlight
+  # 21. Pick up the flashlight
   - IntroTutPickupFlashlight
-  # 19. Turn on the flashlight
+  # 22. Turn on the flashlight
   - IntroTutTurnOnFlashlight
-  # 20. Go to the shooting range entrance
+  # 23. Go to the shooting range entrance
   - IntroTutGoRange
-  # 21. Try the bolted airlock
+  # 24. Try the bolted airlock
   - IntroTutTryOpenBolted
-  # 22. Press the signal button
+  # 25. Press the signal button
   - IntroTutPressButton
-  # 23. Pick up the practice pistol
+  # 26. Store the flashlight before entering the range
+  - IntroTutStoreFlashlight
+  # 27. Pick up the practice pistol
   - IntroTutPickupPistol
-  # 24. Shoot targets
+  # 28. Shoot targets
   - IntroTutShoot
-  # 25. Pick up the knife
+  # 29. Pick up the knife
   - IntroTutPickupKnife
-  # 26. Attack the clown target
+  # 30. Attack the clown target
   - IntroTutAttackClown
 
 
 # ─── Step definitions ──────────────────────────────────────────────────────────
 
-# 1. Walk around to learn movement
+#  1. Walk around to learn movement
 - type: tutorialStep
   id: IntroTutWalk
   parent: BaseTutorialMovementStepBase
   bubble:
     text: intro-tut-walk-bubble
 
-# 2. Head to the locker room
+#  2. Learn to swap hands (placed after walk so player already has the item context)
+- type: tutorialStep
+  id: IntroTutSwapHands
+  parent: BaseTutorialStepBase
+  bubble:
+    text: intro-tut-swap-hands-bubble
+  chatMessage: intro-tut-swap-hands-chat
+  ttsMessage: intro-tut-swap-hands-tts
+  conditions:
+  - !type:SwapHandsListenedCondition
+
+#  3. Head to the locker room
 - type: tutorialStep
   id: IntroTutGoLockerRoom
   parent: BaseTutorialReachStepBase
@@ -85,7 +104,7 @@
     marker: IntroTutMarkerLockerRoom
     distance: 2
 
-# 3. Take any clothing from the vending machine
+#  4. Take any clothing from the vending machine
 - type: tutorialStep
   id: IntroTutTakeClothing
   parent: BaseTutorialStepBase
@@ -99,8 +118,9 @@
   conditions:
   - !type:VendingMachineTakeListenedCondition
     target: VendingMachineClothing
+    itemTarget: ClothingHeadHatBeret
 
-# 4. Equip the new clothing
+#  5. Equip the new clothing
 - type: tutorialStep
   id: IntroTutEquipClothing
   parent: BaseTutorialEquipStepBase
@@ -110,8 +130,10 @@
   ttsMessage: intro-tut-equip-clothing-tts
   conditions:
   - !type:EquipListenedCondition
+    target: ClothingHeadHatBeret
+    slot: HEAD
 
-# 5. Drop the old clothing item (skipped if the player has nothing in hand)
+#  6. Drop the old clothing item (skipped if the player has nothing in hand)
 - type: tutorialStep
   id: IntroTutDropOldClothing
   parent: BaseTutorialDropStepBase
@@ -125,7 +147,7 @@
   conditions:
   - !type:DropListenedCondition
 
-# 6. Go to the center of the location
+#  7. Go to the center of the location
 - type: tutorialStep
   id: IntroTutGoCenter
   parent: BaseTutorialReachStepBase
@@ -140,7 +162,7 @@
     marker: IntroTutMarkerCenter
     distance: 2
 
-# 7. Go to the bar
+#  8. Go to the bar
 - type: tutorialStep
   id: IntroTutGoBar
   parent: BaseTutorialReachStepBase
@@ -155,7 +177,7 @@
     marker: IntroTutMarkerBar
     distance: 2
 
-# 8. Sit on a bar stool
+#  9. Sit on a bar stool
 - type: tutorialStep
   id: IntroTutSitChair
   parent: BaseTutorialStepBase
@@ -167,7 +189,22 @@
   conditions:
   - !type:SitListenedCondition
 
-# 9. Drink something from the bar counter
+# 10. Pick up the orange juice from the bar counter
+- type: tutorialStep
+  id: IntroTutPickupDrink
+  parent: BaseTutorialPickupStepBase
+  target: DrinkOrangeJuice
+  bubble:
+    text: intro-tut-pickup-drink-bubble
+    attachToTarget: true
+  chatMessage: intro-tut-pickup-drink-chat
+  ttsMessage: intro-tut-pickup-drink-tts
+  observeRange: 10
+  conditions:
+  - !type:PickupListenedCondition
+    target: DrinkOrangeJuice
+
+# 11. Drink the orange juice
 - type: tutorialStep
   id: IntroTutDrink
   parent: BaseTutorialStepBase
@@ -175,11 +212,30 @@
     text: intro-tut-drink-bubble
   chatMessage: intro-tut-drink-chat
   ttsMessage: intro-tut-drink-tts
-  observeRange: 10
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: DrinkOrangeJuice
   conditions:
   - !type:ConsumeListenedCondition
+    target: DrinkOrangeJuice
 
-# 10. Go behind the bar counter
+# 12. Put the glass back down
+- type: tutorialStep
+  id: IntroTutDropDrink
+  parent: BaseTutorialDropStepBase
+  bubble:
+    text: intro-tut-drop-drink-bubble
+  chatMessage: intro-tut-drop-drink-chat
+  ttsMessage: intro-tut-drop-drink-tts
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: DrinkOrangeJuice
+  preconditionFailStep: IntroTutGoBarCounter
+  conditions:
+  - !type:DropListenedCondition
+    target: DrinkOrangeJuice
+
+# 13. Go behind the bar counter
 - type: tutorialStep
   id: IntroTutGoBarCounter
   parent: BaseTutorialReachStepBase
@@ -194,7 +250,7 @@
     marker: IntroTutMarkerBarCounter
     distance: 1
 
-# 11. Examine the locked service airlock — player learns it is locked
+# 14. Examine the locked service airlock - player learns it is locked
 - type: tutorialStep
   id: IntroTutExamineAirlock
   parent: BaseTutorialStepBase
@@ -209,11 +265,11 @@
   - !type:ExamineListenedCondition
     target: AirlockServiceLocked
 
-# 12. Rummage in the bush to find the ID card
+# 15. Rummage in the bush to find the ID card
 - type: tutorialStep
   id: IntroTutRummageBush
   parent: BaseTutorialStepBase
-  target: PottedPlant26
+  target: PottedPlant26NoFade
   bubble:
     text: intro-tut-rummage-bush-bubble
     attachToTarget: true
@@ -222,11 +278,11 @@
   observeRange: 8
   anyConditions:
   - !type:InteractListenedCondition
-    target: PottedPlant26
+    target: PottedPlant26NoFade
   - !type:ActivateInWorldListenedCondition
-    target: PottedPlant26
+    target: PottedPlant26NoFade
 
-# 14. Pass through the airlock while holding the ID card
+# 16. Pass through the airlock while holding the ID card
 - type: tutorialStep
   id: IntroTutPassAirlock
   parent: BaseTutorialReachStepBase
@@ -241,7 +297,7 @@
     marker: IntroTutMarkerAfterAirlock
     distance: 2
 
-# 15. Open the dresser
+# 17. Open the dresser
 - type: tutorialStep
   id: IntroTutOpenDresser
   parent: BaseTutorialStepBase
@@ -256,7 +312,7 @@
   - !type:BuiOpenListenedCondition
     target: Dresser
 
-# 16. Return to the center
+# 18. Return to the center
 - type: tutorialStep
   id: IntroTutGoBackCenter
   parent: BaseTutorialReachStepBase
@@ -271,7 +327,23 @@
     marker: IntroTutMarkerCenter
     distance: 2
 
-# 17. Head toward the dark corridor — stop at the marker
+# 19. Drop the ID card if still holding it after returning to center
+- type: tutorialStep
+  id: IntroTutDropIdCard
+  parent: BaseTutorialDropStepBase
+  bubble:
+    text: intro-tut-drop-id-card-bubble
+  chatMessage: intro-tut-drop-id-card-chat
+  ttsMessage: intro-tut-drop-id-card-tts
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: BartenderIDCard
+  preconditionFailStep: IntroTutGoHallway
+  conditions:
+  - !type:DropListenedCondition
+    target: BartenderIDCard
+
+# 20. Head toward the dark corridor — stop at the marker
 - type: tutorialStep
   id: IntroTutGoHallway
   parent: BaseTutorialReachStepBase
@@ -286,7 +358,7 @@
     marker: IntroTutMarkerHallway
     distance: 2
 
-# 18. Pick up the flashlight
+# 21. Pick up the flashlight
 - type: tutorialStep
   id: IntroTutPickupFlashlight
   parent: BaseTutorialPickupStepBase
@@ -300,7 +372,7 @@
   - !type:PickupListenedCondition
     target: FlashlightLantern
 
-# 19. Turn on the flashlight
+# 22. Turn on the flashlight
 - type: tutorialStep
   id: IntroTutTurnOnFlashlight
   parent: BaseTutorialUseStepBase
@@ -315,7 +387,7 @@
   - !type:UseListenedCondition
     target: FlashlightLantern
 
-# 20. Reach the shooting range entrance
+# 23. Reach the shooting range entrance
 - type: tutorialStep
   id: IntroTutGoRange
   parent: BaseTutorialReachStepBase
@@ -330,7 +402,7 @@
     marker: IntroTutMarkerRange
     distance: 2
 
-# 21. Try to open the bolted airlock (it will not open, but the interaction fires)
+# 24. Try to open the bolted airlock (it will not open, but the interaction fires)
 - type: tutorialStep
   id: IntroTutTryOpenBolted
   parent: BaseTutorialInteractStepBase
@@ -347,7 +419,7 @@
   - !type:ActivateInWorldListenedCondition
     target: DoubleGlassAirlockBolted
 
-# 22. Press the signal button to unbolt the airlock
+# 25. Press the signal button to unbolt the airlock
 - type: tutorialStep
   id: IntroTutPressButton
   parent: BaseTutorialInteractStepBase
@@ -360,10 +432,24 @@
   anyConditions:
   - !type:InteractListenedCondition
     target: SignalButton
-  - !type:ActivateInWorldListenedCondition
-    target: SignalButton
 
-# 23. Pick up the practice laser pistol
+# 26. Put the flashlight away before entering the shooting range
+- type: tutorialStep
+  id: IntroTutStoreFlashlight
+  parent: BaseTutorialDropStepBase
+  bubble:
+    text: intro-tut-store-flashlight-bubble
+  chatMessage: intro-tut-store-flashlight-chat
+  ttsMessage: intro-tut-store-flashlight-tts
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: FlashlightLantern
+  preconditionFailStep: IntroTutPickupPistol
+  conditions:
+  - !type:DropListenedCondition
+    target: FlashlightLantern
+
+# 27. Pick up the practice laser pistol
 - type: tutorialStep
   id: IntroTutPickupPistol
   parent: BaseTutorialPickupStepBase
@@ -378,7 +464,7 @@
   - !type:PickupListenedCondition
     target: WeaponDisablerPractice
 
-# 24. Shoot at the targets (3 shots)
+# 28. Shoot at the targets (3 shots)
 - type: tutorialStep
   id: IntroTutShoot
   parent: BaseTutorialStepBase
@@ -393,7 +479,7 @@
   - !type:GunShotListenedCondition
     count: 3
 
-# 25. Pick up the survival knife
+# 29. Pick up the survival knife
 - type: tutorialStep
   id: IntroTutPickupKnife
   parent: BaseTutorialPickupStepBase
@@ -408,18 +494,7 @@
   - !type:PickupListenedCondition
     target: SurvivalKnife
 
-# 2. Learn to swap hands (placed early so players learn the mechanic before needing it)
-- type: tutorialStep
-  id: IntroTutSwapHands
-  parent: BaseTutorialStepBase
-  bubble:
-    text: intro-tut-swap-hands-bubble
-  chatMessage: intro-tut-swap-hands-chat
-  ttsMessage: intro-tut-swap-hands-tts
-  conditions:
-  - !type:SwapHandsListenedCondition
-
-# 27. Attack the clown target with the knife
+# 30. Attack the clown target with the knife
 - type: tutorialStep
   id: IntroTutAttackClown
   parent: BaseTutorialAttackStepBase

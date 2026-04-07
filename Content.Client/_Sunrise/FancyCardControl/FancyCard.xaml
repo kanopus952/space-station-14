@@ -15,10 +15,11 @@
                                 StyleClasses="FancyCardSecondary"
                                 HorizontalExpand="True"
                                 VerticalExpand="True"
-                                MinHeight="220">
+                                MinHeight="220"
+                                RectClipContent="True">
                     <Control>
                         <TextureRect Name="Backdrop"
-                                     Stretch="Scale"
+                                     Stretch="KeepCentered"
                                      HorizontalExpand="True"
                                      VerticalExpand="True"/>
 

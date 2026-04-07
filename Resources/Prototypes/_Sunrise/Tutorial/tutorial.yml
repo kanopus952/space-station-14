@@ -21,6 +21,21 @@
   name: You!
   parent: BaseMobHuman
   id: BaseTutorialPlayer
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: true
+    hair: HumanHairBob
+  - type: Loadout
+    prototypes: [TutorialPlayerGear]
+
+- type: startingGear
+  id: TutorialPlayerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorGrey
+    shoes: ClothingShoesColorBlack
+    back: ClothingBackpack
+    id: PassengerPDA
+    ears: ClothingHeadsetGrey
 
 # --- Introduction Tutorial Markers ---
 

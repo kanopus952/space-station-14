@@ -88,7 +88,7 @@ public sealed partial class TutorialWindow : DefaultWindow
 
             var sb = new StringBuilder();
 
-            sb.AppendLine(proto.Tooltip);
+            sb.AppendLine(Loc.GetString(proto.Tooltip));
 
             sb.AppendLine(Loc.GetString("tutorial-time", ("time", proto.Duration.ToString("mm\\:ss"))));
 

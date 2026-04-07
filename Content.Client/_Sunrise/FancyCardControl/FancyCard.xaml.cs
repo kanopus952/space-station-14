@@ -24,10 +24,14 @@ public sealed partial class FancyCard : Control
 
     public void ApplyConfig(FancyCardConfig config)
     {
-        TitleLabel.Text = config.TitleText;
+        TitleLabel.Text = Loc.GetString(config.TitleText);
 
         _descText = config.DescText;
-        DescLabel.Text = string.IsNullOrEmpty(_descText) ? "-" : _descText;
+
+        var formattedMessage = new FormattedMessage();
+        formattedMessage.AddMarkupOrThrow(Loc.GetString(string.IsNullOrEmpty(_descText) ? "-" : _descText));
+
+        DescLabel.SetMessage(formattedMessage);
         DescOuter.Visible = config.ShowDescription;
 
         if (!string.IsNullOrEmpty(config.BackdropTexture.CanonPath))

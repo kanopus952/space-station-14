@@ -244,8 +244,11 @@ public sealed class TutorialSystem : SharedTutorialSystem
             if (!_proto.TryIndex(step.VoiceId, out var voice))
                 return;
 
-            var message = $"{Loc.GetString(step.Sender)} {Loc.GetString(step.ChatMessage)}";
-            _chat.ChatMessageToOne(ChatChannel.Emotes, message, message, EntityUid.Invalid, false, session.Channel);
+            var senderText = Loc.GetString(step.Sender);
+            var messageText = Loc.GetString(step.ChatMessage);
+            var plainMessage = $"{senderText} {messageText}";
+            var wrappedMessage = $"[color=#B8860B][bold]{FormattedMessage.EscapeText(senderText)}[/bold][/color] {FormattedMessage.EscapeText(messageText)}";
+            _chat.ChatMessageToOne(ChatChannel.Emotes, plainMessage, wrappedMessage, EntityUid.Invalid, false, session.Channel);
 
             RemComp<TutorialDistanceTrackerComponent>(uid);
 
