@@ -5,11 +5,13 @@ using Content.Shared.Hands;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
 public sealed partial class EquipListenedConditionSystem : EventListenedConditionSystemBase<EquipListenedCondition>
 {
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -18,6 +20,9 @@ public sealed partial class EquipListenedConditionSystem : EventListenedConditio
 
     private void OnDidEquip(Entity<TutorialPlayerComponent> ent, ref DidEquipEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         RecordEvent(ent, DefaultKey, args.Equipment);
         RecordEvent(ent, EquipListenedCondition.GetSlotKey(args.SlotFlags), args.Equipment);
 

@@ -38,8 +38,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
     public readonly HashSet<string> CompletedTutorials = [];
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer? _tutorialBubbleRoot;
-    // Bubbles fading out after removal — kept alive in the UI tree until alpha reaches 0.
-    private readonly List<TutorialBubble> _fadingOut = [];
 
     public override void Initialize()
     {
@@ -181,16 +179,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
         bubbleUi.Bubble = null;
         RemComp<TutorialBubbleUiComponent>(uid);
 
-        // Keep bubble alive in the tree until its fade-out completes (SpeechBubble pattern).
-        _fadingOut.Add(bubble);
-        bubble.OnDied += OnBubbleDied;
-        bubble.FadeNow();
-    }
-
-    private void OnBubbleDied(EntityUid _, TutorialBubble bubble)
-    {
-        bubble.OnDied -= OnBubbleDied;
-        _fadingOut.Remove(bubble);
         bubble.DisposeAllChildren();
         bubble.Orphan();
     }
@@ -210,18 +198,17 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         if (_bubbleUiQuery.TryGetComponent(ent.Owner, out var uiComp) && uiComp.Bubble != null)
         {
-            // Only update text and restart the fade-in when the instruction actually changed.
-            // AfterAutoHandleStateEvent fires for any field change on the component,
-            // so guarding here prevents spurious fade restarts.
-            if (uiComp.LastInstruction != ent.Comp.Instruction)
+            if (uiComp.LastInstruction == ent.Comp.Instruction)
             {
-                uiComp.LastInstruction = ent.Comp.Instruction;
-                uiComp.Bubble.SetMessage(Loc.GetString(ent.Comp.Instruction));
-                uiComp.Bubble.ResetFade();
+                // Text unchanged — just ensure parenting is correct.
+                SetSpeechBubbleRoot(viewportContainer, uiComp.Bubble);
+                return;
             }
 
-            SetSpeechBubbleRoot(viewportContainer, uiComp.Bubble);
-            return;
+            // Instruction changed — discard existing bubble and fall through to create a fresh one.
+            // This gives consistent behaviour regardless of whether the network delivered the
+            // change as a component update or as a remove + re-add.
+            RemoveBubble(ent.Owner);
         }
 
         var bubble = TutorialBubble.Create(
@@ -240,13 +227,17 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (_tutorialBubbleRoot == null)
             return;
 
-        _tutorialBubbleRoot.Orphan();
-
         if (bubble.Parent != _tutorialBubbleRoot)
             _tutorialBubbleRoot.AddChild(bubble);
 
-        root.AddChild(_tutorialBubbleRoot);
-        LayoutContainer.SetAnchorPreset(_tutorialBubbleRoot, LayoutContainer.LayoutPreset.Wide);
+        // Only re-parent when necessary — orphaning every update causes a blank render tick.
+        if (_tutorialBubbleRoot.Parent != root)
+        {
+            _tutorialBubbleRoot.Orphan();
+            root.AddChild(_tutorialBubbleRoot);
+            LayoutContainer.SetAnchorPreset(_tutorialBubbleRoot, LayoutContainer.LayoutPreset.Wide);
+        }
+
         _tutorialBubbleRoot.SetPositionLast();
     }
 
@@ -280,11 +271,5 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _ui.OnScreenChanged -= OnScreenChanged;
         _overlayManager.RemoveOverlay<TutorialPathOverlay>();
 
-        foreach (var bubble in _fadingOut)
-        {
-            bubble.DisposeAllChildren();
-            bubble.Orphan();
-        }
-        _fadingOut.Clear();
     }
 }

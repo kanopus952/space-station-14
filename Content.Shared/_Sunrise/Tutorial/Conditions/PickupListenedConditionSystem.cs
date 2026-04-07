@@ -1,11 +1,13 @@
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared.Hands;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
 public sealed partial class PickupListenedConditionSystem : EventListenedConditionSystemBase<PickupListenedCondition>
 {
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -14,6 +16,9 @@ public sealed partial class PickupListenedConditionSystem : EventListenedConditi
 
     private void OnDidEquipHand(Entity<TutorialPlayerComponent> ent, ref DidEquipHandEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         RecordEvent(ent, DefaultKey, args.Equipped);
 
         if (!TryComp<TutorialTrackerComponent>(ent, out var tracker))

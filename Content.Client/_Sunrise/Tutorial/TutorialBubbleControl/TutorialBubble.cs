@@ -22,8 +22,8 @@ public abstract class TutorialBubble : Control
     /// </summary>
     private const float EntityVerticalOffset = 0.6f;
 
-    private static readonly TimeSpan FadeInDuration = TimeSpan.FromSeconds(0.3);
-    private static readonly TimeSpan FadeOutDuration = TimeSpan.FromSeconds(0.3);
+    private static readonly TimeSpan FadeInDuration = TimeSpan.FromSeconds(0.5);
+    private static readonly TimeSpan FadeOutDuration = TimeSpan.FromSeconds(0.5);
 
     /// <summary>Allowed rich-text tags for bubble message content.</summary>
     public static readonly Type[] BubbleTags =
@@ -37,7 +37,6 @@ public abstract class TutorialBubble : Control
         typeof(TutorialKeybindTag),
     ];
 
-    // man down
     public event Action<EntityUid, TutorialBubble>? OnDied;
 
     private readonly EntityUid _senderEntity;
@@ -48,6 +47,8 @@ public abstract class TutorialBubble : Control
     private TimeSpan _transitionStart;
     // Guards against Timer.Spawn(0, Die) being queued on every frame once alpha reaches 0.
     private bool _dying;
+    // When set, FadeOut completes by applying this message and starting FadeIn instead of dying.
+    private string? _pendingMessage;
 
     public static TutorialBubble Create(string message, EntityUid senderEntity)
     {
@@ -67,7 +68,8 @@ public abstract class TutorialBubble : Control
         var control = BuildBubble(message, styleClass, fontColor);
         AddChild(control);
         ForceRunStyleUpdate();
-        control.Measure(Vector2Helpers.Infinity);
+
+        Measure(Vector2Helpers.Infinity);
     }
 
     /// <summary>
@@ -83,13 +85,22 @@ public abstract class TutorialBubble : Control
     }
 
     /// <summary>
-    ///     Reset to a fresh fade-in (used when text is updated on an existing bubble).
-    ///     Cancels any in-progress fade-out.
+    ///     Fade out the current content, then apply <paramref name="message"/> and fade back in.
+    ///     If the bubble is already being removed (dying), the call is ignored.
+    ///     If called while a previous transition is still in progress, the pending message is updated.
     /// </summary>
-    public void ResetFade()
+    public void TransitionTo(string message)
     {
-        _fade = FadeState.FadingIn;
-        _transitionStart = _timing.RealTime;
+        if (_dying)
+            return;
+
+        _pendingMessage = message;
+
+        if (_fade != FadeState.FadingOut)
+        {
+            _fade = FadeState.FadingOut;
+            _transitionStart = _timing.RealTime;
+        }
     }
 
     /// <summary>Updates the displayed text without recreating the bubble control.</summary>
@@ -101,7 +112,6 @@ public abstract class TutorialBubble : Control
     {
         base.FrameUpdate(args);
 
-        // Hide (without dying) when the entity is not renderable or is on a different map.
         if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform)
             || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
         {
@@ -129,7 +139,15 @@ public abstract class TutorialBubble : Control
                 if (alpha <= 0f)
                 {
                     Modulate = Color.White.WithAlpha(0);
-                    if (!_dying)
+                    if (_pendingMessage != null)
+                    {
+                        // Transition: swap content and fade back in.
+                        SetMessage(_pendingMessage);
+                        _pendingMessage = null;
+                        _fade = FadeState.FadingIn;
+                        _transitionStart = _timing.RealTime;
+                    }
+                    else if (!_dying)
                     {
                         _dying = true;
                         // Defer via Timer.Spawn so OnDied does not fire inside an active
@@ -147,12 +165,14 @@ public abstract class TutorialBubble : Control
 
         Modulate = Color.White.WithAlpha(alpha);
 
-        var eyeOffset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -EntityVerticalOffset;
-        var worldPos = _transformSystem.GetWorldPosition(xform) + eyeOffset;
+        // Simple world-space Y offset keeps the bubble above the entity's head.
+        var worldPos = _transformSystem.GetWorldPosition(xform) + new Vector2(0, EntityVerticalOffset);
         var center = _eyeManager.WorldToScreen(worldPos) / UIScale;
 
         // Anchor bubble so its bottom-centre sits at the projected world position.
-        var screenPos = center - new Vector2(Size.X / 2f, Size.Y);
+        // Use DesiredSize as fallback on the first frame before Arrange() has run (Size is still zero).
+        var size = Size == Vector2.Zero ? DesiredSize : Size;
+        var screenPos = center - new Vector2(size.X / 2f, size.Y);
         // Round to nearest 0.5 px for crisp sub-pixel rendering.
         screenPos = (screenPos * 2).Rounded() / 2;
         LayoutContainer.SetPosition(this, screenPos);
@@ -175,8 +195,6 @@ public abstract class TutorialBubble : Control
         return msg;
     }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 public sealed class TutorialMainBubble : TutorialBubble
 {

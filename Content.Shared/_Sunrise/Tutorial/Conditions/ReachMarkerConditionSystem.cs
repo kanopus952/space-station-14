@@ -24,8 +24,6 @@ public sealed partial class ReachMarkerConditionSystem : TutorialConditionSystem
             if (Prototype(uid)!.ID! != args.Condition.Marker)
                 continue;
 
-            // Restrict to the player's own tutorial grid so that identical markers
-            // on other simultaneously running tutorial grids do not trigger this condition.
             if (xform.GridUid != entity.Comp.Grid)
                 continue;
 
