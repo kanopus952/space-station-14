@@ -10,11 +10,12 @@ namespace Content.Client.Stylesheets.Sheetlets;
 [CommonSheetlet]
 public sealed class SunriseDividersSheetlet : Sheetlet<PalettedStylesheet>
 {
+    private Color _backgroundColor = Color.FromHex("#404040");
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
         var boxLowDivider = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#404040"),
+            BackgroundColor = _backgroundColor,
         };
 
         return
