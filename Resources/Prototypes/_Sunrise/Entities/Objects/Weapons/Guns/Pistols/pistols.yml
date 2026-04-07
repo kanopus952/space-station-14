@@ -257,6 +257,7 @@
   id: WeaponPistolHIB88M4
   components:
   - type: Sprite
+    scale: 0.8, 0.8
     sprite: _Sunrise/Objects/Weapons/Guns/Pistols/hi_browning/big.rsi
   - type: Item
     sprite: _Sunrise/Objects/Weapons/Guns/Pistols/hi_browning/tiny.rsi
@@ -380,11 +381,11 @@
   - type: Item
     sprite: _Sunrise/Objects/Weapons/Guns/Pistols/deagle/tiny.rsi
   - type: Gun
-    minAngle: 1
-    maxAngle: 20
-    angleIncrease: 7
+    minAngle: 3
+    maxAngle: 35
+    angleIncrease: 5
     angleDecay: 10
-    fireRate: 4 # 140 dps - 105 for mateba
+    fireRate: 3.5 # 122 dps - 105 for mateba
     availableModes:
     - SemiAuto
     soundGunshot:

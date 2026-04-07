@@ -383,7 +383,7 @@ namespace Content.Server.Database
 
         #region MentorHelp
 
-        Task<List<MentorHelpStatistics>> GetMentorHelpStatisticsAsync();
+        Task<List<MentorHelpStatistics>> GetMentorHelpStatisticsAsync(DateTimeOffset? from);
         Task AddMentorHelpTicketAsync(MentorHelpTicket ticket);
         Task<MentorHelpTicket?> GetMentorHelpTicketAsync(int ticketId);
         Task UpdateMentorHelpTicketAsync(MentorHelpTicket ticket);
@@ -1129,6 +1129,7 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetAHelpMessagesByReceiverAsync(receiverUserId));
         }
 
+        // Sunrise-start
         // MentorHelp implementations
         public Task AddMentorHelpTicketAsync(MentorHelpTicket ticket)
         {
@@ -1136,9 +1137,9 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.AddMentorHelpTicketAsync(ticket));
         }
 
-        public Task<List<MentorHelpStatistics>> GetMentorHelpStatisticsAsync()
+        public Task<List<MentorHelpStatistics>> GetMentorHelpStatisticsAsync(DateTimeOffset? from)
         {
-            return RunDbCommand(() => _db.GetMentorHelpStatisticsAsync());
+            return RunDbCommand(() => _db.GetMentorHelpStatisticsAsync(from));
         }
 
         public Task<MentorHelpTicket?> GetMentorHelpTicketAsync(int ticketId)
@@ -1182,6 +1183,7 @@ namespace Content.Server.Database
         {
             return RunDbCommand(() => _db.GetClosedMentorHelpTicketsAsync());
         }
+        // Sunrise-end
 
         // Sunrise-start
         public Task AddTutorial(Guid player, ProtoId<TutorialSequencePrototype> tutorial, TimeSpan? accountAge = null)
