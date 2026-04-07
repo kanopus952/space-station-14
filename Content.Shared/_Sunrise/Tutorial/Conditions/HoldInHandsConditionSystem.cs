@@ -15,6 +15,12 @@ public sealed partial class HoldInHandsConditionSystem : TutorialConditionSystem
     {
         foreach (var held in _hands.EnumerateHeld(entity.Owner))
         {
+            if (args.Condition.Item == null)
+            {
+                args.Result = true;
+                return;
+            }
+
             var proto = Prototype(held);
 
             if (proto?.ID == null)
@@ -32,5 +38,5 @@ public sealed partial class HoldInHandsConditionSystem : TutorialConditionSystem
 public sealed partial class HoldInHandsCondition : TutorialConditionBase<HoldInHandsCondition>
 {
     [DataField]
-    public EntProtoId Item;
+    public EntProtoId? Item;
 }
