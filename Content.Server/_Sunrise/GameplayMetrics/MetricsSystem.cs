@@ -263,6 +263,8 @@ public sealed class MetricsSystem : EntitySystem
                 JobAssignedTotal.WithLabels(jobProto).Inc();
         }
 
+        var antagRolesList = new List<string>();
+
         // Antag objective completion
         var allMinds = EntityQueryEnumerator<MindComponent>();
         while (allMinds.MoveNext(out var mindId, out var mind))
@@ -270,12 +272,14 @@ public sealed class MetricsSystem : EntitySystem
             if (!_roles.MindIsAntagonist(mindId))
                 continue;
 
-            var antagRoles = _roles.MindGetAllRoleInfo(mindId)
-                .Where(r => r.Antagonist)
-                .Select(r => r.Prototype)
-                .ToArray();
+            antagRolesList.Clear();
+            foreach (var roleInfo in _roles.MindGetAllRoleInfo(mindId))
+            {
+                if (roleInfo.Antagonist)
+                    antagRolesList.Add(roleInfo.Prototype);
+            }
 
-            var antagLabel = antagRoles.Length > 0 ? antagRoles[0] : "unknown_antag";
+            var antagLabel = antagRolesList.Count > 0 ? antagRolesList[0] : "unknown_antag";
             var mindEntity = new Entity<MindComponent>(mindId, mind);
 
             foreach (var objectiveUid in mind.Objectives)
@@ -350,8 +354,6 @@ public sealed class MetricsSystem : EntitySystem
             var secondsSinceStart = (_gameTiming.CurTime - _gameTicker.RoundStartTimeSpan).TotalSeconds;
             PlayerTimeToFirstDeathSeconds.WithLabels(jobLabel, gamemode).Observe(secondsSinceStart);
         }
-
-        data.LastDeathTime = _gameTiming.CurTime;
     }
 
     private void OnCurrencySpent(Entity<MindContainerComponent> _, ref SubtractCashEvent args)
@@ -374,10 +376,9 @@ public sealed class MetricsSystem : EntitySystem
         var jobLabel = "unknown";
         var isAntagLabel = "false";
 
-        if (_minds.TryGetMind(session.UserId, out var mindId, out var mind)
-            && mindId.HasValue && mind != null)
+        if (_minds.TryGetMind(session.UserId, out var mindId, out var mind))
         {
-            isAntagLabel = _roles.MindIsAntagonist(mindId.Value) ? "true" : "false";
+            isAntagLabel = _roles.MindIsAntagonist(mindId) ? "true" : "false";
             jobLabel = GetJobLabel(mindId.Value);
 
             // Mob state of the currently attached entity
@@ -418,7 +419,6 @@ public sealed class MetricsSystem : EntitySystem
     {
         public TimeSpan SessionStart;
         public int DeathCount;
-        public TimeSpan LastDeathTime;
         public bool HasDied;
     }
 }
