@@ -92,10 +92,6 @@ public sealed class MetricsSystem : EntitySystem
         "ss14_round_end_connected_rate",
         "Fraction of players still connected when the round ended (0–1).");
 
-    private static readonly Gauge PlayersOnlineGauge = PrometheusMetrics.CreateGauge(
-        "ss14_players_online",
-        "Number of connected players right now.");
-
     // BALANCE: store / uplink
     private static readonly Counter StoreCurrencySpentTotal = PrometheusMetrics.CreateCounter(
         "ss14_store_currency_spent_total",
@@ -158,7 +154,6 @@ public sealed class MetricsSystem : EntitySystem
         base.Initialize();
 
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
-        _metricsManager.UpdateMetrics += OnUpdateMetrics;
 
         SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
@@ -180,13 +175,7 @@ public sealed class MetricsSystem : EntitySystem
     {
         base.Shutdown();
         _player.PlayerStatusChanged -= OnPlayerStatusChanged;
-        _metricsManager.UpdateMetrics -= OnUpdateMetrics;
         _sessions.Clear();
-    }
-
-    private void OnUpdateMetrics()
-    {
-        PlayersOnlineGauge.Set(_player.PlayerCount);
     }
 
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
