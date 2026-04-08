@@ -2,8 +2,9 @@
     xmlns="https://spacestation14.io"
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:roadmap="clr-namespace:Content.Client._Sunrise.Roadmap"
+    HorizontalExpand="True"
     Margin="0 0 0 5">
-    <PanelContainer>
+    <PanelContainer HorizontalExpand="True">
         <PanelContainer.PanelOverride>
             <gfx:StyleBoxFlat
                 BackgroundColor="#121111"
@@ -34,11 +35,12 @@
                 <BoxContainer Name="ContentsContainer"
                              Access="Public"
                              Orientation="Vertical"
+                             HorizontalExpand="True"
                              Visible="False"
                              Margin="10 5 0 0">
                     <RichTextLabel Name="Contents"
                                   Access="Public"
-                                  RectClipContent="True"
+                                  HorizontalExpand="True"
                                   StyleClasses="LabelSubText"
                                   Margin="0 5"/>
                 </BoxContainer>
