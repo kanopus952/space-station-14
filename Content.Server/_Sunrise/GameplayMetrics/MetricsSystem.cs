@@ -11,12 +11,12 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Preferences;
 using Content.Shared.Roles.Jobs;
-using Content.Shared.Store;
 using Content.Shared.Store.Components;
 using Prometheus;
 using Robust.Server.DataMetrics;
@@ -97,11 +97,6 @@ public sealed class MetricsSystem : EntitySystem
         "Number of connected players right now.");
 
     // BALANCE: store / uplink
-    private static readonly Counter StoreListingPurchasesTotal = PrometheusMetrics.CreateCounter(
-        "ss14_store_listing_purchase_total",
-        "Number of times each store listing was purchased.",
-        new CounterConfiguration { LabelNames = ["listing_id"] });
-
     private static readonly Counter StoreCurrencySpentTotal = PrometheusMetrics.CreateCounter(
         "ss14_store_currency_spent_total",
         "Total currency units spent in stores, by currency type.",
@@ -168,18 +163,14 @@ public sealed class MetricsSystem : EntitySystem
         SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
 
-        // Damage / healing on player-controlled entities only (ActorComponent filter)
-        SubscribeLocalEvent<ActorComponent, DamageChangedEvent>(OnActorDamageChanged);
+        // Damage / healing — MindContainerComponent is on every player body and is free
+        SubscribeLocalEvent<MindContainerComponent, DamageChangedEvent>(OnActorDamageChanged);
 
         // Deaths
-        SubscribeLocalEvent<ActorComponent, MobStateChangedEvent>(OnActorMobStateChanged);
+        SubscribeLocalEvent<MindContainerComponent, MobStateChangedEvent>(OnActorMobStateChanged);
 
         // Store purchases – fires on successful currency deduction
-        SubscribeLocalEvent<ActorComponent, SubtractCashEvent>(OnCurrencySpent);
-
-        // Store listing purchase (fires on every buy request; used for listing-level metrics)
-        SubscribeLocalEvent<StoreComponent, StoreBuyListingMessage>(OnStoreListing,
-            after: [typeof(StoreSystem)]);
+        SubscribeLocalEvent<MindContainerComponent, SubtractCashEvent>(OnCurrencySpent);
 
         // Cargo
         SubscribeLocalEvent<FulfillCargoOrderEvent>(OnCargoFulfilled);
@@ -326,9 +317,9 @@ public sealed class MetricsSystem : EntitySystem
         }
     }
 
-    private void OnActorDamageChanged(EntityUid uid, ActorComponent actor, DamageChangedEvent args)
+    private void OnActorDamageChanged(Entity<MindContainerComponent> ent, ref DamageChangedEvent args)
     {
-        if (args.DamageDelta == null)
+        if (!HasComp<ActorComponent>(ent) || args.DamageDelta == null)
             return;
 
         var total = args.DamageDelta.GetTotal();
@@ -338,20 +329,25 @@ public sealed class MetricsSystem : EntitySystem
             HealingDoneToPlayersTotal.Inc((double)-total);
     }
 
-    private void OnActorMobStateChanged(EntityUid uid, ActorComponent actor, MobStateChangedEvent args)
+    private void OnActorMobStateChanged(Entity<MindContainerComponent> ent, ref MobStateChangedEvent args)
     {
+        if (!HasComp<ActorComponent>(ent))
+            return;
+
         if (args.NewMobState != MobState.Dead || args.OldMobState == MobState.Dead)
             return;
 
         var gamemode = _gameTicker.CurrentPreset?.ID ?? "unknown";
         var jobLabel = "unknown";
 
-        if (_minds.TryGetMind(uid, out var mindId, out _))
+        if (_minds.TryGetMind(ent, out var mindId, out _))
             jobLabel = GetJobLabel(mindId);
 
         PlayerDeathsTotal.WithLabels(jobLabel, gamemode).Inc();
 
-        // Per-session death tracking
+        if (!TryComp<ActorComponent>(ent, out var actor))
+            return;
+
         var userId = actor.PlayerSession.UserId;
         if (!_sessions.TryGetValue(userId, out var data))
             return;
@@ -369,15 +365,11 @@ public sealed class MetricsSystem : EntitySystem
         data.LastDeathTime = _gameTiming.CurTime;
     }
 
-    private void OnCurrencySpent(EntityUid uid, ActorComponent actor, ref SubtractCashEvent args)
+    private void OnCurrencySpent(Entity<MindContainerComponent> _, ref SubtractCashEvent args)
     {
-        StoreCurrencySpentTotal.WithLabels(args.Currency).Inc((double) args.Cost);
+        StoreCurrencySpentTotal.WithLabels(args.Currency).Inc((double)args.Cost);
     }
 
-    private void OnStoreListing(EntityUid uid, StoreComponent store, StoreBuyListingMessage msg)
-    {
-        StoreListingPurchasesTotal.WithLabels(msg.Listing.Id).Inc();
-    }
 
     private void OnCargoFulfilled(ref FulfillCargoOrderEvent args)
     {
