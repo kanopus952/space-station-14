@@ -29,12 +29,6 @@ namespace Content.Server.Database
 {
     public abstract partial class ServerDbBase
     {
-        // Partial methods implemented by _Sunrise/Database/ServerDbBase.Sunrise.cs
-        // Write direction: sets Voice, BodyType, Width, Height, gradient fields on the DB row.
-        private static partial void ApplySunriseFieldsToDb(Profile profile, HumanoidCharacterProfile humanoid, HumanoidCharacterAppearance appearance);
-        // Read direction: resolves TTS voice from DB with sex-based fallback.
-        private static partial void ResolveSunriseTTSVoice(string rawVoice, Sex sex, ref string resolvedVoice);
-
         private readonly ISawmill _opsLog;
         public event Action<DatabaseNotification>? OnNotificationReceived;
 
