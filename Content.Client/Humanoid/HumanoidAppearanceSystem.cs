@@ -6,6 +6,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Humanoid;
 using Content.Shared.CCVar;
 using Content.Shared._Sunrise;
+using Content.Shared._Sunrise.Humanoid;
 using Content.Shared._Sunrise.MarkingEffects;
 using Content.Shared.DisplacementMap;
 using Content.Shared.Humanoid.Markings;
@@ -59,9 +60,10 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var humanoidAppearance = entity.Comp1;
         var sprite = entity.Comp2;
         // Sunrise-start
-        var scale = new Vector2(humanoidAppearance.Width, humanoidAppearance.Height);
-
-        _sprite.SetScale(entity.Owner, scale);
+        if (TryComp<HumanoidScaleComponent>(entity.Owner, out var scaleComp))
+        {
+            _sprite.SetScale(entity.Owner, new Vector2(scaleComp.Width, scaleComp.Height));
+        }
         // Sunrise-end
         sprite[_sprite.LayerMapReserve((entity.Owner, sprite), HumanoidVisualLayers.Eyes)].Color = humanoidAppearance.EyeColor;
     }
@@ -78,7 +80,11 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         component.BaseLayers.Clear();
 
         // add default species layers
-        var bodyTypeProto = _prototypeManager.Index(component.BodyType); // Sunrise-Edit
+        // Sunrise-Edit: BodyType moved to HumanoidBodyTypeComponent
+        var bodyType = TryComp<HumanoidBodyTypeComponent>(entity.Owner, out var bodyTypeComp)
+            ? bodyTypeComp.BodyType
+            : SharedHumanoidAppearanceSystem.DefaultBodyType;
+        var bodyTypeProto = _prototypeManager.Index(bodyType);
         foreach (var (key, id) in bodyTypeProto.Sprites)
         {
             oldLayers.Remove(key);
@@ -242,12 +248,17 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         humanoid.Sex = profile.Sex;
         humanoid.Gender = profile.Gender;
         humanoid.Age = profile.Age;
-        humanoid.BodyType = profile.BodyType;
         humanoid.Species = profile.Species;
         humanoid.SkinColor = profile.Appearance.SkinColor;
         humanoid.EyeColor = profile.Appearance.EyeColor;
-        humanoid.Width = profile.Appearance.Width; // Sunrise
-        humanoid.Height = profile.Appearance.Height; // Sunrise
+        // Sunrise-start
+        SetBodyType(uid, profile.BodyType, false, humanoid);
+        if (TryComp<HumanoidScaleComponent>(uid, out var scaleComp))
+        {
+            scaleComp.Width = profile.Appearance.Width;
+            scaleComp.Height = profile.Appearance.Height;
+        }
+        // Sunrise-end
 
         UpdateSprite((uid, humanoid, Comp<SpriteComponent>(uid)));
     }
@@ -454,37 +465,43 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 
     private DisplacementData? GetMarkingDisplacement(EntityUid uid, HumanoidVisualLayers layer, HumanoidAppearanceComponent humanoid)
     {
+        // Sunrise-start: displacement maps moved to HumanoidBodyTypeComponent
         string? bodyTypeName = null;
-        if (TryComp(uid, out HumanoidAppearanceComponent? humanoidComp))
+        HumanoidBodyTypeComponent? bodyTypeComp = null;
+        if (TryComp(uid, out bodyTypeComp))
         {
-            bodyTypeName = _prototypeManager.Index(humanoidComp.BodyType).Name;
+            bodyTypeName = _prototypeManager.Index(bodyTypeComp.BodyType).Name;
         }
 
         var sex = humanoid.Sex;
 
-        // First try to get body type and sex specific displacement maps
-        if (bodyTypeName != null && humanoid.BodyTypeSexMarkingsDisplacement.TryGetValue(bodyTypeName, out var bodyTypeSexDisplacements))
+        if (bodyTypeComp != null)
         {
-            if (bodyTypeSexDisplacements.TryGetValue(sex, out var sexDisplacements))
+            // First try to get body type and sex specific displacement maps
+            if (bodyTypeName != null && bodyTypeComp.BodyTypeSexMarkingsDisplacement.TryGetValue(bodyTypeName, out var bodyTypeSexDisplacements))
             {
-                if (sexDisplacements.TryGetValue(layer, out var bodyTypeSexDisplacement))
-                    return bodyTypeSexDisplacement;
+                if (bodyTypeSexDisplacements.TryGetValue(sex, out var sexDisplacements))
+                {
+                    if (sexDisplacements.TryGetValue(layer, out var bodyTypeSexDisplacement))
+                        return bodyTypeSexDisplacement;
+                }
+            }
+
+            // Then try body type specific displacement maps
+            if (bodyTypeName != null && bodyTypeComp.BodyTypeMarkingsDisplacement.TryGetValue(bodyTypeName, out var bodyTypeDisplacements))
+            {
+                if (bodyTypeDisplacements.TryGetValue(layer, out var bodyTypeDisplacement))
+                    return bodyTypeDisplacement;
+            }
+
+            // Try sex specific displacement maps
+            if (bodyTypeComp.SexMarkingsDisplacement.TryGetValue(sex, out var sexSpecificDisplacements))
+            {
+                if (sexSpecificDisplacements.TryGetValue(layer, out var sexDisplacement))
+                    return sexDisplacement;
             }
         }
-
-        // Then try body type specific displacement maps
-        if (bodyTypeName != null && humanoid.BodyTypeMarkingsDisplacement.TryGetValue(bodyTypeName, out var bodyTypeDisplacements))
-        {
-            if (bodyTypeDisplacements.TryGetValue(layer, out var bodyTypeDisplacement))
-                return bodyTypeDisplacement;
-        }
-
-        // Try sex specific displacement maps
-        if (humanoid.SexMarkingsDisplacement.TryGetValue(sex, out var sexSpecificDisplacements))
-        {
-            if (sexSpecificDisplacements.TryGetValue(layer, out var sexDisplacement))
-                return sexDisplacement;
-        }
+        // Sunrise-end
 
         // Fall back to the original logic
         return humanoid.MarkingsDisplacement.TryGetValue(layer, out var displacement) ? displacement : null;

@@ -27,7 +27,8 @@
     hideLayersOnEquip:
     - Hair
     - Snout
-    # MARKINGS START
+  # MARKINGS START
+  - type: HumanoidBodyType
     bodyTypeMarkingsDisplacement:
       body-fat-m:
         Hair:
@@ -77,7 +78,7 @@
             32:
               sprite: _Sunrise/Mobs/Species/Human/Giga/displacement.rsi
               state: hair
-# MARKINGS END
+  # MARKINGS END
   # HANDS DISPLACEMENT
   - type: Hands
     leftHandBodyTypeDisplacements:
@@ -557,6 +558,7 @@
   components:
   - type: HumanoidAppearance
   # MARKINGS START
+  - type: HumanoidBodyType
     bodyTypeMarkingsDisplacement:
       body-fat-m:
         Hair:
@@ -606,7 +608,7 @@
             32:
               sprite: _Sunrise/Mobs/Species/Human/Giga/displacement.rsi
               state: hair
-# MARKINGS END
+  # MARKINGS END
   # HANDS DISPLACEMENT
   - type: Hands
     leftHandBodyTypeDisplacements:

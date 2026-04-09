@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Client.DisplacementMap;
 using Content.Client.Inventory;
 using Content.Shared._Sunrise;
+using Content.Shared._Sunrise.Humanoid;
 using Content.Shared.Clothing;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
@@ -111,11 +112,13 @@ public sealed class ClientClothingSystem : ClothingSystem
 
         List<PrototypeLayerData>? layers = null;
 
-        if (TryComp(args.Equipee, out HumanoidAppearanceComponent? humanoid))
+        // Sunrise-start
+        if (TryComp(args.Equipee, out HumanoidBodyTypeComponent? humanoid))
         {
-            var bodyTypeName = _prototype.Index<BodyTypePrototype>(humanoid.BodyType).Name;
+            var bodyTypeName = _prototype.Index(humanoid.BodyType).Name;
             item.ClothingVisuals.TryGetValue($"{args.Slot}-{bodyTypeName}", out layers);
         }
+        // Sunrise-end
 
         // first attempt to get species specific data.
         if (inventory.SpeciesId != null)
@@ -181,12 +184,14 @@ public sealed class ClientClothingSystem : ClothingSystem
         if (clothing.EquippedState != null)
             state = $"{clothing.EquippedState}";
 
-        if (TryComp(target, out HumanoidAppearanceComponent? humanoid))
+        // Sunrise-start
+        if (TryComp(target, out HumanoidBodyTypeComponent? humanoid))
         {
             var bodyTypeName = _prototype.Index(humanoid.BodyType).Name;
             if (rsi.TryGetState($"{state}-{bodyTypeName}", out _))
                 state = $"{state}-{bodyTypeName}";
         }
+        // Sunrise-end
 
         // species specific
         if (speciesId != null && rsi.TryGetState($"{state}-{speciesId}", out _))
@@ -297,7 +302,10 @@ public sealed class ClientClothingSystem : ClothingSystem
         string? bodyTypeName = null;
         if (TryComp(equipee, out HumanoidAppearanceComponent? humanoid))
         {
-            bodyTypeName = _prototype.Index(humanoid.BodyType).Name;
+            // Sunrise-start
+            if (TryComp<HumanoidBodyTypeComponent>(equipee, out var body))
+                bodyTypeName = _prototype.Index(body.BodyType).Name;
+            // Sunrise-end
 
             var hardsuitKey = $"hardsuit-{bodyTypeName}";
 

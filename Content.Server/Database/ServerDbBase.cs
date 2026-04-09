@@ -27,8 +27,14 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Database
 {
-    public abstract class ServerDbBase
+    public abstract partial class ServerDbBase
     {
+        // Partial methods implemented by _Sunrise/Database/ServerDbBase.Sunrise.cs
+        // Write direction: sets Voice, BodyType, Width, Height, gradient fields on the DB row.
+        private static partial void ApplySunriseFieldsToDb(Profile profile, HumanoidCharacterProfile humanoid, HumanoidCharacterAppearance appearance);
+        // Read direction: resolves TTS voice from DB with sex-based fallback.
+        private static partial void ResolveSunriseTTSVoice(string rawVoice, Sex sex, ref string resolvedVoice);
+
         private readonly ISawmill _opsLog;
         public event Action<DatabaseNotification>? OnNotificationReceived;
 
@@ -220,11 +226,10 @@ namespace Content.Server.Database
             if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
                 gender = genderVal;
 
-            // Sunrise-TTS-Start
+            // Sunrise added start - TTS voice fallback
             var voice = profile.Voice;
-            if (voice == String.Empty)
-                voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
-            // Sunrise-TTS-End
+            ResolveSunriseTTSVoice(profile.Voice, sex, ref voice);
+            // Sunrise added end
 
             // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
             var markingsRaw = profile.Markings?.Deserialize<List<string>>();
@@ -318,23 +323,16 @@ namespace Content.Server.Database
             profile.CharacterName = humanoid.Name;
             profile.FlavorText = humanoid.FlavorText;
             profile.Species = humanoid.Species;
-            profile.Voice = humanoid.Voice; // Sunrise-TTS
-            profile.BodyType = humanoid.BodyType;
             profile.Age = humanoid.Age;
-            profile.Width = appearance.Width; //Sunrise
-            profile.Height = appearance.Height; //Sunrise
             profile.Sex = humanoid.Sex.ToString();
             profile.Gender = humanoid.Gender.ToString();
             profile.HairName = appearance.HairStyleId;
             profile.HairColor = appearance.HairColor.ToHex();
             profile.FacialHairName = appearance.FacialHairStyleId;
             profile.FacialHairColor = appearance.FacialHairColor.ToHex();
-            // sunrise gradient start
-            profile.HairColorType = (int)appearance.HairMarkingEffectType;
-            profile.HairExtendedColor = appearance.HairMarkingEffect?.ToString() ?? "";
-            profile.FacialHairColorType = (int)appearance.FacialHairMarkingEffectType;
-            profile.FacialHairExtendedColor = appearance.FacialHairMarkingEffect?.ToString() ?? "";
-            // sunrise gradient end
+            // Sunrise added start - Voice, BodyType, Width/Height, gradient fields
+            ApplySunriseFieldsToDb(profile, humanoid, appearance);
+            // Sunrise added end
             profile.EyeColor = appearance.EyeColor.ToHex();
             profile.SkinColor = appearance.SkinColor.ToHex();
             profile.SpawnPriority = (int) humanoid.SpawnPriority;
@@ -530,11 +528,6 @@ namespace Content.Server.Database
             var flags = await GetBanExemptionCore(db, userId, cancel);
             return flags ?? ServerBanExemptFlags.None;
         }
-
-        // Sunrise-Start
-        public abstract Task<List<ServerBanDef>> GetServerBansByAdminAsync(NetUserId adminId, DateTimeOffset since);
-        public abstract Task DeleteServerBanAsync(int banId);
-        // Sunrise-End
 
         #endregion
 
@@ -1822,226 +1815,6 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         }
 
         #endregion
-
-        // Sunrise-Start
-        # region Ahelp
-
-        public async Task AddAHelpMessage(Guid senderUserId, Guid receiverUserId, string message, DateTimeOffset sentAt, bool playSound, bool adminOnly)
-        {
-            await using var db = await GetDb();
-            var ahelpMessage = new AHelpMessage
-            {
-                SenderUserId = senderUserId,
-                ReceiverUserId = receiverUserId,
-                Message = message,
-                SentAt = sentAt,
-                PlaySound = playSound,
-                AdminOnly = adminOnly
-            };
-            db.DbContext.AHelpMessages.Add(ahelpMessage);
-            await db.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<List<AHelpMessage>> GetAHelpMessagesByReceiverAsync(Guid receiverUserId)
-        {
-            await using var db = await GetDb();
-
-            var messages = await db.DbContext.AHelpMessages
-                .Where(m => m.ReceiverUserId == receiverUserId)
-                .ToListAsync();
-
-            return messages;
-        }
-
-        # endregion
-
-        // Sunrise-start
-        # region MentorHelp
-
-        public async Task AddMentorHelpTicketAsync(MentorHelpTicket ticket)
-        {
-            await using var db = await GetDb();
-            db.DbContext.MentorHelpTickets.Add(ticket);
-            await db.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<MentorHelpTicket?> GetMentorHelpTicketAsync(int ticketId)
-        {
-            await using var db = await GetDb();
-            return await db.DbContext.MentorHelpTickets
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == ticketId);
-        }
-
-        public async Task<List<MentorHelpStatistics>> GetMentorHelpStatisticsAsync(DateTimeOffset? from)
-        {
-            await using var db = await GetDb();
-            var isSqlite = db.DbContext.Database.ProviderName?.Contains("Sqlite") == true;
-
-            var handledTicketsQuery = db.DbContext.MentorHelpMessages
-                .AsNoTracking()
-                .Join(
-                    db.DbContext.MentorHelpTickets.AsNoTracking().Where(ticket => ticket.AssignedToUserId != null),
-                    message => message.TicketId,
-                    ticket => ticket.Id,
-                    (message, ticket) => new
-                    {
-                        message.TicketId,
-                        message.SenderUserId,
-                        message.SentAt,
-                        ticket.PlayerId,
-                        AssignedMentorId = ticket.AssignedToUserId!.Value
-                    })
-                .Where(activity =>
-                    activity.SenderUserId == activity.AssignedMentorId &&
-                    activity.SenderUserId != activity.PlayerId);
-
-            var messagesQuery = db.DbContext.MentorHelpMessages
-                .AsNoTracking()
-                .Join(
-                    db.DbContext.MentorHelpTickets.AsNoTracking(),
-                    message => message.TicketId,
-                    ticket => ticket.Id,
-                    (message, ticket) => new
-                    {
-                        message.SenderUserId,
-                        message.SentAt,
-                        ticket.PlayerId
-                    })
-                .Where(message => message.SenderUserId != message.PlayerId);
-
-            if (from != null && !isSqlite)
-                messagesQuery = messagesQuery.Where(m => m.SentAt >= from);
-
-            var handledTicketsData = await handledTicketsQuery
-                .Select(ticket => new { ticket.TicketId, ticket.AssignedMentorId, ticket.SentAt })
-                .ToListAsync();
-
-            var messagesData = await messagesQuery
-                .Select(m => new { m.SenderUserId, m.SentAt })
-                .ToListAsync();
-
-            if (from != null && isSqlite)
-                messagesData = messagesData.Where(m => m.SentAt >= from).ToList();
-
-            var handledTickets = handledTicketsData
-                .GroupBy(ticket => new { ticket.AssignedMentorId, ticket.TicketId })
-                .Select(group => new
-                {
-                    MentorUserId = group.Key.AssignedMentorId,
-                    FirstHandledAt = group.Min(ticket => ticket.SentAt)
-                });
-
-            if (from != null)
-                handledTickets = handledTickets.Where(ticket => ticket.FirstHandledAt >= from);
-
-            var ticketStats = handledTickets
-                .GroupBy(ticket => ticket.MentorUserId)
-                .Select(group => new { MentorUserId = group.Key, TicketsClosed = group.Count() })
-                .ToList();
-
-            var messageStats = messagesData
-                .GroupBy(message => message.SenderUserId)
-                .Select(group => new { MentorUserId = group.Key, MessagesCount = group.Count() })
-                .ToList();
-
-            var stats = new Dictionary<Guid, MentorHelpStatistics>();
-
-            foreach (var ticketStat in ticketStats)
-            {
-                stats[ticketStat.MentorUserId] = new MentorHelpStatistics
-                {
-                    MentorUserId = ticketStat.MentorUserId,
-                    TicketsClosed = ticketStat.TicketsClosed,
-                    MessagesCount = 0
-                };
-            }
-
-            foreach (var messageStat in messageStats)
-            {
-                if (stats.TryGetValue(messageStat.MentorUserId, out var stat))
-                {
-                    stat.MessagesCount = messageStat.MessagesCount;
-                    stats[messageStat.MentorUserId] = stat;
-                }
-                else
-                {
-                    stats[messageStat.MentorUserId] = new MentorHelpStatistics
-                    {
-                        MentorUserId = messageStat.MentorUserId,
-                        TicketsClosed = 0,
-                        MessagesCount = messageStat.MessagesCount
-                    };
-                }
-            }
-
-            return stats.Values.ToList();
-        }
-
-        public async Task UpdateMentorHelpTicketAsync(MentorHelpTicket ticket)
-        {
-            await using var db = await GetDb();
-            db.DbContext.MentorHelpTickets.Update(ticket);
-            await db.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<List<MentorHelpTicket>> GetMentorHelpTicketsByPlayerAsync(Guid playerId)
-        {
-            await using var db = await GetDb();
-            var tickets = await db.DbContext.MentorHelpTickets
-                .AsNoTracking()
-                .Where(t => t.PlayerId == playerId)
-                .ToListAsync();
-            return tickets.OrderByDescending(t => t.CreatedAt).ToList();
-        }
-
-        public async Task<List<MentorHelpTicket>> GetOpenMentorHelpTicketsAsync()
-        {
-            await using var db = await GetDb();
-            var tickets = await db.DbContext.MentorHelpTickets
-                .AsNoTracking()
-                .Where(t => t.Status != MentorHelpTicketStatus.Closed)
-                .ToListAsync();
-            return tickets.OrderByDescending(t => t.UpdatedAt).ToList();
-        }
-
-        public async Task<List<MentorHelpTicket>> GetAssignedMentorHelpTicketsAsync(Guid mentorId)
-        {
-            await using var db = await GetDb();
-            var tickets = await db.DbContext.MentorHelpTickets
-                .AsNoTracking()
-                .Where(t => t.AssignedToUserId == mentorId && t.Status != MentorHelpTicketStatus.Closed)
-                .ToListAsync();
-            return tickets.OrderByDescending(t => t.UpdatedAt).ToList();
-        }
-
-        public async Task<List<MentorHelpTicket>> GetClosedMentorHelpTicketsAsync()
-        {
-            await using var db = await GetDb();
-            var tickets = await db.DbContext.MentorHelpTickets
-                .AsNoTracking()
-                .Where(t => t.Status == MentorHelpTicketStatus.Closed)
-                .ToListAsync();
-            return tickets.OrderByDescending(t => t.UpdatedAt).ToList();
-        }
-
-        public async Task AddMentorHelpMessageAsync(MentorHelpMessage message)
-        {
-            await using var db = await GetDb();
-            db.DbContext.MentorHelpMessages.Add(message);
-            await db.DbContext.SaveChangesAsync();
-        }
-
-        public async Task<List<MentorHelpMessage>> GetMentorHelpMessagesByTicketAsync(int ticketId)
-        {
-            await using var db = await GetDb();
-            return await db.DbContext.MentorHelpMessages
-                .AsNoTracking()
-                .Where(m => m.TicketId == ticketId)
-                .ToListAsync();
-        }
-        # endregion
-        // Sunrise-End
 
         # region IPIntel
 

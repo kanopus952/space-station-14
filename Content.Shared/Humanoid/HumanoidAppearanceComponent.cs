@@ -1,5 +1,3 @@
-using Content.Shared._Sunrise;
-using Content.Shared._Sunrise.TTS;
 using Content.Shared.DisplacementMap;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -76,12 +74,6 @@ public sealed partial class HumanoidAppearanceComponent : Component
     [DataField, AutoNetworkedField]
     public Color EyeColor = Color.Brown;
 
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
-    public float Width = 1f; // Sunrise
-
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
-    public float Height = 1f; // Sunrise
-
     /// <summary>
     ///     Hair color of this humanoid. Used to avoid looping through all markings
     /// </summary>
@@ -100,37 +92,11 @@ public sealed partial class HumanoidAppearanceComponent : Component
     [DataField]
     public HashSet<HumanoidVisualLayers> HideLayersOnEquip = [HumanoidVisualLayers.Hair];
 
-    // Sunrise-TTS-Start
-    [DataField("voice")]
-    public ProtoId<TTSVoicePrototype> Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
-    // Sunrise-TTS-End
-
-    [DataField, AutoNetworkedField]
-    public ProtoId<BodyTypePrototype> BodyType { get; set; } = SharedHumanoidAppearanceSystem.DefaultBodyType;
-
     /// <summary>
     ///     The displacement maps that will be applied to specific layers of the humanoid.
     /// </summary>
     [DataField]
     public Dictionary<HumanoidVisualLayers, DisplacementData> MarkingsDisplacement = new();
-
-    /// <summary>
-    ///     Body type specific displacement maps for markings. Format: "bodytype" -> layer -> DisplacementData
-    /// </summary>
-    [DataField]
-    public Dictionary<string, Dictionary<HumanoidVisualLayers, DisplacementData>> BodyTypeMarkingsDisplacement = new();
-
-    /// <summary>
-    ///     Sex specific displacement maps for markings. Format: sex -> layer -> DisplacementData
-    /// </summary>
-    [DataField]
-    public Dictionary<Sex, Dictionary<HumanoidVisualLayers, DisplacementData>> SexMarkingsDisplacement = new();
-
-    /// <summary>
-    ///     Body type and sex specific displacement maps for markings. Format: "bodytype" -> sex -> layer -> DisplacementData
-    /// </summary>
-    [DataField]
-    public Dictionary<string, Dictionary<Sex, Dictionary<HumanoidVisualLayers, DisplacementData>>> BodyTypeSexMarkingsDisplacement = new();
 }
 
 [DataDefinition]

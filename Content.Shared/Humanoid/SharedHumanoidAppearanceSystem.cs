@@ -1,7 +1,5 @@
 using System.IO;
 using System.Linq;
-using Content.Shared._Sunrise;
-using Content.Shared._Sunrise.TTS;
 using System.Numerics;
 using Content.Shared._Sunrise.MarkingEffects;
 using Content.Shared.CCVar;
@@ -23,7 +21,6 @@ using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
-using Content.Sunrise.Interfaces.Shared; // Sunrise-Sponsors
 
 namespace Content.Shared.Humanoid;
 
@@ -36,7 +33,7 @@ namespace Content.Shared.Humanoid;
 ///     you still need a local copy so that players can set up their
 ///     characters.
 /// </summary>
-public abstract class SharedHumanoidAppearanceSystem : EntitySystem
+public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfgManager = default!;
     [Dependency] private readonly INetManager _netManager = default!;
@@ -45,49 +42,18 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
     [Dependency] private readonly MarkingManager _markingManager = default!;
     [Dependency] private readonly GrammarSystem _grammarSystem = default!;
     [Dependency] private readonly IdentitySystem _identity = default!;
-    private ISharedSponsorsManager? _sponsors;
 
     public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
-
-    [ValidatePrototypeId<BodyTypePrototype>]
-    public const string DefaultBodyType = "HumanNormal";
-
-    // Sunrise-TTS-Start
-    public const string DefaultVoice = "Voljin";
-    public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
-    {
-        {Sex.Male, "Voljin"},
-        {Sex.Female, "Amina"},
-        {Sex.Unsexed, "Charlotte"}
-    };
-    // Sunrise-TTS-End
 
     public override void Initialize()
     {
         base.Initialize();
-        IoCManager.Instance!.TryResolveType(out _sponsors); // Sunrise-Sponsors
+        // Sunrise added start - Sponsors, TTS, BodyType
+        InitializeSunrise();
+        // Sunrise added end
 
         SubscribeLocalEvent<HumanoidAppearanceComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<HumanoidAppearanceComponent, ExaminedEvent>(OnExamined);
-    }
-
-    public void SetBodyType(
-        EntityUid uid,
-        ProtoId<BodyTypePrototype> bodyType,
-        bool sync = true,
-        HumanoidAppearanceComponent? humanoid = null)
-    {
-        if (!Resolve(uid, ref humanoid))
-            return;
-
-        var speciesPrototype = _proto.Index<SpeciesPrototype>(humanoid.Species);
-        if (speciesPrototype.BodyTypes.Contains(bodyType))
-            humanoid.BodyType = bodyType;
-        else
-            humanoid.BodyType = speciesPrototype.BodyTypes.First();
-
-        if (sync)
-            Dirty(uid, humanoid);
     }
 
     public DataNode ToDataNode(HumanoidCharacterProfile profile)
@@ -117,7 +83,12 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
         var profile = export.Profile;
         var collection = IoCManager.Instance;
-        var sponsorPrototypes = _sponsors?.GetClientPrototypes().ToArray() ?? []; // Sunrise-Sponsors
+
+        // Sunrise added start - Sponsors
+        var sponsorPrototypes = Array.Empty<string>();
+        GetSponsorPrototypes(ref sponsorPrototypes);
+        // Sunrise added end
+
         profile.EnsureValid(session, collection!, sponsorPrototypes);
         return profile;
     }
@@ -194,10 +165,10 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         targetHumanoid.Age = sourceHumanoid.Age;
         targetHumanoid.CustomBaseLayers = new(sourceHumanoid.CustomBaseLayers);
         targetHumanoid.MarkingSet = new(sourceHumanoid.MarkingSet);
-        SetTTSVoice(target, sourceHumanoid.Voice, targetHumanoid); // Sunrise-TTS
-        targetHumanoid.BodyType = sourceHumanoid.BodyType;
-        targetHumanoid.Width = sourceHumanoid.Width; //Sunrise
-        targetHumanoid.Height = sourceHumanoid.Height; //Sunrise
+
+        // Sunrise added start - TTS, BodyType, Width/Height
+        CloneAppearanceSunrise(source, target, targetHumanoid, sourceHumanoid);
+        // Sunrise added end
 
         SetSex(target, sourceHumanoid.Sex, false, targetHumanoid);
         SetGender((target, targetHumanoid), sourceHumanoid.Gender);
@@ -495,8 +466,10 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         EnsureDefaultMarkings(uid, humanoid);
-        SetTTSVoice(uid, profile.Voice, humanoid); // Sunrise-TTS
-        SetBodyType(uid, profile.BodyType, false, humanoid);
+
+        // Sunrise added start - TTS, BodyType, Width/Height
+        LoadProfileSunrise(uid, profile, humanoid);
+        // Sunrise added end
 
         humanoid.Gender = profile.Gender;
         if (TryComp<GrammarComponent>(uid, out var grammar))
@@ -505,9 +478,6 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         humanoid.Age = profile.Age;
-
-        humanoid.Width = profile.Appearance.Width; //Sunrise
-        humanoid.Height = profile.Appearance.Height; //Sunrise
 
         Dirty(uid, humanoid);
     }
@@ -572,29 +542,17 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         {
             return;
         }
-        // Sunrise-start
+        // Sunrise edit start - use Marking ctor directly to apply color list without re-building
         var markingObject = new Marking(marking, colors)
         {
             Forced = forced
         };
-        // Sunrise-end
+        // Sunrise edit end
         humanoid.MarkingSet.AddBack(prototype.MarkingCategory, markingObject);
 
         if (sync)
             Dirty(uid, humanoid);
     }
-
-    // Sunrise-TTS-Start
-    // ReSharper disable once InconsistentNaming
-    public void SetTTSVoice(EntityUid uid, ProtoId<TTSVoicePrototype> voiceId, HumanoidAppearanceComponent humanoid)
-    {
-        if (!TryComp<TTSComponent>(uid, out var comp))
-            return;
-
-        humanoid.Voice = voiceId;
-        comp.VoicePrototypeId = voiceId;
-    }
-    // Sunrise-TTS-End
 
     /// <summary>
     /// Takes ID of the species prototype, returns UI-friendly name of the species.
