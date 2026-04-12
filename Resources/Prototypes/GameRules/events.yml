@@ -245,6 +245,7 @@
   - type: RuleGrids
   - type: LoadMapRule
     mapPath: /Maps/_Sunrise/Nonstations/ninja_outpost.yml
+  - type: NinjaRule
   # Sunrise-end
   - type: StationEvent
     weight: 6

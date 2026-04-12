@@ -14,12 +14,38 @@ public sealed partial class NinjaRuleComponent : Component
     /// The station the ninja is operating against.
     /// Set in <see cref="NinjaRuleSystem.Started"/>.
     /// </summary>
+    [ViewVariables]
     public EntityUid? TargetStation;
 
     /// <summary>
     /// Whether the ninja successfully escaped by boarding their shuttle during FTL.
     /// </summary>
+    [ViewVariables]
     public bool EscapedOnShuttle;
+
+    /// <summary>
+    /// Whether the FTL route to the outpost has been unlocked by completing all objectives.
+    /// </summary>
+    [ViewVariables]
+    public bool FtlUnlocked;
+
+    /// <summary>
+    /// The map entity of the outpost, used to enable its FTL destination on completion.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid? OutpostMapEntity;
+
+    /// <summary>
+    /// Accumulated frame time used to throttle objective checks.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan UpdateNextTime;
+
+    /// <summary>
+    /// How often (in seconds) to poll objective completion.
+    /// </summary>
+    [DataField]
+    public TimeSpan ObjectiveCheckInterval = TimeSpan.FromSeconds(1);
 
     /// <summary>
     /// Sound played as a notification when the ninja is selected.
