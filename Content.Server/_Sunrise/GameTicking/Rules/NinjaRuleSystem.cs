@@ -1,6 +1,5 @@
 using Content.Server.Antag;
 using Content.Server.Chat.Managers;
-using Content.Server.Spawners.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.GameTicking.Rules.Components;
@@ -8,7 +7,6 @@ using Content.Server.Objectives.Systems;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
-using Content.Server.Station.Systems;
 using Content.Shared._Sunrise.Shuttles;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mind;
@@ -19,11 +17,8 @@ using Content.Shared.Ninja.Components;
 using Content.Shared.Objectives.Systems;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
-using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
 using Robust.Server.GameObjects;
-using HarmonyLib;
 using Content.Shared.Whitelist;
 
 namespace Content.Server._Sunrise.GameTicking.Rules;
