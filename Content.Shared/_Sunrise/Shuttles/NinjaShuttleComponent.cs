@@ -5,5 +5,6 @@ namespace Content.Shared._Sunrise.Shuttles;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class NinjaShuttleComponent : Component
 {
+    [ViewVariables]
     public EntityUid? AssociatedRule;
 }

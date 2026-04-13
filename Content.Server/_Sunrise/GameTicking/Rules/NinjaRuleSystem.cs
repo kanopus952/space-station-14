@@ -72,9 +72,7 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         GameRuleComponent gameRule,
         GameRuleEndedEvent args)
     {
-        // Always re-enable the station's FTL destination when the rule ends,
-        // so other shuttles (e.g. emergency) are unaffected.
-        RestoreOutpostFtl(component);
+        RemoveOutpostFtl(component);
     }
 
     protected override void AppendRoundEndText(
@@ -151,10 +149,10 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
     private void UnlockFtl(NinjaRuleComponent component)
     {
         component.FtlUnlocked = true;
-        RestoreOutpostFtl(component);
+        SetOutpostFtl(component);
     }
 
-    private void RestoreOutpostFtl(NinjaRuleComponent component)
+    private void SetOutpostFtl(NinjaRuleComponent component)
     {
         if (component.OutpostMapEntity is not { } mapEnt || !Exists(mapEnt))
             return;
@@ -169,6 +167,21 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         Dirty(mapEnt, ftlComp);
         _console.RefreshShuttleConsoles();
     }
+
+    private void RemoveOutpostFtl(NinjaRuleComponent component)
+    {
+        if (component.OutpostMapEntity is not { } mapEnt || !Exists(mapEnt))
+            return;
+
+        var ftlComp = EnsureComp<FTLDestinationComponent>(mapEnt);
+
+        ftlComp.Enabled = false;
+        ftlComp.Whitelist = null;
+
+        Dirty(mapEnt, ftlComp);
+        _console.RefreshShuttleConsoles();
+    }
+
 
     private void NotifyNinja(MindComponent mind, string message)
     {
@@ -221,6 +234,9 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
             ninjaUid = uid;
             break;
         }
+
+        if (ninjaUid == null)
+            return;
 
         rule.EscapedOnShuttle = true;
 

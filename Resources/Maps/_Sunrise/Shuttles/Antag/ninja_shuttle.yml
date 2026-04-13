@@ -1420,12 +1420,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -0.5,6.5
       parent: 1
-  - uid: 142
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -0.5,6.5
-      parent: 1
   - uid: 143
     components:
     - type: Transform
