@@ -3,38 +3,20 @@
   versions:
   - name: roadmap-available-now
     goals:
-    - name: fugitive-name
-      desc: fugitive-desc
-      state: Complete
     - name: planet-prison-name
       desc: planet-prison-desc
       state: Complete
-    - name: cyborg-update-name
-      desc: cyborg-update-desc
+    - name: shooting-name
+      desc: shooting-desc
       state: Complete
-    - name: collective-mind-name
-      desc: collective-mind-desc
-      state: Complete
-    - name: syndicate-cyborgs-name
-      desc: syndicate-cyborgs-desc
+    - name: surgery-name
+      desc: surgery-desc
       state: Complete
     - name: new-guns-name
       desc: new-guns-desc
       state: Complete
     - name: smart-viruse-name
       desc: smart-viruse-desc
-      state: Complete
-    - name: cargo-rework-name
-      desc: cargo-rework-desc
-      state: Complete
-    - name: new-maps-name
-      desc: new-maps-desc
-      state: Complete
-    - name: fully-translating-name
-      desc: fully-translating-desc
-      state: Complete
-    - name: mechs-name
-      desc: mechs-desc
       state: Complete
     - name: assault-ops-name
       desc: assault-ops-desc
@@ -45,20 +27,41 @@
     - name: blood-cult-name
       desc: blood-cult-desc
       state: Complete
-    - name: vent-crawling-name
-      desc: vent-crawling-desc
+    - name: mechs-name
+      desc: mechs-desc
+      state: Complete
+    - name: alt-jobs-name
+      desc: alt-jobs-desc
       state: Complete
     - name: new-gases-name
       desc: new-gases-desc
       state: Complete
-    - name: shooting-name
-      desc: shooting-desc
-      state: Complete
-    - name: surgery-name
-      desc: surgery-desc
+    - name: cyborg-update-name
+      desc: cyborg-update-desc
       state: Complete
     - name: angels-name
       desc: angels-desc
+      state: Complete
+    - name: collective-mind-name
+      desc: collective-mind-desc
+      state: Complete
+    - name: syndicate-cyborgs-name
+      desc: syndicate-cyborgs-desc
+      state: Complete
+    - name: cargo-rework-name
+      desc: cargo-rework-desc
+      state: Complete
+    - name: new-maps-name
+      desc: new-maps-desc
+      state: Complete
+    - name: fully-translating-name
+      desc: fully-translating-desc
+      state: Complete
+    - name: vent-crawling-name
+      desc: vent-crawling-desc
+      state: Complete
+    - name: fugitive-name
+      desc: fugitive-desc
       state: Complete
   - name: roadmap-in-progress
     goals:
@@ -74,9 +77,6 @@
     - name: pirates-name
       desc: pirates-desc
       state: InProgress
-    - name: alt-jobs-name
-      desc: alt-jobs-desc
-      state: InProgress
   - name: roadmap-planned
     goals:
     - name: economy-name
@@ -85,20 +85,20 @@
     - name: ipc-name
       desc: ipc-desc
       state: Planned
-    - name: ert-call-name
-      desc: ert-call-desc
-      state: Planned
     - name: blob-name
       desc: blob-desc
+      state: Planned
+    - name: perks-name
+      desc: perks-desc
       state: Planned
     - name: station-goals-rework-name
       desc: station-goals-rework-desc
       state: Planned
+    - name: ert-call-name
+      desc: ert-call-desc
+      state: Planned
     - name: borer-name
       desc: borer-desc
-      state: Planned
-    - name: perks-name
-      desc: perks-desc
       state: Planned
     - name: arena-name
       desc: arena-desc
