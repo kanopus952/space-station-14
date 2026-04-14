@@ -1,8 +1,8 @@
 using Content.Server.Antag;
+using Content.Server.Antag.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Objectives.Systems;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
@@ -10,16 +10,17 @@ using Content.Server.Station.Components;
 using Content.Shared._Sunrise.Shuttles;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mind;
-using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Ninja.Components;
-using Content.Shared.Objectives.Systems;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
 using Robust.Shared.Random;
 using Robust.Server.GameObjects;
 using Content.Shared.Whitelist;
+using Content.Server.Mind;
+using Content.Server.Objectives;
+using Content.Server._Sunrise.GameTicking.Rules.Components;
 
 namespace Content.Server._Sunrise.GameTicking.Rules;
 
@@ -28,13 +29,11 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly CodeConditionSystem _codeCondition = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
+    [Dependency] private readonly ObjectivesSystem _objectives = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly ShuttleConsoleSystem _console = default!;
     [Dependency] private readonly MapSystem _map = default!;
-
-    private const string NinjaReturnToBaseObjectiveProto = "NinjaReturnToBaseObjective";
 
     public override void Initialize()
     {
@@ -104,34 +103,28 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
 
         component.UpdateNextTime = Timing.CurTime + component.ObjectiveCheckInterval;
 
-        // Find a living ninja and check whether all non-return objectives are done.
-        var ninjaQuery = EntityQueryEnumerator<SpaceNinjaComponent, MobStateComponent, MindContainerComponent>();
-        while (ninjaQuery.MoveNext(out var ninjaUid, out _, out var mobState, out var mindContainer))
-        {
-            if (mobState.CurrentState != MobState.Alive)
-                continue;
+        // Find this rule's living ninja and check whether all non-return objectives are done.
+        if (!TryGetLivingNinjaForRule(uid, null, out _, out var mindId, out var mind))
+            return;
 
-            Entity<MindContainerComponent?> mob = (ninjaUid, mindContainer);
-            if (_mind.GetMind(mob, mob.Comp) is not { } mindId)
-                continue;
+        if (!AllNonReturnObjectivesComplete(mindId, mind, component))
+            return;
 
-            if (!TryComp<MindComponent>(mindId, out var mind))
-                continue;
-
-            if (!AllNonReturnObjectivesComplete(mindId, mind))
-                break;
-
-            UnlockFtl(component);
-            NotifyNinja(mind, Loc.GetString("ninja-ftl-unlocked"));
-            break;
-        }
+        component.FtlUnlocked = true;
+        SetOutpostFtl(component);
+        NotifyNinja(mind, Loc.GetString("ninja-ftl-unlocked"));
     }
 
-    private bool AllNonReturnObjectivesComplete(EntityUid mindId, MindComponent mind)
+    private bool AllNonReturnObjectivesComplete(EntityUid mindId, MindComponent mind, NinjaRuleComponent rule)
     {
         foreach (var objUid in mind.Objectives)
         {
-            if (MetaData(objUid).EntityPrototype?.ID == NinjaReturnToBaseObjectiveProto)
+            var objProto = MetaData(objUid).EntityPrototype?.ID;
+
+            if (objProto == null)
+                continue;
+
+            if (objProto == rule.ReturnObjectiveProto)
                 continue;
 
             if (!_objectives.IsCompleted(objUid, (mindId, mind)))
@@ -139,12 +132,6 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         }
 
         return true;
-    }
-
-    private void UnlockFtl(NinjaRuleComponent component)
-    {
-        component.FtlUnlocked = true;
-        SetOutpostFtl(component);
     }
 
     private void SetOutpostFtl(NinjaRuleComponent component)
@@ -176,7 +163,6 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         Dirty(mapEnt, ftlComp);
         _console.RefreshShuttleConsoles();
     }
-
 
     private void NotifyNinja(MindComponent mind, string message)
     {
@@ -215,50 +201,73 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         if (!TryComp<NinjaRuleComponent>(ruleUid, out var rule))
             return;
 
-        // Find a living ninja aboard the departing shuttle.
-        EntityUid? ninjaUid = null;
-        var ninjaQuery = EntityQueryEnumerator<SpaceNinjaComponent, MobStateComponent, TransformComponent>();
-        while (ninjaQuery.MoveNext(out var uid, out _, out var mobState, out var xform))
-        {
-            if (xform.GridUid != ev.Entity)
-                continue;
-
-            if (mobState.CurrentState != MobState.Alive)
-                continue;
-
-            ninjaUid = uid;
-            break;
-        }
-
-        if (ninjaUid == null)
+        // Find this rule's living ninja aboard the departing shuttle.
+        if (!TryGetLivingNinjaForRule(ruleUid, ev.Entity, out _, out var mindId, out var mind))
             return;
 
         rule.EscapedOnShuttle = true;
 
         // Mark the return-to-base objective complete only when every OTHER
         // objective is already finished.
-        TryMarkReturnObjective(ninjaUid);
+        TryMarkReturnObjective(mindId, mind, rule);
+    }
+
+    private bool TryGetLivingNinjaForRule(
+        EntityUid ruleUid,
+        EntityUid? requiredGridUid,
+        out EntityUid? ninjaUid,
+        out EntityUid mindId,
+        out MindComponent mind)
+    {
+        ninjaUid = null;
+        mindId = new EntityUid();
+        mind = new MindComponent();
+
+        if (!TryComp<AntagSelectionComponent>(ruleUid, out var antag))
+            return false;
+
+        foreach (var (candidateMindId, _) in antag.AssignedMinds)
+        {
+            if (!TryComp<MindComponent>(candidateMindId, out var candidateMind))
+                continue;
+
+            var candidateNinjaUid = candidateMind.CurrentEntity;
+
+            if (!HasComp<SpaceNinjaComponent>(candidateNinjaUid))
+                continue;
+
+            if (!TryComp<MobStateComponent>(candidateNinjaUid, out var mobState) ||
+                mobState.CurrentState != MobState.Alive)
+                continue;
+
+            if (requiredGridUid != null)
+            {
+                var xform = Transform(candidateNinjaUid.Value);
+                if (xform.GridUid != requiredGridUid)
+                    continue;
+            }
+
+            ninjaUid = candidateNinjaUid.Value;
+            mindId = candidateMindId;
+            mind = candidateMind;
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
     /// Marks <see cref="NinjaReturnToBaseObjectiveProto"/> complete on the ninja's mind
     /// when every other objective in the mind is already completed.
     /// </summary>
-    private void TryMarkReturnObjective(EntityUid? ninjaUid)
+    private void TryMarkReturnObjective(EntityUid mindId, MindComponent mind, NinjaRuleComponent rule)
     {
-        if (!TryComp<MindContainerComponent>(ninjaUid, out var mindContainer))
+        if (!AllNonReturnObjectivesComplete(mindId, mind, rule))
             return;
 
-        Entity<MindContainerComponent?> mob = (ninjaUid.Value, mindContainer);
-        if (_mind.GetMind(mob, mob.Comp) is not { } mindId)
+        if (!_mind.TryFindObjective((mindId, mind), rule.ReturnObjectiveProto, out var objectiveUid))
             return;
 
-        if (!TryComp<MindComponent>(mindId, out var mind))
-            return;
-
-        if (!AllNonReturnObjectivesComplete(mindId, mind))
-            return;
-
-        _codeCondition.SetCompleted(mob, NinjaReturnToBaseObjectiveProto);
+        _codeCondition.SetCompleted(objectiveUid.Value);
     }
 }

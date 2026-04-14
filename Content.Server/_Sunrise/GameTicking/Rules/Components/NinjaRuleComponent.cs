@@ -1,7 +1,7 @@
 using Content.Server._Sunrise.GameTicking.Rules;
-using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 
-namespace Content.Server.GameTicking.Rules.Components;
+namespace Content.Server._Sunrise.GameTicking.Rules.Components;
 
 /// <summary>
 /// Stores state for the ninja outpost game rule.
@@ -46,10 +46,9 @@ public sealed partial class NinjaRuleComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan ObjectiveCheckInterval = TimeSpan.FromSeconds(1);
-
     /// <summary>
-    /// Sound played as a notification when the ninja is selected.
+    /// How often (in seconds) to poll objective completion.
     /// </summary>
     [DataField]
-    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/Misc/ninja_greeting.ogg");
+    public EntProtoId ReturnObjectiveProto = new("NinjaReturnToBaseObjective");
 }
