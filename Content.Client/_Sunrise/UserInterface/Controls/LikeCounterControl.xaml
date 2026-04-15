@@ -1,0 +1,9 @@
+<controls:LikeCounterControl
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._Sunrise.UserInterface.Controls">
+    <Button Name="LikeButton"
+            Access="Public"
+            StyleClasses="NoStyle"
+            MinHeight="28"
+            MinWidth="56"/>
+</controls:LikeCounterControl>

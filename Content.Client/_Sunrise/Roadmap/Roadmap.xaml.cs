@@ -16,17 +16,28 @@ public sealed partial class Roadmap : DefaultWindow
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    private readonly RoadmapSystem _roadmap = default!;
+
+    private readonly Dictionary<string, RoadmapItem> _goalItems = new();
 
     public Roadmap()
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
+        _roadmap = _entMan.System<RoadmapSystem>();
+        _roadmap.OnRoadmapLikesUpdated += OnRoadmapLikesUpdated;
+        OnClose += () => _roadmap.OnRoadmapLikesUpdated -= OnRoadmapLikesUpdated;
 
         var roadmapId = _cfg.GetCVar(SunriseCCVars.RoadmapId);
         if (!_prototype.TryIndex<RoadmapVersionsPrototype>(roadmapId, out var roadmapVersions))
             return;
 
         PopulateRoadmap(roadmapVersions);
+        if (_roadmap.CachedLikesState != null)
+            OnRoadmapLikesUpdated(_roadmap.CachedLikesState);
+
+        _roadmap.RequestLikes();
     }
 
     private void PopulateRoadmap(RoadmapVersionsPrototype roadmapVersions)
@@ -34,6 +45,7 @@ public sealed partial class Roadmap : DefaultWindow
         Title = $"{_loc.GetString("ui-roadmap-header")} {roadmapVersions.Fork}";
 
         MainBox.RemoveAllChildren();
+        _goalItems.Clear();
 
         foreach (var data in roadmapVersions.Versions)
         {
@@ -109,14 +121,44 @@ public sealed partial class Roadmap : DefaultWindow
     {
         foreach (var goal in goals)
         {
+            var goalId = GetGoalId(goal);
+            if (string.IsNullOrWhiteSpace(goalId))
+                continue;
+
             var roadmapItem = new RoadmapItem
             {
                 HeaderText = _loc.GetString(goal.Name),
                 Text = _loc.GetString(goal.Desc),
                 ItemState = goal.State,
+                GoalId = goalId,
             };
+            roadmapItem.OnLikePressed += OnRoadmapLikePressed;
+
+            _goalItems[goalId] = roadmapItem;
 
             targetBox.AddChild(roadmapItem);
         }
+    }
+
+    private void OnRoadmapLikePressed(string goalId)
+    {
+        _roadmap.RequestLikeToggle(goalId);
+    }
+
+    private void OnRoadmapLikesUpdated(RoadmapLikesStateEvent data)
+    {
+        foreach (var itemState in data.ItemStates)
+        {
+            if (!_goalItems.TryGetValue(itemState.ItemId, out var roadmapItem))
+                continue;
+
+            roadmapItem.LikeCount = itemState.LikeCount;
+            roadmapItem.LikedByPlayer = itemState.LikedByPlayer;
+        }
+    }
+
+    private static string GetGoalId(RoadmapGoal goal)
+    {
+        return goal.Id;
     }
 }
