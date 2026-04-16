@@ -25,7 +25,7 @@ public sealed partial class RoadmapItem : Control
         {
             _itemState = value;
             var panel = (StyleBoxFlat) StateColor.PanelOverride!;
-            panel.BackgroundColor = RoadmapColors.GetStateColor(_itemState);
+            panel.BackgroundColor = RoadmapColorPallet.GetStateColor(_itemState);
 
             StateText.Text = _itemState switch
             {

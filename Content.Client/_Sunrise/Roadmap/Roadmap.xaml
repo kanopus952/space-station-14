@@ -9,7 +9,7 @@
     <PanelContainer>
         <PanelContainer.PanelOverride>
             <gfx:StyleBoxFlat
-                BackgroundColor="{x:Static roadmap:RoadmapColors.WindowBackground}"
+                BackgroundColor="{x:Static roadmap:RoadmapColorPallet.WindowBackground}"
                 ContentMarginLeftOverride="10"
                 ContentMarginRightOverride="10"/>
         </PanelContainer.PanelOverride>

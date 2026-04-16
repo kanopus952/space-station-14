@@ -67,7 +67,7 @@ public sealed partial class Roadmap : DefaultWindow
 
         var cardStyle = new StyleBoxFlat
         {
-            BackgroundColor = RoadmapColors.VersionCardBackground,
+            BackgroundColor = RoadmapColorPallet.VersionCardBackground,
             ContentMarginLeftOverride = 8,
             ContentMarginRightOverride = 8,
             ContentMarginTopOverride = 8,
@@ -89,7 +89,7 @@ public sealed partial class Roadmap : DefaultWindow
         };
         var headerStyle = new StyleBoxFlat
         {
-            BackgroundColor = RoadmapColors.VersionHeaderBackground,
+            BackgroundColor = RoadmapColorPallet.VersionHeaderBackground,
             ContentMarginLeftOverride = 8,
             ContentMarginTopOverride = 6,
             ContentMarginBottomOverride = 6,
@@ -103,7 +103,7 @@ public sealed partial class Roadmap : DefaultWindow
             StyleClasses = { "LabelHeadingBigger" },
             HorizontalAlignment = HAlignment.Center,
             HorizontalExpand = true,
-            FontColorOverride = RoadmapColors.VersionHeaderText,
+            FontColorOverride = RoadmapColorPallet.VersionHeaderText,
         };
         header.AddChild(nameLabel);
         outerBox.AddChild(header);

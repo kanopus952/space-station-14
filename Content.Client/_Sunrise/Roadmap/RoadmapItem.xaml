@@ -9,7 +9,7 @@
     <PanelContainer HorizontalExpand="True">
         <PanelContainer.PanelOverride>
             <gfx:StyleBoxFlat
-                BackgroundColor="{x:Static roadmap:RoadmapColors.ItemBackground}"
+                BackgroundColor="{x:Static roadmap:RoadmapColorPallet.ItemBackground}"
                 ContentMarginRightOverride="10"
                 ContentMarginTopOverride="5"
                 ContentMarginBottomOverride="5"/>
@@ -33,7 +33,7 @@
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
                     <Label StyleClasses="LabelSubText"
                         Text="{Loc ui-roadmap-click-for-details}"
-                        FontColorOverride="{x:Static roadmap:RoadmapColors.ItemHintText}"
+                        FontColorOverride="{x:Static roadmap:RoadmapColorPallet.ItemHintText}"
                         Margin="10 2 0 0"/>
                     <Control HorizontalExpand="True"/>
                     <controls:LikeCounterControl Name="LikesControl" Access="Public" LikeEmoji="&#x2665;"/>
