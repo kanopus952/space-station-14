@@ -7,6 +7,15 @@ using Robust.Shared.Animations;
 
 namespace Content.Client._Sunrise.UserInterface.Controls;
 
+/// <summary>
+/// Reusable control for roadmap likes with a local optimistic toggle and count display.
+/// </summary>
+/// <remarks>
+/// XAML usage:
+/// <code>
+/// &lt;controls:LikeCounterControl LikeEmoji="&amp;#x2665;" /&gt;
+/// </code>
+/// </remarks>
 [GenerateTypedNameReferences]
 public sealed partial class LikeCounterControl : Control
 {
@@ -23,8 +32,14 @@ public sealed partial class LikeCounterControl : Control
     private string _likeEmoji = "\u2665";
     private Vector2 _baseLikeButtonSize;
 
+    /// <summary>
+    /// Raised when the like button is pressed.
+    /// </summary>
     public event Action? OnLikePressed;
 
+    /// <summary>
+    /// Gets or sets the current like counter value shown on the button.
+    /// </summary>
     public int LikeCount
     {
         get => _likeCount;
@@ -35,6 +50,9 @@ public sealed partial class LikeCounterControl : Control
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether the local player currently likes this item.
+    /// </summary>
     public bool LikedByPlayer
     {
         get => _likedByPlayer;
@@ -45,6 +63,9 @@ public sealed partial class LikeCounterControl : Control
         }
     }
 
+    /// <summary>
+    /// Gets or sets the emoji/text prefix shown before the like counter in XAML and runtime.
+    /// </summary>
     public string LikeEmoji
     {
         get => _likeEmoji;

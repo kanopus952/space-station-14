@@ -9,6 +9,23 @@ namespace Content.Server.Database;
 
 public abstract partial class ServerDbBase
 {
+    public async Task<List<UiLikeEntryData>> GetUiLikeEntriesAsync(string scopeId, IReadOnlyList<string> itemIds)
+    {
+        await using var db = await GetDb();
+
+        var normalizedScopeId = NormalizeScopeId(scopeId);
+        var normalizedIds = NormalizeUiLikeItemIds(itemIds);
+
+        if (normalizedScopeId == null || normalizedIds.Count == 0)
+            return [];
+
+        return await db.DbContext.UiLikes
+            .AsNoTracking()
+            .Where(like => like.ScopeId == normalizedScopeId && normalizedIds.Contains(like.ItemId))
+            .Select(like => new UiLikeEntryData(like.ItemId, like.PlayerUserId))
+            .ToListAsync();
+    }
+
     public async Task<List<UiLikeData>> GetUiLikesAsync(Guid player, string scopeId, IReadOnlyList<string> itemIds)
     {
         await using var db = await GetDb();
@@ -119,10 +136,11 @@ public abstract partial class ServerDbBase
             if (string.IsNullOrWhiteSpace(itemId))
                 continue;
 
-            if (!unique.Add(itemId))
+            var trimmed = itemId.Trim();
+            if (!unique.Add(trimmed))
                 continue;
 
-            normalized.Add(itemId);
+            normalized.Add(trimmed);
         }
 
         return normalized;

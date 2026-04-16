@@ -8,15 +8,23 @@ namespace Content.Server.Database;
 
 public partial interface IServerDbManager
 {
+    Task<List<UiLikeEntryData>> GetUiLikeEntriesAsync(string scopeId, IReadOnlyList<string> itemIds);
     Task<List<UiLikeData>> GetUiLikesAsync(Guid player, string scopeId, IReadOnlyList<string> itemIds);
     Task<bool> ToggleUiLikeAsync(Guid player, string scopeId, string itemId);
 
+    Task<List<RoadmapLikeEntryData>> GetRoadmapLikeEntriesAsync(string roadmapId, IReadOnlyList<string> itemIds);
     Task<List<RoadmapLikeData>> GetRoadmapLikesAsync(Guid player, string roadmapId, IReadOnlyList<string> itemIds);
     Task<bool> ToggleRoadmapLikeAsync(Guid player, string roadmapId, string itemId);
 }
 
 public sealed partial class ServerDbManager
 {
+    public Task<List<UiLikeEntryData>> GetUiLikeEntriesAsync(string scopeId, IReadOnlyList<string> itemIds)
+    {
+        DbReadOpsMetric.Inc();
+        return RunDbCommand(() => _db.GetUiLikeEntriesAsync(scopeId, itemIds));
+    }
+
     public Task<List<UiLikeData>> GetUiLikesAsync(Guid player, string scopeId, IReadOnlyList<string> itemIds)
     {
         DbReadOpsMetric.Inc();
@@ -38,6 +46,15 @@ public sealed partial class ServerDbManager
         return likes.Select(like => new RoadmapLikeData(like.ItemId, like.LikeCount, like.LikedByPlayer)).ToList();
     }
 
+    public async Task<List<RoadmapLikeEntryData>> GetRoadmapLikeEntriesAsync(string roadmapId, IReadOnlyList<string> itemIds)
+    {
+        if (string.IsNullOrWhiteSpace(roadmapId))
+            return [];
+
+        var likes = await GetUiLikeEntriesAsync(ToRoadmapLikesScope(roadmapId), itemIds);
+        return likes.Select(like => new RoadmapLikeEntryData(like.ItemId, like.PlayerUserId)).ToList();
+    }
+
     public Task<bool> ToggleRoadmapLikeAsync(Guid player, string roadmapId, string itemId)
     {
         if (string.IsNullOrWhiteSpace(roadmapId))
@@ -52,5 +69,7 @@ public sealed partial class ServerDbManager
     }
 }
 
+public sealed record UiLikeEntryData(string ItemId, Guid PlayerUserId);
 public sealed record UiLikeData(string ItemId, int LikeCount, bool LikedByPlayer);
+public sealed record RoadmapLikeEntryData(string ItemId, Guid PlayerUserId);
 public sealed record RoadmapLikeData(string ItemId, int LikeCount, bool LikedByPlayer);

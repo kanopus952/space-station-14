@@ -72,7 +72,7 @@ public sealed class RoadmapUIController : UIController, IOnStateEntered<LobbySta
         AppendHashField(sb, proto.Fork);
         foreach (var group in proto.Versions)
         {
-            sb.Append(group.Name);
+            AppendHashField(sb, group.Name);
             foreach (var goal in group.Goals)
             {
                 AppendHashField(sb, goal.Id);

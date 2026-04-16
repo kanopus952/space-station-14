@@ -96,16 +96,71 @@ public sealed class RoadmapLikesSystem : EntitySystem
         string itemId,
         List<string> itemIds)
     {
-        await _db.ToggleRoadmapLikeAsync(session.UserId.UserId, roadmap.ID, itemId);
+        if (!await _db.ToggleRoadmapLikeAsync(session.UserId.UserId, roadmap.ID, itemId))
+            Log.Warning("Failed to toggle roadmap like for player {Player}, item {Item}",
+                        session.UserId, itemId);
+
         await BroadcastRoadmapLikesStateAsync(roadmap, itemIds);
     }
 
-    private async Task BroadcastRoadmapLikesStateAsync(RoadmapVersionsPrototype roadmap, List<string> itemIds)
+    private async Task BroadcastRoadmapLikesStateAsync(
+        RoadmapVersionsPrototype roadmap,
+        List<string> itemIds)
     {
-        foreach (var targetSession in _playerManager.NetworkedSessions)
+        var targetSessions = _playerManager.NetworkedSessions.ToList();
+        if (targetSessions.Count == 0)
+            return;
+
+        var stateByUser = await BuildRoadmapLikeStateByUserAsync(roadmap, itemIds, targetSessions);
+        foreach (var targetSession in targetSessions)
         {
-            await SendRoadmapLikesStateAsync(targetSession, roadmap, itemIds);
+            if (!stateByUser.TryGetValue(targetSession.UserId.UserId, out var state))
+                continue;
+
+            RaiseNetworkEvent(state, targetSession);
         }
+    }
+
+    private async Task<Dictionary<Guid, RoadmapLikesStateEvent>> BuildRoadmapLikeStateByUserAsync(
+        RoadmapVersionsPrototype roadmap,
+        List<string> itemIds,
+        IReadOnlyList<ICommonSession> sessions)
+    {
+        var likes = await _db.GetRoadmapLikeEntriesAsync(roadmap.ID, itemIds);
+        var likeCounts = new Dictionary<string, int>(itemIds.Count);
+        var likedItemsByPlayer = new Dictionary<Guid, HashSet<string>>();
+
+        foreach (var like in likes)
+        {
+            likeCounts[like.ItemId] = likeCounts.GetValueOrDefault(like.ItemId) + 1;
+
+            if (!likedItemsByPlayer.TryGetValue(like.PlayerUserId, out var likedItems))
+            {
+                likedItems = [];
+                likedItemsByPlayer.Add(like.PlayerUserId, likedItems);
+            }
+
+            likedItems.Add(like.ItemId);
+        }
+
+        var statesByUser = new Dictionary<Guid, RoadmapLikesStateEvent>(sessions.Count);
+        foreach (var session in sessions)
+        {
+            var userId = session.UserId.UserId;
+            likedItemsByPlayer.TryGetValue(userId, out var likedItems);
+
+            var itemStates = new RoadmapLikeState[itemIds.Count];
+            for (var i = 0; i < itemIds.Count; i++)
+            {
+                var itemId = itemIds[i];
+                var likedByPlayer = likedItems != null && likedItems.Contains(itemId);
+                itemStates[i] = new RoadmapLikeState(itemId, likeCounts.GetValueOrDefault(itemId), likedByPlayer);
+            }
+
+            statesByUser[userId] = new RoadmapLikesStateEvent(itemStates);
+        }
+
+        return statesByUser;
     }
 
     private bool TryGetRoadmap([NotNullWhen(true)] out RoadmapVersionsPrototype? roadmap)
