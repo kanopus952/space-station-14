@@ -26,7 +26,7 @@ public sealed class RoadmapUIController : UIController, IOnStateEntered<LobbySta
             return;
 
         var roadmapId = _cfg.GetCVar(SunriseCCVars.RoadmapId);
-        if (!_prototype.TryIndex<RoadmapVersionsPrototype>(roadmapId, out var roadmapVersions))
+        if (!_prototype.Resolve<RoadmapVersionsPrototype>(roadmapId, out var roadmapVersions))
             return;
 
         var currentHash = ComputeHash(roadmapVersions);

@@ -1,5 +1,6 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Localization;
 
 namespace Content.Shared._Sunrise.Roadmap;
 
@@ -23,16 +24,32 @@ public partial record struct RoadmapGroup
 }
 
 [DataDefinition]
-public partial record struct RoadmapGoal
+public sealed partial class RoadmapGoal : ISerializationHooks
 {
     [DataField(required: true)]
     public string Id = string.Empty;
 
-    [DataField] public string Name;
+    [DataField("name")]
+    public LocId? SetName;
 
-    [DataField] public string Desc;
+    [DataField("desc")]
+    public LocId? SetDesc;
+
+    public LocId Name;
+
+    public LocId Desc;
+
+    [DataField("localizationId")]
+    public string? CustomLocalizationID;
 
     [DataField] public RoadmapItemState State = RoadmapItemState.Planned;
+
+    void ISerializationHooks.AfterDeserialization()
+    {
+        var locId = CustomLocalizationID ?? $"roadmap-goal-{Id}";
+        Name = SetName ?? locId;
+        Desc = SetDesc ?? $"{locId}.desc";
+    }
 }
 
 [Serializable, NetSerializable]

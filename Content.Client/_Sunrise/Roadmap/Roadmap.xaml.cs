@@ -31,7 +31,7 @@ public sealed partial class Roadmap : DefaultWindow
         OnClose += () => _roadmap.OnRoadmapLikesUpdated -= OnRoadmapLikesUpdated;
 
         var roadmapId = _cfg.GetCVar(SunriseCCVars.RoadmapId);
-        if (!_prototype.TryIndex<RoadmapVersionsPrototype>(roadmapId, out var roadmapVersions))
+        if (!_prototype.Resolve<RoadmapVersionsPrototype>(roadmapId, out var roadmapVersions))
             return;
 
         PopulateRoadmap(roadmapVersions);
@@ -67,7 +67,7 @@ public sealed partial class Roadmap : DefaultWindow
 
         var cardStyle = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#121111"),
+            BackgroundColor = RoadmapColors.VersionCardBackground,
             ContentMarginLeftOverride = 8,
             ContentMarginRightOverride = 8,
             ContentMarginTopOverride = 8,
@@ -89,7 +89,7 @@ public sealed partial class Roadmap : DefaultWindow
         };
         var headerStyle = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#2a2929"),
+            BackgroundColor = RoadmapColors.VersionHeaderBackground,
             ContentMarginLeftOverride = 8,
             ContentMarginTopOverride = 6,
             ContentMarginBottomOverride = 6,
@@ -103,7 +103,7 @@ public sealed partial class Roadmap : DefaultWindow
             StyleClasses = { "LabelHeadingBigger" },
             HorizontalAlignment = HAlignment.Center,
             HorizontalExpand = true,
-            FontColorOverride = Color.FromHex("#ffffff"),
+            FontColorOverride = RoadmapColors.VersionHeaderText,
         };
         header.AddChild(nameLabel);
         outerBox.AddChild(header);

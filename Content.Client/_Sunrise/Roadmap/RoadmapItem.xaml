@@ -1,5 +1,6 @@
-﻿<roadmap:RoadmapItem
+<roadmap:RoadmapItem
     xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client._Sunrise.UserInterface.Controls"
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:roadmap="clr-namespace:Content.Client._Sunrise.Roadmap"
@@ -8,7 +9,7 @@
     <PanelContainer HorizontalExpand="True">
         <PanelContainer.PanelOverride>
             <gfx:StyleBoxFlat
-                BackgroundColor="#121111"
+                BackgroundColor="{x:Static roadmap:RoadmapColors.ItemBackground}"
                 ContentMarginRightOverride="10"
                 ContentMarginTopOverride="5"
                 ContentMarginBottomOverride="5"/>
@@ -32,7 +33,7 @@
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
                     <Label StyleClasses="LabelSubText"
                         Text="{Loc ui-roadmap-click-for-details}"
-                        FontColorOverride="#666666"
+                        FontColorOverride="{x:Static roadmap:RoadmapColors.ItemHintText}"
                         Margin="10 2 0 0"/>
                     <Control HorizontalExpand="True"/>
                     <controls:LikeCounterControl Name="LikesControl" Access="Public" LikeEmoji="&#x2665;"/>

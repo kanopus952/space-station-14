@@ -4,138 +4,72 @@
   - name: roadmap-available-now
     goals:
     - id: planet-prison-name
-      name: planet-prison-name
-      desc: planet-prison-desc
       state: Complete
     - id: shooting-name
-      name: shooting-name
-      desc: shooting-desc
       state: Complete
     - id: surgery-name
-      name: surgery-name
-      desc: surgery-desc
       state: Complete
     - id: new-guns-name
-      name: new-guns-name
-      desc: new-guns-desc
       state: Complete
     - id: smart-viruse-name
-      name: smart-viruse-name
-      desc: smart-viruse-desc
       state: Complete
     - id: assault-ops-name
-      name: assault-ops-name
-      desc: assault-ops-desc
       state: Complete
     - id: flesh-cult-name
-      name: flesh-cult-name
-      desc: flesh-cult-desc
       state: Complete
     - id: blood-cult-name
-      name: blood-cult-name
-      desc: blood-cult-desc
       state: Complete
     - id: mechs-name
-      name: mechs-name
-      desc: mechs-desc
       state: Complete
     - id: alt-jobs-name
-      name: alt-jobs-name
-      desc: alt-jobs-desc
       state: Complete
     - id: new-gases-name
-      name: new-gases-name
-      desc: new-gases-desc
       state: Complete
     - id: cyborg-update-name
-      name: cyborg-update-name
-      desc: cyborg-update-desc
       state: Complete
     - id: angels-name
-      name: angels-name
-      desc: angels-desc
       state: Complete
     - id: collective-mind-name
-      name: collective-mind-name
-      desc: collective-mind-desc
       state: Complete
     - id: syndicate-cyborgs-name
-      name: syndicate-cyborgs-name
-      desc: syndicate-cyborgs-desc
       state: Complete
     - id: cargo-rework-name
-      name: cargo-rework-name
-      desc: cargo-rework-desc
       state: Complete
     - id: new-maps-name
-      name: new-maps-name
-      desc: new-maps-desc
       state: Complete
     - id: fully-translating-name
-      name: fully-translating-name
-      desc: fully-translating-desc
       state: Complete
     - id: vent-crawling-name
-      name: vent-crawling-name
-      desc: vent-crawling-desc
       state: Complete
     - id: fugitive-name
-      name: fugitive-name
-      desc: fugitive-desc
       state: Complete
   - name: roadmap-in-progress
     goals:
     - id: virusology-name
-      name: virusology-name
-      desc: virusology-desc
       state: InProgress
     - id: ingame-tutorial-name
-      name: ingame-tutorial-name
-      desc: ingame-tutorial-desc
       state: InProgress
     - id: vampires-name
-      name: vampires-name
-      desc: vampires-desc
       state: InProgress
     - id: pirates-name
-      name: pirates-name
-      desc: pirates-desc
       state: InProgress
   - name: roadmap-planned
     goals:
     - id: economy-name
-      name: economy-name
-      desc: economy-desc
       state: Planned
     - id: ipc-name
-      name: ipc-name
-      desc: ipc-desc
       state: Planned
     - id: blob-name
-      name: blob-name
-      desc: blob-desc
       state: Planned
     - id: perks-name
-      name: perks-name
-      desc: perks-desc
       state: Planned
     - id: station-goals-rework-name
-      name: station-goals-rework-name
-      desc: station-goals-rework-desc
       state: Planned
     - id: ert-call-name
-      name: ert-call-name
-      desc: ert-call-desc
       state: Planned
     - id: borer-name
-      name: borer-name
-      desc: borer-desc
       state: Planned
     - id: arena-name
-      name: arena-name
-      desc: arena-desc
       state: Planned
     - id: limbo-name
-      name: limbo-name
-      desc: limbo-desc
       state: Planned
