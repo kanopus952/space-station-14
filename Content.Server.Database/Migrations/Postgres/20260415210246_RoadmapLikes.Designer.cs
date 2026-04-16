@@ -16,8 +16,8 @@ using NpgsqlTypes;
 namespace Content.Server.Database.Migrations.Postgres
 {
     [DbContext(typeof(PostgresServerDbContext))]
-    [Migration("20260415210246_УНИКАЛЬНОЕИМЯМИГРАЦИИ")]
-    partial class УНИКАЛЬНОЕИМЯМИГРАЦИИ
+    [Migration("20260415210246_RoadmapLikes")]
+    partial class RoadmapLikes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

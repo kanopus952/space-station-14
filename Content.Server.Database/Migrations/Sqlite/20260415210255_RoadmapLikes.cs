@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Content.Server.Database.Migrations.Postgres
+namespace Content.Server.Database.Migrations.Sqlite
 {
     /// <inheritdoc />
-    public partial class УНИКАЛЬНОЕИМЯМИГРАЦИИ : Migration
+    public partial class RoadmapLikes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,9 +15,9 @@ namespace Content.Server.Database.Migrations.Postgres
                 name: "ui_likes",
                 columns: table => new
                 {
-                    scope_id = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    item_id = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    player_user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    scope_id = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    item_id = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    player_user_id = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

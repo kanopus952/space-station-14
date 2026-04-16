@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Content.Server.Database.Migrations.Sqlite
 {
     [DbContext(typeof(SqliteServerDbContext))]
-    [Migration("20260415210255_УНИКАЛЬНОЕИМЯМИГРАЦИИ")]
-    partial class УНИКАЛЬНОЕИМЯМИГРАЦИИ
+    [Migration("20260415210255_RoadmapLikes")]
+    partial class RoadmapLikes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
