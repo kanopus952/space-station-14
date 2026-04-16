@@ -23,8 +23,8 @@ public sealed partial class Roadmap : DefaultWindow
 
     public Roadmap()
     {
-        IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
+        IoCManager.InjectDependencies(this);
 
         _roadmap = _entMan.System<RoadmapSystem>();
         _roadmap.OnRoadmapLikesUpdated += OnRoadmapLikesUpdated;

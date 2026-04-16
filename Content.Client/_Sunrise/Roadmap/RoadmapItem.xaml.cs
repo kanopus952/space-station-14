@@ -88,7 +88,7 @@ public sealed partial class RoadmapItem : Control
         // GridContainer measures children with the full available size, not the per-column size.
         // So RichTextLabel gets infinite width during measure and never wraps.
         // We fix this by explicitly setting its width to the actual arranged width of this control.
-        var targetWidth = Width - ContentsContainer.Margin.Left - Contents.Margin.Left - Contents.Margin.Right;
+        var targetWidth = ContentsContainer.Width - Contents.Margin.Left - Contents.Margin.Right;
         if (targetWidth <= 0 || MathF.Abs(_lastSetWidth - targetWidth) < 0.5f)
             return;
 
