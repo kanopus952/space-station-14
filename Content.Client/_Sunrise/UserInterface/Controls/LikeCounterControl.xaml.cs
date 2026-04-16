@@ -125,7 +125,7 @@ public sealed partial class LikeCounterControl : Control
                     {
                         new AnimationTrackProperty.KeyFrame(Color.White, 0f),
                         new AnimationTrackProperty.KeyFrame(LikeButtonPressedModulate, LikeButtonPressDuration),
-                        new AnimationTrackProperty.KeyFrame(Color.White, LikeButtonReleaseDuration),
+                        new AnimationTrackProperty.KeyFrame(Color.White, animationLength),
                     }
                 },
                 new AnimationTrackControlProperty
@@ -136,7 +136,7 @@ public sealed partial class LikeCounterControl : Control
                     {
                         new AnimationTrackProperty.KeyFrame(_baseLikeButtonSize, 0f),
                         new AnimationTrackProperty.KeyFrame(pressedButtonSize, LikeButtonPressDuration),
-                        new AnimationTrackProperty.KeyFrame(_baseLikeButtonSize, LikeButtonReleaseDuration),
+                        new AnimationTrackProperty.KeyFrame(_baseLikeButtonSize, animationLength),
                     }
                 }
             }

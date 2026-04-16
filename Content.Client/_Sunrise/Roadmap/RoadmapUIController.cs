@@ -2,6 +2,7 @@ using System.Text;
 using Content.Client.Lobby;
 using Content.Shared._Sunrise.Roadmap;
 using Content.Shared._Sunrise.SunriseCCVars;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
@@ -13,13 +14,13 @@ public sealed class RoadmapUIController : UIController, IOnStateEntered<LobbySta
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [UISystemDependency] private readonly RoadmapSystem _roadmap = default!;
 
     private Roadmap? _window;
 
     public void OnStateEntered(LobbyState state)
     {
-        _entMan.System<RoadmapSystem>().RequestLikes();
+        _roadmap.RequestLikes();
 
         if (_window != null)
             return;
@@ -55,21 +56,29 @@ public sealed class RoadmapUIController : UIController, IOnStateEntered<LobbySta
         _window.OnClose += () => _window = null;
         _window.OpenCentered();
     }
+    private static void AppendHashField(StringBuilder sb, string? value)
+    {
+        var text = value ?? string.Empty;
+        sb.Append(text.Length);
+        sb.Append(':');
+        sb.Append(text);
+        sb.Append('|');
+    }
 
     private static string ComputeHash(RoadmapVersionsPrototype proto)
     {
         var sb = new StringBuilder();
-        sb.Append(proto.ID);
-        sb.Append(proto.Fork);
+        AppendHashField(sb, proto.ID);
+        AppendHashField(sb, proto.Fork);
         foreach (var group in proto.Versions)
         {
             sb.Append(group.Name);
             foreach (var goal in group.Goals)
             {
-                sb.Append(goal.Id);
-                sb.Append(goal.Name);
-                sb.Append(goal.Desc);
-                sb.Append((int)goal.State);
+                AppendHashField(sb, goal.Id);
+                AppendHashField(sb, goal.Name);
+                AppendHashField(sb, goal.Desc);
+                AppendHashField(sb, ((int)goal.State).ToString());
             }
         }
 

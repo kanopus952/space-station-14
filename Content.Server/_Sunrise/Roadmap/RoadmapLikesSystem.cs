@@ -1,13 +1,13 @@
 using Content.Server.Database;
 using Content.Shared._Sunrise.Roadmap;
 using Content.Shared._Sunrise.SunriseCCVars;
+using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Robust.Shared.Utility;
 
 namespace Content.Server._Sunrise.Roadmap;
 
@@ -16,6 +16,7 @@ public sealed class RoadmapLikesSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {
@@ -96,7 +97,15 @@ public sealed class RoadmapLikesSystem : EntitySystem
         List<string> itemIds)
     {
         await _db.ToggleRoadmapLikeAsync(session.UserId.UserId, roadmap.ID, itemId);
-        await SendRoadmapLikesStateAsync(session, roadmap, itemIds);
+        await BroadcastRoadmapLikesStateAsync(roadmap, itemIds);
+    }
+
+    private async Task BroadcastRoadmapLikesStateAsync(RoadmapVersionsPrototype roadmap, List<string> itemIds)
+    {
+        foreach (var targetSession in _playerManager.NetworkedSessions)
+        {
+            await SendRoadmapLikesStateAsync(targetSession, roadmap, itemIds);
+        }
     }
 
     private bool TryGetRoadmap([NotNullWhen(true)] out RoadmapVersionsPrototype? roadmap)

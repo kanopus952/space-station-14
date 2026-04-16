@@ -54,8 +54,6 @@ public abstract partial class ServerDbBase
 
     public async Task<bool> ToggleUiLikeAsync(Guid player, string scopeId, string itemId)
     {
-        await using var db = await GetDb();
-
         var normalizedScopeId = NormalizeScopeId(scopeId);
         if (normalizedScopeId == null)
             return false;
@@ -63,34 +61,44 @@ public abstract partial class ServerDbBase
         if (string.IsNullOrWhiteSpace(itemId))
             return false;
 
-        var existingLike = await db.DbContext.UiLikes.SingleOrDefaultAsync(like =>
-            like.ScopeId == normalizedScopeId &&
-            like.ItemId == itemId &&
-            like.PlayerUserId == player);
+        var normalizedItemId = itemId.Trim();
+        const int maxToggleAttempts = 4;
 
-        if (existingLike != null)
+        for (var attempt = 0; attempt < maxToggleAttempts; attempt++)
         {
-            db.DbContext.UiLikes.Remove(existingLike);
-            await db.DbContext.SaveChangesAsync();
-            return true;
+            await using var db = await GetDb();
+
+            try
+            {
+                var existingLike = await db.DbContext.UiLikes.SingleOrDefaultAsync(like =>
+                    like.ScopeId == normalizedScopeId &&
+                    like.ItemId == normalizedItemId &&
+                    like.PlayerUserId == player);
+
+                if (existingLike != null)
+                {
+                    db.DbContext.UiLikes.Remove(existingLike);
+                }
+                else
+                {
+                    db.DbContext.UiLikes.Add(new UiLike
+                    {
+                        ScopeId = normalizedScopeId,
+                        ItemId = normalizedItemId,
+                        PlayerUserId = player,
+                    });
+                }
+
+                await db.DbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException) when (attempt < maxToggleAttempts - 1)
+            {
+                // Race on concurrent toggle (insert unique conflict / delete lost update), retry with fresh context.
+            }
         }
 
-        db.DbContext.UiLikes.Add(new UiLike
-        {
-            ScopeId = normalizedScopeId,
-            ItemId = itemId,
-            PlayerUserId = player,
-        });
-
-        try
-        {
-            await db.DbContext.SaveChangesAsync();
-            return true;
-        }
-        catch (DbUpdateException)
-        {
-            return false;
-        }
+        return false;
     }
 
     private static string? NormalizeScopeId(string scopeId)

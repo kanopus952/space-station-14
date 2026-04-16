@@ -1388,6 +1388,7 @@ namespace Content.Server.Database
     }
 
     public sealed record PlayTimeUpdate(NetUserId User, string Tracker, TimeSpan Time);
+
     internal sealed class SyncAsyncEnumerable<T> : IAsyncEnumerable<T>
     {
         private readonly IAsyncEnumerable<T> _enumerable;
