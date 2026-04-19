@@ -5,7 +5,7 @@
   tooltip: introduction-tutorial-tooltip
   texture: /Textures/_Sunrise/Tutorial/introduction_tutorial.png
   grid: /Maps/_Sunrise/Tutorials/introduction_tutorial.yml
-  playerEntity: BaseTutorialPlayer
+  playerEntity: IntroductionTutorialPlayer
   steps:
   #  1. Movement basics
   - IntroTutWalk
@@ -508,3 +508,9 @@
   conditions:
   - !type:AttackListenedCondition
     target: TargetClown
+
+- type: entity
+  parent: BaseTutorialPlayer
+  id: IntroductionTutorialPlayer
+  components:
+  - type: Godmode
