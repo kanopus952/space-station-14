@@ -30,7 +30,7 @@ namespace Content.IntegrationTests.Tests
             var mapManager = server.ResolveDependency<IMapManager>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
             Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
-            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise
+            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise-Edit
 
             var testSystem = server.System<SaveLoadSaveTestSystem>();
             testSystem.Enabled = true;
@@ -111,7 +111,7 @@ namespace Content.IntegrationTests.Tests
             MapId mapId = default;
             var cfg = server.ResolveDependency<IConfigurationManager>();
             Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
-            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise
+            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise-Edit
 
             // Load bagel.yml as uninitialized map, and save it to ensure it's up to date.
             server.Post(() =>
@@ -194,7 +194,7 @@ namespace Content.IntegrationTests.Tests
             var userData = server.ResolveDependency<IResourceManager>().UserData;
             var cfg = server.ResolveDependency<IConfigurationManager>();
             Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
-            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise
+            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise-Edit
             var testSystem = server.System<SaveLoadSaveTestSystem>();
             testSystem.Enabled = true;
 

@@ -29,7 +29,7 @@ namespace Content.IntegrationTests.Tests
             var xformSystem = sEntities.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
             var resManager = server.ResolveDependency<IResourceManager>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
-            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise
+            cfg.SetCVar(SunriseCCVars.MappingAutoVariantize, false); // Sunrise-Edit
             Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
 
             await server.WaitAssertion(() =>
