@@ -997,5 +997,7 @@ WeaponTurretVespera50mm: ShuttleGunVespera50mm
 #2026-04-06
 AirlockExternalGlassShuttleArrivalsLocked: AirlockExternalGlassShuttleArrivalsLockedCentComm
 AirlockExternalGlassShuttleEmergencyLocked: AirlockExternalGlassShuttleEmergencyLockedCentComm
-# region Sunrise-End
 
+#2026-04-19
+AtmosDeviceFanDirectionalInvisible: AtmosDeviceFanDirectional
+# region Sunrise-End
