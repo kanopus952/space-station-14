@@ -7,7 +7,8 @@ namespace Content.Client._Sunrise.Sheetlets;
 /// </summary>
 public static class SunriseStyleClass
 {
-    public const string StyleClassNoStyle = "NoStyle";
+    public const string StyleClassNoStyle = "NoStyle";  // Sunrise-Edit
+    public const string MappingWidgetPanel = "SunriseMappingWidgetPanel";
     public const string TutorialCategoryButtonClass = "TutorialButton";
     public const string TutorialDivider = "TutorialDivider";
     public const string FancyCardPrimary = "FancyCardPrimary";
