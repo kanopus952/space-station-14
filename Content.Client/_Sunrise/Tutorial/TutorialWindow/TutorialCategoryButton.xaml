@@ -6,7 +6,6 @@
             MinHeight="50">
         <Label Name="CategoryLabel"
                HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontColorOverride="white"/>
+               VerticalAlignment="Center"/>
     </Button>
 </BoxContainer>
