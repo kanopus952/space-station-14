@@ -5,7 +5,6 @@
             StyleClasses="TutorialButton"
             MinHeight="50">
         <Label Name="CategoryLabel"
-               Text="-"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                FontColorOverride="white"/>
