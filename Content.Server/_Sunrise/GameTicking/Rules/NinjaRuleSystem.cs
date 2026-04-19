@@ -204,11 +204,16 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         if (!TryGetLivingNinjaForRule(ruleUid, ev.Entity, out _, out var mindId, out var mind))
             return;
 
+        if (!AllNonReturnObjectivesComplete(mindId.Value, mind, rule))
+            return;
+
         rule.EscapedOnShuttle = true;
 
-        // Mark the return-to-base objective complete only when every OTHER
-        // objective is already finished.
-        TryCompleteReturnObjective(mindId.Value, mind, rule);
+        if (!_mind.TryFindObjective((mindId.Value, mind), rule.ReturnObjectiveProto, out var objectiveUid))
+            return;
+
+        // Complete escape goal
+        _codeCondition.SetCompleted(objectiveUid.Value);
     }
 
     private bool TryGetLivingNinjaForRule(
@@ -253,20 +258,5 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         }
 
         return false;
-    }
-
-    /// <summary>
-    /// Marks <see cref="NinjaReturnToBaseObjectiveProto"/> complete on the ninja's mind
-    /// when every other objective in the mind is already completed.
-    /// </summary>
-    private void TryCompleteReturnObjective(EntityUid mindId, MindComponent mind, NinjaRuleComponent rule)
-    {
-        if (!AllNonReturnObjectivesComplete(mindId, mind, rule))
-            return;
-
-        if (!_mind.TryFindObjective((mindId, mind), rule.ReturnObjectiveProto, out var objectiveUid))
-            return;
-
-        _codeCondition.SetCompleted(objectiveUid.Value);
     }
 }
