@@ -1,4 +1,5 @@
 using Content.Server._Sunrise.GameTicking.Rules;
+using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Sunrise.GameTicking.Rules.Components;
@@ -46,9 +47,16 @@ public sealed partial class NinjaRuleComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan ObjectiveCheckInterval = TimeSpan.FromSeconds(1);
+
     /// <summary>
-    /// How often (in seconds) to poll objective completion.
+    /// Ninja return objective prototype.
     /// </summary>
     [DataField]
-    public EntProtoId ReturnObjectiveProto = new("NinjaReturnToBaseObjective");
+    public EntProtoId ReturnObjectiveProto;
+
+    /// <summary>
+    /// Ninja return objective prototype.
+    /// </summary>
+    [DataField]
+    public EntityWhitelist FtlMapWhitelist;
 }

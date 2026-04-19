@@ -246,6 +246,10 @@
   - type: LoadMapRule
     mapPath: /Maps/_Sunrise/Nonstations/ninja_outpost.yml
   - type: NinjaRule
+    returnObjectiveProto: NinjaReturnToBaseObjective
+    ftlMapWhitelist:
+      components:
+      - NinjaShuttle
   # Sunrise-end
   - type: StationEvent
     weight: 6

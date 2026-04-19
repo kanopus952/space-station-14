@@ -21,6 +21,7 @@ using Content.Shared.Whitelist;
 using Content.Server.Mind;
 using Content.Server.Objectives;
 using Content.Server._Sunrise.GameTicking.Rules.Components;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Content.Server._Sunrise.GameTicking.Rules;
 
@@ -28,10 +29,10 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
 {
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly CodeConditionSystem _codeCondition = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly ShuttleConsoleSystem _console = default!;
     [Dependency] private readonly MapSystem _map = default!;
 
@@ -107,7 +108,7 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         if (!TryGetLivingNinjaForRule(uid, null, out _, out var mindId, out var mind))
             return;
 
-        if (!AllNonReturnObjectivesComplete(mindId, mind, component))
+        if (!AllNonReturnObjectivesComplete(mindId.Value, mind, component))
             return;
 
         component.FtlUnlocked = true;
@@ -119,7 +120,7 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
     {
         foreach (var objUid in mind.Objectives)
         {
-            var objProto = MetaData(objUid).EntityPrototype?.ID;
+            var objProto = Prototype(objUid)?.ID;
 
             if (objProto == null)
                 continue;
@@ -142,10 +143,8 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         var ftlComp = EnsureComp<FTLDestinationComponent>(mapEnt);
 
         ftlComp.Enabled = true;
-        ftlComp.Whitelist = new EntityWhitelist
-        {
-            Components = ["NinjaShuttle"]
-        };
+        ftlComp.Whitelist = component.FtlMapWhitelist;
+
         Dirty(mapEnt, ftlComp);
         _console.RefreshShuttleConsoles();
     }
@@ -169,10 +168,10 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         if (mind.UserId is not { } userId)
             return;
 
-        if (!_playerManager.TryGetSessionById(userId, out var session))
+        if (!_player.TryGetSessionById(userId, out var session))
             return;
 
-        _chatManager.DispatchServerMessage(session, message);
+        _chat.DispatchServerMessage(session, message);
     }
 
     private void OnRuleLoadedGrids(Entity<NinjaRuleComponent> ent, ref RuleLoadedGridsEvent args)
@@ -209,19 +208,19 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
 
         // Mark the return-to-base objective complete only when every OTHER
         // objective is already finished.
-        TryMarkReturnObjective(mindId, mind, rule);
+        TryCompleteReturnObjective(mindId.Value, mind, rule);
     }
 
     private bool TryGetLivingNinjaForRule(
         EntityUid ruleUid,
         EntityUid? requiredGridUid,
-        out EntityUid? ninjaUid,
-        out EntityUid mindId,
-        out MindComponent mind)
+        [NotNullWhen(true)] out EntityUid? ninjaUid,
+        [NotNullWhen(true)] out EntityUid? mindId,
+        [NotNullWhen(true)] out MindComponent? mind)
     {
         ninjaUid = null;
-        mindId = new EntityUid();
-        mind = new MindComponent();
+        mindId = null;
+        mind = null;
 
         if (!TryComp<AntagSelectionComponent>(ruleUid, out var antag))
             return false;
@@ -260,7 +259,7 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
     /// Marks <see cref="NinjaReturnToBaseObjectiveProto"/> complete on the ninja's mind
     /// when every other objective in the mind is already completed.
     /// </summary>
-    private void TryMarkReturnObjective(EntityUid mindId, MindComponent mind, NinjaRuleComponent rule)
+    private void TryCompleteReturnObjective(EntityUid mindId, MindComponent mind, NinjaRuleComponent rule)
     {
         if (!AllNonReturnObjectivesComplete(mindId, mind, rule))
             return;
