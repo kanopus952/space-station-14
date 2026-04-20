@@ -9,6 +9,8 @@ trait-ukrainian-accent-name = Ukrainian Accent
 trait-ukrainian-accent-desc = You speak with a distinct Ukrainian accent.
 trait-russian-accent-name = Russian Accent
 trait-russian-accent-desc = You speak with a distinct Russian accent.
+trait-cat-accent-name = Cat Accent
+trait-cat-accent-desc = You unintentionally purr or meow while talking.
 trait-transliteration-accent-name = Transliteration Accent
 trait-transliteration-accent-desc = You keep mixing sounds, transliterating words as you go.
 

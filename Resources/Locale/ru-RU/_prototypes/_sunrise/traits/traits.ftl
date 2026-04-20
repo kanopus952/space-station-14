@@ -9,6 +9,8 @@ trait-ukrainian-accent-name = Украинский акцент
 trait-ukrainian-accent-desc = Ты говоришь с отчётливым украинским акцентом.
 trait-russian-accent-name = Русский акцент
 trait-russian-accent-desc = Ты говоришь с отчётливым русским акцентом.
+trait-cat-accent-name = Кошачий акцент
+trait-cat-accent-desc = Вы неумышленно мурчите или мяукаете во время разговора.
 trait-transliteration-accent-name = Транслитерация
 trait-transliteration-accent-desc = Постоянно миксуешь звуки, транслитерируя слова на лету.
 

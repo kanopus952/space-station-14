@@ -40,7 +40,6 @@
   - BarkAccent
   - BleatingAccent
   - DamagedSiliconAccent
-  - FormalAccent # Fish-edit
   - FrenchAccent
   - FrontalLisp
   - GermanAccent
@@ -63,6 +62,10 @@
   - SouthernAccent
   - SpanishAccent
   - StutteringAccent
+  # Sunrise-start
+  - FormalAccent
+  - CatAccent
+  # Sunrise-end
 
 # for job-specific traits etc.
 - type: cloningSettings
