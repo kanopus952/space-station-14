@@ -35,7 +35,14 @@
   category: SpeechTraits
   cost: 1
   components:
-  - type: CatAccent
+  - type: AddWordsAccent
+    words:
+    - cat-accent-mew-1
+    - cat-accent-mew-2
+    - cat-accent-mew-3
+    - cat-accent-mew-4
+    - cat-accent-mew-5
+    - cat-accent-mew-6
 
 # 2 Cost
 
