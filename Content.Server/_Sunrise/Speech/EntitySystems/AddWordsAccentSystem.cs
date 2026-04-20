@@ -59,7 +59,7 @@ public sealed partial class AddWordsAccentSystem : EntitySystem
 
             if (lastWordAllCaps)
                 suffix = suffix.ToUpper();
-            message = RegexLastPunctuation.Replace(message, suffix);
+            message = RegexLastPunctuation.Replace(message, m => suffix + m.Value);
         }
 
         return message;
