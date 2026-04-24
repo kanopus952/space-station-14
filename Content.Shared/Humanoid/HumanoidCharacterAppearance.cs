@@ -303,20 +303,23 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
         var newWidth = random.NextFloat(speciesPrototype.MinWidth, speciesPrototype.MaxWidth);
         var newHeight = random.NextFloat(speciesPrototype.MinHeight, speciesPrototype.MaxHeight);
 
-        return new HumanoidCharacterAppearance(
-            newHairStyle,
-            newHairColor,
-            newFacialHairStyle,
-            newHairColor,
-            newEyeColor,
-            newSkinColor,
-            new(),
-            MarkingEffectType.Color,
-            null,
-            MarkingEffectType.Color,
-            null,
-            newWidth,
-            newHeight);
+        var appearance = new HumanoidCharacterAppearance(
+                newHairStyle,
+                newHairColor,
+                newFacialHairStyle,
+                newHairColor,
+                newEyeColor,
+                newSkinColor,
+                new(),
+                MarkingEffectType.Color,
+                null,
+                MarkingEffectType.Color,
+                null,
+                newWidth,
+                newHeight);
+
+        // Safety step. Most systems which called Random() also called this, and not doing so caused issues with markings.
+        return EnsureValid(appearance, species, sex);
 
         float RandomizeColor(float channel)
         {
