@@ -5666,3 +5666,12 @@
     type: Tweak
   id: 1826
   time: '2026-04-27T22:16:58.105741+00:00'
+- author: KaiserMaus
+  changes:
+  - message: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D \u0441\u043F\u0440\u0430\
+      \u0439\u0442 \u043F\u0440\u0438\u0437\u0440\u0430\u043A\u0430 \u043A\u043B\u043E\
+      \u0443\u043D\u0430."
+    type: Tweak
+  id: 1827
+  time: '2026-04-28T11:18:06.0000000+00:00'
+  url: https://github.com/space-sunrise/sunrise-station/pull/4313
