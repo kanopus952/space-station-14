@@ -5707,3 +5707,12 @@
   id: 1830
   time: '2026-05-02T12:57:58.0000000+00:00'
   url: https://github.com/space-sunrise/sunrise-station/pull/4311
+- author: _3xie_, KaiserMaus
+  changes:
+  - message: "\u0414\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B \u0434\u0435\u043A\
+      \u0430\u043B\u0438 \u0431\u0443\u043A\u0432 \u043A\u0438\u0440\u0438\u043B\u0438\
+      \u0446\u0435\u0439."
+    type: Add
+  id: 1831
+  time: '2026-05-02T13:40:07.0000000+00:00'
+  url: https://github.com/space-sunrise/sunrise-station/pull/4304
