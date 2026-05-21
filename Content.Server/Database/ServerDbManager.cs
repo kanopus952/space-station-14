@@ -1130,7 +1130,6 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetAHelpMessagesByReceiverAsync(receiverUserId));
         }
 
-        // Sunrise-start
         // MentorHelp implementations
         public Task AddMentorHelpTicketAsync(MentorHelpTicket ticket)
         {
@@ -1185,15 +1184,11 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetClosedMentorHelpTicketsAsync());
         }
 
-        // Sunrise-end
-
-        // Sunrise-start
         public Task AddTutorial(Guid player, ProtoId<TutorialSequencePrototype> tutorial, TimeSpan? accountAge = null)
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.AddTutorial(player, tutorial, accountAge));
         }
-        // Sunrise-end
 
         public Task<List<string>> GetTutorial(Guid player, CancellationToken cancel = default)
         {
@@ -1212,13 +1207,13 @@ namespace Content.Server.Database
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.RemoveTutorial(player, tutorial));
         }
-        // Sunrise-start
+
         public Task<int> PruneInvalidTutorialCompletionsAsync(IEnumerable<string> validTutorialIds, CancellationToken cancel = default)
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.PruneInvalidTutorialCompletionsAsync(validTutorialIds, cancel));
         }
-        // Sunrise-end
+
         // Sunrise-end
         public void SubscribeToNotifications(Action<DatabaseNotification> handler)
         {
