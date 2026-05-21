@@ -17,4 +17,5 @@ public static class SunriseStyleClass
     public const string FancyCardDescInner = "FancyCardDescInner";
     public const string TutorialBubbleFrame = "TutorialBubbleFrame";
     public const string TutorialKeybindFrame = "TutorialKeybindFrame";
+    public const string PrisonerRecordPanel = "PrisonerRecordPanel";
 }

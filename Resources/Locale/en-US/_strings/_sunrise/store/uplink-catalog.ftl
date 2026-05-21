@@ -66,6 +66,8 @@ uplink-hardsuit-syndie-medic-name = Syndicate Medic Hardsuit
 uplink-hardsuit-syndie-medic-desc = A hardsuit designed for Gorlax combat medics.
 uplink-50blessing-name = 50 Blessings Gift Set
 uplink-50blessing-desc = For agents who want to conceal their identity in style, with love from Egor Semenov.
+uplink-slipknotset-name = slipknot masks gift set
+uplink-slipknotset-desc = Five masks. Five souls. Numbers 7, 8, 6, 1 and 5 inside a black box — filthy Iowa fury.
 uplink-clothing-murder-socks-name = Murder Socks
 uplink-clothing-murder-socks-desc = For the agent who truly understands style.
 uplink-syndie-maid-raid-name = Maid Raider
@@ -128,6 +130,8 @@ uplink-anomaly-auto-injector-popup-pending = Skin resists injection!
 uplink-anomaly-auto-injector-popup-infected = Skin resists injection!
 uplink-xeno-artifact-throwing-auto-injector-name = Artifact throwing Auto-Injector
 uplink-xeno-artifact-throwing-auto-injector-desc = A single-use, throwable folding device. Upon striking a living target, it embeds and injects artifact particles. Ineffective against synthetics.
+uplink-roboticist-nuclear-operative-id-card-name = Roboticist operative ID card
+uplink-roboticist-nuclear-operative-id-card-desc = A roboticist ID card with standard job access and additional Syndicate access.
 
 ## Implants
 
