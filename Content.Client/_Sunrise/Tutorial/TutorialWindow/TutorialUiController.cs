@@ -8,15 +8,34 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Sunrise.Tutorial.TutorialWindow;
 
-public sealed class TutorialUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
+public sealed class TutorialUIController : UIController,
+    IOnStateEntered<LobbyState>,
+    IOnStateExited<LobbyState>,
+    IOnSystemChanged<TutorialSystem>
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [UISystemDependency] private readonly TutorialSystem _tutorialSystem = default!;
+
+    private TutorialSystem? _tutorialSystem;
+    private TutorialSystem? _windowDataSystem;
     private TutorialWindow? _window;
     private Action<TutorialSequencePrototype>? _startTutorialHandler;
+    private Action? _requestCompletedTutorialsHandler;
     private bool _shown;
     private bool _autoOpenEnabled = true;
-    private bool _windowDataSubscribed;
+
+    public void OnSystemLoaded(TutorialSystem system)
+    {
+        _tutorialSystem = system;
+    }
+
+    public void OnSystemUnloaded(TutorialSystem system)
+    {
+        _window?.Close();
+        UnsubscribeWindowData();
+
+        if (_tutorialSystem == system)
+            _tutorialSystem = null;
+    }
 
     public void ToggleTutorial()
     {
@@ -26,32 +45,25 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
             return;
         }
 
+        var tutorialSystem = _tutorialSystem;
+        if (tutorialSystem == null)
+            return;
+
         _shown = true;
-        _window = new TutorialWindow();
+        _window = UIManager.CreateWindow<TutorialWindow>();
 
-        if (_tutorialSystem.CompletedTutorialsReceived)
-            _window.SetCompletedTutorials(_tutorialSystem.CompletedTutorials);
+        if (tutorialSystem.CompletedTutorialsReceived)
+            _window.SetCompletedTutorials(tutorialSystem.CompletedTutorials);
 
-        if (!_windowDataSubscribed)
-        {
-            _tutorialSystem.WindowDataReceived += OnWindowDataReceived;
-            _windowDataSubscribed = true;
-        }
+        SubscribeWindowData(tutorialSystem);
 
         _startTutorialHandler = proto =>
-            _tutorialSystem.RequestStartTutorial(new ProtoId<TutorialSequencePrototype>(proto.ID));
+            tutorialSystem.RequestStartTutorial(new ProtoId<TutorialSequencePrototype>(proto.ID));
+        _requestCompletedTutorialsHandler = tutorialSystem.RequestWindowData;
 
         _window.OnTutorialButtonPressed += _startTutorialHandler;
-        _window.OnRequestCompletedTutorials += _tutorialSystem.RequestWindowData;
-
-        _window.OnClose += () =>
-        {
-            _window.OnTutorialButtonPressed -= _startTutorialHandler;
-            _window.OnRequestCompletedTutorials -= _tutorialSystem.RequestWindowData;
-
-            _startTutorialHandler = null;
-            _window = null;
-        };
+        _window.OnRequestCompletedTutorials += _requestCompletedTutorialsHandler;
+        _window.OnClose += OnWindowClosed;
 
         _window.OpenCentered();
     }
@@ -70,14 +82,14 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
         if (!_autoOpenEnabled)
             return;
 
-        if (!_windowDataSubscribed)
-        {
-            _tutorialSystem.WindowDataReceived += OnWindowDataReceived;
-            _windowDataSubscribed = true;
-        }
+        var tutorialSystem = _tutorialSystem;
+        if (tutorialSystem == null)
+            return;
 
-        if (!_tutorialSystem.CompletedTutorialsReceived)
-            _tutorialSystem.RequestWindowData();
+        SubscribeWindowData(tutorialSystem);
+
+        if (!tutorialSystem.CompletedTutorialsReceived)
+            tutorialSystem.RequestWindowData();
 
         TryOpenTutorial();
     }
@@ -87,12 +99,7 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
         _cfg.UnsubValueChanged(SunriseCCVars.TutorialWindowAutoOpen, OnAutoOpenChanged);
 
         _window?.Close();
-
-        if (!_windowDataSubscribed)
-            return;
-
-        _tutorialSystem.WindowDataReceived -= OnWindowDataReceived;
-        _windowDataSubscribed = false;
+        UnsubscribeWindowData();
     }
 
     private void OnAutoOpenChanged(bool value)
@@ -102,9 +109,52 @@ public sealed class TutorialUIController : UIController, IOnStateEntered<LobbySt
 
     private void OnWindowDataReceived()
     {
-        if (_tutorialSystem.CompletedTutorialsReceived)
-            _window?.SetCompletedTutorials(_tutorialSystem.CompletedTutorials);
+        var tutorialSystem = _windowDataSystem;
+        if (tutorialSystem == null)
+            return;
+
+        if (tutorialSystem.CompletedTutorialsReceived)
+            _window?.SetCompletedTutorials(tutorialSystem.CompletedTutorials);
 
         TryOpenTutorial();
+    }
+
+    private void OnWindowClosed()
+    {
+        var window = _window;
+        if (window == null)
+            return;
+
+        if (_startTutorialHandler != null)
+            window.OnTutorialButtonPressed -= _startTutorialHandler;
+
+        if (_requestCompletedTutorialsHandler != null)
+            window.OnRequestCompletedTutorials -= _requestCompletedTutorialsHandler;
+
+        window.OnClose -= OnWindowClosed;
+
+        _startTutorialHandler = null;
+        _requestCompletedTutorialsHandler = null;
+        _window = null;
+    }
+
+    private void SubscribeWindowData(TutorialSystem system)
+    {
+        if (_windowDataSystem == system)
+            return;
+
+        UnsubscribeWindowData();
+
+        system.WindowDataReceived += OnWindowDataReceived;
+        _windowDataSystem = system;
+    }
+
+    private void UnsubscribeWindowData()
+    {
+        if (_windowDataSystem == null)
+            return;
+
+        _windowDataSystem.WindowDataReceived -= OnWindowDataReceived;
+        _windowDataSystem = null;
     }
 }
