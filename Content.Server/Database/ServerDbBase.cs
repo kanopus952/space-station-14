@@ -2135,10 +2135,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         {
             await using var db = await GetDb(cancel);
             var validList = validTutorialIds.ToList();
+            if (validList.Count == 0)
+                return 0;
 
             IQueryable<TutorialCompletion> query = db.DbContext.TutorialCompletions;
-            if (validList.Count > 0)
-                query = query.Where(w => !validList.Contains(w.TutorialId));
+            query = query.Where(w => !validList.Contains(w.TutorialId));
 
             var toRemove = await query.ToListAsync(cancellationToken: cancel);
             if (toRemove.Count == 0)

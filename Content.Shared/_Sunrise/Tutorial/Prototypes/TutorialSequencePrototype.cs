@@ -29,25 +29,25 @@ public sealed partial class TutorialSequencePrototype : IPrototype
     /// <summary>
     ///     Grid map loaded for this tutorial sequence.
     /// </summary>
-    [DataField]
+    [DataField(required: true)]
     public ResPath Grid;
 
     /// <summary>
     ///     Player entity prototype used when starting this tutorial.
     /// </summary>
-    [DataField]
+    [DataField(required: true)]
     public EntProtoId PlayerEntity;
 
     /// <summary>
     ///     Texture displayed for this tutorial in the tutorial menu.
     /// </summary>
-    [DataField]
+    [DataField(required: true)]
     public ResPath Texture;
 
     /// <summary>
     ///     Duration of tutorial
     /// </summary>
-    [DataField]
+    [DataField(required: true)]
     public TimeSpan Duration;
 
     /// <summary>

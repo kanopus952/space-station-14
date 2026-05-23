@@ -139,7 +139,6 @@ public record struct TutorialConditionEvent<T>(T Condition) where T : TutorialCo
     /// <summary>
     /// Whether the condition is satisfied. Defaults to <c>false</c> if no system handles the event.
     /// </summary>
-    [DataField]
     public bool Result;
 
     /// <summary>

@@ -1,14 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using Content.Client.Eui;
-using Content.Client._Sunrise.FancyCardControl;
 using Content.Shared._Sunrise.Tutorial.Eui;
 using Content.Shared.Eui;
 using JetBrains.Annotations;
-using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.CustomControls;
-
 namespace Content.Client._Sunrise.Tutorial;
 
 [UsedImplicitly]
@@ -25,11 +18,13 @@ public sealed class TutorialCompletionEui : BaseEui
 
     public override void Opened()
     {
+        base.Opened();
         _window.OpenCentered();
     }
 
     public override void Closed()
     {
+        base.Closed();
         _window.Close();
     }
 
