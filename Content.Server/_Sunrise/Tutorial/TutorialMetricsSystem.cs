@@ -51,8 +51,6 @@ public sealed class TutorialMetricsSystem : EntitySystem
         "ss14_tutorial_metrics_last_refresh_unixtime",
         "Unix timestamp of the last successful tutorial metrics refresh.");
 
-    private readonly HashSet<string> _reportedTutorials = [];
-
     private ISawmill _sawmill = default!;
     private CancellationTokenSource? _shutdownToken;
     private TimeSpan _nextRefresh;
@@ -76,7 +74,6 @@ public sealed class TutorialMetricsSystem : EntitySystem
         _shutdownToken?.Cancel();
         _shutdownToken?.Dispose();
         _shutdownToken = null;
-        _reportedTutorials.Clear();
     }
 
     private void OnUpdateMetrics()
@@ -132,17 +129,13 @@ public sealed class TutorialMetricsSystem : EntitySystem
         });
     }
 
-    private void ApplyTutorialMetrics(List<TutorialCompletionMetrics> metrics)
+    private static void ApplyTutorialMetrics(List<TutorialCompletionMetrics> metrics)
     {
-        foreach (var tutorialId in _reportedTutorials)
-            SetTutorialMetricsToZero(tutorialId);
-
         for (var i = 0; i < metrics.Count; i++)
         {
             var metric = metrics[i];
             var tutorialId = metric.TutorialId;
 
-            _reportedTutorials.Add(tutorialId);
             TutorialCompletedPlayers.WithLabels(tutorialId).Set(metric.CompletedPlayers);
             TutorialCompletionCount.WithLabels(tutorialId).Set(metric.CompletionCount);
             TutorialAccountAgeSamples.WithLabels(tutorialId).Set(metric.AccountAgeSamples);
@@ -151,14 +144,5 @@ public sealed class TutorialMetricsSystem : EntitySystem
         }
 
         TutorialMetricsLastRefreshUnixTime.Set(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-    }
-
-    private static void SetTutorialMetricsToZero(string tutorialId)
-    {
-        TutorialCompletedPlayers.WithLabels(tutorialId).Set(0);
-        TutorialCompletionCount.WithLabels(tutorialId).Set(0);
-        TutorialAccountAgeSamples.WithLabels(tutorialId).Set(0);
-        TutorialAverageAccountAgeDays.WithLabels(tutorialId).Set(0);
-        TutorialLastCompletedAtUnixTime.WithLabels(tutorialId).Set(0);
     }
 }

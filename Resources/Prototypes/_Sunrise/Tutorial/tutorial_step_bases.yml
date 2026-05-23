@@ -31,7 +31,7 @@
   parent: BaseTutorialStepBase
   abstract: true
   chatMessage: tutorial-base-step-activate-action-chat
-  ttsMessage: tutorial-base-step-pickup-tts
+  ttsMessage: tutorial-base-step-activate-action-tts
   conditions:
   - !type:ActivateActionListenedCondition
 

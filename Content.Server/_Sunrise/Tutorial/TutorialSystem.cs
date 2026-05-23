@@ -131,6 +131,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
             return;
         }
 
+        _tutorialTtsRevisions.Remove(session.UserId);
         StopTutorialTts(session);
         SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
         ShowCompletionEui(ent.Owner, session);
@@ -151,6 +152,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
             return;
         }
 
+        _tutorialTtsRevisions.Remove(session.UserId);
         RespawnAfterTutorialCompletion(session);
     }
 
@@ -191,6 +193,11 @@ public sealed class TutorialSystem : SharedTutorialSystem
         }
         catch (OperationCanceledException)
         {
+            return;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to wait for user DB load for tutorial respawn: {e}");
             return;
         }
 
