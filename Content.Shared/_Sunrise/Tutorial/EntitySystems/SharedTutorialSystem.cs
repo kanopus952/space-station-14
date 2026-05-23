@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared._Sunrise.Tutorial.Conditions;
@@ -26,20 +26,19 @@ public abstract class SharedTutorialSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<TutorialPlayerComponent, ComponentInit>(OnComponentInit);
-    }
-
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
+        if (_timing.ApplyingState)
+            return;
+
         var query = EntityQueryEnumerator<TutorialPlayerComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
+            if (!comp.TutorialInitialized)
+                continue;
+
             if (comp.EndTime != null && _timing.CurTime > comp.EndTime)
             {
                 EndTutorial((uid, comp));
@@ -50,14 +49,6 @@ public abstract class SharedTutorialSystem : EntitySystem
         }
     }
 
-    private void OnComponentInit(Entity<TutorialPlayerComponent> ent, ref ComponentInit args)
-    {
-        // SequenceId may not be set yet if the component was added before the caller
-        // could configure it (e.g. EnsureComp fires ComponentInit synchronously).
-        // In that case the server calls InitializeTutorial() explicitly after setup.
-        InitializeTutorial(ent);
-    }
-
     /// <summary>
     /// Performs first-time setup for a tutorial session: starts the timer, initialises
     /// the first step, and fires all related side-effects.
@@ -66,9 +57,13 @@ public abstract class SharedTutorialSystem : EntitySystem
     /// </summary>
     public void InitializeTutorial(Entity<TutorialPlayerComponent> ent)
     {
+        if (ent.Comp.TutorialInitialized)
+            return;
+
         if (!TryGetCurrentStep(ent, out var step))
             return;
 
+        ent.Comp.TutorialInitialized = true;
         ent.Comp.EndTime = _timing.CurTime + _proto.Index(ent.Comp.SequenceId).Duration;
         UpdateTimeCounter(ent, ent.Comp.EndTime);
         OnStepChanged(ent, step);
@@ -79,17 +74,18 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (!TryGetCurrentStep(ent, out var step))
             return;
 
-        if (!_tutorial.TryConditions(ent, step.Preconditions.ToArray()))
+        if (!_tutorial.TryConditions(ent, step.Preconditions))
         {
+            // A missing fail step intentionally means "skip this step".
             ClearTutorialBubble(ent);
             Advance(ent, step.PreconditionFailStep);
             return;
         }
 
-        if (!_tutorial.TryConditions(ent, step.Conditions.ToArray()))
+        if (!_tutorial.TryConditions(ent, step.Conditions))
             return;
 
-        if (step.AnyConditions.Count > 0 && !_tutorial.TryAnyCondition(ent, step.AnyConditions.ToArray()))
+        if (step.AnyConditions.Count > 0 && !_tutorial.TryAnyCondition(ent, step.AnyConditions))
             return;
 
         Advance(ent);
@@ -146,7 +142,7 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         RaiseLocalEvent(ent, new TutorialStepChangedEvent());
 
-        if (_tutorial.TryConditions(ent, step.Preconditions.ToArray()))
+        if (_tutorial.TryConditions(ent, step.Preconditions))
             UpdateTutorialBubble(ent, step);
     }
 
@@ -156,6 +152,7 @@ public abstract class SharedTutorialSystem : EntitySystem
     public void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
         ClearTutorialBubble(ent);
+        ent.Comp.TutorialInitialized = false;
         ent.Comp.Target = null;
 
         ClearTracking(ent);
@@ -185,6 +182,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         var tracker = EnsureComp<TutorialTrackerComponent>(ent);
         tracker.Counters.Clear();
         UpdateObservedEntities(ent, tracker);
+        Dirty(ent, tracker);
     }
 
     private void ClearTracking(Entity<TutorialPlayerComponent> ent)
@@ -228,10 +226,11 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     private static void CollectObservedConditions(
         TutorialTrackerComponent tracker,
-        IEnumerable<TutorialCondition> conditions)
+        List<TutorialCondition> conditions)
     {
-        foreach (var condition in conditions)
+        for (var i = 0; i < conditions.Count; i++)
         {
+            var condition = conditions[i];
             if (condition is not IEventListenedCondition listened)
                 continue;
 
@@ -253,7 +252,7 @@ public abstract class SharedTutorialSystem : EntitySystem
 
         foreach (var uid in _lookupSystem.GetEntitiesInRange(user, step.ObserveRange))
         {
-            TryObserveEntity(user, uid, tracker);
+            TryObserveEntityInternal(user, uid, tracker);
         }
     }
 
@@ -266,7 +265,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         {
             foreach (var held in _hands.EnumerateHeld((user, hands)))
             {
-                TryObserveEntity(user, held, tracker);
+                TryObserveEntityInternal(user, held, tracker);
             }
         }
 
@@ -277,7 +276,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         {
             if (_inventory.TryGetSlotEntity(user, slot.Name, out var item, inventory))
             {
-                TryObserveEntity(user, item.Value, tracker);
+                TryObserveEntityInternal(user, item.Value, tracker);
             }
         }
     }
@@ -287,14 +286,24 @@ public abstract class SharedTutorialSystem : EntitySystem
     /// </summary>
     public void TryObserveEntity(EntityUid user, EntityUid target, TutorialTrackerComponent tracker)
     {
-        if (!ShouldObserveEntity(target, tracker))
+        if (!TryObserveEntityInternal(user, target, tracker))
             return;
 
+        Dirty(user, tracker);
+    }
+
+    private bool TryObserveEntityInternal(EntityUid user, EntityUid target, TutorialTrackerComponent tracker)
+    {
+        if (!ShouldObserveEntity(target, tracker))
+            return false;
+
         if (!tracker.ObservedEntities.Add(target))
-            return;
+            return false;
 
         var observable = EnsureComp<TutorialObservableComponent>(target);
         observable.Observers.Add(user);
+        Dirty(target, observable);
+        return true;
     }
 
     private void RemoveObserver(EntityUid user, EntityUid target)
@@ -302,9 +311,16 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (!TryComp(target, out TutorialObservableComponent? observable))
             return;
 
-        observable.Observers.Remove(user);
+        if (!observable.Observers.Remove(user))
+            return;
+
         if (observable.Observers.Count == 0)
+        {
             RemComp<TutorialObservableComponent>(target);
+            return;
+        }
+
+        Dirty(target, observable);
     }
 
     private bool ShouldObserveEntity(EntityUid target, TutorialTrackerComponent tracker)
@@ -317,9 +333,14 @@ public abstract class SharedTutorialSystem : EntitySystem
 
     private static bool ObservesAny(TutorialTrackerComponent tracker)
     {
-        return tracker.Counters.Keys.Any(k =>
-            k.Target.Equals(default(EntProtoId)) &&
-            k.Key.EndsWith(EventListenedConditionKeys.ObserveSuffix, StringComparison.Ordinal));
+        foreach (var (key, target) in tracker.Counters.Keys)
+        {
+            if (target.Equals(default(EntProtoId)) &&
+                key.EndsWith(EventListenedConditionKeys.ObserveSuffix, StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>

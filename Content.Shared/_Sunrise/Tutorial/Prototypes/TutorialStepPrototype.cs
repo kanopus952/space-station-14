@@ -93,6 +93,7 @@ public sealed partial class TutorialStepPrototype : IPrototype, IInheritingProto
 
     /// <summary>
     ///     Optional step to jump to if <see cref="Preconditions"/> are not met.
+    ///     If unset, failed preconditions skip this step and continue with the next one.
     /// </summary>
     [DataField]
     public ProtoId<TutorialStepPrototype>? PreconditionFailStep;

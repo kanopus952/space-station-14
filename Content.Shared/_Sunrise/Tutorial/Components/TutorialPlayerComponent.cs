@@ -35,6 +35,12 @@ public sealed partial class TutorialPlayerComponent : Component
     public EntityUid? Target;
 
     /// <summary>
+    /// Whether the tutorial session has been explicitly initialized by the server.
+    /// </summary>
+    [ViewVariables, AutoNetworkedField]
+    public bool TutorialInitialized;
+
+    /// <summary>
     /// Absolute game time when this tutorial session expires.
     /// </summary>
     [ViewVariables, AutoPausedField]
@@ -43,6 +49,6 @@ public sealed partial class TutorialPlayerComponent : Component
     /// <summary>
     /// Grid loaded for this player's tutorial session.
     /// </summary>
-    [ViewVariables]
+    [ViewVariables, AutoNetworkedField]
     public EntityUid? Grid;
 }

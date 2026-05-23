@@ -24,7 +24,18 @@ public sealed partial class TravelDistanceConditionSystem : TutorialConditionSys
         var pos = _transform.GetWorldPosition(entity);
 
         if (tracker.LastPosition is { } last)
-            tracker.Distance += (pos - last).Length();
+        {
+            var delta = (pos - last).Length();
+            if (delta > 0f)
+            {
+                tracker.Distance += delta;
+                tracker.LastPosition = pos;
+                Dirty(entity, tracker);
+            }
+
+            args.Result = tracker.Distance >= args.Condition.Distance;
+            return;
+        }
 
         tracker.LastPosition = pos;
         Dirty(entity, tracker);

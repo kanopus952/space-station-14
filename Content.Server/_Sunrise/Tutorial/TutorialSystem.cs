@@ -47,6 +47,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     private EntityUid? _tutorialMap;
     private readonly Dictionary<ICommonSession, TutorialCompletionEui> _completionEuis = new();
+    private readonly Dictionary<NetUserId, int> _tutorialTtsRevisions = new();
     public override void Initialize()
     {
         base.Initialize();
@@ -78,6 +79,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!_player.TryGetSessionByEntity(ent, out var session))
             return;
 
+        StopTutorialTts(session);
         SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
         ShowCompletionEui(ent.Owner, session);
     }
@@ -87,6 +89,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (!_player.TryGetSessionByEntity(ent, out var session))
             return;
 
+        StopTutorialTts(session);
         CloseCompletionEui(session);
         QueueDel(ent.Comp.Grid);
         QueueDel(ent);
@@ -203,11 +206,17 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         var spawnPoint = GetSpawnPoint(gridUid);
 
-        if (!TrySpawnNextTo(sequence.PlayerEntity, spawnPoint, out var uid))
-            return;
-
         if (spawnPoint == EntityUid.Invalid)
+        {
+            QueueDel(gridUid);
             return;
+        }
+
+        if (!TrySpawnNextTo(sequence.PlayerEntity, spawnPoint, out var uid))
+        {
+            QueueDel(gridUid);
+            return;
+        }
 
         var (mindId, _) = _mind.CreateMind(args.SenderSession.UserId);
         _mind.SetUserId(mindId, args.SenderSession.UserId);
@@ -248,12 +257,16 @@ public sealed class TutorialSystem : SharedTutorialSystem
             if (!_player.TryGetSessionByEntity(uid, out var session))
                 return;
 
+            var ttsRevision = StopTutorialTts(session);
+
             if (!TryGetCurrentStep((uid, comp), out var step))
                 return;
 
             if (!_proto.TryIndex(step.VoiceId, out var voice))
                 return;
 
+            var sequenceId = comp.SequenceId;
+            var stepIndex = comp.StepIndex;
             var senderText = Loc.GetString(step.Sender);
             var messageText = Loc.GetString(step.ChatMessage);
             var plainMessage = $"{senderText} {messageText}";
@@ -266,13 +279,45 @@ public sealed class TutorialSystem : SharedTutorialSystem
             if (tts == null)
                 return;
 
-            var ev = new PlayTTSEvent(tts);
+            if (!IsCurrentTutorialTts(session.UserId, ttsRevision))
+                return;
+
+            if (!TryComp(uid, out TutorialPlayerComponent? currentComp))
+                return;
+
+            if (!currentComp.TutorialInitialized ||
+                currentComp.StepIndex != stepIndex ||
+                !currentComp.SequenceId.Equals(sequenceId))
+                return;
+
+            var ev = new PlayTTSEvent(tts, playbackGroup: TTSPlaybackGroup.Tutorial);
             RaiseNetworkEvent(ev, Filter.SinglePlayer(session));
         }
         catch (Exception e)
         {
             Log.Error($"Error in OnStepChanged: {e}");
         }
+    }
+
+    private int StopTutorialTts(ICommonSession session)
+    {
+        var revision = NextTutorialTtsRevision(session.UserId);
+        RaiseNetworkEvent(new StopTTSEvent(TTSPlaybackGroup.Tutorial), Filter.SinglePlayer(session));
+        return revision;
+    }
+
+    private int NextTutorialTtsRevision(NetUserId userId)
+    {
+        _tutorialTtsRevisions.TryGetValue(userId, out var revision);
+        revision++;
+        _tutorialTtsRevisions[userId] = revision;
+        return revision;
+    }
+
+    private bool IsCurrentTutorialTts(NetUserId userId, int revision)
+    {
+        return _tutorialTtsRevisions.TryGetValue(userId, out var currentRevision) &&
+               currentRevision == revision;
     }
 
     private async Task<byte[]?> GenerateTtsForTutorial(string text, TTSVoicePrototype voicePrototype)

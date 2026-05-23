@@ -21,7 +21,7 @@ public sealed partial class ReachMarkerConditionSystem : TutorialConditionSystem
         var query = EntityQueryEnumerator<TutorialGoalMarkerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
-            if (Prototype(uid)!.ID! != args.Condition.Marker)
+            if (args.Condition.Marker is { } marker && !marker.Equals(Prototype(uid)?.ID))
                 continue;
 
             if (xform.GridUid != entity.Comp.Grid)
@@ -51,7 +51,7 @@ public sealed partial class ReachMarkerCondition : TutorialConditionBase<ReachMa
     /// Leave empty to match any <see cref="TutorialGoalMarkerComponent"/>.
     /// </summary>
     [DataField]
-    public EntProtoId Marker;
+    public EntProtoId? Marker;
 
     /// <summary>
     /// Maximum distance in world units at which the condition is satisfied.

@@ -199,9 +199,13 @@ public abstract class TutorialBubble : Control
 public sealed class TutorialMainBubble : TutorialBubble
 {
     private TutorialBubbleControl _control = default!;
+    private readonly Color? _fontColor;
 
     public TutorialMainBubble(string message, EntityUid senderEntity, string styleClass, Color? fontColor = null)
-        : base(message, senderEntity, styleClass, fontColor) { }
+        : base(message, senderEntity, styleClass, fontColor)
+    {
+        _fontColor = fontColor;
+    }
 
     protected override Control BuildBubble(string message, string styleClass, Color? fontColor = null)
     {
@@ -213,6 +217,6 @@ public sealed class TutorialMainBubble : TutorialBubble
 
     public override void SetMessage(string locMessage)
     {
-        _control.BubbleText.SetMessage(FormatSpeech(locMessage), BubbleTags);
+        _control.BubbleText.SetMessage(FormatSpeech(locMessage, _fontColor), BubbleTags);
     }
 }

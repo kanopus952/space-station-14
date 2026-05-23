@@ -1,7 +1,6 @@
-using System.Linq;
+using System.Collections.Generic;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Toolshed.Commands.Generic.ListGeneration;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
@@ -17,12 +16,18 @@ public sealed partial class SharedTutorialConditionsSystem : EntitySystem, ITuto
     /// <param name="target">Entity we're checking conditions on.</param>
     /// <param name="conditions">Conditions to check.</param>
     /// <returns><c>true</c> if all conditions pass or the list is null; <c>false</c> if any condition fails.</returns>
-    public bool TryConditions(EntityUid target, TutorialCondition[]? conditions)
+    public bool TryConditions(EntityUid target, IReadOnlyList<TutorialCondition>? conditions)
     {
         if (conditions == null)
             return true;
 
-        return conditions.All(condition => TryCondition(target, condition));
+        for (var i = 0; i < conditions.Count; i++)
+        {
+            if (!TryCondition(target, conditions[i]))
+                return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -31,14 +36,14 @@ public sealed partial class SharedTutorialConditionsSystem : EntitySystem, ITuto
     /// <param name="target">Entity we're checking conditions on.</param>
     /// <param name="conditions">Conditions to check.</param>
     /// <returns><c>true</c> if at least one condition passes; <c>false</c> if none pass or the list is null.</returns>
-    public bool TryAnyCondition(EntityUid target, TutorialCondition[]? conditions)
+    public bool TryAnyCondition(EntityUid target, IReadOnlyList<TutorialCondition>? conditions)
     {
         if (conditions == null)
             return false;
 
-        foreach (var condition in conditions)
+        for (var i = 0; i < conditions.Count; i++)
         {
-            if (TryCondition(target, condition))
+            if (TryCondition(target, conditions[i]))
                 return true;
         }
 
