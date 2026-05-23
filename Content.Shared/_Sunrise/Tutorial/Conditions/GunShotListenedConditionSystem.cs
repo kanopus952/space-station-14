@@ -3,6 +3,9 @@ using Content.Shared.Weapons.Ranged.Events;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records gun firing events from observed weapons for tutorial conditions.
+/// </summary>
 public sealed partial class GunShotListenedConditionSystem : EventListenedConditionSystemBase<GunShotListenedCondition>
 {
     public override void Initialize()

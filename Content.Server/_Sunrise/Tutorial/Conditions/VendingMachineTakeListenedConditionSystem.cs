@@ -6,6 +6,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records vending machine eject actions and supports matching the dispensed item prototype.
+/// </summary>
 public sealed partial class VendingMachineTakeListenedConditionSystem
     : EventListenedConditionSystemBase<VendingMachineTakeListenedCondition>
 {

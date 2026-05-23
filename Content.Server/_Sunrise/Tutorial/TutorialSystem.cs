@@ -28,7 +28,7 @@ using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 namespace Content.Server._Sunrise.Tutorial;
 
 /// <summary>
-/// System for educating new players
+/// Server-side tutorial controller for session creation, map loading, completion persistence, chat, and TTS.
 /// </summary>
 public sealed class TutorialSystem : SharedTutorialSystem
 {
@@ -64,6 +64,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
     {
         args.Entities ??= [];
 
+        // Tutorial bubbles and highlighted targets may be outside normal PVS,
+        // but the client still needs them for UI anchors and path rendering.
         if (Exists(ent.Comp.CurrentBubbleTarget))
             args.Entities.Add(ent.Comp.CurrentBubbleTarget.Value);
 
@@ -128,11 +130,17 @@ public sealed class TutorialSystem : SharedTutorialSystem
             eui.Close();
     }
 
+    /// <summary>
+    /// Removes the tracked completion EUI when the client closes it.
+    /// </summary>
     public void OnCompletionEuiClosed(ICommonSession session)
     {
         _completionEuis.Remove(session);
     }
 
+    /// <summary>
+    /// Handles actions sent by the tutorial completion EUI.
+    /// </summary>
     public void HandleCompletionAction(EntityUid player, string actionId)
     {
         if (actionId != TutorialCompletionActions.Leave)
@@ -206,6 +214,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _mind.TransferTo(mindId, uid);
         _ticker.PlayerJoinGame(args.SenderSession, true);
 
+        // ComponentInit runs before these fields are configured, so the shared
+        // system performs the actual setup after the server has assigned them.
         var tutorial = EnsureComp<TutorialPlayerComponent>(uid.Value);
         tutorial.SequenceId = msg.SequenceId;
         tutorial.Grid = gridUid;
@@ -322,6 +332,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
             offset = tutorialMap.GridOffsets[lastGrid] + tutorialMap.CoordinateStep;
         }
 
+        // Each tutorial grid is placed at a stable offset on one shared map so
+        // multiple active tutorial sessions do not overlap.
         if (!_mapLoader.TryLoadGrid(mapComp.MapId, gridPath, out var grid, null, offset))
             return EntityUid.Invalid;
 

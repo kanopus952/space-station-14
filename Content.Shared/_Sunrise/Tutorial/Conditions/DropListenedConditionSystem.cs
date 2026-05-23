@@ -4,6 +4,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records item drops from tutorial players while avoiding state-application replays.
+/// </summary>
 public sealed partial class DropListenedConditionSystem : EventListenedConditionSystemBase<DropListenedCondition>
 {
     [Dependency] private readonly IGameTiming _timing = default!;

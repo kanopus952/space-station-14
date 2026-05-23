@@ -3,6 +3,9 @@ using Content.Shared._Sunrise.Tutorial.Conditions;
 
 namespace Content.Server._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records bound UI openings on observed tutorial entities.
+/// </summary>
 public sealed partial class BuiOpenListenedConditionSystem
     : EventListenedConditionSystemBase<BuiOpenListenedCondition>
 {

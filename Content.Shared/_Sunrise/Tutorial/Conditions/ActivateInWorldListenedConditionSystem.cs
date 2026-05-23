@@ -3,6 +3,9 @@ using Content.Shared.Interaction;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records activation events performed by a tutorial player on observed world entities.
+/// </summary>
 public sealed partial class ActivateInWorldListenedConditionSystem : EventListenedConditionSystemBase<ActivateInWorldListenedCondition>
 {
     public override void Initialize()

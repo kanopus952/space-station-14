@@ -3,6 +3,9 @@ using Content.Shared.Interaction;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records direct hand interactions performed by a tutorial player.
+/// </summary>
 public sealed partial class InteractListenedConditionSystem : EventListenedConditionSystemBase<InteractListenedCondition>
 {
     public override void Initialize()

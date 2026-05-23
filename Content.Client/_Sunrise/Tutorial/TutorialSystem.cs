@@ -17,6 +17,9 @@ using Content.Client._Sunrise.Tutorial.TutorialBubbleControl;
 
 namespace Content.Client._Sunrise.Tutorial;
 
+/// <summary>
+/// Client-side tutorial controller for bubbles, target highlighting, path overlay, and tutorial menu requests.
+/// </summary>
 public sealed class TutorialSystem : SharedTutorialSystem
 {
     [Dependency] private readonly IPlayerManager _player = default!;
@@ -33,8 +36,19 @@ public sealed class TutorialSystem : SharedTutorialSystem
     private uint? _highlightedTargetRenderOrder;
     private EntityQuery<SpriteComponent> _spriteQuery;
 
+    /// <summary>
+    /// Raised after the server sends the list of completed tutorial sequences.
+    /// </summary>
     public event Action? WindowDataReceived;
+
+    /// <summary>
+    /// Whether completion data has been received from the server during this client session.
+    /// </summary>
     public bool CompletedTutorialsReceived { get; private set; }
+
+    /// <summary>
+    /// Prototype IDs of tutorial sequences completed by the local user.
+    /// </summary>
     public readonly HashSet<string> CompletedTutorials = [];
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer? _tutorialBubbleRoot;
@@ -241,16 +255,25 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _tutorialBubbleRoot.SetPositionLast();
     }
 
+    /// <summary>
+    /// Requests that the server ends the local player's active tutorial session.
+    /// </summary>
     public void RequestQuitTutorial()
     {
         RaiseNetworkEvent(new TutorialQuitRequestEvent());
     }
 
+    /// <summary>
+    /// Requests the server-side list of tutorials completed by the local user.
+    /// </summary>
     public void RequestWindowData()
     {
         RaiseNetworkEvent(new TutorialWindowDataRequestEvent());
     }
 
+    /// <summary>
+    /// Requests that the server starts the selected tutorial sequence for the local user.
+    /// </summary>
     public void RequestStartTutorial(ProtoId<TutorialSequencePrototype> sequenceId)
     {
         RaiseNetworkEvent(new TutorialStartRequestEvent(sequenceId));

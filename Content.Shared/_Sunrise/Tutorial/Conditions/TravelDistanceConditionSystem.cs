@@ -5,6 +5,9 @@ using Robust.Shared.Map;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Accumulates player movement distance for travel-distance tutorial conditions.
+/// </summary>
 public sealed partial class TravelDistanceConditionSystem : TutorialConditionSystem<TutorialPlayerComponent, TravelDistanceCondition>
 {
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -34,6 +37,9 @@ public sealed partial class TravelDistanceConditionSystem : TutorialConditionSys
 /// </summary>
 public sealed partial class TravelDistanceCondition : TutorialConditionBase<TravelDistanceCondition>
 {
+    /// <summary>
+    /// Distance in world units the player must travel.
+    /// </summary>
     [DataField]
     public float Distance = 1f;
 }

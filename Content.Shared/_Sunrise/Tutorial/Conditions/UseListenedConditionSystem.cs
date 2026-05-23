@@ -4,6 +4,9 @@ using Content.Shared.Interaction.Events;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records use-in-hand and use-on-target interactions for tutorial conditions.
+/// </summary>
 public sealed partial class UseListenedConditionSystem : EventListenedConditionSystemBase<UseListenedCondition>
 {
     public override void Initialize()

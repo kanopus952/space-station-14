@@ -3,6 +3,9 @@ using Content.Shared.Nutrition;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records food and drink consumption events for tutorial conditions.
+/// </summary>
 public sealed partial class ConsumeListenedConditionSystem : EventListenedConditionSystemBase<ConsumeListenedCondition>
 {
     public override void Initialize()
@@ -13,7 +16,7 @@ public sealed partial class ConsumeListenedConditionSystem : EventListenedCondit
 
     private void OnIngested(Entity<TutorialObservableComponent> ent, ref IngestedEvent args)
     {
-        // Target is the entity doing the eating (User may differ in force-feed scenarios)
+        // Target is the entity doing the eating; User may differ in force-feed scenarios.
         if (!ent.Comp.Observers.Contains(args.Target))
             return;
 

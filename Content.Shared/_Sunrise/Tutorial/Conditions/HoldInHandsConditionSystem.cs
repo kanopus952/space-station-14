@@ -35,8 +35,14 @@ public sealed partial class HoldInHandsConditionSystem : TutorialConditionSystem
     }
 }
 
+/// <summary>
+/// Checks whether the player is holding any item or a specific item prototype.
+/// </summary>
 public sealed partial class HoldInHandsCondition : TutorialConditionBase<HoldInHandsCondition>
 {
+    /// <summary>
+    /// Optional item prototype that must be held. If unset, any held item passes.
+    /// </summary>
     [DataField]
     public EntProtoId? Item;
 }

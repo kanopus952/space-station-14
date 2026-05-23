@@ -3,6 +3,9 @@ using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records melee attacks performed by a tutorial player against observed entities.
+/// </summary>
 public sealed partial class AttackListenedConditionSystem : EventListenedConditionSystemBase<AttackListenedCondition>
 {
     public override void Initialize()
@@ -20,6 +23,9 @@ public sealed partial class AttackListenedConditionSystem : EventListenedConditi
     }
 }
 
+/// <summary>
+/// Checks if the player has attacked a target entity.
+/// </summary>
 public sealed partial class AttackListenedCondition : EventListenedConditionBase<AttackListenedCondition>
 {
     public override bool ObserveAnyWithoutTarget => true;

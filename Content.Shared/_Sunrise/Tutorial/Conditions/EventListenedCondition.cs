@@ -13,6 +13,10 @@ public abstract partial class EventListenedConditionSystemBase<TCondition> : Tut
     where TCondition : EventListenedConditionBase<TCondition>
 {
     [Dependency] protected readonly SharedTutorialSystem Tutorial = default!;
+
+    /// <summary>
+    /// Counter target used when the condition accepts any prototype.
+    /// </summary>
     protected readonly EntProtoId AnyTarget = default;
 
     protected override void Condition(Entity<TutorialPlayerComponent> entity, ref TutorialConditionEvent<TCondition> args)
@@ -32,11 +36,14 @@ public abstract partial class EventListenedConditionSystemBase<TCondition> : Tut
 
     /// <summary>
     /// The default counter key for this condition type.
-    /// Pass explicitly to <see cref="RecordEvent"/> — do not rely on implicit defaulting,
+    /// Pass explicitly to <see cref="RecordEvent"/> - do not rely on implicit defaulting,
     /// so any <see cref="EventListenedConditionBase{T}.CounterKey"/> override stays consistent.
     /// </summary>
     protected string DefaultKey => typeof(TCondition).Name;
 
+    /// <summary>
+    /// Records a tutorial event for a player and optional target entities.
+    /// </summary>
     protected void RecordEvent(EntityUid user, string key, EntityUid? primaryTarget = null, EntityUid? secondaryTarget = null)
     {
         var tracker = EnsureComp<TutorialTrackerComponent>(user);
@@ -66,6 +73,9 @@ public abstract partial class EventListenedConditionSystemBase<TCondition> : Tut
         counters[dictKey] = count + 1;
     }
 
+    /// <summary>
+    /// Returns whether a counter reached the required count for the requested target prototype.
+    /// </summary>
     protected static bool HasCount(Dictionary<(string Key, EntProtoId Target), int> counters, string key, EntProtoId target, int count)
     {
         return counters.TryGetValue((key, target), out var value) && value >= count;

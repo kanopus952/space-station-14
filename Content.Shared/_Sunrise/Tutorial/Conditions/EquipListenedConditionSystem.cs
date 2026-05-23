@@ -9,6 +9,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records equipment events and optionally separates them by inventory slot.
+/// </summary>
 public sealed partial class EquipListenedConditionSystem : EventListenedConditionSystemBase<EquipListenedCondition>
 {
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -38,6 +41,9 @@ public sealed partial class EquipListenedConditionSystem : EventListenedConditio
 /// </summary>
 public sealed partial class EquipListenedCondition : EventListenedConditionBase<EquipListenedCondition>
 {
+    /// <summary>
+    /// Optional slot mask that the equipment event must match.
+    /// </summary>
     [DataField]
     public SlotFlags? Slot;
 
@@ -45,6 +51,9 @@ public sealed partial class EquipListenedCondition : EventListenedConditionBase<
         ? base.CounterKey
         : string.Concat(base.CounterKey, ":", Slot.Value);
 
+    /// <summary>
+    /// Builds the counter key used for slot-specific equipment checks.
+    /// </summary>
     public static string GetSlotKey(SlotFlags slot)
     {
         return string.Concat(nameof(EquipListenedCondition), ":", slot);

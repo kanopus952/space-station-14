@@ -4,6 +4,9 @@ using Content.Shared.Storage.Components;
 
 namespace Content.Server._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records successful physical storage openings on observed tutorial entities.
+/// </summary>
 public sealed partial class StorageOpenListenedConditionSystem
     : EventListenedConditionSystemBase<StorageOpenListenedCondition>
 {

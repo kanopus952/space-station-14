@@ -14,7 +14,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared._Sunrise.Tutorial.EntitySystems;
 
 /// <summary>
-/// System for educating new players
+/// Shared tutorial flow controller for step progression, condition checks, bubbles, and tracked targets.
 /// </summary>
 public abstract class SharedTutorialSystem : EntitySystem
 {
@@ -150,6 +150,9 @@ public abstract class SharedTutorialSystem : EntitySystem
             UpdateTutorialBubble(ent, step);
     }
 
+    /// <summary>
+    /// Stops the tutorial session and clears all tutorial-only runtime state from the player.
+    /// </summary>
     public void EndTutorial(Entity<TutorialPlayerComponent> ent)
     {
         ClearTutorialBubble(ent);
@@ -162,6 +165,9 @@ public abstract class SharedTutorialSystem : EntitySystem
         Dirty(ent);
     }
 
+    /// <summary>
+    /// Marks the tutorial sequence as completed and raises completion side-effects.
+    /// </summary>
     public void CompleteTutorial(Entity<TutorialPlayerComponent> ent, TutorialSequencePrototype sequence)
     {
         ent.Comp.StepIndex = sequence.Steps.Count;
@@ -210,6 +216,8 @@ public abstract class SharedTutorialSystem : EntitySystem
         if (!TryGetCurrentStep(ent, out var step))
             return;
 
+        // Event-listened conditions decide which nearby/equipped entities should
+        // receive TutorialObservableComponent for this step.
         CollectObservedConditions(tracker, step.Conditions);
         CollectObservedConditions(tracker, step.AnyConditions);
         CollectObservedConditions(tracker, step.Preconditions);
@@ -274,6 +282,9 @@ public abstract class SharedTutorialSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Starts tracking tutorial-relevant events from <paramref name="target"/> for <paramref name="user"/>.
+    /// </summary>
     public void TryObserveEntity(EntityUid user, EntityUid target, TutorialTrackerComponent tracker)
     {
         if (!ShouldObserveEntity(target, tracker))
@@ -311,6 +322,9 @@ public abstract class SharedTutorialSystem : EntitySystem
             k.Key.EndsWith(EventListenedConditionKeys.ObserveSuffix, StringComparison.Ordinal));
     }
 
+    /// <summary>
+    /// Gets the currently active step prototype for a tutorial player.
+    /// </summary>
     public bool TryGetCurrentStep(Entity<TutorialPlayerComponent> ent, [NotNullWhen(true)] out TutorialStepPrototype? step)
     {
         step = null;
@@ -324,6 +338,9 @@ public abstract class SharedTutorialSystem : EntitySystem
         return _proto.TryIndex(sequence.Steps[ent.Comp.StepIndex], out step);
     }
 
+    /// <summary>
+    /// Tries to resolve an entity's prototype ID for condition target matching.
+    /// </summary>
     public bool TryGetPrototypeId(EntityUid? uid, out EntProtoId protoId)
     {
         protoId = default;
@@ -404,6 +421,9 @@ public abstract class SharedTutorialSystem : EntitySystem
         return best;
     }
 
+    /// <summary>
+    /// Updates side-specific time counter state for a tutorial session.
+    /// </summary>
     protected virtual void UpdateTimeCounter(Entity<TutorialPlayerComponent> ent, TimeSpan? endTime)
     {
     }

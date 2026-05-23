@@ -5,6 +5,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records examine events performed by tutorial players on observed entities.
+/// </summary>
 public sealed partial class ExamineListenedConditionSystem : EventListenedConditionSystemBase<ExamineListenedCondition>
 {
     public override void Initialize()

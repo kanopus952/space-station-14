@@ -12,6 +12,9 @@ using Content.Shared._Sunrise.Tutorial.Events;
 
 namespace Content.Client._Sunrise.Tutorial.ProgressBar;
 
+/// <summary>
+/// Client-side system that attaches tutorial progress bars to the active in-game viewport.
+/// </summary>
 public sealed class TutorialProgressBarSystem : EntitySystem
 {
     [Dependency] private readonly IPlayerManager _player = default!;
@@ -52,6 +55,8 @@ public sealed class TutorialProgressBarSystem : EntitySystem
             return;
         }
 
+        // The viewport controls are recreated with the screen, so refresh on the
+        // next frame after the new InGameScreen is active.
         _pendingRefresh = true;
     }
 

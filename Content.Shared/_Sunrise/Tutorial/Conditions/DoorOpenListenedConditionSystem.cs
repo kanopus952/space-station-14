@@ -3,6 +3,9 @@ using Content.Shared.Doors;
 
 namespace Content.Shared._Sunrise.Tutorial.Conditions;
 
+/// <summary>
+/// Records successful door opening attempts made by observed tutorial players.
+/// </summary>
 public sealed partial class DoorOpenListenedConditionSystem : EventListenedConditionSystemBase<DoorOpenListenedCondition>
 {
     public override void Initialize()
