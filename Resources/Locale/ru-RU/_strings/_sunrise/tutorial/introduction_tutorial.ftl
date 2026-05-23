@@ -9,6 +9,8 @@ tutorial-base-step-examine-tts = Отлично! Начнем с осмотра 
 tutorial-base-step-pickup-bubble = Поднимите предмет.
 tutorial-base-step-pickup-chat = Поднимите предмет, чтобы взять его в руку.
 tutorial-base-step-pickup-tts = Поднимите предмет, чтобы взять его в руку.
+tutorial-base-step-activate-action-chat = Активируйте кнопку с текстурой на панели кнопок (слева или сверху).
+tutorial-base-step-activate-action-tts = Активируйте акшен.
 tutorial-base-step-use-bubble = Используйте предмет в руке. Нажмите [tutkeybind="UseItemInHand"].
 tutorial-base-step-use-chat = Теперь используйте предмет в руке.
 tutorial-base-step-use-tts = Теперь используйте предмет в руке.
@@ -117,7 +119,7 @@ intro-tut-go-range-bubble = Двигайтесь к тренировочному
 intro-tut-go-range-chat = Впереди тренировочный полигон. Пора поупражняться.
 intro-tut-go-range-tts = Впереди тренировочный полигон. Пора поупражняться.
 
-intro-tut-try-open-bolted-bubble = Попробуйте открыть шлюз [tutkeybind="ActivateItemInWorld"].
+intro-tut-try-open-bolted-bubble = Попробуйте открыть шлюз [tutkeybind="UIClick"].
 intro-tut-try-open-bolted-chat = Дверь заблокирована болтами! Нужно снять блокировку.
 intro-tut-try-open-bolted-tts = Дверь заблокирована болтами! Нужно снять блокировку.
 
@@ -128,6 +130,10 @@ intro-tut-press-button-tts = Эта кнопка снимет блокировк
 intro-tut-pickup-pistol-bubble = Возьмите тренировочный лазерный пистолет [tutkeybind="UIClick"].
 intro-tut-pickup-pistol-chat = Отличный шанс попрактиковаться в стрельбе. Возьмите пистолет!
 intro-tut-pickup-pistol-tts = Отличный шанс попрактиковаться в стрельбе. Возьмите пистолет!
+
+intro-tut-combat-mode-bubble = Войдите в боевой режим, нажав [tutkeybind="Num1"] (цифру 1).
+intro-tut-combat-mode-chat = Для атаки оружием нужно войти в боевой режим. Нажмите на цифру 1.
+intro-tut-combat-mode-tts = Для атаки оружием нужно войти в боевой режим. Нажмите на цифру 1.
 
 intro-tut-shoot-bubble = Выстрелите по мишеням 3 раза [tutkeybind="UIClick"] по цели.
 intro-tut-shoot-chat = Прицельтесь по мишеням и откройте огонь!

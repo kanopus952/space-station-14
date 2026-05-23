@@ -25,6 +25,17 @@
   conditions:
   - !type:PickupListenedCondition
 
+# Steps where the player picks up an item from the world.
+- type: tutorialStep
+  id: BaseTutorialActivateAction
+  parent: BaseTutorialStepBase
+  abstract: true
+  chatMessage: tutorial-base-step-activate-action-chat
+  ttsMessage: tutorial-base-step-pickup-tts
+  conditions:
+  - !type:ActivateActionListenedCondition
+
+
 # Steps where the player equips an item into a clothing slot.
 - type: tutorialStep
   id: BaseTutorialEquipStepBase

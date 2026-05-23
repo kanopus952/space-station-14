@@ -61,11 +61,13 @@
   - IntroTutStoreFlashlight
   # 27. Pick up the practice pistol
   - IntroTutPickupPistol
-  # 28. Shoot targets
+  # 28. Pick up the practice pistol
+  - IntroTutActivateBattleMode
+  # 29. Shoot targets
   - IntroTutShoot
-  # 29. Pick up the knife
+  # 30. Pick up the knife
   - IntroTutPickupKnife
-  # 30. Attack the clown target
+  # 31. Attack the clown target
   - IntroTutAttackClown
 
 
@@ -464,7 +466,19 @@
   - !type:PickupListenedCondition
     target: WeaponDisablerPractice
 
-# 28. Shoot at the targets (3 shots)
+# 28. Pick up the practice laser pistol
+- type: tutorialStep
+  id: IntroTutActivateBattleMode
+  parent: BaseTutorialActivateAction
+  bubble:
+    text: intro-tut-combat-mode-bubble
+  chatMessage: intro-tut-combat-mode-chat
+  ttsMessage: intro-tut-combat-mode-tts
+  conditions:
+  - !type:ActivateActionListenedCondition
+    target: ActionCombatModeToggle
+
+# 29. Shoot at the targets (3 shots)
 - type: tutorialStep
   id: IntroTutShoot
   parent: BaseTutorialStepBase
@@ -479,7 +493,7 @@
   - !type:GunShotListenedCondition
     count: 3
 
-# 29. Pick up the survival knife
+# 30. Pick up the survival knife
 - type: tutorialStep
   id: IntroTutPickupKnife
   parent: BaseTutorialPickupStepBase
@@ -494,7 +508,7 @@
   - !type:PickupListenedCondition
     target: SurvivalKnife
 
-# 30. Attack the clown target with the knife
+# 31. Attack the clown target with the knife
 - type: tutorialStep
   id: IntroTutAttackClown
   parent: BaseTutorialAttackStepBase

@@ -2131,6 +2131,65 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return true;
         }
 
+        public async Task<List<TutorialCompletionMetrics>> GetTutorialCompletionMetricsAsync(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+            var isSqlite = db.DbContext.Database.ProviderName?.Contains("Sqlite") == true;
+
+            if (isSqlite)
+            {
+                var metrics = await db.DbContext.TutorialCompletions
+                    .AsNoTracking()
+                    .GroupBy(completion => completion.TutorialId)
+                    .Select(group => new
+                    {
+                        TutorialId = group.Key,
+                        CompletedPlayers = group.Count(),
+                        CompletionCount = group.Sum(completion => completion.CompletionCount),
+                        AccountAgeSamples = group.Count(completion => completion.AccountAgeDays != null),
+                        AverageAccountAgeDays = group.Average(completion => completion.AccountAgeDays)
+                    })
+                    .ToListAsync(cancellationToken: cancel);
+
+                var lastCompletedAt = await db.DbContext.TutorialCompletions
+                    .AsNoTracking()
+                    .Select(completion => new
+                    {
+                        completion.TutorialId,
+                        completion.CompletedAt
+                    })
+                    .ToListAsync(cancellationToken: cancel);
+
+                var lastCompletedAtByTutorial = lastCompletedAt
+                    .GroupBy(completion => completion.TutorialId)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Max(completion => completion.CompletedAt));
+
+                return metrics
+                    .Select(metric => new TutorialCompletionMetrics(
+                        metric.TutorialId,
+                        metric.CompletedPlayers,
+                        metric.CompletionCount,
+                        metric.AccountAgeSamples,
+                        metric.AverageAccountAgeDays,
+                        lastCompletedAtByTutorial[metric.TutorialId]))
+                    .ToList();
+            }
+
+            return await db.DbContext.TutorialCompletions
+                .AsNoTracking()
+                .GroupBy(w => w.TutorialId)
+                .Select(group => new TutorialCompletionMetrics(
+                    group.Key,
+                    group.Count(),
+                    group.Sum(w => w.CompletionCount),
+                    group.Count(w => w.AccountAgeDays != null),
+                    group.Average(w => w.AccountAgeDays),
+                    group.Max(w => w.CompletedAt)))
+                .ToListAsync(cancellationToken: cancel);
+        }
+
         public async Task<int> PruneInvalidTutorialCompletionsAsync(IEnumerable<string> validTutorialIds, CancellationToken cancel = default)
         {
             await using var db = await GetDb(cancel);

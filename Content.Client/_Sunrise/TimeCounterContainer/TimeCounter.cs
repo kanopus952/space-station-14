@@ -46,12 +46,35 @@ public sealed partial class TimeCounter : PanelContainer
         CounterLabel.ShadowOffsetYOverride = _style.ShadowOffsetY;
 
         if (position != null)
-            LayoutContainer.SetPosition(this, position.Value);
+            SetPosition(position.Value, _style.Centered);
     }
 
     public void SetPosition(Vector2 position)
     {
+        SetPosition(position, centered: false);
+    }
+
+    public void SetPosition(Vector2 position, bool centered)
+    {
+        LayoutContainer.SetAnchorPreset(this, LayoutContainer.LayoutPreset.TopLeft);
+        LayoutContainer.SetGrowHorizontal(this, centered
+            ? LayoutContainer.GrowDirection.Both
+            : LayoutContainer.GrowDirection.End);
+        LayoutContainer.SetGrowVertical(this, centered
+            ? LayoutContainer.GrowDirection.Both
+            : LayoutContainer.GrowDirection.End);
         LayoutContainer.SetPosition(this, position);
+    }
+
+    public void SetTopCenter()
+    {
+        LayoutContainer.SetAnchorPreset(this, LayoutContainer.LayoutPreset.CenterTop);
+        LayoutContainer.SetGrowHorizontal(this, LayoutContainer.GrowDirection.Both);
+        LayoutContainer.SetGrowVertical(this, LayoutContainer.GrowDirection.End);
+        LayoutContainer.SetMarginLeft(this, 0f);
+        LayoutContainer.SetMarginRight(this, 0f);
+        LayoutContainer.SetMarginTop(this, 1f);
+        LayoutContainer.SetMarginBottom(this, 0f);
     }
 
     protected override void FrameUpdate(FrameEventArgs args)

@@ -1,8 +1,5 @@
-using System.Numerics;
-using Content.Client.Viewport;
 using Content.Client._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components;
-using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Content.Client._Sunrise.TimeCounterContainer;
 using Content.Client.UserInterface.Screens;
@@ -14,12 +11,11 @@ namespace Content.Client._Sunrise.Tutorial;
 public sealed class TimeCounterSystem : EntitySystem
 {
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
     private EntityQuery<TimeCounterUiComponent> _timeCounterUiQuery;
     private LayoutContainer _timeCounterRoot = default!;
     /// <summary>
-    /// Why? The scaling viewport is not initialized after OnScreenChanged.
-    /// Soo we have to wait
+    /// Why? The in-game screen hierarchy is recreated after OnScreenChanged.
+    /// Soo we have to wait one frame before reattaching controls.
     /// </summary>
     private bool _pendingRefresh;
     public override void Initialize()
@@ -94,14 +90,7 @@ public sealed class TimeCounterSystem : EntitySystem
         if (_ui.ActiveScreen is not InGameScreen)
             return;
 
-        if (_eye.MainViewport is not ScalingViewport vp)
-            return;
-
         var viewportContainer = _ui.ActiveScreen.FindControl<LayoutContainer>("ViewportContainer");
-
-        var screenSize = vp.SizeBox;
-
-        var position = ent.Comp.ScreenPosition ?? new Vector2(screenSize.Center.X, 1);
 
         var style = new TimeCounterStyle
         {
@@ -119,7 +108,12 @@ public sealed class TimeCounterSystem : EntitySystem
         if (_timeCounterUiQuery.TryGetComponent(ent.Owner, out var timeUi) && timeUi.Counter != null)
             timeUi.Counter.Orphan();
 
-        var counter = new TimeCounter(ent.Comp.EndTime, style, position);
+        var counter = new TimeCounter(ent.Comp.EndTime, style);
+        if (ent.Comp.ScreenPosition is { } position)
+            counter.SetPosition(position, ent.Comp.Centered);
+        else
+            counter.SetTopCenter();
+
         SetTimeCounterRoot(viewportContainer, counter);
         var counterUi = EnsureComp<TimeCounterUiComponent>(ent.Owner);
         counterUi.Counter = counter;
@@ -174,9 +168,6 @@ public sealed class TimeCounterSystem : EntitySystem
             return;
 
         if (_ui.ActiveScreen is not InGameScreen)
-            return;
-
-        if (_eye.MainViewport is not ScalingViewport)
             return;
 
         _pendingRefresh = false;

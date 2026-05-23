@@ -14,8 +14,11 @@ using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared.Chat;
+using Content.Shared.GameTicking;
 using Content.Shared.Mind;
+using Robust.Shared.Enums;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
@@ -45,13 +48,20 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly UserDbDataManager _userDb = default!;
     private EntityUid? _tutorialMap;
     private readonly Dictionary<ICommonSession, TutorialCompletionEui> _completionEuis = new();
     private readonly Dictionary<NetUserId, int> _tutorialTtsRevisions = new();
+    private readonly HashSet<NetUserId> _pendingCompletionRespawns = [];
+
     public override void Initialize()
     {
         base.Initialize();
 
+        _player.PlayerStatusChanged += OnPlayerStatusChanged;
+        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepChangedEvent>(OnStepChanged);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialStepsCompletedEvent>(OnStepsCompleted);
         SubscribeLocalEvent<TutorialPlayerComponent, TutorialEndedEvent>(OnTutorialComplete);
@@ -59,6 +69,39 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SubscribeNetworkEvent<TutorialQuitRequestEvent>(OnTutorialQuitRequest);
         SubscribeNetworkEvent<TutorialStartRequestEvent>(OnStartRequest);
         SubscribeNetworkEvent<TutorialWindowDataRequestEvent>(OnWindowDataRequest);
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+
+        _player.PlayerStatusChanged -= OnPlayerStatusChanged;
+        _pendingCompletionRespawns.Clear();
+        _completionEuis.Clear();
+        _tutorialTtsRevisions.Clear();
+    }
+
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
+    {
+        if (args.NewStatus != SessionStatus.Disconnected)
+            return;
+
+        TryQueueCompletedTutorialRespawn(args.Session);
+    }
+
+    private void OnPlayerAttached(PlayerAttachedEvent args)
+    {
+        SchedulePendingRespawnAfterAttach(args.Player);
+    }
+
+    private void OnRoundEnd(RoundEndMessageEvent args)
+    {
+        _pendingCompletionRespawns.Clear();
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
+    {
+        _pendingCompletionRespawns.Clear();
     }
 
     private void OnExpandPvs(Entity<TutorialPlayerComponent> ent, ref ExpandPvsEvent args)
@@ -76,8 +119,17 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private void OnStepsCompleted(Entity<TutorialPlayerComponent> ent, ref TutorialStepsCompletedEvent args)
     {
-        if (!_player.TryGetSessionByEntity(ent, out var session))
+        if (!_player.TryGetSessionByEntity(ent, out var session) || session.Status != SessionStatus.InGame)
+        {
+            if (TryGetTutorialUserId(ent, out var userId))
+            {
+                SaveTutorialCompletion(userId, ent.Comp.SequenceId);
+                QueueRespawnAfterTutorialCompletion(userId);
+                EndTutorial(ent);
+            }
+
             return;
+        }
 
         StopTutorialTts(session);
         SaveTutorialCompletion(session.UserId, ent.Comp.SequenceId);
@@ -86,15 +138,114 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private void OnTutorialComplete(Entity<TutorialPlayerComponent> ent, ref TutorialEndedEvent args)
     {
-        if (!_player.TryGetSessionByEntity(ent, out var session))
-            return;
+        var hasUserId = TryGetTutorialUserId(ent, out var userId);
 
-        StopTutorialTts(session);
-        CloseCompletionEui(session);
         QueueDel(ent.Comp.Grid);
         QueueDel(ent);
 
+        if (!_player.TryGetSessionByEntity(ent, out var session) || session.Status != SessionStatus.InGame)
+        {
+            if (hasUserId)
+                QueueRespawnAfterTutorialCompletion(userId);
+
+            return;
+        }
+
+        RespawnAfterTutorialCompletion(session);
+    }
+
+    private void RespawnAfterTutorialCompletion(ICommonSession session)
+    {
+        _pendingCompletionRespawns.Remove(session.UserId);
+        StopTutorialTts(session);
+        CloseCompletionEui(session);
         _ticker.Respawn(session);
+    }
+
+    private bool TryRespawnAfterTutorialCompletion(ICommonSession session)
+    {
+        if (!CanRespawnAfterTutorialCompletion(session))
+            return false;
+
+        RespawnAfterTutorialCompletion(session);
+        return true;
+    }
+
+    private void SchedulePendingRespawnAfterAttach(ICommonSession session)
+    {
+        if (!_pendingCompletionRespawns.Contains(session.UserId))
+            return;
+
+        RespawnAfterTutorialCompletionWhenReady(session);
+    }
+
+    private async void RespawnAfterTutorialCompletionWhenReady(ICommonSession session)
+    {
+        if (!CanRespawnAfterTutorialCompletion(session))
+            return;
+
+        // When respawn, we have to wait for DB
+        try
+        {
+            await _userDb.WaitLoadComplete(session);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
+        TryRespawnAfterTutorialCompletion(session);
+    }
+
+    private bool CanRespawnAfterTutorialCompletion(ICommonSession session)
+    {
+        return session.Status == SessionStatus.InGame &&
+               _pendingCompletionRespawns.Contains(session.UserId);
+    }
+
+    private void QueueRespawnAfterTutorialCompletion(NetUserId userId)
+    {
+        _pendingCompletionRespawns.Add(userId);
+    }
+
+    private bool TryQueueCompletedTutorialRespawn(ICommonSession session)
+    {
+        if (session.AttachedEntity is not { } uid)
+            return false;
+
+        if (!TryComp(uid, out TutorialPlayerComponent? comp))
+            return false;
+
+        if (!comp.TutorialInitialized || !IsTutorialStepsCompleted((uid, comp)))
+            return false;
+
+        QueueRespawnAfterTutorialCompletion(session.UserId);
+        EndTutorial((uid, comp));
+        return true;
+    }
+
+    private bool IsTutorialStepsCompleted(Entity<TutorialPlayerComponent> ent)
+    {
+        return _proto.TryIndex(ent.Comp.SequenceId, out var sequence) &&
+               ent.Comp.StepIndex >= sequence.Steps.Count;
+    }
+
+    private bool TryGetTutorialUserId(EntityUid uid, out NetUserId userId)
+    {
+        if (_player.TryGetSessionByEntity(uid, out var session))
+        {
+            userId = session.UserId;
+            return true;
+        }
+
+        if (_mind.TryGetMind(uid, out _, out var mind) && mind.UserId is { } mindUserId)
+        {
+            userId = mindUserId;
+            return true;
+        }
+
+        userId = default;
+        return false;
     }
 
     private async void SaveTutorialCompletion(NetUserId userId, ProtoId<TutorialSequencePrototype> sequenceId)
@@ -322,6 +473,9 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     private async Task<byte[]?> GenerateTtsForTutorial(string text, TTSVoicePrototype voicePrototype)
     {
+        if (!_cfg.GetCVar(SunriseCCVars.TTSEnabled))
+            return null;
+
         try
         {
             return await _tts.GenerateTTS(text, voicePrototype, null);
