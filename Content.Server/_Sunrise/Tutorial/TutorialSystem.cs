@@ -406,7 +406,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     {
         reason = string.Empty;
 
-        if (session.AttachedEntity is { } ent && HasComp<TutorialPlayerComponent>(ent))
+        if (session.AttachedEntity != null)
             return false;
 
         var cooldown = _cooldownData.GetValueOrDefault(session.UserId);
