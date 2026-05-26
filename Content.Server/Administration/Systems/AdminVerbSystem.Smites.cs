@@ -1,9 +1,6 @@
+using System.Linq;
 using System.Numerics;
 using System.Threading;
-using System.Numerics;
-using System.Threading;
-using Content.Server.Administration.Logs;
-using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Systems;
 using Content.Server.Electrocution;
@@ -16,33 +13,29 @@ using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Server.Roles;
 using Content.Server.Speech.Components;
+using Content.Shared.Speech.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Tabletop;
 using Content.Server.Tabletop.Components;
 using Content.Shared.Actions;
-using Content.Server.Terminator.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Components;
 using Content.Shared.Administration.Systems;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Part;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clumsy;
 using Content.Shared.Cluwne;
-using Content.Shared.Coordinates;
 using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Electrocution;
 using Content.Shared.Gibbing;
 using Content.Shared.Gravity;
-using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Medical;
-using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -68,6 +61,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 using Robust.Shared.Utility;
 using Timer = Robust.Shared.Timing.Timer;
+using Content.Shared.Body.Part;
+using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
 
 namespace Content.Server.Administration.Systems;
@@ -97,7 +92,6 @@ public sealed partial class AdminVerbSystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly RoleSystem _role = default!;
     [Dependency] private readonly TabletopSystem _tabletopSystem = default!;
-    [Dependency] private readonly TerminatorSystem _terminator = default!;
     [Dependency] private readonly VomitSystem _vomitSystem = default!;
     [Dependency] private readonly WeldableSystem _weldableSystem = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
@@ -106,7 +100,6 @@ public sealed partial class AdminVerbSystem
     [Dependency] private readonly SlipperySystem _slipperySystem = default!;
     [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogManager = default!;
 
     private static int _lastTestedEventIndex = 0;
 
@@ -1101,134 +1094,5 @@ public sealed partial class AdminVerbSystem
 
         if (TryComp<TimedDespawnComponent>(rod, out var despawn))
             despawn.Lifetime = offset.Length() / speed * 3; // exists thrice as long as it takes to get to you.
-    }
-
-    public void RandomDeath(EntityUid target)
-    {
-        var badEvents = new List<Action<EntityUid>>
-        {
-            VomitToDeath,
-            BluespaceAway,
-            BleedOut,
-            Irradiate,
-            Scorched,
-            Shock,
-        };
-
-        var random = new Random();
-        var randomEvent = badEvents[random.Next(badEvents.Count)];
-        randomEvent(target);
-    }
-
-    private FixedPoint2 GetDamageToKill(EntityUid target)
-    {
-        var random = new Random();
-        var multiplier = (float)(random.NextDouble() * 6.0 + 4.0); // Random float between 4.0 and 10.0
-        var damageToKill = _mobThresholdSystem.TryGetThresholdForState(target, MobState.Dead, out var deadThreshold)
-            ? deadThreshold.Value * multiplier
-            : FixedPoint2.New(100);
-        return FixedPoint2.New((int)Math.Round(damageToKill.Float(), MidpointRounding.AwayFromZero));
-    }
-
-    private void Irradiate(EntityUid target)
-    {
-        _popupSystem.PopupEntity("3.6 roentgen, not great, not terrible...", target, target, PopupType.LargeCaution);
-        var damageSpecifier = new DamageSpecifier()
-        {
-            DamageDict = new Dictionary<string, FixedPoint2>
-            {
-                { "Radiation", GetDamageToKill(target) }
-            }
-        };
-        _damageable.SetDamage(target, damageSpecifier);
-    }
-
-    private void Scorched(EntityUid target)
-    {
-        if (TryComp<FlammableComponent>(target, out var flammable))
-        {
-            // Popup message to notify the target
-            _popupSystem.PopupEntity("You smell gas, Smoking kills...", target, target, PopupType.LargeCaution);
-
-            // Ignite the target
-            flammable.FireStacks = 3;
-            _flammableSystem.Ignite(target, target);
-
-            // Wait for a couple of seconds before applying the damage
-            Timer.Spawn(TimeSpan.FromSeconds(2), () =>
-            {
-                // Apply heat damage after the delay
-                var damageSpecifier = new DamageSpecifier()
-                {
-                    DamageDict = new Dictionary<string, FixedPoint2>
-                    {
-                        { "Heat", GetDamageToKill(target) - 50 }
-                    }
-                };
-                _damageable.SetDamage(target, damageSpecifier);
-            });
-        }
-    }
-
-    private void Shock(EntityUid target)
-    {
-        _popupSystem.PopupEntity("You trip on a loose wire...", target, target, PopupType.LargeCaution);
-        var damageToKill = GetDamageToKill(target);
-        _electrocutionSystem.TryDoElectrocution(target,
-            null,
-            (int) damageToKill,
-            TimeSpan.FromSeconds(30),
-            refresh: true,
-            ignoreInsulation: true);
-    }
-
-    private void VomitToDeath(EntityUid target)
-    {
-        _popupSystem.PopupEntity("You start vomiting uncontrollably...", target, target, PopupType.LargeCaution);
-        _vomitSystem.Vomit(target, -1000, -1000);
-        var damageSpecifier = new DamageSpecifier()
-        {
-            DamageDict = new Dictionary<string, FixedPoint2>
-            {
-                { "Toxin", GetDamageToKill(target) }
-            }
-        };
-        _damageable.SetDamage(target, damageSpecifier);
-    }
-
-    private void BluespaceAway(EntityUid target)
-    {
-        // Notify the player about the teleportation
-        _popupSystem.PopupEntity("You feel a strange sensation as you are teleported away...", target, target, PopupType.LargeCaution);
-
-        // Get the current position of the target
-        var currentCoordinates = _transformSystem.GetMapCoordinates(target);
-
-        // Spawn the bluespace effect at the current location
-        var bluespaceEffect = "EffectFlashBluespace"; // Replace with the actual prototype ID
-        Spawn(bluespaceEffect, currentCoordinates);
-
-        // Trigger the explosion after teleportation
-        EntityManager.QueueDeleteEntity(target);
-    }
-
-    private void BleedOut(EntityUid target)
-    {
-        _popupSystem.PopupEntity("You start bleeding profusely...", target, target, PopupType.LargeCaution);
-
-        if (TryComp<BloodstreamComponent>(target, out var bloodstream))
-        {
-            _bloodstreamSystem.SpillAllSolutions((target, bloodstream));
-        }
-
-        var damageSpecifier = new DamageSpecifier()
-        {
-            DamageDict = new Dictionary<string, FixedPoint2>
-            {
-                { "Slash", GetDamageToKill(target) }
-            }
-        };
-
-        _damageable.SetDamage(target, damageSpecifier);
     }
 }

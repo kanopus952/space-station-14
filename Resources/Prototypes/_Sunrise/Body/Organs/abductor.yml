@@ -1,5 +1,5 @@
 - type: entity
-  id: BaseAbductorOrganUnGibbable
+  id: BaseAbductorOrgan
   parent: BaseItem
   abstract: true
   components:
@@ -27,15 +27,8 @@
       - Meat
 
 - type: entity
-  id: BaseAbductorOrgan
-  parent: BaseAbductorOrganUnGibbable
-  abstract: true
-  components:
-  - type: Gibbable
-
-- type: entity
   id: OrganAbductorBrain
-  parent: [BaseAbductorOrganUnGibbable, BaseOrganBrain]
+  parent: [BaseAbductorOrgan, BaseOrganBrain]
   name: brain
   description: "The source of incredible, unending intelligence. Honk."
   components:

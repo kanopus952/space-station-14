@@ -1,6 +1,6 @@
 # © SUNRISE, An EULA/CLA with a hosting restriction, full text: https://github.com/space-sunrise/space-station-14/blob/master/CLA.txt
 - type: entity
-  id: BaseHumanoidXenoOrganUnGibbable
+  id: BaseHumanoidXenoOrgan
   parent: BaseItem
   abstract: true
   components:
@@ -26,13 +26,6 @@
   - type: Tag
     tags:
       - Meat
-
-- type: entity
-  id: BaseHumanoidXenoOrgan
-  parent: BaseHumanoidXenoOrganUnGibbable
-  abstract: true
-  components:
-  - type: Gibbable
 
 - type: entity
   id: OrganHumanoidXenoBrain

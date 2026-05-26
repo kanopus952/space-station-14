@@ -35,6 +35,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Numerics;
 using Robust.Shared.Maths;
+using Content.Shared.Gibbing;
 
 namespace Content.Server._Sunrise.Boss.Systems;
 
