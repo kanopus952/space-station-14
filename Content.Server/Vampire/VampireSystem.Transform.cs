@@ -69,27 +69,6 @@ public sealed partial class VampireSystem
                 reactive.ReactiveGroups.Add("Unholy", new() { ReactionMethod.Touch });
             }
         }
-
-        if (!TryComp<BodyComponent>(vampire, out var bodyComponent))
-            return;
-
-        //Add vampire and bloodsucker to all metabolizing organs
-        //And restrict diet to Pills (and liquids)
-        foreach (var organ in _body.GetBodyOrgans(vampire, bodyComponent))
-        {
-            if (TryComp<MetabolizerComponent>(organ.Id, out var metabolizer))
-            {
-                if (TryComp<StomachComponent>(organ.Id, out var stomachComponent))
-                {
-                    //Override the stomach, prevents humans getting sick when ingesting blood
-                    _metabolism.ClearMetabolizerTypes(metabolizer);
-                    _stomach.SetSpecialDigestible(stomachComponent, VampireComponent.AcceptableFoods);
-                }
-
-                _metabolism.TryAddMetabolizerType(metabolizer, VampireComponent.MetabolizerVampire);
-                _metabolism.TryAddMetabolizerType(metabolizer, VampireComponent.MetabolizerBloodsucker);
-            }
-        }
     }
 
     public void AddStartingAbilities(EntityUid vampire)
@@ -127,18 +106,6 @@ public sealed partial class VampireSystem
     //Remove weakeness to holy items
     private void MakeImmuneToHoly(EntityUid vampire)
     {
-        if (!TryComp<BodyComponent>(vampire, out var bodyComponent))
-            return;
-
-        //Add vampire and bloodsucker to all metabolizing organs
-        //And restrict diet to Pills (and liquids)
-        foreach (var organ in _body.GetBodyOrgans(vampire, bodyComponent))
-        {
-            if (TryComp<MetabolizerComponent>(organ.Id, out var metabolizer))
-            {
-                _metabolism.TryRemoveMetabolizerType(metabolizer, VampireComponent.MetabolizerVampire);
-            }
-        }
 
         if (TryComp<ReactiveComponent>(vampire, out var reactive))
         {

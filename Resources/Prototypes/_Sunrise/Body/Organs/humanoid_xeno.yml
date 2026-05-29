@@ -29,7 +29,7 @@
 
 - type: entity
   id: OrganHumanoidXenoBrain
-  parent: [BaseHumanoidXenoOrgan, BaseOrganBrain]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseBrain]
   name: brain
   description: The nexus of the alien mind. Thoughts you don't want to know.
   components:
@@ -63,7 +63,7 @@
 
 - type: entity
   id: OrganHumanoidXenoTongue
-  parent: [BaseHumanoidXenoOrgan, BaseOrganTongue]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseTongue]
   name: tongue
   description: Long and flexible.
   components:
@@ -72,7 +72,7 @@
 
 - type: entity
   id: OrganHumanoidXenoAppendix
-  parent: [BaseHumanoidXenoOrgan, BaseOrganAppendix]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseAppendix]
   name: appendix
   description: An evolutionary greeting from the past.
   components:
@@ -84,7 +84,7 @@
 
 - type: entity
   id: OrganHumanoidXenoEars
-  parent: [BaseHumanoidXenoOrgan, BaseOrganEars]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseEars]
   name: ears
   description: Ultra-sensitive locators. Hear your fears.
   components:
@@ -93,7 +93,7 @@
 
 - type: entity
   id: OrganHumanoidXenoLungs
-  parent: [BaseHumanoidXenoOrgan, BaseOrganLungs]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseLungs]
   name: lungs
   description: They filter oxygen from the atmosphere and channel it into the bloodstream, where it is used as an electron carrier.
   components:
@@ -120,7 +120,7 @@
 
 - type: entity
   id: OrganHumanoidXenoHeart
-  parent: [BaseHumanoidXenoOrgan, BaseOrganHeart]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseHeart]
   name: xenomorph heart
   description: A powerful organ that pumps acidic blood through tough tissues and provides incredible stamina and strength to every xenomorph.
   components:
@@ -136,7 +136,7 @@
 
 - type: entity
   id: OrganHumanoidXenoStomach
-  parent: [BaseHumanoidXenoOrgan, BaseOrganStomach]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseStomach]
   name: stomach
   description: A voracious pit.
   components:
@@ -161,7 +161,7 @@
 
 - type: entity
   id: OrganHumanoidXenoLiver
-  parent: [BaseHumanoidXenoOrgan, BaseOrganLiver]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseLiver]
   name: liver
   description: A powerful detoxifier that neutralizes dangerous substances with ease.
   components:
@@ -176,7 +176,7 @@
 
 - type: entity
   id: OrganHumanoidXenoKidneys
-  parent: [BaseHumanoidXenoOrgan, BaseOrganKidneys]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseKidneys]
   name: kidneys
   description: Paired filters, ruthlessly taking out anything superfluous.
   components:
@@ -191,7 +191,7 @@
 
 - type: entity
   id: OrganHumanoidXenoEyes
-  parent: [BaseHumanoidXenoOrgan, BaseOrganEyes]
+  parent: [BaseHumanoidXenoOrgan, SunriseOrganBaseEyes]
   name: eyes
   description: Eyes. They see
   components:

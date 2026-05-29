@@ -31,6 +31,11 @@
           32:
             sprite: Mobs/Species/Moth/displacement.rsi
             state: shoes
+      socks:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Moth/displacement.rsi
+            state: shoes
     displacements:
       jumpsuit:
         sizeMaps:
@@ -53,6 +58,11 @@
             sprite: Mobs/Species/Moth/displacement.rsi
             state: hand
       shoes:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Moth/displacement.rsi
+            state: shoes
+      socks:
         sizeMaps:
           32:
             sprite: Mobs/Species/Moth/displacement.rsi
@@ -83,6 +93,8 @@
         - id: OrganMothKidneys
   - type: HumanoidAppearance
     species: Moth
+    hideLayersOnEquip:
+    - HeadTop
 
 - type: entity
   parent:
@@ -91,6 +103,7 @@
   id: MobMoth
   name: Urist McFluff
   components:
+  - type: Interactions
   - type: Damageable
     damageModifierSet: Moth
   - type: ZombieAccentOverride
@@ -100,6 +113,11 @@
     allowedEmotes: ['Chitter', 'Squeak']
   - type: TypingIndicator
     proto: moth
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeat
+      amount: 5
   - type: Bloodstream
     bloodReferenceSolution:
       reagents:
@@ -143,6 +161,7 @@
       289: 0.9
       275: 0.8
       250: 0.7
+  - type: FootprintEmitter
 
 - type: entity
   parent: OrganBase

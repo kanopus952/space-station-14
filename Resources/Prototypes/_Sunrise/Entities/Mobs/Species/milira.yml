@@ -1,7 +1,37 @@
 - type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceMilira
+  name: milira appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoMilira
+        - id: HeadMilira
+        - id: LeftArmMilira
+        - id: RightArmMilira
+        - id: LeftHandMilira
+        - id: RightHandMilira
+        - id: LeftLegMilira
+        - id: RightLegMilira
+        - id: LeftFootMilira
+        - id: RightFootMilira
+        - id: OrganHumanBrain
+        - id: OrganHumanEyes
+        - id: OrganHumanTongue
+        - id: OrganHumanHeart
+        - id: OrganHumanLungs
+        - id: OrganHumanStomach
+        - id: OrganHumanLiver
+        - id: OrganHumanKidneys
+
+- type: entity
   save: false
   name: Urist McMilira
-  parent: BaseMobSpeciesOrganic
+  parent:
+  - AppearanceMilira
+  - BaseSpeciesMobOrganic
   id: BaseMobMilira
   abstract: true
   components:
@@ -39,9 +69,6 @@
       amount: 5
   - type: HumanoidAppearance
     species: Milira
-  - type: Body
-    prototype: Milira
-    requiredLegs: 2
   - type: Temperature
     currentTemperature: 310.15
     specificHeat: 42
@@ -74,7 +101,7 @@
 
 - type: entity
   save: false
-  parent: MobHumanDummy
+  parent: AppearanceMilira
   id: MobMiliraDummy
   categories: [ HideSpawnMenu ]
   description: A dummy milira meant to be used in character setup.

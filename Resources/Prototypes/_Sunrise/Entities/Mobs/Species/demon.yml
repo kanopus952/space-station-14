@@ -1,7 +1,37 @@
 - type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceDemon
+  name: demon appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoDemon
+        - id: HeadDemon
+        - id: LeftArmDemon
+        - id: RightArmDemon
+        - id: LeftHandDemon
+        - id: RightHandDemon
+        - id: LeftLegDemon
+        - id: RightLegDemon
+        - id: LeftFootDemon
+        - id: RightFootDemon
+        - id: OrganHumanBrain
+        - id: OrganHumanEyes
+        - id: OrganHumanTongue
+        - id: OrganAnimalHeart
+        - id: OrganHumanLungs
+        - id: OrganDemonStomach
+        - id: OrganAnimalLiver
+        - id: OrganHumanKidneys
+
+- type: entity
   save: false
   name: Urisst' Mzhand Demon
-  parent: BaseMobSpeciesOrganic
+  parent:
+  - AppearanceDemon
+  - BaseSpeciesMobOrganic
   id: BaseMobDemon
   abstract: true
   components:
@@ -21,9 +51,6 @@
     netsync: false
     noRot: true
     drawdepth: Mobs
-  - type: Body
-    prototype: Demon
-    requiredLegs: 2
   - type: Butcherable
     butcheringType: Spike
     spawned:
@@ -75,7 +102,7 @@
 - type: entity
   save: false
   name: Urist McHands
-  parent: MobHumanDummy
+  parent: AppearanceDemon
   id: MobDemonDummy
   categories: [ HideSpawnMenu ]
   description: A dummy reptilian meant to be used in character setup.

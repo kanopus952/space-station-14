@@ -1,10 +1,38 @@
 - type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceAbductor
+  name: abductor appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoAbductor
+        - id: HeadAbductor
+        - id: LeftArmAbductor
+        - id: RightArmAbductor
+        - id: LeftHandAbductor
+        - id: RightHandAbductor
+        - id: LeftLegAbductor
+        - id: RightLegAbductor
+        - id: LeftFootAbductor
+        - id: RightFootAbductor
+        - id: OrganAbductorBrain
+        - id: OrganAbductorEyes
+        - id: OrganAbductorHeart
+        - id: OrganAbductorLungs
+        - id: OrganAbductorStomach
+        - id: OrganAbductorLiver
+        - id: OrganAbductorKidneys
+
+- type: entity
   save: false
   name: Urist McAbductor
   parent:
   - MobBloodstream
   - MobFlammable
-  - BaseMobSpecies
+  - AppearanceAbductor
+  - BaseSpeciesMob
   id: BaseMobAbductor
   abstract: true
   components:
@@ -16,9 +44,6 @@
     state: full
   - type: Fingerprint
   - type: Blindable
-  - type: Body
-    prototype: Abductor
-    requiredLegs: 2
   - type: FireVisuals
     alternateState: Standing
   - type: Damageable
@@ -54,7 +79,7 @@
     - Abductor
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceAbductor
   id: MobAbductorDummy
   categories: [ HideSpawnMenu ]
   components:

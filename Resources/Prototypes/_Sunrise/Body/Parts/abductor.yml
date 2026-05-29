@@ -1,6 +1,6 @@
 - type: entity
   id: PartAbductor
-  parent: [BaseItem, BasePart]
+  parent: OrganBase
   name: "Abductor body part"
   abstract: true
   components:
@@ -15,7 +15,7 @@
 - type: entity
   id: TorsoAbductor
   name: "Abductor torso"
-  parent: [PartAbductor, BaseTorso]
+  parent: [PartAbductor, OrganBaseTorso]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -31,7 +31,7 @@
 - type: entity
   id: HeadAbductor
   name: "Abductor head"
-  parent: [PartAbductor, BaseHead]
+  parent: [PartAbductor, OrganBaseHead]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -47,7 +47,7 @@
 - type: entity
   id: LeftArmAbductor
   name: "left Abductor arm"
-  parent: [PartAbductor, BaseLeftArm]
+  parent: [PartAbductor, OrganBaseArmLeft]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -56,7 +56,7 @@
 - type: entity
   id: RightArmAbductor
   name: "right Abductor arm"
-  parent: [PartAbductor, BaseRightArm]
+  parent: [PartAbductor, OrganBaseArmRight]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -65,7 +65,7 @@
 - type: entity
   id: LeftHandAbductor
   name: "left Abductor hand"
-  parent: [PartAbductor, BaseLeftHand]
+  parent: [PartAbductor, OrganBaseHandLeft]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -74,7 +74,7 @@
 - type: entity
   id: RightHandAbductor
   name: "right Abductor hand"
-  parent: [PartAbductor, BaseRightHand]
+  parent: [PartAbductor, OrganBaseHandRight]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -83,7 +83,7 @@
 - type: entity
   id: LeftLegAbductor
   name: "left Abductor leg"
-  parent: [PartAbductor, BaseLeftLeg]
+  parent: [PartAbductor, OrganBaseLegLeft]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -92,7 +92,7 @@
 - type: entity
   id: RightLegAbductor
   name: "right Abductor leg"
-  parent: [PartAbductor, BaseRightLeg]
+  parent: [PartAbductor, OrganBaseLegRight]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -101,7 +101,7 @@
 - type: entity
   id: LeftFootAbductor
   name: "left Abductor foot"
-  parent: [PartAbductor, BaseLeftFoot]
+  parent: [PartAbductor, OrganBaseFootLeft]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi
@@ -110,7 +110,7 @@
 - type: entity
   id: RightFootAbductor
   name: "right Abductor foot"
-  parent: [PartAbductor, BaseRightFoot]
+  parent: [PartAbductor, OrganBaseFootRight]
   components:
   - type: Sprite
     sprite: _Sunrise/Abductor/Mobs/Species/Abductor/parts.rsi

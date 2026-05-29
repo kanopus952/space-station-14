@@ -1,6 +1,6 @@
 - type: entity
   id: PartCyber
-  parent: [BaseItem, BasePart]
+  parent: OrganBase
   name: "cyber body part"
   abstract: true
   components:
@@ -13,7 +13,7 @@
 - type: entity
   id: LeftArmCyber
   name: "left cyber arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArm
@@ -33,7 +33,7 @@
 - type: entity
   id: RightArmCyber
   name: "right cyber arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArm
@@ -53,7 +53,7 @@
 - type: entity
   id: LeftHandCyber
   name: "left cyber hand"
-  parent: [PartCyber, BaseLeftHand]
+  parent: [PartCyber, OrganBaseHandLeft]
   components:
     - type: BaseLayerId
       layer: CyberLHand
@@ -70,7 +70,7 @@
 - type: entity
   id: RightHandCyber
   name: "right cyber hand"
-  parent: [PartCyber, BaseRightHand]
+  parent: [PartCyber, OrganBaseHandRight]
   components:
     - type: BaseLayerId
       layer: CyberRHand
@@ -87,7 +87,7 @@
 - type: entity
   id: LeftLegCyber
   name: "left cyber leg"
-  parent: [PartCyber, BaseLeftLeg]
+  parent: [PartCyber, OrganBaseLegLeft]
   components:
     - type: BaseLayerId
       layer: CyberLLeg
@@ -110,7 +110,7 @@
 - type: entity
   id: RightLegCyber
   name: "right cyber leg"
-  parent: [PartCyber, BaseRightLeg]
+  parent: [PartCyber, OrganBaseLegRight]
   components:
     - type: BaseLayerId
       layer: CyberRLeg
@@ -133,7 +133,7 @@
 - type: entity
   id: LeftFootCyber
   name: "left cyber foot"
-  parent: [PartCyber, BaseLeftFoot]
+  parent: [PartCyber, OrganBaseFootLeft]
   components:
     - type: BaseLayerId
       layer: CyberLFoot
@@ -150,7 +150,7 @@
 - type: entity
   id: RightFootCyber
   name: "right cyber foot"
-  parent: [PartCyber, BaseRightFoot]
+  parent: [PartCyber, OrganBaseFootRight]
   components:
     - type: BaseLayerId
       layer: "CyberRFoot"
@@ -168,7 +168,7 @@
 - type: entity
   id: LeftArmCyberReaper
   name: "left reaper arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmSilver
@@ -203,7 +203,7 @@
 - type: entity
   id: RightArmCyberReaper
   name: "right reaper arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmSilver
@@ -239,7 +239,7 @@
 - type: entity
   id: LeftArmCyberMechwright
   name: "left mechwright arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmSteel
@@ -272,7 +272,7 @@
 - type: entity
   id: RightArmCyberMechwright
   name: "right mechwright arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmSteel
@@ -306,7 +306,7 @@
 - type: entity
   id: LeftArmCyberBulwark
   name: "left bulwark arm"
-  parent: [PartCyber, BaseLeftArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmBulwark
@@ -335,7 +335,7 @@
 - type: entity
   id: RightArmCyberBulwark
   name: "right bulwark arm"
-  parent: [PartCyber, BaseRightArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmBulwark
@@ -365,7 +365,7 @@
 - type: entity
   id: LeftArmCyberMantisBlade
   name: "left mantis blade arm"
-  parent: [PartCyber, BaseLeftArm, BaseSyndicateContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseSyndicateContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmMantisBlade
@@ -391,7 +391,7 @@
 - type: entity
   id: RightArmCyberMantisBlade
   name: "right mantis blade arm"
-  parent: [PartCyber, BaseRightArm, BaseSyndicateContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseSyndicateContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmMantisBlade
@@ -418,7 +418,7 @@
 - type: entity
   id: LeftArmCyberRipper
   name: "left ripperdoc arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmRipper
@@ -456,7 +456,7 @@
 - type: entity
   id: RightArmCyberRipper
   name: "right ripperdoc arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmRipper

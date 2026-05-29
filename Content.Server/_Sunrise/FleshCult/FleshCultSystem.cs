@@ -13,6 +13,7 @@ using Content.Server.Station.Systems;
 using Content.Server.Store.Systems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Alert;
+using Content.Shared.Body;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;

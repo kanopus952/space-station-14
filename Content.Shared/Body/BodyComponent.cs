@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.Body;
 
 [RegisterComponent, NetworkedComponent]
-[Access(typeof(BodySystem))]
+// [Access(typeof(BodySystem))] // Sunrise edit
 public sealed partial class BodyComponent : Component
 {
     public const string ContainerID = "body_organs";

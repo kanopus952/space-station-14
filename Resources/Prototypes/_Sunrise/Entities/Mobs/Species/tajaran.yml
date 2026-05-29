@@ -1,5 +1,36 @@
 - type: entity
-  parent: BaseMobSpeciesOrganic
+  parent: BaseSpeciesAppearance
+  id: AppearanceTajaran
+  name: tajaran appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoTajaran
+        - id: HeadTajaran
+        - id: LeftArmTajaran
+        - id: RightArmTajaran
+        - id: LeftHandTajaran
+        - id: RightHandTajaran
+        - id: LeftLegTajaran
+        - id: RightLegTajaran
+        - id: LeftFootTajaran
+        - id: RightFootTajaran
+        - id: TailTajaran
+        - id: OrganHumanBrain
+        - id: OrganTajaranEyes
+        - id: OrganHumanTongue
+        - id: OrganAnimalHeart
+        - id: OrganHumanLungs
+        - id: OrganTajaranStomach
+        - id: OrganAnimalLiver
+        - id: OrganHumanKidneys
+
+- type: entity
+  parent:
+  - AppearanceTajaran
+  - BaseSpeciesMobOrganic
   id: BaseMobTajaran
   abstract: true
   components:
@@ -10,9 +41,6 @@
     - Snout
     - HeadTop
     - HeadSide
-  - type: Body
-    prototype: Tajaran
-    requiredLegs: 2
   - type: Butcherable
     butcheringType: Spike
     spawned:
@@ -159,7 +187,7 @@
 - type: entity
   save: false
   name: Tajaran McHands
-  parent: MobHumanDummy
+  parent: AppearanceTajaran
   id: MobTajaranDummy
   categories: [ HideSpawnMenu ]
   description: A dummy tajaran meant to be used in character setup.

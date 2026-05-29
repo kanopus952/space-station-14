@@ -2,7 +2,7 @@
 - type: entity
   id: LeftHandCyberFolder
   name: "left cyber hand"
-  parent: [PartCyber, BaseLeftHand]
+  parent: [PartCyber, OrganBaseHandLeft]
   components:
     - type: BaseLayerId
       layer: CyberLHandFolder
@@ -16,7 +16,7 @@
 - type: entity
   id: RightHandCyberFolder
   name: "right cyber hand"
-  parent: [PartCyber, BaseRightHand]
+  parent: [PartCyber, OrganBaseHandRight]
   components:
     - type: BaseLayerId
       layer: CyberRHandFolder
@@ -31,7 +31,7 @@
 - type: entity
   id: LeftArmCyberUpgradedMechwright
   name: "left fixic arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmSteel
@@ -65,7 +65,7 @@
 - type: entity
   id: RightArmCyberUpgradedMechwright
   name: "right fixic arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmSteel
@@ -99,7 +99,7 @@
 - type: entity
   id: LeftArmCyberHack
   name: "left Netrunner arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmZenghu
@@ -130,7 +130,7 @@
 - type: entity
   id: RightArmCyberHack
   name: "right Netrunner arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmZenghu
@@ -162,7 +162,7 @@
 - type: entity
   id: LeftArmCyberAtmos
   name: "left Atmos arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmSteel
@@ -197,7 +197,7 @@
 - type: entity
   id: RightArmCyberAtmos
   name: "right Atmos arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmSteel
@@ -232,7 +232,7 @@
 - type: entity
   id: LeftArmCyberJanitorial
   name: "left jani-arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmZenghu
@@ -264,7 +264,7 @@
 - type: entity
   id: RightArmCyberJanitorial
   name: "right jani-arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmZenghu
@@ -297,7 +297,7 @@
 - type: entity
   id: LeftArmCyberRobust
   name: "left robust arm"
-  parent: [PartCyber, BaseLeftArm]
+  parent: [PartCyber, OrganBaseArmLeft]
   components:
     - type: BaseLayerId
       layer: CyberLArmGreen
@@ -330,7 +330,7 @@
 - type: entity
   id: RightArmCyberRobust
   name: "right robust arm"
-  parent: [PartCyber, BaseRightArm]
+  parent: [PartCyber, OrganBaseArmRight]
   components:
     - type: BaseLayerId
       layer: CyberRArmGreen
@@ -364,7 +364,7 @@
 - type: entity
   id: LeftArmCyberBonesaw
   name: "left Bonesaw arm"
-  parent: [PartCyber, BaseLeftArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmBonesaw
@@ -393,7 +393,7 @@
 - type: entity
   id: RightArmCyberBonesaw
   name: "right Bonesaw arm"
-  parent: [PartCyber, BaseRightArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmBonesaw
@@ -423,7 +423,7 @@
 - type: entity
   id: LeftArmCyberMantisBladeMaxGuard
   name: "left Max-Guard blade arm"
-  parent: [PartCyber, BaseLeftArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmMantisBladeSec
@@ -452,7 +452,7 @@
 - type: entity
   id: RightArmCyberMantisBladeMaxGuard
   name: "right Max-Guard blade arm"
-  parent: [PartCyber, BaseRightArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmMantisBladeSec
@@ -482,7 +482,7 @@
 - type: entity
   id: LeftArmCyberGorilla
   name: "left G.O.R.I.L.L.A. arm"
-  parent: [PartCyber, BaseLeftArm, BaseScienceContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseScienceContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmGorilla
@@ -512,7 +512,7 @@
 - type: entity
   id: RightArmCyberGorilla
   name: "right G.O.R.I.L.L.A. arm"
-  parent: [PartCyber, BaseRightArm, BaseScienceContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseScienceContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmGorilla
@@ -579,7 +579,7 @@
 - type: entity
   id: LeftArmCyberLaserEmitter
   name: "left bulwark emitter arm"
-  parent: [PartCyber, BaseLeftArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmBulwark
@@ -608,7 +608,7 @@
 - type: entity
   id: RightArmCyberLaserEmitter
   name: "right bulwark emitter arm"
-  parent: [PartCyber, BaseRightArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmBulwark
@@ -638,7 +638,7 @@
 - type: entity
   id: LeftArmCyberGrenadeThrower
   name: "left hephaestus thrower arm"
-  parent: [PartCyber, BaseLeftArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmLeft, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberLArmHephaestus
@@ -667,7 +667,7 @@
 - type: entity
   id: RightArmCyberGrenadeThrower
   name: "right hephaestus thrower arm"
-  parent: [PartCyber, BaseRightArm, BaseSecurityContraband]
+  parent: [PartCyber, OrganBaseArmRight, BaseSecurityContraband]
   components:
     - type: BaseLayerId
       layer: CyberRArmHephaestus

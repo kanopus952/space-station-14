@@ -33,6 +33,7 @@ using Content.Shared.Flash;
 using Content.Shared.Flash.Components;
 using Content.Shared.Storage.Components;
 using Content.Shared.Damage.Components;
+using Content.Shared.Body;
 
 namespace Content.Server.Vampire;
 
@@ -809,22 +810,6 @@ public sealed partial class VampireSystem
     /// </summary>
     private bool TryIngestBlood(Entity<VampireComponent> vampire, Solution ingestedSolution, bool force = false)
     {
-        //Get all stomaches
-        if (TryComp<BodyComponent>(vampire.Owner, out var body) && _body.TryGetBodyOrganEntityComps<StomachComponent>((vampire.Owner, body), out var stomachs))
-        {
-            //Pick the first one that has space available
-            var firstStomach = stomachs.FirstOrNull(stomach => _stomach.CanTransferSolution(stomach.Owner, ingestedSolution, stomach.Comp1));
-            if (firstStomach == null)
-            {
-                //We are full
-                _popup.PopupEntity(Loc.GetString("vampire-full-stomach"), vampire.Owner, vampire.Owner, PopupType.SmallCaution);
-                return false;
-            }
-            //Fill the stomach with that delicious blood
-            return _stomach.TryTransferSolution(firstStomach.Value.Owner, ingestedSolution, firstStomach.Value.Comp1);
-        }
-
-        //No stomach
         return false;
     }
     #endregion

@@ -72,7 +72,7 @@
 # Sunrise-start
 - type: entity
   name: NanoTrasen footsoldier
-  parent: BaseMobHuman
+  parent: MobHuman
   id: MobNanoTrasenFootsoldier
   components:
     - type: NpcFactionMember

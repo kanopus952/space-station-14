@@ -1,7 +1,35 @@
 - type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceFelinid
+  name: felinid appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: OrganHumanTorso
+        - id: OrganHumanHead
+        - id: OrganHumanArmLeft
+        - id: OrganHumanArmRight
+        - id: OrganHumanHandLeft
+        - id: OrganHumanHandRight
+        - id: OrganHumanLegLeft
+        - id: OrganHumanLegRight
+        - id: OrganHumanFootLeft
+        - id: OrganHumanFootRight
+        - id: OrganHumanBrain
+        - id: OrganHumanEyes
+        - id: OrganHumanTongue
+        - id: OrganFelinidHeart
+        - id: OrganHumanLungs
+        - id: OrganReptilianStomach
+        - id: OrganAnimalLiver
+        - id: OrganHumanKidneys
+
+- type: entity
   save: false
   name: Urist McFelinid
-  parent: [BaseMobSpeciesOrganic, BaseSpeciesPickupable]
+  parent: [AppearanceFelinid, BaseSpeciesMobOrganic, BaseSpeciesPickupable]
   id: MobFelinidBase
   abstract: true
   components:
@@ -420,8 +448,6 @@
         - MobMask
         layer:
         - MobLayer
-  - type: Body
-    prototype: Felinid
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Felinid
@@ -534,7 +560,7 @@
 - type: entity
   save: false
   name: Urist McHands
-  parent: MobHumanDummy
+  parent: AppearanceFelinid
   id: MobFelinidDummy
   categories: [ HideSpawnMenu ]
   description: A dummy felinid meant to be used in character setup.

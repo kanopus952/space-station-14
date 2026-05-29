@@ -125,7 +125,20 @@
   - type: NoSlip
   - type: MovementAlwaysTouching
   - type: Body
-    prototype: SVBodyDoubleClown
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: OrganHumanTorso
+        - id: OrganHumanArmRight
+        - id: OrganHumanArmLeft
+        - id: OrganHumanHandRight
+        - id: OrganHumanHandLeft
+        - id: OrganHumanLungs
+        - id: OrganBloodsuckerStomach
+        - id: OrganBloodsuckerLiver
+        - id: OrganBloodsuckerHeart
+        - id: OrganAnimalKidneys
   - type: InventorySlots
   - type: Inventory
     templateId: clowngoblin
@@ -232,8 +245,6 @@
 #  - type: MovementAlwaysTouching
 #  - type: Stripping
 #  - type: Strippable
-#  - type: Body
-#    prototype: SVBodyDoubleClown
 #  - type: InventorySlots
 #  - type: Inventory
 #    templateId: clownhulk

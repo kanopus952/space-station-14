@@ -293,7 +293,15 @@
     - Passive
   # Sunrise-start
   - type: Body
-    prototype: Chiken
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: OrganAnimalLungs
+        - id: OrganManeaterAnimalStomach
+        - id: OrganAnimalLiver
+        - id: OrganChikenHeart
+        - id: OrganAnimalKidneys
   - type: CanEscapeInventory
   - type: AttackOnInteractionFail
     attackMemoryLength: 10
@@ -3885,7 +3893,15 @@
       task: RuminantCompound
     # Sunrise-start
   - type: Body
-    prototype: ManeaterAnimal
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: OrganAnimalLungs
+        - id: OrganManeaterAnimalStomach
+        - id: OrganAnimalLiver
+        - id: OrganPigHeart
+        - id: OrganAnimalKidneys
   - type: CanEscapeInventory
   - type: AttackOnInteractionFail
     attackMemoryLength: 10

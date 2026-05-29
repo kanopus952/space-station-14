@@ -9,7 +9,7 @@
       jumpsuit:
         sizeMaps:
           32:
-            sprite: Mobs/Species/Human/displacement.rsi
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
             state: jumpsuit-female
       head:
         sizeMaps:
@@ -21,6 +21,11 @@
           32:
             sprite: Mobs/Species/Reptilian/displacement.rsi
             state: mask
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
     displacements:
       head:
         sizeMaps:
@@ -32,6 +37,52 @@
           32:
             sprite: Mobs/Species/Reptilian/displacement.rsi
             state: mask
+      shoes:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: shoes
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
+      outerClothing:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: outer
+      hardsuit:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: hardsuit
+    maleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: jumpsuit
+      shoes:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: shoes
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
+      outerClothing:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: outer
+      hardsuit-body-normal:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: hardsuit
   - type: EntityTableContainerFill
     containers:
       body_organs: !type:AllSelector
@@ -63,7 +114,7 @@
     - HeadTop
     - HeadSide
     - Tail
-    undergarmentBottom: UndergarmentBottomBoxersReptilian
+    #undergarmentBottom: UndergarmentBottomBoxersReptilian
 
 - type: entity
   parent:
@@ -72,12 +123,13 @@
   id: MobReptilian
   name: Urissst Mz'Hand
   components:
+  - type: Interactions
   - type: Puller
     needsHands: false
   - type: Butcherable
     butcheringType: Spike
     spawned:
-    - id: FoodMeatLizard
+    - id: FoodMeatUnath
       amount: 5
   - type: LizardAccent
   - type: Speech
@@ -121,6 +173,17 @@
       295: 0.8
       285: 0.7
   - type: Wagging
+  - type: Tag
+    tags:
+    - CanPilot
+    - FootstepSound
+    - DoorBumpOpener
+    - AnomalyHost
+  - type: FootprintEmitter
+    leftBareFootState:
+    - "footprint-left-bare-lizard"
+    rightBareFootState:
+    - "footprint-right-bare-lizard"
 
 - type: entity
   parent: OrganBase

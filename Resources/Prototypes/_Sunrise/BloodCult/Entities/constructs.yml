@@ -95,10 +95,18 @@
     - type: Hands
       showInHands: true
     - type: Body
-      prototype: ConstructJuggernaut
+    - type: EntityTableContainerFill
+      containers:
+        body_organs: !type:AllSelector
+          children:
+          - id: OrganHumanTorso
+          - id: OrganHumanArmRight
+          - id: OrganHumanArmLeft
+          - id: OrganHumanHandRight
+          - id: OrganHumanHandLeft
     - type: ContainerContainer
       containers:
-        body_root_part: !type:ContainerSlot
+        body_organs: !type:Container
     - type: Juggernaut
     - type: TTS
       voice: enigma_dota_2

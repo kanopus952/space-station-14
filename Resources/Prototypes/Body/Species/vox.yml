@@ -83,8 +83,8 @@
         - id: OrganVoxKidneys
   - type: HumanoidAppearance
     species: Vox
-    undergarmentTop: UndergarmentTopTanktopVox
-    undergarmentBottom: UndergarmentBottomBoxersVox
+    #undergarmentTop: UndergarmentTopTanktopVox # Sunrise-edit
+    #undergarmentBottom: UndergarmentBottomBoxersVox # Sunrise-edit
     markingsDisplacement:
       Hair:
         sizeMaps:
@@ -137,7 +137,6 @@
             min: 3
             max: 5
       - !type:BurnBodyBehavior
-        popupMessage: bodyburn-vox-text-others
       - !type:PlaySoundBehavior
         sound:
           collection: MeatLaserImpact

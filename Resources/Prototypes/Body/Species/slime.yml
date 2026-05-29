@@ -36,6 +36,7 @@
   id: MobSlimePerson
   name: Urist McWobble
   components:
+  - type: Interactions
   - type: Storage
     clickInsert: false
     grid:
@@ -55,6 +56,18 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      # Sunrise-Start
+      enum.VampireMutationUiKey.Key:
+        type: VampireMutationBoundUserInterface
+      enum.SummonCultistUiKey.Key:
+        type: SummonCultistListWindowBUI
+      enum.CultSpellProviderUiKey.Key:
+        type: SpellSelectorBUI
+      # Sunrise-End
   - type: UseDelay
     delay: 0.5
   - type: Speech
@@ -77,6 +90,7 @@
     damage:
       types:
         Heat: -0.14
+        Mangleness: -0.03
       groups:
         Brute: -0.14
   - type: DamageVisuals
@@ -120,7 +134,7 @@
   - type: Butcherable
     butcheringType: Spike
     spawned:
-    - id: FoodMeatSlime
+    - id: FoodMeatSlimeJelly
       amount: 5
   - type: Respirator
     damage:
@@ -130,6 +144,11 @@
       types:
         Asphyxiation: -1.0
     maxSaturation: 15
+  - type: FootprintEmitter
+    leftBareFootState:
+      - "footprint-left-bare-slime"
+    rightBareFootState:
+      - "footprint-right-bare-slime"
 
 - type: entity
   parent: OrganBase

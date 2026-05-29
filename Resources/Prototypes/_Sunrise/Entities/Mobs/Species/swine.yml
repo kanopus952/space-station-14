@@ -1,6 +1,36 @@
 - type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceSwine
+  name: swine appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoSwine
+        - id: HeadSwine
+        - id: LeftArmSwine
+        - id: RightArmSwine
+        - id: LeftHandSwine
+        - id: RightHandSwine
+        - id: LeftLegSwine
+        - id: RightLegSwine
+        - id: LeftFootSwine
+        - id: RightFootSwine
+        - id: OrganHumanBrain
+        - id: OrganHumanEyes
+        - id: OrganHumanTongue
+        - id: OrganAnimalHeart
+        - id: OrganHumanLungs
+        - id: OrganSwineStomach
+        - id: OrganAnimalLiver
+        - id: OrganHumanKidneys
+
+- type: entity
   name: Urist McPig
-  parent: BaseMobSpeciesOrganic
+  parent:
+  - AppearanceSwine
+  - BaseSpeciesMobOrganic
   id: BaseMobSwine
   abstract: true
   components:
@@ -47,9 +77,6 @@
         - MobMask
         layer:
         - MobLayer
-  - type: Body
-    prototype: Swine
-    requiredLegs: 2
   - type: Vocal
     sounds:
       Male: UnisexSwine
@@ -69,7 +96,7 @@
 - type: entity
   save: false
   name: Urist McHands
-  parent: MobHumanDummy
+  parent: AppearanceSwine
   id: MobSwineDummy
   categories: [ HideSpawnMenu ]
   description: A dummy swine meant to be used in character setup.

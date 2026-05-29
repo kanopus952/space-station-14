@@ -9,7 +9,7 @@
   markingLimits: MobHumanMarkingLimits
   maleFirstNames: NamesSkeletonFirst
   femaleFirstNames: NamesSkeletonFirst
-  dollPrototype: MobSkeletonPersonDummy
+  dollPrototype: AppearanceTerminator
   skinColoration: TintedHues
   # Sunrise-Start
   buttScan:

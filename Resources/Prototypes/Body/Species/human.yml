@@ -39,6 +39,9 @@
     hideLayersOnEquip:
     - Hair
     - Snout
+    - HeadTop
+    - Special
+    - Tail
 
 - type: entity
   parent:
@@ -47,10 +50,13 @@
   id: MobHuman
   name: Urist McHands
   components:
+  - type: Interactions
   - type: Butcherable
+    butcheringType: Spike
     spawned:
     - id: FoodMeatHuman
       amount: 5
+  - type: FootprintEmitter
 
 - type: entity
   parent: OrganBase

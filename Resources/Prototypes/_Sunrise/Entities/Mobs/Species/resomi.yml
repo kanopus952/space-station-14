@@ -1,7 +1,35 @@
 - type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceResomi
+  name: resomi appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoResomi
+        - id: HeadResomi
+        - id: LeftArmResomi
+        - id: RightArmResomi
+        - id: LeftHandResomi
+        - id: RightHandResomi
+        - id: LeftLegResomi
+        - id: RightLegResomi
+        - id: LeftFootResomi
+        - id: RightFootResomi
+        - id: OrganHumanBrain
+        - id: OrganResomiEyes
+        - id: OrganHumanTongue
+        - id: OrganHumanHeart
+        - id: OrganHumanLungs
+        - id: OrganHumanStomach
+        - id: OrganHumanLiver
+        - id: OrganHumanKidneys
+
+- type: entity
   save: false
   name: Urist McRaptor
-  parent: [ BaseMobSpeciesOrganic, BaseSpeciesPickupable ]
+  parent: [ AppearanceResomi, BaseSpeciesMobOrganic, BaseSpeciesPickupable ]
   id: BaseMobResomi
   abstract: true
   components:
@@ -61,9 +89,6 @@
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Resomi
-  - type: Body
-    prototype: Resomi
-    requiredLegs: 2
   - type: Butcherable
     butcheringType: Spike
     spawned:
@@ -272,7 +297,7 @@
     - Resomi
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceResomi
   id: MobResomiDummy
   categories: [ HideSpawnMenu ]
   description: A dummy resomi meant to be used in character setup.

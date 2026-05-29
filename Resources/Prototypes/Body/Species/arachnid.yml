@@ -40,6 +40,7 @@
   id: MobArachnid
   name: Urist McWebs
   components:
+  - type: Interactions
   - type: Respirator
     damage:
       types:
@@ -59,6 +60,7 @@
     - SpiderCraft
     - AnomalyHost
   - type: Butcherable
+    butcheringType: Spike
     spawned:
     - id: FoodMeatSpider
       amount: 5
@@ -104,6 +106,21 @@
       Unsexed: UnisexArachnid
   - type: TypingIndicator
     proto: spider
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepSpiderLegs
+      params:
+        volume: -10
+  - type: CollectiveMind
+    minds:
+    - Arachnids
+  - type: FootprintEmitter
+    leftBareFootState:
+      - "footprint-left-bare-spider"
+    rightBareFootState:
+      - "footprint-right-bare-spider"
+  - type: ToggleableNightVision
+    effect: EffectNightVisioSpecies
 
 - type: entity
   parent: OrganBase

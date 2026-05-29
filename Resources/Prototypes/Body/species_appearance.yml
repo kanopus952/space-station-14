@@ -19,15 +19,24 @@
     - map: [ "enum.HumanoidVisualLayers.LLeg" ]
 
     # Underwear & clothing
-    - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-    - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
-    - map: ["jumpsuit"]
+    #- map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ] # Sunrise-edit
+    #- map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ] # Sunrise-edit
+    #- map: ["jumpsuit"] # Sunrise-edit
+    # Sunrise-start
+    - map: [ "pants" ]
+    - map: [ "bra" ]
+    # Sunrise-end
 
     # Extremities
     - map: ["enum.HumanoidVisualLayers.LFoot"]
     - map: ["enum.HumanoidVisualLayers.RFoot"]
     - map: ["enum.HumanoidVisualLayers.LHand"]
     - map: ["enum.HumanoidVisualLayers.RHand"]
+
+    # Sunrise-start
+    - map: [ "socks" ]
+    - map: ["jumpsuit"]
+    # Sunrise-end
 
     # More equipment
     - map: [ "gloves" ]
@@ -85,3 +94,15 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      # Sunrise-Start
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.VampireMutationUiKey.Key:
+        type: VampireMutationBoundUserInterface
+      enum.SummonCultistUiKey.Key:
+        type: SummonCultistListWindowBUI
+      enum.CultSpellProviderUiKey.Key:
+        type: SpellSelectorBUI
+      # Sunrise-End

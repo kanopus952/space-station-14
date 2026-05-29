@@ -137,18 +137,6 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
-      enum.SurgeryUIKey.Key:
-        type: SurgeryBui
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
-      # Sunrise-Start
-      enum.VampireMutationUiKey.Key:
-        type: VampireMutationBoundUserInterface
-      enum.SummonCultistUiKey.Key:
-        type: SummonCultistListWindowBUI
-      enum.CultSpellProviderUiKey.Key:
-        type: SpellSelectorBUI
-      # Sunrise-End
   - type: Puller
   - type: Speech
     speechSounds: Alto
@@ -270,6 +258,7 @@
     alternateState: Standing
   - type: StunVisuals
   # Sunrise-Start
+  - type: SurgeryTarget
   - type: DarkenedVision
   - type: CanEscapeInventory
   - type: Mood

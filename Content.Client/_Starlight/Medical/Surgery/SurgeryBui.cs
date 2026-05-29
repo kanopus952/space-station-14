@@ -3,7 +3,7 @@ using Content.Client._Starlight;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Client.Hands.Systems;
 using Content.Server.Administration.Systems;
-using Content.Shared.Body.Part;
+using Content.Shared.Body;
 using Content.Shared.Starlight.Medical.Surgery;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -76,11 +76,12 @@ public sealed class SurgeryBui : BoundUserInterface
         _part = null;
         _surgery = null;
 
-        var parts = new List<Entity<BodyPartComponent>>(state.Choices.Keys.Count);
+        var parts = new List<Entity<OrganComponent>>(state.Choices.Keys.Count);
         foreach (var choice in state.Choices.Keys)
         {
             if (_entities.TryGetEntity(choice, out var ent) &&
-                _entities.TryGetComponent(ent, out BodyPartComponent? part))
+                _entities.TryGetComponent(ent, out OrganComponent? part) &&
+                SharedSurgerySystem.IsSurgeryTarget(part))
             {
                 parts.Add((ent.Value, part));
             }
@@ -88,21 +89,7 @@ public sealed class SurgeryBui : BoundUserInterface
 
         parts.Sort((a, b) =>
         {
-            static int GetScore(Entity<BodyPartComponent> part)
-                => part.Comp.PartType switch
-                {
-                    BodyPartType.Head => 1,
-                    BodyPartType.Torso => 2,
-                    BodyPartType.Arm => 3,
-                    BodyPartType.Hand => 4,
-                    BodyPartType.Leg => 5,
-                    BodyPartType.Foot => 6,
-                    BodyPartType.Tail => 7,
-                    BodyPartType.Other => 8,
-                    _ => 0
-                };
-
-            return GetScore(a) - GetScore(b);
+            return SharedSurgerySystem.GetSurgeryTargetScore(a.Comp) - SharedSurgerySystem.GetSurgeryTargetScore(b.Comp);
         });
 
         foreach (var part in parts)
@@ -227,10 +214,10 @@ public sealed class SurgeryBui : BoundUserInterface
             foreach (var requirementId in requirementIds)
             {
                 if (_entitySystem.TryGetSingleton(requirementId, out var requirement)
-                    && _entities.TryGetComponent(_part, out BodyPartComponent? partComp)
-                    && partComp.Body is { } Body
-                    && _part is { } Part
-                    && _system.IsSurgeryValid(Body, Part, requirementId, surgeryId, out _, out _, out _))
+                    && _entities.TryGetComponent(_part, out OrganComponent? partComp)
+                    && partComp.Body is { } body
+                    && _part is { } part
+                    && _system.IsSurgeryValid(body, part, requirementId, surgeryId, out _, out _, out _))
                 {
                     var label = new ChoiceControl();
                     label.Button.OnPressed += _ =>
@@ -312,7 +299,7 @@ public sealed class SurgeryBui : BoundUserInterface
     {
         if (_window == null ||
             !_entities.HasComponent<SurgeryComponent>(_surgery?.Ent) ||
-            !_entities.TryGetComponent(_part, out BodyPartComponent? part))
+            !_entities.TryGetComponent(_part, out OrganComponent? part))
         {
             return;
         }
@@ -355,7 +342,7 @@ public sealed class SurgeryBui : BoundUserInterface
             {
                 stepButton.Button.Modulate = Color.White;
                 if (_player.LocalEntity is { } player &&
-                    !_system.CanPerformStep(player, Owner, part.PartType, stepButton.Step, false, out var popup, out var reason, out _))
+                    !_system.CanPerformStep(player, Owner, _part.Value, stepButton.Step, false, out var popup, out var reason, out _))
                 {
                     stepButton.ToolTip = popup;
                     stepButton.Button.Disabled = true;

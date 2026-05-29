@@ -62,7 +62,7 @@
   - type: Butcherable
     butcheringType: Spike
     spawned:
-      - id: FoodMeatPlant
+      - id: FoodMeatDionaRoots
         amount: 5
   - type: Bloodstream
     bloodReferenceSolution:
@@ -138,6 +138,14 @@
     allowedStates:
     - Dead
   - type: Rootable
+  - type: CollectiveMind
+    minds:
+    - Dioneas
+  - type: FootprintEmitter
+    leftBareFootState:
+      - "footprint-left-bare-diona"
+    rightBareFootState:
+      - "footprint-right-bare-diona"
 
 - type: entity
   parent: OrganBase

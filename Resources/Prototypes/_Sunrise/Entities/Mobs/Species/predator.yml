@@ -1,6 +1,35 @@
 # © SUNRISE, An EULA/CLA with a hosting restriction, full text: https://github.com/space-sunrise/space-station-14/blob/master/CLA.txt
 - type: entity
-  parent: BaseMobSpeciesOrganic
+  parent: BaseSpeciesAppearance
+  id: AppearancePredator
+  name: predator appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoPredator
+        - id: HeadPredator
+        - id: LeftArmPredator
+        - id: RightArmPredator
+        - id: LeftHandPredator
+        - id: RightHandPredator
+        - id: LeftLegPredator
+        - id: RightLegPredator
+        - id: LeftFootPredator
+        - id: RightFootPredator
+        - id: OrganPredatorBrain
+        - id: OrganPredatorEyes
+        - id: OrganPredatorHeart
+        - id: OrganPredatorLungs
+        - id: OrganPredatorStomach
+        - id: OrganPredatorLiver
+        - id: OrganPredatorKidneys
+
+- type: entity
+  parent:
+  - AppearancePredator
+  - BaseSpeciesMobOrganic
   id: BaseMobPredator
   name: Urist McPredator
   abstract: true
@@ -56,12 +85,10 @@
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#008000"
-  - type: Body
-    prototype: Predator
   - type: FootprintEmitter
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearancePredator
   id: MobPredatorDummy
   categories: [ HideSpawnMenu ]
   components:

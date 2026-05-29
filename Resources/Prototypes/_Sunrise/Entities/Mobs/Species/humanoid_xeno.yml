@@ -1,6 +1,36 @@
 # © SUNRISE, An EULA/CLA with a hosting restriction, full text: https://github.com/space-sunrise/space-station-14/blob/master/CLA.txt
 - type: entity
-  parent: BaseMobSpeciesOrganic
+  parent: BaseSpeciesAppearance
+  id: AppearanceHumanoidXeno
+  name: humanoid xeno appearance
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: TorsoHumanoidXeno
+        - id: HeadHumanoidXeno
+        - id: LeftArmHumanoidXeno
+        - id: RightArmHumanoidXeno
+        - id: LeftHandHumanoidXeno
+        - id: RightHandHumanoidXeno
+        - id: LeftLegHumanoidXeno
+        - id: RightLegHumanoidXeno
+        - id: LeftFootHumanoidXeno
+        - id: RightFootHumanoidXeno
+        - id: OrganHumanoidXenoBrain
+        - id: OrganHumanoidXenoEyes
+        - id: OrganHumanTongue
+        - id: OrganHumanoidXenoHeart
+        - id: OrganHumanoidXenoLungs
+        - id: OrganHumanoidXenoStomach
+        - id: OrganHumanoidXenoLiver
+        - id: OrganHumanoidXenoKidneys
+
+- type: entity
+  parent:
+  - AppearanceHumanoidXeno
+  - BaseSpeciesMobOrganic
   id: BaseMobHumanoidXeno
   name: Urist McXeno
   abstract: true
@@ -125,9 +155,6 @@
     spawned:
     - id: FoodMeatXeno
       amount: 5
-  - type: Body
-    prototype: HumanoidXeno
-    requiredLegs: 2
   - type: Inventory
     speciesId: reptilian
     templateId: humanoidxeno
@@ -243,7 +270,7 @@
   - type: FootprintEmitter
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceHumanoidXeno
   id: MobXenoDummy
   categories: [ HideSpawnMenu ]
   components:
@@ -350,6 +377,4 @@
           32:
             sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
             state: hardsuit
-  - type: Body
-    prototype: HumanoidXeno
 

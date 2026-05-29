@@ -19,7 +19,7 @@
   id: CyberEyeNightVision
   name: NightVision cyber eyes
   description: Enables you to see in the dark.
-  parent: [OrganCyber, BaseOrganEyes]
+  parent: [OrganCyber, SunriseOrganBaseEyes]
   components:
   - type: Sprite
     scale: 0.75,0.75
@@ -36,7 +36,7 @@
   id: CyberEyeThermal
   name: ThermalVision cyber eyes
   description: Enables you to see in the dark and detect warm objects through walls.
-  parent: [OrganCyber, BaseOrganEyes]
+  parent: [OrganCyber, SunriseOrganBaseEyes]
   components:
   - type: Sprite
     scale: 0.75,0.75

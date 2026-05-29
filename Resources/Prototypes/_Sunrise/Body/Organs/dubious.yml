@@ -1,7 +1,7 @@
 - type: entity
   abstract: true
   id: BaseOrganDubious
-  parent: [BaseItem, BaseOrganHeart]
+  parent: [OrganBase, SunriseOrganBaseHeart]
   components:
   - type: Organ
   - type: Extractable

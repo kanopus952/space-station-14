@@ -39,8 +39,8 @@
     Snout: MobHumanoidAnyMarking
     SnoutCover: MobHumanoidAnyMarking
     # Sunrise-Start
-    #UndergarmentTop: MobHumanoidAnyMarking
-    #UndergarmentBottom: MobHumanoidAnyMarking
+    #UndergarmentTop: MobHumanoidAnyMarking # Sunrise-edit
+    #UndergarmentBottom: MobHumanoidAnyMarking # Sunrise-edit
     # Sunrise-End
     Chest: MobVulpkaninTorso
     HeadTop: MobHumanoidAnyMarking

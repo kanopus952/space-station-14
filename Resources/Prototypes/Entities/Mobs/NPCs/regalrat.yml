@@ -432,8 +432,6 @@
     distance: 0.5
     speed: 5
   - type: Body
-    prototype: Rat
-    requiredLegs: 1 # TODO: More than 1 leg
   - type: Hunger # probably should be prototyped
     thresholds:
       Overfed: 300
