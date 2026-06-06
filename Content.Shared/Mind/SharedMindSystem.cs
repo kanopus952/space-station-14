@@ -504,7 +504,7 @@ public abstract partial class SharedMindSystem : EntitySystem
 
         foreach (var uid in mind.Comp.Objectives)
         {
-            if (Prototype(uid)?.ID == prototype)
+            if (MetaData(uid).EntityPrototype?.ID == prototype)
             {
                 objective = uid;
                 return true;
