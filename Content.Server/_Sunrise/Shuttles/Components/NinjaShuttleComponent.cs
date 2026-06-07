@@ -1,8 +1,8 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Sunrise.Shuttles;
+namespace Content.Server._Sunrise.Shuttles.Components;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent]
 public sealed partial class NinjaShuttleComponent : Component
 {
     [ViewVariables]

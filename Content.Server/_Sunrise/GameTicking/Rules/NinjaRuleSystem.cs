@@ -7,7 +7,6 @@ using Content.Server.Objectives.Systems;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
-using Content.Shared._Sunrise.Shuttles;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
@@ -17,11 +16,12 @@ using Content.Shared.Shuttles.Components;
 using Robust.Server.Player;
 using Robust.Shared.Random;
 using Robust.Server.GameObjects;
-using Content.Shared.Whitelist;
 using Content.Server.Mind;
 using Content.Server.Objectives;
 using Content.Server._Sunrise.GameTicking.Rules.Components;
 using System.Diagnostics.CodeAnalysis;
+using Content.Server._Sunrise.Shuttles.Components;
+using Content.Server._Sunrise.Helpers;
 
 namespace Content.Server._Sunrise.GameTicking.Rules;
 
@@ -35,6 +35,7 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly ShuttleConsoleSystem _console = default!;
     [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private readonly SunriseHelpersSystem _helpers = default!;
 
     public override void Initialize()
     {
@@ -50,15 +51,10 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
         GameRuleComponent gameRule,
         GameRuleStartedEvent args)
     {
-        var eligible = new List<EntityUid>();
-        var query = EntityQueryEnumerator<StationEventEligibleComponent>();
-        while (query.MoveNext(out var stationUid, out _))
-            eligible.Add(stationUid);
-
-        if (eligible.Count == 0)
+        if (!_helpers.TryGetRandomStation(out var eligible))
             return;
 
-        component.TargetStation = RobustRandom.Pick(eligible);
+        component.TargetStation = eligible;
     }
 
     protected override void Ended(
@@ -120,7 +116,7 @@ public sealed class NinjaRuleSystem : GameRuleSystem<NinjaRuleComponent>
     {
         foreach (var objUid in mind.Objectives)
         {
-            var objProto = Prototype(objUid)?.ID;
+            var objProto = Prototype(objUid);
 
             if (objProto == null)
                 continue;
