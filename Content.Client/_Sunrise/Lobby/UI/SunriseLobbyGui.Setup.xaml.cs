@@ -39,13 +39,8 @@ public sealed partial class SunriseLobbyGui
             CharacterInfoHider.Texture = CharacterInfoContent.Visible ? IconExpanded : IconCollapsed;
         };
 
-        UserProfileHeader.OnKeyBindUp += args =>
-        {
-            if (args.Function != EngineKeyFunctions.Use)
-                return;
-
-            SetUserProfileExpanded(!UserProfileContent.Visible);
-        };
+        UserProfileButton.OnPressed += _ =>
+            UserInterfaceManager.GetUIController<LobbyProfileUIController>().ToggleWindow();
 
         ServersHubHider.OnKeyBindUp += args =>
         {

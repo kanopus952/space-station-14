@@ -1,0 +1,13 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:userProfile="clr-namespace:Content.Client._Sunrise.UserProfile"
+               SetSize="760 310"
+               MinSize="560 300"
+               Title="{Loc 'lobby-gui-profile'}">
+    <ScrollContainer HorizontalExpand="True"
+                     VerticalExpand="True"
+                     HScrollEnabled="False">
+        <userProfile:UserProfile Name="UserProfileBody"
+                                 HorizontalExpand="True"
+                                 VerticalExpand="True" />
+    </ScrollContainer>
+</DefaultWindow>

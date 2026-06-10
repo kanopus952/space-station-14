@@ -9,7 +9,6 @@
     xmlns:maths="clr-namespace:Robust.Shared.Maths;assembly=Robust.Shared.Maths"
     xmlns:serversHub="clr-namespace:Content.Client._Sunrise.ServersHub"
     xmlns:style="clr-namespace:Content.Client.Stylesheets"
-    xmlns:userProfile="clr-namespace:Content.Client._Sunrise.UserProfile"
     xmlns:vote="clr-namespace:Content.Client.Voting.UI"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -161,6 +160,17 @@
                                     SeparationOverride="3"
                                     VerticalAlignment="Stretch"
                                     VerticalExpand="True">
+                                    <controls:StripeBack
+                                        HorizontalExpand="True"
+                                        VerticalAlignment="Top">
+                                        <Button
+                                            Access="Public"
+                                            HorizontalExpand="True"
+                                            MinHeight="34"
+                                            Name="UserProfileButton"
+                                            StyleClasses="ButtonBig"
+                                            Text="{Loc 'lobby-gui-profile'}" />
+                                    </controls:StripeBack>
                                     <BoxContainer
                                         Access="Public"
                                         Name="ServersHubBox"
@@ -535,55 +545,6 @@
                         </PanelContainer>
                     </BoxContainer>
             </BoxContainer>
-            <PanelContainer
-                    HorizontalAlignment="Center"
-                    HorizontalExpand="True"
-                    MaxWidth="720"
-                    Name="BottomCenterProfilePanel"
-                    StyleClasses="AngleRect"
-                    VerticalAlignment="Bottom">
-                    <BoxContainer
-                        Access="Public"
-                        Name="UserProfileBox"
-                        Orientation="Vertical">
-                        <controls:StripeBack
-                            MouseFilter="Stop"
-                            Name="UserProfileHeader">
-                            <BoxContainer
-                                HorizontalExpand="True"
-                                MouseFilter="Ignore"
-                                Orientation="Horizontal">
-                                <Label
-                                    Access="Public"
-                                    Align="Center"
-                                    HorizontalExpand="True"
-                                    Name="UserProfileHeaderLabel"
-                                    StyleClasses="LabelHeading"
-                                    Text="{Loc 'lobby-gui-profile'}"
-                                    VAlign="Center" />
-                                <TextureRect
-                                    Access="Public"
-                                    HorizontalAlignment="Right"
-                                    Margin="5,1"
-                                    MouseFilter="Ignore"
-                                    Name="UserProfileHider"
-                                    SetSize="25 25"
-                                    Stretch="KeepAspectCentered"
-                                    VerticalAlignment="Center" />
-                            </BoxContainer>
-                        </controls:StripeBack>
-                        <BoxContainer
-                            HorizontalAlignment="Stretch"
-                            HorizontalExpand="True"
-                            Name="UserProfileContent"
-                            Orientation="Vertical">
-                            <userProfile:UserProfile
-                                Access="Public"
-                                HorizontalExpand="True"
-                                Name="UserProfileBody" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </PanelContainer>
         </Control>
         <!--  Character setup state  -->
         <!--  This is injected on startup. Funky!  -->
