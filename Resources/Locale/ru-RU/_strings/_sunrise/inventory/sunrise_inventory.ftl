@@ -1,0 +1,39 @@
+sunrise-inventory-open-button = Инвентарь
+sunrise-inventory-window-title = Инвентарь
+sunrise-inventory-save = Сохранить
+sunrise-inventory-job = Профессия
+sunrise-inventory-job-all = Все профессии
+sunrise-inventory-no-profile = Персонаж не выбран
+
+sunrise-inventory-tab-loadout = Снаряжение
+sunrise-inventory-tab-sponsor = Спонсорские
+sunrise-inventory-tab-pets = Питомцы
+
+sunrise-inventory-loadout-select-job = Выберите профессию, чтобы настроить обычное снаряжение.
+sunrise-inventory-loadout-missing = Для этой профессии нет доступного снаряжения.
+sunrise-inventory-sponsor-unavailable = Данные спонсорского инвентаря недоступны.
+sunrise-inventory-sponsor-empty = Спонсорский инвентарь пока пуст.
+sunrise-inventory-current-selection = Текущий выбор
+sunrise-inventory-selection-empty = Ничего не выбрано.
+sunrise-inventory-selection-slot = { $slot }: { $item }
+sunrise-inventory-selection-bag = Сумка: { $item }
+sunrise-inventory-slot-bag = Сумка
+sunrise-inventory-add = Добавить
+sunrise-inventory-remove = Убрать
+sunrise-inventory-pets-clear = Без питомца
+
+sunrise-inventory-slot-head = Голова
+sunrise-inventory-slot-mask = Маска
+sunrise-inventory-slot-eyes = Глаза
+sunrise-inventory-slot-ears = Уши
+sunrise-inventory-slot-jumpsuit = Униформа
+sunrise-inventory-slot-outer-clothing = Верхняя одежда
+sunrise-inventory-slot-gloves = Перчатки
+sunrise-inventory-slot-shoes = Обувь
+sunrise-inventory-slot-back = Спина
+sunrise-inventory-slot-belt = Пояс
+sunrise-inventory-slot-id = ID
+sunrise-inventory-slot-neck = Шея
+sunrise-inventory-slot-pocket-1 = Карман 1
+sunrise-inventory-slot-pocket-2 = Карман 2
+sunrise-inventory-slot-suitstorage = Слот костюма

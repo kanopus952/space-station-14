@@ -1,0 +1,39 @@
+sunrise-inventory-open-button = Inventory
+sunrise-inventory-window-title = Inventory
+sunrise-inventory-save = Save
+sunrise-inventory-job = Job
+sunrise-inventory-job-all = All jobs
+sunrise-inventory-no-profile = No character selected
+
+sunrise-inventory-tab-loadout = Loadout
+sunrise-inventory-tab-sponsor = Sponsor
+sunrise-inventory-tab-pets = Pets
+
+sunrise-inventory-loadout-select-job = Select a job to edit regular loadout items.
+sunrise-inventory-loadout-missing = This job has no loadout available.
+sunrise-inventory-sponsor-unavailable = Sponsor inventory data is unavailable.
+sunrise-inventory-sponsor-empty = Sponsor inventory is empty.
+sunrise-inventory-current-selection = Current selection
+sunrise-inventory-selection-empty = Nothing selected.
+sunrise-inventory-selection-slot = { $slot }: { $item }
+sunrise-inventory-selection-bag = Bag: { $item }
+sunrise-inventory-slot-bag = Bag
+sunrise-inventory-add = Add
+sunrise-inventory-remove = Remove
+sunrise-inventory-pets-clear = No pet
+
+sunrise-inventory-slot-head = Head
+sunrise-inventory-slot-mask = Mask
+sunrise-inventory-slot-eyes = Eyes
+sunrise-inventory-slot-ears = Ears
+sunrise-inventory-slot-jumpsuit = Jumpsuit
+sunrise-inventory-slot-outer-clothing = Outer clothing
+sunrise-inventory-slot-gloves = Gloves
+sunrise-inventory-slot-shoes = Shoes
+sunrise-inventory-slot-back = Back
+sunrise-inventory-slot-belt = Belt
+sunrise-inventory-slot-id = ID
+sunrise-inventory-slot-neck = Neck
+sunrise-inventory-slot-pocket-1 = Pocket 1
+sunrise-inventory-slot-pocket-2 = Pocket 2
+sunrise-inventory-slot-suitstorage = Suit storage

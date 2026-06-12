@@ -13,6 +13,11 @@ public interface ISharedSponsorsManager
 
     public event Action? LoadedSponsorInfo;
     public event Action<List<SponsorInfo>>? LoadedSponsorTiers;
+    public event Action<SponsorInventoryConfig>? LoadedSponsorInventoryConfig
+    {
+        add { }
+        remove { }
+    }
 
     // Client
     public List<string> GetClientPrototypes();
@@ -22,6 +27,8 @@ public interface ISharedSponsorsManager
 
     public bool ClientIsSponsor();
     public List<SponsorInfo> GetSponsorTiers();
+    public SponsorInventoryConfig GetSponsorInventoryConfig() => new();
+    public List<string> GetClientPurchasedInventoryItems() => [];
 
     // Server
     public bool TryGetPrototypes(NetUserId userId, [NotNullWhen(true)] out List<string>? prototypes);
@@ -42,7 +49,50 @@ public interface ISharedSponsorsManager
     public bool TryGetPriorityAntags(NetUserId userId, [NotNullWhen(true)] out List<string>? priorityAntags);
     public bool TryGetPriorityRoles(NetUserId userId, [NotNullWhen(true)] out List<string>? priorityRoles);
     public bool TryGetPets(NetUserId userId, [NotNullWhen(true)] out List<string>? petSelections);
+    public int GetSponsorTier(NetUserId userId) => 0;
+
+    public bool TryGetPurchasedInventoryItems(NetUserId userId, [NotNullWhen(true)] out List<string>? inventoryItems)
+    {
+        inventoryItems = null;
+        return false;
+    }
     public void Update();
+}
+
+[Serializable, NetSerializable]
+public sealed class SponsorInventoryConfig
+{
+    [JsonPropertyName("items")]
+    public SponsorInventoryItemInfo[] Items { get; set; } = [];
+
+    [JsonPropertyName("packs")]
+    public SponsorInventoryPackInfo[] Packs { get; set; } = [];
+}
+
+[Serializable, NetSerializable]
+public sealed class SponsorInventoryItemInfo
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("entityPrototype")]
+    public string EntityPrototype { get; set; } = string.Empty;
+
+    [JsonPropertyName("availableJobs")]
+    public string[]? AvailableJobs { get; set; }
+
+    [JsonPropertyName("sponsorLevel")]
+    public int? SponsorLevel { get; set; }
+}
+
+[Serializable, NetSerializable]
+public sealed class SponsorInventoryPackInfo
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("inventoryItemIds")]
+    public string[] InventoryItemIds { get; set; } = [];
 }
 
 [Serializable, NetSerializable]

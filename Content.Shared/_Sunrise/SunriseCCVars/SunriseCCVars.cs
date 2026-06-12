@@ -577,4 +577,7 @@ public sealed partial class SunriseCCVars : CVars
         CVarDef.Create("tutorial.cooldown", TimeSpan.FromSeconds(15), CVar.SERVERONLY);
 
 
+
+    public static readonly CVarDef<string> PaymentLink =
+        CVarDef.Create("infolinks.payment", "https://ss14.org/payments", CVar.SERVER | CVar.REPLICATED);
 }
