@@ -7873,3 +7873,13 @@
   id: 1942
   time: '2026-06-15T19:42:43.0000000+00:00'
   url: https://github.com/space-sunrise/sunrise-station/pull/4526
+- author: KaiserMaus
+  changes:
+  - message: "\u0421\u0438\u043D\u0435\u043C\u0443 \u0449\u0438\u0442\u0443 \u0434\
+      \u043E\u0431\u0430\u0432\u043B\u0435\u043D \u043B\u043E\u0434\u0430\u0443\u0442\
+      \ \u0433\u043E\u043B\u043E\u0432\u043D\u044B\u0445 \u0443\u0431\u043E\u0440\u043E\
+      \u0432."
+    type: Tweak
+  id: 1943
+  time: '2026-06-15T19:44:47.0000000+00:00'
+  url: https://github.com/space-sunrise/sunrise-station/pull/4528
