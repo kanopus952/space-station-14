@@ -1,0 +1,81 @@
+using System;
+using Content.Client._Sunrise.Sheetlets;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Utility;
+
+namespace Content.Client._Sunrise.Sponsor;
+
+public sealed partial class SponsorWindow
+{
+    private void OnPaymentLinkChanged(string url)
+    {
+        _paymentLink = url;
+        var disabled = string.IsNullOrWhiteSpace(url);
+        BalanceButton.Disabled = disabled;
+        MainSubscriptionPurchaseButton.Disabled = disabled;
+        SubscriptionPurchaseButton.Disabled = disabled;
+        RefreshSubscriptionCards();
+    }
+
+    private void OnAccountManagementUrlChanged(string url)
+    {
+        _accountManagementUrl = url;
+        MainAccountManageButton.Disabled = string.IsNullOrWhiteSpace(url);
+    }
+
+    private void OpenPaymentLink()
+    {
+        if (string.IsNullOrWhiteSpace(_paymentLink))
+            return;
+
+        _uri.OpenUri(_paymentLink);
+    }
+
+    private void OpenAccountManagementLink()
+    {
+        if (string.IsNullOrWhiteSpace(_accountManagementUrl))
+            return;
+
+        _uri.OpenUri(_accountManagementUrl);
+    }
+
+    private void SelectTab(DonationTerminalTab tab)
+    {
+        _selectedTab = tab;
+
+        MainContent.Visible = tab == DonationTerminalTab.Main;
+        ShopContent.Visible = tab == DonationTerminalTab.Shop;
+        SubscriptionsContent.Visible = tab == DonationTerminalTab.Subscriptions;
+        PurchaseConfirmationContent.Visible = false;
+
+        switch (tab)
+        {
+            case DonationTerminalTab.Main:
+                Footer.Text = Loc.GetString("donation-terminal-footer-main");
+                break;
+            case DonationTerminalTab.Shop:
+                Footer.Text = Loc.GetString("donation-terminal-footer-shop");
+                break;
+            case DonationTerminalTab.Subscriptions:
+                Footer.Text = Loc.GetString("donation-terminal-footer-subs");
+                break;
+        }
+
+        SetTabActive(MainTabButton, tab == DonationTerminalTab.Main);
+        SetTabActive(ShopTabButton, tab == DonationTerminalTab.Shop);
+        SetTabActive(SubscriptionsTabButton, tab == DonationTerminalTab.Subscriptions);
+    }
+
+    private static void SetTabActive(Button button, bool active)
+    {
+        if (active)
+            button.AddStyleClass(SunriseStyleClass.StyleClassSciFiTabActive);
+        else
+            button.RemoveStyleClass(SunriseStyleClass.StyleClassSciFiTabActive);
+    }
+
+    private void OpenSponsorTierDetails()
+    {
+        _sponsorTiersController.OpenWindow();
+    }
+}

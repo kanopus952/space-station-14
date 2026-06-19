@@ -1,0 +1,193 @@
+<ui:InventoryWindow xmlns="https://spacestation14.io"
+                    xmlns:ui="clr-namespace:Content.Client._Sunrise.SponsorInventory"
+                    xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
+                    Title="{Loc 'sunrise-inventory-window-title'}"
+                    MinSize="1120 720"
+                    SetSize="1150 790"
+                    Resizable="True">
+    <PanelContainer>
+        <BoxContainer Orientation="Vertical"
+                      SeparationOverride="8"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True"
+                          SeparationOverride="8">
+                <Label Name="ProfileName"
+                       StyleClasses="LabelHeading"
+                       VerticalAlignment="Center"/>
+                <Control HorizontalExpand="True"/>
+                <Label Text="{Loc 'sunrise-inventory-job'}"
+                       VerticalAlignment="Center"/>
+                <OptionButton Name="JobOption"
+                              MinWidth="260"/>
+                <Button Name="SaveButton"
+                        Text="{Loc 'sunrise-inventory-save'}"
+                        MinWidth="120"/>
+            </BoxContainer>
+
+            <BoxContainer Orientation="Horizontal"
+                          SeparationOverride="6">
+                <Button Name="LoadoutTabButton"
+                        Text="{Loc 'sunrise-inventory-tab-equipment'}"
+                        MinWidth="180"/>
+                <Button Name="PetsTabButton"
+                        Text="{Loc 'sunrise-inventory-tab-pets'}"
+                        MinWidth="160"/>
+            </BoxContainer>
+
+            <PanelContainer Name="ContentPanel"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                <BoxContainer Name="EquipmentContent"
+                              Orientation="Horizontal"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="0">
+                    <BoxContainer Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  SeparationOverride="8">
+                        <Label Text="{Loc 'sunrise-inventory-slot-menu-hint'}"
+                               StyleClasses="LabelSubText"
+                               Margin="0 0 0 2"/>
+                        <BoxContainer Orientation="Horizontal"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True"
+                                      SeparationOverride="8"
+                                      MinHeight="220">
+                            <BoxContainer Orientation="Vertical"
+                                            MinWidth="200"
+                                            SetWidth="200"
+                                            VerticalAlignment="Center">
+                                <SpriteView Name="CharacterPreview"
+                                            MinSize="200 250"
+                                            SetSize="200 250"
+                                            Scale="8 8"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                                <BoxContainer Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                Margin="0 4 0 0">
+                                    <Button Name="RotateLeftButton"
+                                            Text="&lt;"
+                                            MinWidth="32"
+                                            StyleClasses="OpenRight"/>
+                                    <Button Name="RotateRightButton"
+                                            Text="&gt;"
+                                            MinWidth="32"
+                                            StyleClasses="OpenLeft"/>
+                                </BoxContainer>
+                            </BoxContainer>
+
+                            <ScrollContainer HorizontalExpand="True"
+                                             VerticalExpand="True"
+                                             HScrollEnabled="True"
+                                             VScrollEnabled="True">
+                                <Control Name="InventoryHost"
+                                         HorizontalExpand="True"
+                                         VerticalExpand="True"/>
+                            </ScrollContainer>
+                        </BoxContainer>
+
+                        <PanelContainer Name="BagPanel"
+                                        HorizontalExpand="True"
+                                        MinHeight="210">
+                            <BoxContainer Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          SeparationOverride="6">
+                                <BoxContainer Orientation="Horizontal"
+                                              HorizontalExpand="True"
+                                              SeparationOverride="6">
+                                    <Label Name="BagTitle"
+                                           Text="{Loc 'sunrise-inventory-bag-title'}"
+                                           StyleClasses="LabelHeading"
+                                           HorizontalExpand="True"/>
+                                    <Label Name="BagCapacityLabel"
+                                           StyleClasses="LabelSubText"
+                                           VerticalAlignment="Center"/>
+                                    <Button Name="BagEditorButton"
+                                            Text="{Loc 'sunrise-inventory-bag-edit'}"
+                                            MinWidth="150"/>
+                                </BoxContainer>
+                                <Label Name="BagHint"
+                                       StyleClasses="LabelSubText"/>
+                                <ScrollContainer HScrollEnabled="True"
+                                                 VScrollEnabled="True"
+                                                 HorizontalExpand="True"
+                                                 VerticalExpand="True">
+                                    <LayoutContainer Name="BagGridHost"
+                                                     HorizontalExpand="True"
+                                                     VerticalExpand="True"/>
+                                </ScrollContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+
+                    <cc:VSeparator Margin="8 -8 0 -8"/>
+
+                    <PanelContainer Name="PalettePanel"
+                                     MinWidth="390"
+                                     Margin="0 -8 -8 -8"
+                                     VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True"
+                                      SeparationOverride="6">
+                            <Label Name="PaletteTitle"
+                                   Text="{Loc 'sunrise-inventory-palette-title'}"
+                                   StyleClasses="LabelHeading"
+                                   Margin="8 8 8 0"/>
+                            <BoxContainer Orientation="Horizontal"
+                                           HorizontalExpand="True"
+                                           SeparationOverride="6"
+                                           Margin="8 0 8 0">
+                                <LineEdit Name="ItemSearch"
+                                           PlaceHolder="{Loc 'sunrise-inventory-search'}"
+                                           HorizontalExpand="True"
+                                           MinWidth="100"/>
+                                <Label Name="SourceFilterLabel"
+                                       Text="{Loc 'sunrise-inventory-filter-source'}"
+                                       StyleClasses="LabelSubText"
+                                       VerticalAlignment="Center"
+                                       Visible="False"/>
+                                <OptionButton Name="SourceFilter"
+                                              MinWidth="100"/>
+                                <OptionButton Name="PlacementFilter"
+                                              MinWidth="100"/>
+                            </BoxContainer>
+                            <Label Name="StatusLabel"
+                                   StyleClasses="LabelSubText"
+                                   Margin="8 0 8 0"/>
+                            <PanelContainer Name="PaletteListPanel"
+                                            HorizontalExpand="True"
+                                            VerticalExpand="True">
+                                <ScrollContainer VerticalExpand="True"
+                                                 HorizontalExpand="True"
+                                                 HScrollEnabled="False">
+                                    <BoxContainer Name="ItemPalette"
+                                                  Orientation="Vertical"
+                                                  HorizontalExpand="True"/>
+                                </ScrollContainer>
+                            </PanelContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <BoxContainer Name="PetsContent"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              Visible="False">
+                    <ScrollContainer VerticalExpand="True"
+                                     HScrollEnabled="False">
+                        <BoxContainer Name="PetsList"
+                                      Orientation="Vertical"
+                                      HorizontalExpand="True"/>
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </PanelContainer>
+</ui:InventoryWindow>

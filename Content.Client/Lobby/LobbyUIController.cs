@@ -241,7 +241,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
 
     private void OpenInventory()
     {
-        UIManager.GetUIController<SunriseInventoryUIController>().Open();
+        UIManager.GetUIController<InventoryUIController>().Open();
     }
 
     private string? GetCurrentPetSelection()

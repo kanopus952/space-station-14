@@ -7,8 +7,20 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Sunrise.SponsorInventory;
 
+/// <summary>
+/// Shared validation for sponsor inventory profile data received from clients or external sponsor services.
+/// </summary>
 public static class SunriseInventoryValidation
 {
+    private const int MaxJobSelectionCount = 128;
+    private const int MaxSlotSelectionCount = 64;
+    private const int MaxBagSelectionCount = 128;
+    private const int MaxPrototypeIdLength = 128;
+    private const int MaxSlotIdLength = 64;
+
+    /// <summary>
+    /// Validates a sponsor inventory profile against server-side sponsor ownership data for a session.
+    /// </summary>
     public static SunriseInventoryProfile EnsureValid(
         SunriseInventoryProfile profile,
         ICommonSession session,
@@ -19,13 +31,34 @@ public static class SunriseInventoryValidation
             return new SunriseInventoryProfile();
 
         var config = sponsors.GetSponsorInventoryConfig();
-        if (config.Items.Length == 0)
+        if (config == null || config.Items is not { Length: > 0 })
+            return new SunriseInventoryProfile();
+
+        var purchasedItems = GetPurchasedItems(session, sponsors);
+        var sponsorTier = sponsors.GetSponsorTier(session.UserId);
+
+        return EnsureValid(profile, prototype, config, purchasedItems, sponsorTier);
+    }
+
+    /// <summary>
+    /// Validates a sponsor inventory profile against an already loaded catalog and ownership snapshot.
+    /// </summary>
+    public static SunriseInventoryProfile EnsureValid(
+        SunriseInventoryProfile profile,
+        IPrototypeManager prototype,
+        SponsorInventoryConfig config,
+        IEnumerable<string> purchasedItems,
+        int sponsorTier)
+    {
+        profile ??= new SunriseInventoryProfile();
+
+        if (config == null || config.Items is not { Length: > 0 })
             return new SunriseInventoryProfile();
 
         var items = new Dictionary<string, SponsorInventoryItemInfo>();
         foreach (var item in config.Items)
         {
-            if (string.IsNullOrWhiteSpace(item.Id))
+            if (item == null || !IsReasonableId(item.Id, MaxPrototypeIdLength))
                 continue;
 
             items[item.Id] = item;
@@ -34,30 +67,38 @@ public static class SunriseInventoryValidation
         if (items.Count == 0)
             return new SunriseInventoryProfile();
 
-        var purchasedItems = GetPurchasedItems(session, sponsors);
-        var sponsorTier = sponsors.GetSponsorTier(session.UserId);
+        var purchased = new HashSet<string>();
+        foreach (var purchasedItem in purchasedItems ?? [])
+        {
+            if (IsReasonableId(purchasedItem, MaxPrototypeIdLength))
+                purchased.Add(purchasedItem);
+        }
 
         var valid = new SunriseInventoryProfile
         {
             Global = EnsureValidSelection(
-                profile.Global,
+                profile.Global ?? new SunriseInventorySelection(),
                 null,
                 items,
-                purchasedItems,
+                purchased,
                 sponsorTier,
                 prototype),
         };
 
-        foreach (var (jobId, selection) in profile.Jobs)
+        var checkedJobs = 0;
+        foreach (var (jobId, selection) in profile.Jobs ?? new Dictionary<string, SunriseInventorySelection>())
         {
-            if (string.IsNullOrWhiteSpace(jobId) || !prototype.HasIndex<JobPrototype>(jobId))
+            if (++checkedJobs > MaxJobSelectionCount)
+                break;
+
+            if (!IsReasonableId(jobId, MaxPrototypeIdLength) || !prototype.HasIndex<JobPrototype>(jobId))
                 continue;
 
             var validSelection = EnsureValidSelection(
-                selection,
+                selection ?? new SunriseInventorySelection(),
                 jobId,
                 items,
-                purchasedItems,
+                purchased,
                 sponsorTier,
                 prototype);
 
@@ -68,6 +109,9 @@ public static class SunriseInventoryValidation
         return valid;
     }
 
+    /// <summary>
+    /// Returns whether a sponsor inventory item may be used by a session for the selected job.
+    /// </summary>
     public static bool CanUseItem(
         string inventoryItemId,
         string? jobId,
@@ -75,14 +119,17 @@ public static class SunriseInventoryValidation
         IPrototypeManager prototype,
         ISharedSponsorsManager? sponsors)
     {
-        if (sponsors == null)
+        if (sponsors == null || !IsReasonableId(inventoryItemId, MaxPrototypeIdLength))
             return false;
 
         var config = sponsors.GetSponsorInventoryConfig();
         SponsorInventoryItemInfo? item = null;
 
-        foreach (var inventoryItem in config.Items)
+        foreach (var inventoryItem in config.Items ?? [])
         {
+            if (inventoryItem == null)
+                continue;
+
             if (inventoryItem.Id != inventoryItemId)
                 continue;
 
@@ -101,19 +148,64 @@ public static class SunriseInventoryValidation
             prototype);
     }
 
-    public static SunriseInventorySelection GetEffectiveSelection(SunriseInventoryProfile profile, string? jobId)
+    /// <summary>
+    /// Returns whether a sponsor inventory item may be used with a preloaded catalog and ownership snapshot.
+    /// </summary>
+    public static bool CanUseItem(
+        string inventoryItemId,
+        string? jobId,
+        IPrototypeManager prototype,
+        SponsorInventoryConfig config,
+        IEnumerable<string> purchasedItems,
+        int sponsorTier)
     {
-        var selection = profile.Global.Clone();
+        if (config == null || !IsReasonableId(inventoryItemId, MaxPrototypeIdLength))
+            return false;
 
-        if (jobId == null || !profile.Jobs.TryGetValue(jobId, out var jobSelection))
-            return selection;
+        SponsorInventoryItemInfo? item = null;
 
-        foreach (var (slot, itemId) in jobSelection.SlotItems)
+        foreach (var inventoryItem in config.Items ?? [])
         {
-            selection.SlotItems[slot] = itemId;
+            if (inventoryItem == null)
+                continue;
+
+            if (inventoryItem.Id != inventoryItemId)
+                continue;
+
+            item = inventoryItem;
+            break;
         }
 
-        selection.BagItems.AddRange(jobSelection.BagItems);
+        var purchased = new HashSet<string>();
+        foreach (var purchasedItem in purchasedItems ?? [])
+        {
+            if (IsReasonableId(purchasedItem, MaxPrototypeIdLength))
+                purchased.Add(purchasedItem);
+        }
+
+        return item != null &&
+               CanUseItem(item, jobId, purchased, sponsorTier, prototype);
+    }
+
+    /// <summary>
+    /// Merges global sponsor inventory choices with job-specific overrides.
+    /// </summary>
+    public static SunriseInventorySelection GetEffectiveSelection(SunriseInventoryProfile profile, string? jobId)
+    {
+        profile ??= new SunriseInventoryProfile();
+
+        var selection = new SunriseInventorySelection();
+        CopySelectionLayer(profile.Global ?? new SunriseInventorySelection(), selection);
+
+        if (jobId == null ||
+            profile.Jobs == null ||
+            !profile.Jobs.TryGetValue(jobId, out var jobSelection) ||
+            jobSelection == null)
+        {
+            return selection;
+        }
+
+        CopySelectionLayer(jobSelection, selection);
         return selection;
     }
 
@@ -128,9 +220,14 @@ public static class SunriseInventoryValidation
         var valid = new SunriseInventorySelection();
         var usedItems = new HashSet<string>();
 
-        foreach (var (slot, itemId) in selection.SlotItems)
+        var checkedSlotItems = 0;
+        foreach (var (slot, itemId) in selection.SlotItems ?? new Dictionary<string, string>())
         {
-            if (string.IsNullOrWhiteSpace(slot) ||
+            if (++checkedSlotItems > MaxSlotSelectionCount)
+                break;
+
+            if (!IsReasonableId(slot, MaxSlotIdLength) ||
+                !IsReasonableId(itemId, MaxPrototypeIdLength) ||
                 usedItems.Contains(itemId) ||
                 !items.TryGetValue(itemId, out var item) ||
                 !CanUseItem(item, jobId, purchasedItems, sponsorTier, prototype))
@@ -142,9 +239,14 @@ public static class SunriseInventoryValidation
             usedItems.Add(itemId);
         }
 
-        foreach (var itemId in selection.BagItems)
+        var checkedBagItems = 0;
+        foreach (var itemId in selection.BagItems ?? [])
         {
-            if (usedItems.Contains(itemId) ||
+            if (++checkedBagItems > MaxBagSelectionCount)
+                break;
+
+            if (!IsReasonableId(itemId, MaxPrototypeIdLength) ||
+                usedItems.Contains(itemId) ||
                 !items.TryGetValue(itemId, out var item) ||
                 !CanUseItem(item, jobId, purchasedItems, sponsorTier, prototype))
             {
@@ -158,6 +260,43 @@ public static class SunriseInventoryValidation
         return valid;
     }
 
+    private static void CopySelectionLayer(SunriseInventorySelection source, SunriseInventorySelection target)
+    {
+        var checkedSlotItems = 0;
+        foreach (var (slot, itemId) in source.SlotItems ?? new Dictionary<string, string>())
+        {
+            if (++checkedSlotItems > MaxSlotSelectionCount)
+                break;
+
+            if (!IsReasonableId(slot, MaxSlotIdLength) ||
+                !IsReasonableId(itemId, MaxPrototypeIdLength) ||
+                target.SlotItems.Count >= MaxSlotSelectionCount && !target.SlotItems.ContainsKey(slot))
+            {
+                continue;
+            }
+
+            target.SlotItems[slot] = itemId;
+        }
+
+        var checkedBagItems = 0;
+        foreach (var itemId in source.BagItems ?? [])
+        {
+            if (++checkedBagItems > MaxBagSelectionCount ||
+                target.BagItems.Count >= MaxBagSelectionCount)
+            {
+                break;
+            }
+
+            if (IsReasonableId(itemId, MaxPrototypeIdLength))
+                target.BagItems.Add(itemId);
+        }
+    }
+
+    private static bool IsReasonableId(string? id, int maxLength)
+    {
+        return !string.IsNullOrWhiteSpace(id) && id.Length <= maxLength;
+    }
+
     private static bool CanUseItem(
         SponsorInventoryItemInfo item,
         string? jobId,
@@ -165,7 +304,8 @@ public static class SunriseInventoryValidation
         int sponsorTier,
         IPrototypeManager prototype)
     {
-        if (string.IsNullOrWhiteSpace(item.EntityPrototype) ||
+        if (!IsReasonableId(item.Id, MaxPrototypeIdLength) ||
+            !IsReasonableId(item.EntityPrototype, MaxPrototypeIdLength) ||
             !prototype.HasIndex<EntityPrototype>(item.EntityPrototype))
         {
             return false;
@@ -185,7 +325,7 @@ public static class SunriseInventoryValidation
         if (item.AvailableJobs is not { Length: > 0 })
             return true;
 
-        if (jobId == null)
+        if (jobId == null || !IsReasonableId(jobId, MaxPrototypeIdLength))
             return false;
 
         return item.AvailableJobs.Contains(jobId);
@@ -196,6 +336,6 @@ public static class SunriseInventoryValidation
         if (sponsors.TryGetPurchasedInventoryItems(session.UserId, out var serverItems) && serverItems != null)
             return serverItems.ToHashSet();
 
-        return sponsors.GetClientPurchasedInventoryItems().ToHashSet();
+        return sponsors.GetClientPurchasedInventoryItems()?.ToHashSet() ?? new HashSet<string>();
     }
 }

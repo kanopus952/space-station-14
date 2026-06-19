@@ -6,16 +6,23 @@ using Robust.Client.UserInterface.Controllers;
 
 namespace Content.Client._Sunrise.SponsorInventory;
 
-public sealed class SunriseInventoryUIController : UIController, IOnStateExited<LobbyState>
+/// <summary>
+/// UI controller that owns the lobby sponsor inventory window lifecycle.
+/// </summary>
+public sealed class InventoryUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
 {
     [Dependency] private readonly IClientPreferencesManager _preferences = default!;
 
-    [UISystemDependency] private readonly SunriseInventorySystem _inventory = default!;
+    [UISystemDependency] private readonly SunriseInventorySystem _sponsorInventory = default!;
 
-    private SunriseInventoryWindow? _window;
+    private InventoryWindow? _window;
 
+    /// <summary>
+    /// Opens the sponsor inventory window for the currently selected lobby character.
+    /// </summary>
     public void Open()
     {
+        _sponsorInventory.RequestInitialData();
         EnsureWindow();
         RefreshWindow();
 
@@ -25,17 +32,22 @@ public sealed class SunriseInventoryUIController : UIController, IOnStateExited<
         _window?.OpenCentered();
     }
 
+    public void OnStateEntered(LobbyState state)
+    {
+        _sponsorInventory.RequestInitialData();
+    }
+
     public void OnStateExited(LobbyState state)
     {
-        _window?.Close();
+        CloseWindow();
     }
 
     private void EnsureWindow()
     {
-        if (_window is { Disposed: false })
+        if (_window != null)
             return;
 
-        _window = UIManager.CreateWindow<SunriseInventoryWindow>();
+        _window = UIManager.CreateWindow<InventoryWindow>();
         _window.OnSaveRequested += SaveProfile;
         _window.OnPetSelected += SelectPet;
     }
@@ -49,12 +61,12 @@ public sealed class SunriseInventoryUIController : UIController, IOnStateExited<
         _window.SetProfile(
             _preferences.Preferences.SelectedCharacter as HumanoidCharacterProfile,
             selectedSlot,
-            _inventory.GetInventoryProfile(selectedSlot));
+            _sponsorInventory.GetInventoryProfile(selectedSlot));
     }
 
-    private void SaveProfile(HumanoidCharacterProfile profile, int slot, SunriseInventoryProfile sponsorInventory)
+    private void SaveProfile(HumanoidCharacterProfile profile, int slot, SunriseInventoryProfile inventoryProfile)
     {
-        _inventory.SetInventoryProfile(slot, sponsorInventory);
+        _sponsorInventory.SetInventoryProfile(slot, inventoryProfile);
         _preferences.UpdateCharacter(profile, slot);
         UIManager.GetUIController<LobbyUIController>().ReloadCharacterSetup();
         RefreshWindow();
@@ -62,7 +74,19 @@ public sealed class SunriseInventoryUIController : UIController, IOnStateExited<
 
     private void SelectPet(string? petSelection)
     {
-        _inventory.SelectPet(petSelection);
+        _sponsorInventory.SelectPet(petSelection);
         _window?.RefreshPets();
+    }
+
+    private void CloseWindow()
+    {
+        if (_window == null)
+            return;
+
+        _window.OnSaveRequested -= SaveProfile;
+        _window.OnPetSelected -= SelectPet;
+        _window.DetachExternalSubscriptions();
+        _window.Close();
+        _window = null;
     }
 }

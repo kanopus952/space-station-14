@@ -1,4 +1,5 @@
 using Content.Client._Sunrise.SponsorTiers;
+using Content.Client.Lobby;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.CCVar;
 using Content.Sunrise.Interfaces.Shared;
@@ -19,6 +20,7 @@ public sealed partial class UserProfile : Control
     [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
     [Dependency] private readonly IUriOpener _uri = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IClientPreferencesManager _preferences = default!;
 
     private readonly UserProfileAccountInfoUIController _accountInfoUIController;
     private readonly SponsorTiersUIController _sponsorTiersUIController;
@@ -52,6 +54,8 @@ public sealed partial class UserProfile : Control
         if (_sponsorsManager != null)
             _sponsorsManager.LoadedSponsorInfo += RefreshSponsorInfo;
 
+        _preferences.OnServerDataLoaded += OnServerDataLoaded;
+
         SubscribeCfgHandlers();
         RefreshSponsorInfo();
         RefreshBindings(_accountBindingsManager?.GetSnapshot() ?? AccountBindingsSnapshot.Unavailable());
@@ -76,6 +80,8 @@ public sealed partial class UserProfile : Control
 
             if (_sponsorsManager != null)
                 _sponsorsManager.LoadedSponsorInfo -= RefreshSponsorInfo;
+
+            _preferences.OnServerDataLoaded -= OnServerDataLoaded;
         }
 
         base.Dispose(disposing);
@@ -83,6 +89,9 @@ public sealed partial class UserProfile : Control
 
     public void RequestAccountBindingsRefresh()
     {
+        if (!_preferences.ServerDataLoaded)
+            return;
+
         _accountBindingsManager?.RequestBindingsRefresh();
     }
 
@@ -126,6 +135,11 @@ public sealed partial class UserProfile : Control
     {
         _sponsorEnabled = enabled;
         RefreshSponsorInfo();
+    }
+
+    private void OnServerDataLoaded()
+    {
+        RequestAccountBindingsRefresh();
     }
 
     private void OnBindingsChanged(AccountBindingsSnapshot snapshot)

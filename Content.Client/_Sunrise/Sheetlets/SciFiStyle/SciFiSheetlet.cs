@@ -130,12 +130,6 @@ public sealed class DonationTerminalSheetlet : Sheetlet<NanotrasenStylesheet>
 
             E<Button>()
                 .Class(SunriseStyleClass.StyleClassSciFiButton)
-                .PseudoHovered()
-                .ParentOf(E<Label>())
-                .FontColor(SciFiPalette.Accent),
-
-            E<Button>()
-                .Class(SunriseStyleClass.StyleClassSciFiButton)
                 .PseudoPressed()
                 .ParentOf(E<Label>())
                 .FontColor(SciFiPalette.TextMuted),
@@ -276,6 +270,106 @@ public sealed class DonationTerminalSheetlet : Sheetlet<NanotrasenStylesheet>
                 .Font(sheet.BaseFont.GetFont(13, FontKind.Bold))
                 .FontColor(SciFiPalette.Accent),
 
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .PseudoNormal()
+                .Box(MakePanelButton(active: false)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .PseudoHovered()
+                .Box(MakePanelButton(active: false, hovered: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .PseudoPressed()
+                .Box(MakePanelButton(active: false, pressed: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .PseudoDisabled()
+                .Box(MakePanelButton(active: false, disabled: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButtonActive)
+                .PseudoNormal()
+                .Box(MakePanelButton(active: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButtonActive)
+                .PseudoHovered()
+                .Box(MakePanelButton(active: true, hovered: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButtonActive)
+                .PseudoPressed()
+                .Box(MakePanelButton(active: true, pressed: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .ParentOf(E<Label>())
+                .Font(sheet.BaseFont.GetFont(12, FontKind.Regular))
+                .FontColor(SciFiPalette.TextMuted),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButton)
+                .Class(SunriseStyleClass.StyleClassSciFiPanelButtonActive)
+                .ParentOf(E<Label>())
+                .Font(sheet.BaseFont.GetFont(12, FontKind.Regular))
+                .FontColor(SciFiPalette.Accent),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoNormal()
+                .Box(MakeBuyButton()),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoHovered()
+                .Box(MakeBuyButton(hovered: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoPressed()
+                .Box(MakeBuyButton(pressed: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoDisabled()
+                .Box(MakeBuyButton(disabled: true)),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .ParentOf(E<Label>())
+                .Font(sheet.BaseFont.GetFont(12, FontKind.Regular))
+                .FontColor(SciFiPalette.Text),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoHovered()
+                .ParentOf(E<Label>())
+                .FontColor(SciFiPalette.Accent),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoPressed()
+                .ParentOf(E<Label>())
+                .FontColor(SciFiPalette.TextMuted),
+
+            E<Button>()
+                .Class(SunriseStyleClass.StyleClassSciFiBuyButton)
+                .PseudoDisabled()
+                .ParentOf(E<Label>())
+                .FontColor(SciFiPalette.TextMuted.WithAlpha(0.65f)),
+
+            E<RichTextLabel>()
+                .Class(SunriseStyleClass.StyleClassSciFiDetailsTitle)
+                .Prop(Label.StylePropertyFont, sheet.BaseFont.GetFont(16, FontKind.Bold))
+                .Prop(nameof(RichTextLabel.LineHeightScale), 0.95f),
+
             E<PanelContainer>()
                 .Class(SunriseStyleClass.SciFiDivider)
                 .Panel(boxSciFiDivider)
@@ -341,7 +435,7 @@ public sealed class DonationTerminalSheetlet : Sheetlet<NanotrasenStylesheet>
 
     private static StyleBoxTexture MakeDonateButton(Texture texture, bool hovered = false, bool pressed = false, bool disabled = false)
     {
-        var background = SciFiPalette.PanelBackgroundDark.WithAlpha(0.4f);
+        var background = SciFiPalette.PanelBackgroundDark.WithAlpha(0.8f);
 
         if (hovered)
         {
@@ -469,6 +563,52 @@ public sealed class DonationTerminalSheetlet : Sheetlet<NanotrasenStylesheet>
             ContentMarginRightOverride = 16,
             ContentMarginTopOverride = 7,
             ContentMarginBottomOverride = active ? 8 : 7
+        };
+    }
+
+    private static StyleBoxFlat MakePanelButton(bool active, bool hovered = false, bool pressed = false, bool disabled = false)
+    {
+        var styleBox = MakeTab(active, hovered, pressed, disabled);
+        styleBox.BorderThickness = new Thickness(1);
+        styleBox.ContentMarginLeftOverride = 8;
+        styleBox.ContentMarginRightOverride = 8;
+        styleBox.ContentMarginTopOverride = 6;
+        styleBox.ContentMarginBottomOverride = 6;
+        return styleBox;
+    }
+
+    private static StyleBoxFlat MakeBuyButton(bool hovered = false, bool pressed = false, bool disabled = false)
+    {
+        var background = SciFiPalette.PanelBackgroundDark.WithAlpha(0.95f);
+        var border = SciFiPalette.AccentDim.NudgeLightness(0.12f).WithAlpha(0.95f);
+
+        if (hovered)
+        {
+            background = SciFiPalette.PanelBackground.NudgeLightness(0.04f);
+            border = SciFiPalette.Accent.NudgeLightness(0.04f);
+        }
+
+        if (pressed)
+        {
+            background = SciFiPalette.PanelBackgroundDark.NudgeLightness(-0.03f);
+            border = SciFiPalette.AccentDim.WithAlpha(1f);
+        }
+
+        if (disabled)
+        {
+            background = SciFiPalette.PanelBackgroundDark.WithAlpha(0.65f);
+            border = SciFiPalette.AccentDim.WithAlpha(0.6f);
+        }
+
+        return new StyleBoxFlat
+        {
+            BackgroundColor = background,
+            BorderColor = border,
+            BorderThickness = new Thickness(2),
+            ContentMarginLeftOverride = 6,
+            ContentMarginRightOverride = 6,
+            ContentMarginTopOverride = 6,
+            ContentMarginBottomOverride = 6
         };
     }
 }

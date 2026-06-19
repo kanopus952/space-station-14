@@ -2210,6 +2210,107 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         }
 
         #endregion
+
+        #region SponsorInventory
+
+        public async Task<DatabaseSponsorInventoryProfile?> GetSponsorInventoryProfileAsync(
+            Guid player,
+            int slot,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            return await db.DbContext.SponsorInventoryProfiles
+                .AsNoTracking()
+                .Where(profile => profile.PlayerUserId == player)
+                .Where(profile => profile.Slot == slot)
+                .Select(profile => new DatabaseSponsorInventoryProfile(
+                    profile.Slot,
+                    profile.ProfileJson,
+                    profile.Revision,
+                    profile.UpdatedAt))
+                .SingleOrDefaultAsync(cancellationToken: cancel);
+        }
+
+        public async Task<Dictionary<int, DatabaseSponsorInventoryProfile>> GetSponsorInventoryProfilesAsync(
+            Guid player,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            return await db.DbContext.SponsorInventoryProfiles
+                .AsNoTracking()
+                .Where(profile => profile.PlayerUserId == player)
+                .ToDictionaryAsync(
+                    profile => profile.Slot,
+                    profile => new DatabaseSponsorInventoryProfile(
+                        profile.Slot,
+                        profile.ProfileJson,
+                        profile.Revision,
+                        profile.UpdatedAt),
+                    cancellationToken: cancel);
+        }
+
+        public async Task<DatabaseSponsorInventoryProfile> SaveSponsorInventoryProfileAsync(
+            Guid player,
+            int slot,
+            string profileJson,
+            string revision,
+            DateTimeOffset updatedAt,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            var profile = await db.DbContext.SponsorInventoryProfiles
+                .Where(entry => entry.PlayerUserId == player)
+                .Where(entry => entry.Slot == slot)
+                .SingleOrDefaultAsync(cancellationToken: cancel);
+
+            if (profile == null)
+            {
+                profile = new SponsorInventoryProfile
+                {
+                    PlayerUserId = player,
+                    Slot = slot,
+                    ProfileJson = profileJson,
+                    Revision = revision,
+                    UpdatedAt = updatedAt,
+                };
+
+                db.DbContext.SponsorInventoryProfiles.Add(profile);
+            }
+            else
+            {
+                profile.ProfileJson = profileJson;
+                profile.Revision = revision;
+                profile.UpdatedAt = updatedAt;
+            }
+
+            await db.DbContext.SaveChangesAsync(cancel);
+            return new DatabaseSponsorInventoryProfile(slot, profile.ProfileJson, profile.Revision, profile.UpdatedAt);
+        }
+
+        public async Task<bool> DeleteSponsorInventoryProfileAsync(
+            Guid player,
+            int slot,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            var profile = await db.DbContext.SponsorInventoryProfiles
+                .Where(entry => entry.PlayerUserId == player)
+                .Where(entry => entry.Slot == slot)
+                .SingleOrDefaultAsync(cancellationToken: cancel);
+
+            if (profile == null)
+                return false;
+
+            db.DbContext.SponsorInventoryProfiles.Remove(profile);
+            await db.DbContext.SaveChangesAsync(cancel);
+            return true;
+        }
+
+        #endregion
         // Sunrise-end
         # region IPIntel
 
