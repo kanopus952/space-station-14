@@ -154,20 +154,17 @@
                             HorizontalExpand="True"
                             MinWidth="140"
                             SizeFlagsStretchRatio="1" />
-                        <sf:SciFiPillGlowButton
+                        <sf:SciFiPillSweepButton
                             Access="Public"
                             HorizontalAlignment="Right"
-                            HoverGlowIntensity="0.85"
                             MinHeight="36"
                             MinWidth="178"
                             Name="DonateButton"
-                            PressedGlowIntensity="0.95"
-                            ShineAlpha="0.9"
                             VerticalAlignment="Center">
-                            <sf:SciFiPillGlowButton.StyleClasses>
+                            <sf:SciFiPillSweepButton.StyleClasses>
                                 <system:String>SciFiButton</system:String>
                                 <system:String>SciFiPillButton</system:String>
-                            </sf:SciFiPillGlowButton.StyleClasses>
+                            </sf:SciFiPillSweepButton.StyleClasses>
                             <BoxContainer
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal"
@@ -183,7 +180,7 @@
                                     Text="{Loc 'donation-terminal-lobby-button'}"
                                     VAlign="Center" />
                             </BoxContainer>
-                        </sf:SciFiPillGlowButton>
+                        </sf:SciFiPillSweepButton>
                     </BoxContainer>
                 </PanelContainer>
                 <BoxContainer

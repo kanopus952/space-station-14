@@ -28,7 +28,7 @@ public sealed partial class SponsorWindow : BaseWindow
     private readonly SponsorTiersUIController _sponsorTiersController;
 
     private DonationTerminalTab _selectedTab = DonationTerminalTab.Main;
-    private string _paymentLink = string.Empty;
+    private string _accountFundsLink = string.Empty;
     private string _accountManagementUrl = string.Empty;
     private int _currentSponsorTier;
 
@@ -46,9 +46,9 @@ public sealed partial class SponsorWindow : BaseWindow
         ShopTabButton.OnPressed += _ => SelectTab(DonationTerminalTab.Shop);
         SubscriptionsTabButton.OnPressed += _ => SelectTab(DonationTerminalTab.Subscriptions);
         MainSubscriptionDetailsButton.OnPressed += _ => OpenSponsorTierDetails();
-        MainSubscriptionPurchaseButton.OnPressed += _ => OpenPaymentLink();
+        MainSubscriptionPurchaseButton.OnPressed += _ => OpenAccountFundsLink();
         MainAccountManageButton.OnPressed += _ => OpenAccountManagementLink();
-        SubscriptionPurchaseButton.OnPressed += _ => OpenPaymentLink();
+        SubscriptionPurchaseButton.OnPressed += _ => OpenAccountFundsLink();
         MainSubscriptionDetailsButton.TextAlign = Label.AlignMode.Center;
         MainSubscriptionPurchaseButton.TextAlign = Label.AlignMode.Center;
         MainAccountManageButton.TextAlign = Label.AlignMode.Center;
@@ -58,10 +58,10 @@ public sealed partial class SponsorWindow : BaseWindow
 
         SelectTab(_selectedTab);
 
-        _config.OnValueChanged(SunriseCCVars.PaymentLink, OnPaymentLinkChanged, true);
+        _config.OnValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged, true);
         _config.OnValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged, true);
 
-        BalanceButton.OnPressed += _ => OpenPaymentLink();
+        BalanceButton.OnPressed += _ => OpenAccountFundsLink();
         InitializeSponsorShopUi();
 
         RefreshPlayerInfo();
@@ -89,7 +89,7 @@ public sealed partial class SponsorWindow : BaseWindow
     {
         if (disposing)
         {
-            _config.UnsubValueChanged(SunriseCCVars.PaymentLink, OnPaymentLinkChanged);
+            _config.UnsubValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged);
             _config.UnsubValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged);
 
             if (_sponsorsManager != null)

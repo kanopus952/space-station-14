@@ -9,6 +9,7 @@ namespace Content.Client._Sunrise.Sponsor;
 
 public sealed partial class SponsorWindow
 {
+    [Dependency] private readonly IResourceCache _resource = default!;
     private const int StoreDetailsPreviewSize = 112;
     private const int StoreDetailsTierLineLength = 32;
     private const int StoreDetailsTierLines = 2;
@@ -21,8 +22,6 @@ public sealed partial class SponsorWindow
     private const int StoreStatusLineLength = 82;
     private const int StoreStatusLines = 3;
     private const int BenefitMarkerFontSize = 14;
-
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
 
     private Font? _benefitMarkerFont;
 
@@ -51,7 +50,7 @@ public sealed partial class SponsorWindow
 
     private Font GetBenefitMarkerFont()
     {
-        return _benefitMarkerFont ??= _resourceCache.GetFont(
+        return _benefitMarkerFont ??= _resource.GetFont(
             [
                 "/Fonts/NotoSans/NotoSans-Regular.ttf",
                 "/Fonts/NotoSans/NotoSansSymbols-Regular.ttf",

@@ -1,4 +1,5 @@
 using Content.Client._Sunrise.Sheetlets.SciFiStyle;
+using Content.Shared._Sunrise.Helpers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
@@ -36,7 +37,7 @@ public sealed partial class SponsorWindow
 
         var entry = _pendingPurchaseEntry;
         PurchasePreviewHost.RemoveAllChildren();
-        PurchaseNameLabel.Text = SponsorUiHelpers.WrapText(entry.Name, 34, 2);
+        PurchaseNameLabel.Text = entry.Name.WrapText(34, 2);
         PurchaseNameLabel.ToolTip = entry.Name;
         SetCurrencyPriceRow(PurchasePriceLabel, PurchasePriceIcon, PurchasePriceValueLabel, entry.Price);
         AddStoreEntryPreview(PurchasePreviewHost, entry, PurchasePreviewSize, 4f, true);
@@ -86,7 +87,7 @@ public sealed partial class SponsorWindow
 
     private void SetPurchaseDetailsValue(Label label, string text)
     {
-        label.Text = SponsorUiHelpers.WrapText(text, PurchaseDetailsLineLength, PurchaseDetailsLines);
+        label.Text = text.WrapText(PurchaseDetailsLineLength, PurchaseDetailsLines);
         label.ToolTip = text;
     }
 }

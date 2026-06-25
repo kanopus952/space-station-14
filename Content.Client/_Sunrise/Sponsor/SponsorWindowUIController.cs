@@ -3,7 +3,7 @@ using Content.Client.Lobby;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 
-namespace Content.Client._Sunrise.Donation;
+namespace Content.Client._Sunrise.Sponsor;
 
 public sealed class SponsorWindowUIController : UIController, IOnStateExited<LobbyState>
 {

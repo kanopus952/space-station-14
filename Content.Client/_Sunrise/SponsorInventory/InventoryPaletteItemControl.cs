@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using Content.Client._Sunrise.Sheetlets;
 using Content.Client.Stylesheets;
 using Content.Client._Sunrise.UserInterface.RichText;
 using Content.Client.UserInterface.Controls;
+using Content.Shared._Sunrise.Helpers;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.RichText;
@@ -26,7 +26,6 @@ internal sealed class InventoryPaletteItemControl : ContainerButton
     private const int MaxLabelLineLength = 9;
     private const int MaxLabelLines = 2;
     private const int TooltipMaxWidth = 300;
-    private const string Ellipsis = "...";
 
     private static readonly Type[] TooltipTags =
     [
@@ -78,7 +77,7 @@ internal sealed class InventoryPaletteItemControl : ContainerButton
 
         var label = new Label
         {
-            Text = WrapLabelText(entry.Name),
+            Text = entry.Name.WrapText(MaxLabelLineLength, MaxLabelLines),
             ClipText = true,
             SetWidth = LabelWidth,
             SetHeight = LabelHeight,
@@ -136,79 +135,5 @@ internal sealed class InventoryPaletteItemControl : ContainerButton
 
             return result;
         };
-    }
-
-    private static string WrapLabelText(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return text;
-
-        var lines = new List<string>();
-        var currentLine = string.Empty;
-
-        foreach (var rawWord in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-        {
-            var word = rawWord.Trim();
-
-            while (word.Length > MaxLabelLineLength)
-            {
-                if (currentLine.Length > 0)
-                {
-                    lines.Add(currentLine);
-                    currentLine = string.Empty;
-                }
-
-                var splitIndex = GetSplitIndex(word);
-                lines.Add(word[..splitIndex]);
-                word = word[splitIndex..];
-            }
-
-            if (word.Length == 0)
-                continue;
-
-            if (currentLine.Length == 0)
-            {
-                currentLine = word;
-                continue;
-            }
-
-            if (currentLine.Length + 1 + word.Length <= MaxLabelLineLength)
-            {
-                currentLine += " " + word;
-                continue;
-            }
-
-            lines.Add(currentLine);
-            currentLine = word;
-        }
-
-        if (currentLine.Length > 0)
-            lines.Add(currentLine);
-
-        if (lines.Count <= MaxLabelLines)
-            return string.Join('\n', lines);
-
-        lines[MaxLabelLines - 1] = TruncateLineWithEllipsis(lines[MaxLabelLines - 1]);
-        return string.Concat(lines[0], "\n", lines[MaxLabelLines - 1]);
-    }
-
-    private static int GetSplitIndex(string word)
-    {
-        var hyphenIndex = word.LastIndexOf('-', MaxLabelLineLength - 1, MaxLabelLineLength);
-        if (hyphenIndex > 0)
-            return hyphenIndex + 1;
-
-        return MaxLabelLineLength;
-    }
-
-    private static string TruncateLineWithEllipsis(string line)
-    {
-        if (line.Length + Ellipsis.Length <= MaxLabelLineLength)
-            return line + Ellipsis;
-
-        if (MaxLabelLineLength <= Ellipsis.Length)
-            return Ellipsis[..MaxLabelLineLength];
-
-        return line[..(MaxLabelLineLength - Ellipsis.Length)] + Ellipsis;
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Client._Sunrise.Sheetlets.SciFiStyle;
 using Content.Client._Sunrise.SponsorInventory;
+using Content.Shared._Sunrise.Helpers;
 using Content.Sunrise.Interfaces.Shared;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameObjects;
@@ -72,15 +73,18 @@ public sealed partial class SponsorWindow
 
         var color = result.Success ? SciFiPalette.Accent : Color.Red;
         StoreStatusLabel.FontColorOverride = color;
-        StoreStatusLabel.Text = SponsorUiHelpers.WrapText(text, StoreStatusLineLength, StoreStatusLines);
+        StoreStatusLabel.Text = text.WrapText(StoreStatusLineLength, StoreStatusLines);
         StoreStatusLabel.ToolTip = text;
         SetPurchaseStatus(text, color);
 
-        if (result.Success)
+        if (!result.Success)
         {
-            _pendingPurchaseEntry = null;
-            SelectTab(_purchaseReturnTab);
+            PurchaseConfirmButton.Disabled = _pendingPurchaseEntry == null || !CanBuyStoreEntry(_pendingPurchaseEntry);
+            return;
         }
+
+        _pendingPurchaseEntry = null;
+        SelectTab(_purchaseReturnTab);
     }
 
     private void RefreshBalance()

@@ -1,4 +1,5 @@
 using System;
+using Content.Shared._Sunrise.Helpers;
 using Content.Sunrise.Interfaces.Shared;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
@@ -58,7 +59,7 @@ public sealed partial class SponsorWindow
 
     private void SetAccountValue(Label label, string text)
     {
-        label.Text = SponsorUiHelpers.WrapText(text, AccountValueLineLength, AccountValueLines);
+        label.Text = text.WrapText(AccountValueLineLength, AccountValueLines);
         label.ToolTip = text;
     }
 }

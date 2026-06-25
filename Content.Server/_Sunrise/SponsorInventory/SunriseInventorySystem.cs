@@ -20,7 +20,9 @@ using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Content.Sunrise.Interfaces.Shared;
+using Robust.Server.Player;
 using Robust.Shared.Containers;
+using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -42,6 +44,7 @@ public sealed class SunriseInventorySystem : EntitySystem
     [Dependency] private readonly PlayerCacheManager _playerCache = default!;
     [Dependency] private readonly SponsorValidationSystem _validation = default!;
     [Dependency] private readonly IServerPreferencesManager _preferences = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
 
     private const int MaxInventoryPurchaseIdLength = 128;
     private const int MaxPetSelectionIdLength = 128;
@@ -59,6 +62,23 @@ public sealed class SunriseInventorySystem : EntitySystem
         SubscribeNetworkEvent<SunriseInventoryPetSelectedEvent>(OnPetSelected);
         SubscribeNetworkEvent<SunriseInventoryProfileChangedEvent>(OnInventoryProfileChanged);
         SubscribeNetworkEvent<SunriseInventoryPurchaseRequestEvent>(OnPurchaseRequest);
+        _player.PlayerStatusChanged += OnPlayerStatusChanged;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+
+        _player.PlayerStatusChanged -= OnPlayerStatusChanged;
+        _profiles.Clear();
+    }
+
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
+    {
+        if (args.NewStatus != SessionStatus.Disconnected)
+            return;
+
+        _profiles.Remove(args.Session.UserId);
     }
 
     private async void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)

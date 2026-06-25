@@ -42,20 +42,14 @@
             <Label
                 FontColorOverride="{x:Static sf:SciFiPalette.TextMuted}"
                 Text="{Loc 'donation-terminal-inventory-pack-kind'}"
-                VAlign="Center">
-                <Label.StyleClasses>
-                    <system:String>font-small</system:String>
-                </Label.StyleClasses>
-            </Label>
+                VAlign="Center"
+                StyleClasses="font-small"/>
             <Control HorizontalExpand="True" />
             <Label
                 Name="PackProgress"
                 FontColorOverride="{x:Static sf:SciFiPalette.Accent}"
-                VAlign="Center">
-                <Label.StyleClasses>
-                    <system:String>font-small</system:String>
-                </Label.StyleClasses>
-            </Label>
+                VAlign="Center"
+                StyleClasses="font-small"/>
         </BoxContainer>
 
         <Control VerticalExpand="True" />
@@ -77,11 +71,8 @@
                     Name="PackPrice"
                     FontColorOverride="{x:Static sf:SciFiPalette.Text}"
                     MaxWidth="96"
-                    VAlign="Center">
-                    <Label.StyleClasses>
-                        <system:String>font-small</system:String>
-                    </Label.StyleClasses>
-                </Label>
+                    VAlign="Center"
+                    StyleClasses="font-small"/>
             </BoxContainer>
 
             <Button
@@ -90,11 +81,8 @@
                 MaxHeight="30"
                 MinHeight="30"
                 Text="{Loc 'donation-terminal-buy'}"
-                TextAlign="Center">
-                <Button.StyleClasses>
-                    <system:String>SciFiBuyButton</system:String>
-                </Button.StyleClasses>
-            </Button>
+                TextAlign="Center"
+                StyleClasses="SciFiBuyButton"/>
         </BoxContainer>
     </BoxContainer>
 </ContainerButton>

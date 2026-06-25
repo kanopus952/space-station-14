@@ -7,9 +7,9 @@ namespace Content.Client._Sunrise.Sponsor;
 
 public sealed partial class SponsorWindow
 {
-    private void OnPaymentLinkChanged(string url)
+    private void OnAccountFundsLinkChanged(string url)
     {
-        _paymentLink = url;
+        _accountFundsLink = url;
         var disabled = string.IsNullOrWhiteSpace(url);
         BalanceButton.Disabled = disabled;
         MainSubscriptionPurchaseButton.Disabled = disabled;
@@ -23,12 +23,12 @@ public sealed partial class SponsorWindow
         MainAccountManageButton.Disabled = string.IsNullOrWhiteSpace(url);
     }
 
-    private void OpenPaymentLink()
+    private void OpenAccountFundsLink()
     {
-        if (string.IsNullOrWhiteSpace(_paymentLink))
+        if (string.IsNullOrWhiteSpace(_accountFundsLink))
             return;
 
-        _uri.OpenUri(_paymentLink);
+        _uri.OpenUri(_accountFundsLink);
     }
 
     private void OpenAccountManagementLink()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Content.Shared._Sunrise.SponsorInventory;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Sunrise.Interfaces.Shared;
@@ -158,6 +159,7 @@ public sealed class SunriseInventorySystem : EntitySystem
             GetSponsorTier());
 
         ApplyInventoryProfile(slot, validProfile);
+        InventoryDataChanged?.Invoke();
         RaiseNetworkEvent(new SunriseInventoryProfileChangedEvent(slot, validProfile));
     }
 
@@ -177,10 +179,11 @@ public sealed class SunriseInventorySystem : EntitySystem
     /// </summary>
     public SponsorInventoryConfig GetSponsorInventoryConfig()
     {
-        if (_hasInitialData)
-            return _config;
+        var config = _hasInitialData
+            ? _config
+            : _sponsors?.GetSponsorInventoryConfig() ?? new SponsorInventoryConfig();
 
-        return _sponsors?.GetSponsorInventoryConfig() ?? new SponsorInventoryConfig();
+        return CloneSponsorInventoryConfig(config);
     }
 
     /// <summary>
@@ -189,9 +192,9 @@ public sealed class SunriseInventorySystem : EntitySystem
     public IReadOnlyCollection<string> GetPurchasedInventoryItems()
     {
         if (_hasInitialData)
-            return _ownedItemIds;
+            return _ownedItemIds.ToArray();
 
-        return _sponsors?.GetClientPurchasedInventoryItems() ?? [];
+        return _sponsors?.GetClientPurchasedInventoryItems().ToArray() ?? [];
     }
 
     public int GetSponsorTier()
@@ -255,5 +258,36 @@ public sealed class SunriseInventorySystem : EntitySystem
             _profiles.Remove(slot);
         else
             _profiles[slot] = profile.Clone();
+    }
+
+    private static SponsorInventoryConfig CloneSponsorInventoryConfig(SponsorInventoryConfig config)
+    {
+        return new SponsorInventoryConfig
+        {
+            Version = config.Version,
+            Items = (config.Items ?? [])
+                .Where(item => item != null)
+                .Select(item => new SponsorInventoryItemInfo
+                {
+                    Id = item.Id,
+                    EntityPrototype = item.EntityPrototype,
+                    AvailableJobs = item.AvailableJobs?.ToArray(),
+                    SponsorLevel = item.SponsorLevel,
+                    Price = item.Price,
+                })
+                .ToArray(),
+            Packs = (config.Packs ?? [])
+                .Where(pack => pack != null)
+                .Select(pack => new SponsorInventoryPackInfo
+                {
+                    Id = pack.Id,
+                    Name = pack.Name,
+                    Description = pack.Description,
+                    PreviewEntityPrototype = pack.PreviewEntityPrototype,
+                    InventoryItemIds = pack.InventoryItemIds?.ToArray() ?? [],
+                    Price = pack.Price,
+                })
+                .ToArray(),
+        };
     }
 }

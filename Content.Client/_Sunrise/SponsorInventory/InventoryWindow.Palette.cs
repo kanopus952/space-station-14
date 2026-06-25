@@ -110,6 +110,11 @@ public sealed partial class InventoryWindow
     private void AddSponsorPaletteEntries()
     {
         var config = _sponsorInventory.GetSponsorInventoryConfig();
+
+        var selection = GetSponsorSelectionSnapshot();
+        var slotCache = new Dictionary<string, HashSet<string>>();
+        var bagFitCache = new Dictionary<string, bool>();
+
         foreach (var sponsorItem in (config.Items ?? [])
                      .Where(i => i != null && !string.IsNullOrWhiteSpace(i.Id) && !string.IsNullOrWhiteSpace(i.EntityPrototype))
                      .OrderBy(GetSponsorItemName))
@@ -118,11 +123,23 @@ public sealed partial class InventoryWindow
                 continue;
 
             var canUse = _sponsorInventory.CanUseItem(sponsorItem.Id, CurrentJobId);
-            var targetSlots = GetValidSlotsForEntityPrototype(sponsorItem.EntityPrototype);
-            var selection = GetSponsorSelectionSnapshot();
+
+            if (!slotCache.TryGetValue(sponsorItem.EntityPrototype, out var targetSlots))
+            {
+                targetSlots = GetValidSlotsForEntityPrototype(sponsorItem.EntityPrototype);
+                slotCache[sponsorItem.EntityPrototype] = targetSlots;
+            }
+
             var selected = IsSponsorItemSelected(selection, sponsorItem.Id);
             var selectedInBag = selection.BagItems.Contains(sponsorItem.Id);
-            var canPlaceInBag = canUse && (selectedInBag || CanAddSponsorItemToBag(sponsorItem.Id));
+
+            if (!bagFitCache.TryGetValue(sponsorItem.Id, out var canFitBag))
+            {
+                canFitBag = CanAddSponsorItemToBag(sponsorItem.Id);
+                bagFitCache[sponsorItem.Id] = canFitBag;
+            }
+            var canPlaceInBag = canUse && (selectedInBag || canFitBag);
+
             var enabled = canUse && (targetSlots.Count > 0 || canPlaceInBag);
             var reason = !canUse
                 ? Loc.GetString("sunrise-inventory-item-unavailable")

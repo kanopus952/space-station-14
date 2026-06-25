@@ -63,7 +63,7 @@
                         StyleClasses="LabelHeading"
                         Text="0"
                         VAlign="Center" />
-                    <sf:SciFiGlowButton
+                    <sf:SciFiSweepButton
                         Access="Public"
                         Disabled="True"
                         MinHeight="25"
@@ -76,7 +76,7 @@
                             Stretch="KeepAspectCentered"
                             StyleClasses="SciFiIconButtonIcon"
                             TexturePath="/Textures/Interface/VerbIcons/plus.svg.192dpi.png" />
-                    </sf:SciFiGlowButton>
+                    </sf:SciFiSweepButton>
                 </BoxContainer>
             </BoxContainer>
             <TextureButton
@@ -98,38 +98,29 @@
                 Margin="6 4 6 0"
                 Orientation="Horizontal"
                 SeparationOverride="3">
-                <sf:SciFiGlowButton
+                <sf:SciFiSweepButton
                     Access="Public"
-                    HoverGlowIntensity="1.15"
                     MinHeight="32"
                     MinWidth="142"
                     Name="MainTabButton"
-                    PressedGlowIntensity="1.3"
-                    ShineAlpha="1.7"
-                    ShineSpeed="1.15"
                     StyleClasses="SciFiTab"
+                    SweepIntensity="1.7"
                     Text="{Loc 'donation-terminal-tab-main'}" />
-                <sf:SciFiGlowButton
+                <sf:SciFiSweepButton
                     Access="Public"
-                    HoverGlowIntensity="1.15"
                     MinHeight="32"
                     MinWidth="142"
                     Name="ShopTabButton"
-                    PressedGlowIntensity="1.3"
-                    ShineAlpha="1.7"
-                    ShineSpeed="1.15"
                     StyleClasses="SciFiTab"
+                    SweepIntensity="1.7"
                     Text="{Loc 'donation-terminal-tab-shop'}" />
-                <sf:SciFiGlowButton
+                <sf:SciFiSweepButton
                     Access="Public"
-                    HoverGlowIntensity="1.15"
                     MinHeight="32"
                     MinWidth="142"
                     Name="SubscriptionsTabButton"
-                    PressedGlowIntensity="1.3"
-                    ShineAlpha="1.7"
-                    ShineSpeed="1.15"
                     StyleClasses="SciFiTab"
+                    SweepIntensity="1.7"
                     Text="{Loc 'donation-terminal-tab-subscriptions'}" />
             </BoxContainer>
         </PanelContainer>
@@ -222,7 +213,7 @@
                                         Name="MainSubscriptionDetailsButton"
                                         StyleClasses="SciFiDonateButton"
                                         Text="{Loc 'donation-terminal-details'}" />
-                                    <sf:SciFiGlowButton
+                                    <sf:SciFiSweepButton
                                         Access="Public"
                                         HorizontalExpand="True"
                                         Name="MainSubscriptionPurchaseButton"
@@ -277,7 +268,7 @@
                                 Text="{Loc 'donation-terminal-main-account-title'}"
                                 VAlign="Center" />
                             <Control HorizontalExpand="True" />
-                            <sf:SciFiGlowButton
+                            <sf:SciFiSweepButton
                                 Access="Public"
                                 MinWidth="220"
                                 Name="MainAccountManageButton"
@@ -667,7 +658,7 @@
                                         MaxWidth="320"
                                         Name="StoreDetailsDescriptionLabel" />
                                 </ScrollContainer>
-                                <sf:SciFiGlowButton
+                                <sf:SciFiSweepButton
                                     Access="Public"
                                     HorizontalExpand="True"
                                     MinHeight="32"
@@ -703,7 +694,7 @@
                                 FontColorOverride="{x:Static sf:SciFiPalette.TextMuted}"
                                 Text="{Loc 'donation-terminal-subscriptions-hint'}" />
                         </BoxContainer>
-                        <sf:SciFiGlowButton
+                        <sf:SciFiSweepButton
                             Access="Public"
                             MinWidth="170"
                             Name="SubscriptionPurchaseButton"
@@ -898,7 +889,7 @@
                                             Name="PurchaseCancelButton"
                                             StyleClasses="SciFiDonateButton"
                                             Text="{Loc 'donation-terminal-cancel'}" />
-                                        <sf:SciFiGlowButton
+                                        <sf:SciFiSweepButton
                                             Access="Public"
                                             HorizontalExpand="True"
                                             MinWidth="160"

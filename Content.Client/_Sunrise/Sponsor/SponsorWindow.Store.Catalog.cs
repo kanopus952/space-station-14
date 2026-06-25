@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Content.Client._Sunrise.Sheetlets;
 using Content.Client._Sunrise.Sheetlets.SciFiStyle;
+using Content.Shared._Sunrise.Helpers;
 using Content.Shared.Roles;
 using Content.Sunrise.Interfaces.Shared;
 using Robust.Client.UserInterface;
@@ -552,10 +553,8 @@ public sealed partial class SponsorWindow
         StoreDetailsNameLabel.SetMessage(FormattedMessage.FromUnformatted(entry.Name), SciFiPalette.Text);
         StoreDetailsNameLabel.ToolTip = entry.Name;
         SetCurrencyPriceRow(StoreDetailsPriceLabel, StoreDetailsPriceIcon, StoreDetailsPriceValueLabel, entry.Price);
-        StoreDetailsTierValue.Text = SponsorUiHelpers.WrapText(
-            GetStoreRequiredLevelText(entry.SponsorLevel),
-            StoreDetailsTierLineLength,
-            StoreDetailsTierLines);
+        StoreDetailsTierValue.Text = GetStoreRequiredLevelText(entry.SponsorLevel)
+            .WrapText(StoreDetailsTierLineLength, StoreDetailsTierLines);
         StoreDetailsTierValue.ToolTip = StoreDetailsTierValue.Text;
         StoreDetailsDescriptionLabel.SetMessage(
             FormattedMessage.FromUnformatted(string.IsNullOrWhiteSpace(entry.Description)
@@ -658,6 +657,6 @@ public sealed partial class SponsorWindow
             return false;
 
         var balance = _sponsorInventory.GetBalance();
-        return balance == null || balance.Value >= entry.Price;
+        return balance != null && balance.Value >= entry.Price;
     }
 }
