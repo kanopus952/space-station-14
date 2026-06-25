@@ -2261,33 +2261,53 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         {
             await using var db = await GetDb(cancel);
 
-            var profile = await db.DbContext.SponsorInventoryProfiles
+            var updated = await db.DbContext.SponsorInventoryProfiles
                 .Where(entry => entry.PlayerUserId == player)
                 .Where(entry => entry.Slot == slot)
-                .SingleOrDefaultAsync(cancellationToken: cancel);
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(entry => entry.ProfileJson, profileJson)
+                    .SetProperty(entry => entry.Revision, revision)
+                    .SetProperty(entry => entry.UpdatedAt, updatedAt),
+                    cancellationToken: cancel);
 
-            if (profile == null)
+            if (updated != 0)
+                return new DatabaseSponsorInventoryProfile(slot, profileJson, revision, updatedAt);
+
+            var profile = new SponsorInventoryProfile
             {
-                profile = new SponsorInventoryProfile
-                {
-                    PlayerUserId = player,
-                    Slot = slot,
-                    ProfileJson = profileJson,
-                    Revision = revision,
-                    UpdatedAt = updatedAt,
-                };
+                PlayerUserId = player,
+                Slot = slot,
+                ProfileJson = profileJson,
+                Revision = revision,
+                UpdatedAt = updatedAt,
+            };
 
-                db.DbContext.SponsorInventoryProfiles.Add(profile);
-            }
-            else
+            db.DbContext.SponsorInventoryProfiles.Add(profile);
+
+            try
             {
-                profile.ProfileJson = profileJson;
-                profile.Revision = revision;
-                profile.UpdatedAt = updatedAt;
+                await db.DbContext.SaveChangesAsync(cancel);
+            }
+            catch (DbUpdateException)
+            {
+                db.DbContext.Entry(profile).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+
+                updated = await db.DbContext.SponsorInventoryProfiles
+                    .Where(entry => entry.PlayerUserId == player)
+                    .Where(entry => entry.Slot == slot)
+                    .ExecuteUpdateAsync(setters => setters
+                            .SetProperty(entry => entry.ProfileJson, profileJson)
+                            .SetProperty(entry => entry.Revision, revision)
+                            .SetProperty(entry => entry.UpdatedAt, updatedAt),
+                        cancellationToken: cancel);
+
+                if (updated != 0)
+                    return new DatabaseSponsorInventoryProfile(slot, profileJson, revision, updatedAt);
+
+                throw;
             }
 
-            await db.DbContext.SaveChangesAsync(cancel);
-            return new DatabaseSponsorInventoryProfile(slot, profile.ProfileJson, profile.Revision, profile.UpdatedAt);
+            return new DatabaseSponsorInventoryProfile(slot, profileJson, revision, updatedAt);
         }
 
         public async Task<bool> DeleteSponsorInventoryProfileAsync(

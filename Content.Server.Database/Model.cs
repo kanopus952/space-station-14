@@ -1532,18 +1532,17 @@ namespace Content.Server.Database
     [Table("sponsor_inventory_profile"), Index(nameof(PlayerUserId)), PrimaryKey(nameof(PlayerUserId), nameof(Slot))]
     public sealed class SponsorInventoryProfile
     {
-        [Required, ForeignKey("Player")]
-        public Guid PlayerUserId { get; set; }
+        [ForeignKey("Player")]
+        public required Guid PlayerUserId { get; set; }
 
         public Player Player { get; set; } = default!;
 
         public int Slot { get; set; }
 
-        [Required]
-        public string ProfileJson { get; set; } = string.Empty;
+        public required string ProfileJson { get; set; } = string.Empty;
 
-        [Required, MaxLength(64)]
-        public string Revision { get; set; } = string.Empty;
+        [MaxLength(64)]
+        public required string Revision { get; set; } = string.Empty;
 
         public DateTimeOffset UpdatedAt { get; set; }
     }
