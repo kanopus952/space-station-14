@@ -25,6 +25,9 @@ public sealed partial class SunriseInventoryProfile : IEquatable<SunriseInventor
     [DataField]
     public Dictionary<string, SunriseInventorySelection> Jobs { get; set; } = new();
 
+    /// <summary>
+    /// Creates a deep copy of this profile, including all global and job-specific selections.
+    /// </summary>
     public SunriseInventoryProfile Clone()
     {
         var clone = new SunriseInventoryProfile
@@ -81,11 +84,17 @@ public sealed partial class SunriseInventoryProfile : IEquatable<SunriseInventor
         return profile;
     }
 
+    /// <summary>
+    /// Returns true when the profile contains no global or job-specific sponsor inventory selections.
+    /// </summary>
     public bool IsEmpty()
     {
         return (Global == null || Global.IsEmpty()) && (Jobs == null || Jobs.Count == 0);
     }
 
+    /// <summary>
+    /// Compares this profile with another profile by global selection and all job-specific selections.
+    /// </summary>
     public bool Equals(SunriseInventoryProfile? other)
     {
         if (ReferenceEquals(null, other))
@@ -118,11 +127,17 @@ public sealed partial class SunriseInventoryProfile : IEquatable<SunriseInventor
         return true;
     }
 
+    /// <summary>
+    /// Compares this profile with another object.
+    /// </summary>
     public override bool Equals(object? obj)
     {
         return obj is SunriseInventoryProfile other && Equals(other);
     }
 
+    /// <summary>
+    /// Returns a hash code based on the global selection and sorted job-specific selections.
+    /// </summary>
     public override int GetHashCode()
     {
         var hash = new HashCode();

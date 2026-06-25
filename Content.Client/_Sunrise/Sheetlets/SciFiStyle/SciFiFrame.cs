@@ -6,6 +6,10 @@ namespace Content.Client._Sunrise.Sheetlets.SciFiStyle;
 
 public sealed class SciFiFrame : Control
 {
+    /// <summary>
+    /// Grid size scale
+    /// </summary>
+    private const int StepScale = 56;
     protected override void Draw(DrawingHandleScreen handle)
     {
         var width = PixelWidth;
@@ -19,7 +23,7 @@ public sealed class SciFiFrame : Control
 
     private static void DrawGrid(DrawingHandleScreen handle, float width, float height, float cut, float scale)
     {
-        var step = 56f * scale;
+        var step = StepScale * scale;
         var color = SciFiPalette.BorderDim.WithAlpha(0.22f);
 
         for (var x = cut; x < width - cut; x += step)

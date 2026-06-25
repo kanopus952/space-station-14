@@ -152,9 +152,15 @@ public sealed class SponsorInventoryItemInfo
     [JsonPropertyName("entityPrototype")]
     public string EntityPrototype { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Job IDs that may use this item, or null when the item is not job-restricted.
+    /// </summary>
     [JsonPropertyName("availableJobs")]
     public string[]? AvailableJobs { get; set; }
 
+    /// <summary>
+    /// Minimum sponsor tier required for this item, or null when tier does not restrict it.
+    /// </summary>
     [JsonPropertyName("sponsorLevel")]
     public int? SponsorLevel { get; set; }
 
@@ -171,12 +177,21 @@ public sealed class SponsorInventoryPackInfo
     [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Optional display name supplied by the external sponsor service.
+    /// </summary>
     [JsonPropertyName("name")]
     public string? Name { get; set; }
 
+    /// <summary>
+    /// Optional display description supplied by the external sponsor service.
+    /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; set; }
 
+    /// <summary>
+    /// Optional entity prototype used to preview the pack in the UI.
+    /// </summary>
     [JsonPropertyName("previewEntityPrototype")]
     public string? PreviewEntityPrototype { get; set; }
 
@@ -205,6 +220,9 @@ public sealed class SponsorInventoryInitialData
     [JsonPropertyName("profiles")]
     public Dictionary<int, SponsorInventoryProfileInfo> Profiles { get; set; } = new();
 
+    /// <summary>
+    /// Optional sponsor inventory balance when the backing service exposes one.
+    /// </summary>
     [JsonPropertyName("balance")]
     public int? Balance { get; set; }
 
@@ -218,33 +236,63 @@ public sealed class SponsorInventoryInitialData
 [Serializable]
 public sealed class SponsorInventoryInitialDataApiResponse
 {
+    /// <summary>
+    /// Complete catalog object, or null when the API returns catalog parts at the top level.
+    /// </summary>
     [JsonPropertyName("config")]
     public SponsorInventoryConfig? Config { get; set; }
 
+    /// <summary>
+    /// Legacy catalog version fallback used when catalogVersion is absent.
+    /// </summary>
     [JsonPropertyName("version")]
     public string? Version { get; set; }
 
+    /// <summary>
+    /// Catalog version returned by the external sponsor service.
+    /// </summary>
     [JsonPropertyName("catalogVersion")]
     public string? CatalogVersion { get; set; }
 
+    /// <summary>
+    /// Top-level catalog items used when config is absent.
+    /// </summary>
     [JsonPropertyName("items")]
     public SponsorInventoryItemInfo[]? Items { get; set; }
 
+    /// <summary>
+    /// Top-level catalog packs used when config is absent.
+    /// </summary>
     [JsonPropertyName("packs")]
     public SponsorInventoryPackInfo[]? Packs { get; set; }
 
+    /// <summary>
+    /// Sponsor tier returned by the inventory endpoint, or null to use the fallback sponsor tier.
+    /// </summary>
     [JsonPropertyName("sponsorTier")]
     public int? SponsorTier { get; set; }
 
+    /// <summary>
+    /// Owned sponsor inventory item IDs, or null when the service returns no ownership data.
+    /// </summary>
     [JsonPropertyName("ownedItemIds")]
     public string[]? OwnedItemIds { get; set; }
 
+    /// <summary>
+    /// Saved profiles keyed by character slot, or null when no profiles are returned.
+    /// </summary>
     [JsonPropertyName("profiles")]
     public Dictionary<int, SponsorInventoryProfileInfo>? Profiles { get; set; }
 
+    /// <summary>
+    /// Optional sponsor inventory balance returned by the backing service.
+    /// </summary>
     [JsonPropertyName("balance")]
     public int? Balance { get; set; }
 
+    /// <summary>
+    /// Revision token returned by the backing service, or null when the response is not revisioned.
+    /// </summary>
     [JsonPropertyName("revision")]
     public string? Revision { get; set; }
 
@@ -314,9 +362,15 @@ public sealed class SponsorInventorySelectionInfo
 [Serializable, NetSerializable]
 public sealed class SponsorInventoryPurchaseRequest
 {
+    /// <summary>
+    /// Item ID to purchase, or null when the request purchases a pack.
+    /// </summary>
     [JsonPropertyName("itemId")]
     public string? ItemId { get; set; }
 
+    /// <summary>
+    /// Pack ID to purchase, or null when the request purchases a single item.
+    /// </summary>
     [JsonPropertyName("packId")]
     public string? PackId { get; set; }
 
@@ -368,12 +422,18 @@ public sealed class SponsorInventoryPurchaseResult
     [JsonPropertyName("ownedItemIds")]
     public string[] OwnedItemIds { get; set; } = [];
 
+    /// <summary>
+    /// Updated sponsor inventory balance, or null when the backing service does not expose one.
+    /// </summary>
     [JsonPropertyName("balance")]
     public int? Balance { get; set; }
 
     [JsonPropertyName("revision")]
     public string Revision { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Failure reason from the backing sponsor service, or null when the purchase succeeds.
+    /// </summary>
     [JsonPropertyName("error")]
     public string? Error { get; set; }
 }
@@ -390,9 +450,15 @@ public sealed class SponsorInventoryPurchaseApiRequest
     [JsonPropertyName("serverId")]
     public string ServerId { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Item ID to purchase, or null when the command purchases a pack.
+    /// </summary>
     [JsonPropertyName("itemId")]
     public string? ItemId { get; set; }
 
+    /// <summary>
+    /// Pack ID to purchase, or null when the command purchases a single item.
+    /// </summary>
     [JsonPropertyName("packId")]
     public string? PackId { get; set; }
 
@@ -406,9 +472,15 @@ public sealed class SponsorInfo
     [JsonPropertyName("tier")]
     public int Tier { get; set; }
 
+    /// <summary>
+    /// Optional out-of-character title granted by the sponsor tier.
+    /// </summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }
 
+    /// <summary>
+    /// Optional out-of-character chat color granted by the sponsor tier.
+    /// </summary>
     [JsonPropertyName("oocColor")]
     public string? OOCColor { get; set; }
 
@@ -433,6 +505,9 @@ public sealed class SponsorInfo
     [JsonPropertyName("pets")]
     public string[] Pets { get; set; } = [];
 
+    /// <summary>
+    /// Optional starting equipment prototype granted by the sponsor tier.
+    /// </summary>
     [JsonPropertyName("spawnEquipment")]
     public string? SpawnEquipment { get; set; }
 
