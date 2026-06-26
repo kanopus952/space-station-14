@@ -60,17 +60,17 @@ public sealed class SunriseInventorySystem : EntitySystem
 
     private void OnRunLevelChanged(object? sender, RunLevelChangedEventArgs e)
     {
-        if (e.NewLevel == ClientRunLevel.Initialize)
-        {
-            _profiles.Clear();
-            _ownedItemIds.Clear();
-            _config = new SponsorInventoryConfig();
-            _sponsorTier = 0;
-            _balance = null;
-            _revision = string.Empty;
-            _hasInitialData = false;
-            InventoryDataChanged?.Invoke();
-        }
+        if (e.NewLevel != ClientRunLevel.Initialize)
+            return;
+
+        _profiles.Clear();
+        _ownedItemIds.Clear();
+        _config = new SponsorInventoryConfig();
+        _sponsorTier = 0;
+        _balance = null;
+        _revision = string.Empty;
+        _hasInitialData = false;
+        InventoryDataChanged?.Invoke();
     }
 
     private void OnInitialData(SunriseInventoryInitialDataEvent ev)

@@ -29,6 +29,7 @@ public interface ISharedSponsorsManager
 
     public bool ClientIsSponsor();
     public List<SponsorInfo> GetSponsorTiers();
+    public string GetSponsorProjectName() => string.Empty;
     public SponsorInventoryConfig GetSponsorInventoryConfig() => new();
     public List<string> GetClientPurchasedInventoryItems() => [];
     public SponsorInventoryInitialData GetClientSponsorInventoryInitialData() => new();
@@ -469,9 +470,6 @@ public sealed class SponsorInfo
 
     [JsonPropertyName("allowedVoices")]
     public string[] AllowedVoices { get; set; } = [];
-
-    [JsonPropertyName("allowedLoadouts")]
-    public string[] AllowedLoadouts { get; set; } = [];
 
     [JsonPropertyName("allowedSpecies")]
     public string[] AllowedSpecies { get; set; } = [];

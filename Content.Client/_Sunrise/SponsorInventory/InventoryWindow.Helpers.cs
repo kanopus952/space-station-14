@@ -37,11 +37,11 @@ public sealed partial class InventoryWindow
      */
     private string? GetSlotPrototype(string slot)
     {
-        if (_previewDummy == null ||
-            !_inventory.TryGetSlotEntity(_previewDummy.Value, slot, out var entity))
-        {
+        if (_previewDummy == null)
             return null;
-        }
+
+        if (!_inventory.TryGetSlotEntity(_previewDummy.Value, slot, out var entity))
+            return null;
 
         return _entManager.GetComponent<MetaDataComponent>(entity.Value).EntityPrototype?.ID;
     }
@@ -57,7 +57,7 @@ public sealed partial class InventoryWindow
             _ => $"sunrise-inventory-slot-{slot.Name.ToLowerInvariant()}",
         };
 
-        if (Loc.TryGetString(locKey, out var localized))
+        if (_loc.TryGetString(locKey, out var localized))
             return localized;
 
         return string.IsNullOrWhiteSpace(slot.DisplayName)
@@ -91,7 +91,8 @@ public sealed partial class InventoryWindow
 
     private void SetPreviewRotation(Direction direction)
     {
-        CharacterPreview.OverrideDirection = (Direction) ((int) direction % 4 * 2);
+        // SpriteView only uses even facings for cardinal directions, while the stored preview rotation uses Direction turns.
+        CharacterPreview.OverrideDirection = (Direction)((int)direction % 4 * 2);
     }
 
 
@@ -121,6 +122,7 @@ public sealed partial class InventoryWindow
         var message = new FormattedMessage();
         AddTooltipColoredText(message, entry.Name, TooltipHeadingColor, bold: true);
 
+        // Tooltips are rich text because requirements can include validation markup and custom status icons.
         AddTooltipMetaLine(message, entry);
 
         if (entry.GroupMaxLimit != null)
@@ -277,24 +279,20 @@ public sealed partial class InventoryWindow
         var purchased = _sponsorInventory.GetPurchasedInventoryItems().Contains(item.Id);
 
         if (purchased)
-        {
             lines.Add(Loc.GetString("sunrise-inventory-requirement-owned"));
-        }
-        else
-        {
-            if (item.SponsorLevel != null)
-            {
-                lines.Add(Loc.GetString(
-                    "sunrise-inventory-requirement-sponsor-tier",
-                    ("level", item.SponsorLevel.Value)));
-            }
 
-            if (item.Price > 0)
-            {
-                lines.Add(Loc.GetString(
-                    "sunrise-inventory-requirement-price",
-                    ("price", item.Price)));
-            }
+        if (!purchased && item.SponsorLevel != null)
+        {
+            lines.Add(Loc.GetString(
+                "sunrise-inventory-requirement-sponsor-tier",
+                ("level", item.SponsorLevel.Value)));
+        }
+
+        if (!purchased && item.Price > 0)
+        {
+            lines.Add(Loc.GetString(
+                "sunrise-inventory-requirement-price",
+                ("price", item.Price)));
         }
 
         if (item.AvailableJobs is { Length: > 0 })
@@ -324,6 +322,7 @@ public sealed partial class InventoryWindow
         if (!_entManager.TryGetComponent<StorageComponent>(storageEntity, out var storage))
             return items;
 
+        // Temporarily detach contained entities so replacing a backpack does not delete its contents before the new fit is known.
         foreach (var contained in storage.Container.ContainedEntities.ToArray())
         {
             if (!_container.Remove(contained, storage.Container, reparent: false, force: true))
@@ -347,6 +346,7 @@ public sealed partial class InventoryWindow
                 !_storage.TryGetAvailableGridSpace((storageEntity, storage), (item, itemComp), out var location) ||
                 !_storage.InsertAt((storageEntity, storage), (item, itemComp), location.Value, out _, playSound: false, stackAutomatically: false))
             {
+                // Treat storage transfer as all-or-nothing so partially moved contents do not survive a failed replacement.
                 foreach (var insertedItem in inserted)
                 {
                     _container.Remove(insertedItem, storage.Container, reparent: false, force: true);
@@ -386,14 +386,14 @@ public sealed partial class InventoryWindow
     {
         var button = new TextureButton
         {
-            StyleClasses = { DefaultWindow.StyleClassWindowCloseButton },
+            StyleClasses = { StyleClassWindowCloseButton },
             SetWidth = 18,
             SetHeight = 18,
-            HorizontalAlignment = Control.HAlignment.Right,
-            VerticalAlignment = Control.VAlignment.Top,
+            HorizontalAlignment = HAlignment.Right,
+            VerticalAlignment = VAlignment.Top,
             Margin = new Thickness(0, -3, -3, 0),
             ToolTip = Loc.GetString(tooltip),
-            MouseFilter = Control.MouseFilterMode.Stop,
+            MouseFilter = MouseFilterMode.Stop,
             ModulateSelfOverride = Color.DarkRed
         };
 

@@ -8,6 +8,7 @@ using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Content.Shared.Preferences.Loadouts;
+using Content.Sunrise.Interfaces.Shared;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
@@ -43,8 +44,8 @@ public sealed partial class InventoryWindow
 
         var loadoutSystem = _entManager.System<LoadoutSystem>();
         var collection = IoCManager.Instance!;
-        var sponsorPrototypes = _sponsors?.GetClientPrototypes()?.ToArray() ?? [];
 
+        // Group metadata is copied onto each entry so the palette can sort and show limits without re-reading prototypes.
         for (var groupOrder = 0; groupOrder < roleLoadoutProto.Groups.Count; groupOrder++)
         {
             var groupId = roleLoadoutProto.Groups[groupOrder];
@@ -57,7 +58,7 @@ public sealed partial class InventoryWindow
             var selectedLoadouts = roleLoadout.SelectedLoadouts[group.ID];
             var selectedCount = selectedLoadouts.Count;
             var groupMinLimit = Math.Max(0, group.MinLimit);
-            var groupMaxLimit = group.MaxLimit > 0 ? group.MaxLimit : (int?) null;
+            var groupMaxLimit = group.MaxLimit > 0 ? group.MaxLimit : (int?)null;
             var groupName = Loc.GetString(group.Name);
 
             foreach (var loadoutId in group.Loadouts)
@@ -72,7 +73,6 @@ public sealed partial class InventoryWindow
                     _player.LocalSession,
                     loadout.ID,
                     collection,
-                    sponsorPrototypes,
                     out reason);
 
                 var equipment = GetLoadoutEquipment(loadout);
@@ -115,13 +115,32 @@ public sealed partial class InventoryWindow
         var slotCache = new Dictionary<string, HashSet<string>>();
         var bagFitCache = new Dictionary<string, bool>();
 
-        foreach (var sponsorItem in (config.Items ?? [])
-                     .Where(i => i != null && !string.IsNullOrWhiteSpace(i.Id) && !string.IsNullOrWhiteSpace(i.EntityPrototype))
-                     .OrderBy(GetSponsorItemName))
+        // Slot and bag-fit checks spawn probe entities, so cache by prototype/item for this palette rebuild.
+        var sponsorItems = new List<SponsorInventoryItemInfo>();
+        foreach (var sponsorItem in config.Items ?? [])
         {
+            if (sponsorItem == null)
+                continue;
+
+            if (string.IsNullOrWhiteSpace(sponsorItem.Id))
+                continue;
+
+            if (string.IsNullOrWhiteSpace(sponsorItem.EntityPrototype))
+                continue;
+
             if (!_prototype.HasIndex<EntityPrototype>(sponsorItem.EntityPrototype))
                 continue;
 
+            sponsorItems.Add(sponsorItem);
+        }
+
+        sponsorItems.Sort((left, right) => string.Compare(
+            GetSponsorItemName(left),
+            GetSponsorItemName(right),
+            StringComparison.CurrentCulture));
+
+        foreach (var sponsorItem in sponsorItems)
+        {
             var canUse = _sponsorInventory.CanUseItem(sponsorItem.Id, CurrentJobId);
 
             if (!slotCache.TryGetValue(sponsorItem.EntityPrototype, out var targetSlots))
@@ -173,10 +192,11 @@ public sealed partial class InventoryWindow
 
     private void BuildPlacementOptions(List<SlotDefinition> slots)
     {
-        var previous = CurrentPlacementFilter;
+        var previous = CurrentPlacementFilter();
         PlacementFilter.Clear();
         _placementOptions.Clear();
 
+        // The bag editor forces a synthetic placement filter because only backpack-compatible entries are actionable there.
         if (_bagEditorOpen)
         {
             AddPlacementOption(Loc.GetString("sunrise-inventory-filter-placement-bag"), PlacementFilterBag);
@@ -187,6 +207,7 @@ public sealed partial class InventoryWindow
 
         AddPlacementOption(Loc.GetString("sunrise-inventory-filter-placement-slot"), PlacementFilterAnySlot);
 
+        // Specific slot filters share the same option list as synthetic filters, so the backing value is the slot id.
         foreach (var slot in slots)
         {
             AddPlacementOption(
@@ -197,6 +218,7 @@ public sealed partial class InventoryWindow
         var selected = _selectedEquipmentSlot != null
             ? _placementOptions.IndexOf(_selectedEquipmentSlot)
             : _placementOptions.IndexOf(previous);
+
         _placementFilter = selected >= 0 ? selected : 0;
         PlacementFilter.SelectId(_placementFilter);
     }
@@ -208,15 +230,12 @@ public sealed partial class InventoryWindow
         PlacementFilter.AddItem(text, id);
     }
 
-    private string CurrentPlacementFilter
+    private string CurrentPlacementFilter()
     {
-        get
-        {
-            if (_placementFilter < 0 || _placementFilter >= _placementOptions.Count)
-                return PlacementFilterAll;
+        if (_placementFilter < 0 || _placementFilter >= _placementOptions.Count)
+            return PlacementFilterAll;
 
-            return _placementOptions[_placementFilter];
-        }
+        return _placementOptions[_placementFilter];
     }
 
     private static bool IsSpecificSlotFilter(string placementFilter)
@@ -245,30 +264,15 @@ public sealed partial class InventoryWindow
         ItemPalette.RemoveAllChildren();
         UpdateBagEditorControls(_characterProfile != null && CurrentJobId != null);
 
-        var filter = (InventoryPaletteSourceFilter) _sourceFilter;
+        var filter = (InventoryPaletteSourceFilter)_sourceFilter;
         var placementFilter = _bagEditorOpen
             ? PlacementFilterBag
-            : _selectedEquipmentSlot ?? CurrentPlacementFilter;
+            : _selectedEquipmentSlot ?? CurrentPlacementFilter();
         var search = ItemSearch.Text.Trim();
 
-        if (_bagEditorOpen)
-        {
-            StatusLabel.Text = Loc.GetString("sunrise-inventory-bag-editor-status");
+        RefreshPaletteStatus();
 
-            if (TryGetPreviewBackStorage(out _, out _))
-                BagHint.Text = Loc.GetString("sunrise-inventory-bag-editor-hint");
-        }
-        else if (_selectedEquipmentSlot != null)
-        {
-            StatusLabel.Text = Loc.GetString(
-                "sunrise-inventory-selected-slot",
-                ("slot", GetSlotLabel(_selectedEquipmentSlot)));
-        }
-        else
-        {
-            StatusLabel.Text = string.Empty;
-        }
-
+        // Enabled entries stay first, then mode-specific placement/source ordering keeps likely actions near the top.
         var entries = _paletteEntries
             .Where(e => filter == InventoryPaletteSourceFilter.All ||
                         filter == InventoryPaletteSourceFilter.Loadout && e.Source == InventoryPaletteEntrySource.Loadout ||
@@ -303,6 +307,29 @@ public sealed partial class InventoryWindow
         RenderRegularPalette(entries);
     }
 
+    private void RefreshPaletteStatus()
+    {
+        if (_bagEditorOpen)
+        {
+            StatusLabel.Text = Loc.GetString("sunrise-inventory-bag-editor-status");
+
+            if (TryGetPreviewBackStorage(out _, out _))
+                BagHint.Text = Loc.GetString("sunrise-inventory-bag-editor-hint");
+
+            return;
+        }
+
+        if (_selectedEquipmentSlot == null)
+        {
+            StatusLabel.Text = string.Empty;
+            return;
+        }
+
+        StatusLabel.Text = Loc.GetString(
+            "sunrise-inventory-selected-slot",
+            ("slot", GetSlotLabel(_selectedEquipmentSlot)));
+    }
+
     private void RenderRegularPalette(List<InventoryPaletteEntry> entries)
     {
         var grid = CreatePaletteGrid();
@@ -320,6 +347,7 @@ public sealed partial class InventoryWindow
             .Where(e => e.Source == InventoryPaletteEntrySource.Sponsor)
             .ToList();
 
+        // Bag editor groups loadout entries by loadout group so group min/max limits stay visible while packing storage.
         if (sponsorsFirst && sponsorEntries.Count > 0)
             AddBackpackPaletteGroup(Loc.GetString("sunrise-inventory-bag-group-sponsor"), sponsorEntries);
 
@@ -381,6 +409,8 @@ public sealed partial class InventoryWindow
     {
         var selected = IsEntrySelectedInCurrentContext(entry);
         var control = new InventoryPaletteItemControl(entry, selected, BuildPaletteTooltip(entry));
+
+        // Mouse down/up are used for drag detection, while OnPressed keeps normal click activation working.
         control.OnKeyBindDown += args => OnPaletteKeyDown(args, control);
         control.OnKeyBindUp += args => OnPaletteKeyUp(args, control);
         control.OnPressed += _ => ActivateInventoryPaletteEntry(control.Entry);
@@ -434,8 +464,8 @@ public sealed partial class InventoryWindow
             return string.Empty;
 
         return entry.TargetSlots
-            .OrderBy(slot => GetAnySlotOrder(slot))
-            .ThenBy(slot => GetSlotLabel(slot))
+            .OrderBy(GetAnySlotOrder)
+            .ThenBy(GetSlotLabel)
             .FirstOrDefault() ?? string.Empty;
     }
 
@@ -456,7 +486,7 @@ public sealed partial class InventoryWindow
         if (filter == InventoryPaletteSourceFilter.All)
             return entry.Source == InventoryPaletteEntrySource.Sponsor ? 0 : 1;
 
-        return (int) entry.Source;
+        return (int)entry.Source;
     }
 
     private bool IsEntrySelectedInCurrentContext(InventoryPaletteEntry entry)
@@ -558,6 +588,7 @@ public sealed partial class InventoryWindow
             return false;
 
         ClearDragGhost();
+        // The drag preview lives in PopupRoot so it can follow the cursor outside the palette scroll container.
         _dragGhost = new EntityPrototypeView
         {
             SetSize = new Vector2(64, 64),
@@ -596,6 +627,8 @@ public sealed partial class InventoryWindow
     private void TryDropInventoryPaletteEntry(InventoryPaletteEntry entry, ScreenCoordinates pointer)
     {
         var target = _ui.MouseGetControl(pointer);
+
+        // Drop targets are resolved by walking the UI parent chain, so children still count as their slot or bag.
         if (TryFindParentSlot(target, out var slot))
         {
             ApplyInventoryPaletteEntryToSlot(entry, slot);
@@ -674,7 +707,13 @@ public sealed partial class InventoryWindow
         string? replacementSlot = null,
         string? sponsorSlotToClear = null)
     {
-        if (_characterProfile == null || entry.GroupId == null || entry.LoadoutId == null || CurrentJobId == null)
+        if (_characterProfile == null)
+            return false;
+
+        if (entry.GroupId == null || entry.LoadoutId == null)
+            return false;
+
+        if (CurrentJobId == null)
             return false;
 
         var roleLoadout = EnsureRoleLoadout(CurrentJobId);
@@ -710,6 +749,7 @@ public sealed partial class InventoryWindow
         if (sponsorSlotToClear != null)
             RemoveSponsorSlotSelection(sponsorSlotToClear);
 
+        // Rebuild after every successful mutation because slot contents, bag fit, and palette availability are interdependent.
         _characterProfile = _characterProfile.WithLoadout(roleLoadout);
         RefreshEquipment();
         return true;
@@ -720,6 +760,7 @@ public sealed partial class InventoryWindow
         if (_bagEditorOpen)
             return null;
 
+        // A single-slot loadout can replace its current occupant without forcing the user to select the slot first.
         if (_selectedEquipmentSlot != null && entry.TargetSlots.Contains(_selectedEquipmentSlot))
             return _selectedEquipmentSlot;
 
@@ -754,6 +795,7 @@ public sealed partial class InventoryWindow
                     return false;
                 }
 
+                // Loadout equipment is exclusive per slot in this UI, so conflicting selected loadouts are removed first.
                 selectedLoadouts.RemoveAt(i);
             }
         }

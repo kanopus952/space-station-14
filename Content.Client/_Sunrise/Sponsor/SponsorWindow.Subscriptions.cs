@@ -41,7 +41,8 @@ public sealed partial class SponsorWindow
                 GetSubscriptionAccentColor(sponsorTier),
                 sponsorTier.Tier > 0 && sponsorTier.Tier == _currentSponsorTier);
 
-            card.DetailsPressed += OpenSponsorTierDetails;
+            var tier = sponsorTier.Tier;
+            card.DetailsPressed += () => OpenSponsorTierDetails(tier);
             SubscriptionCards.AddChild(card);
         }
     }
@@ -133,10 +134,6 @@ public sealed partial class SponsorWindow
             benefits,
             "donation-terminal-subscription-card-benefit-customization",
             sponsorTier.AllowedMarkings.Length + sponsorTier.AllowedSpecies.Length + sponsorTier.AllowedVoices.Length);
-        AddCountBenefit(
-            benefits,
-            "donation-terminal-subscription-card-benefit-loadouts",
-            sponsorTier.AllowedLoadouts.Length);
         AddCountBenefit(
             benefits,
             "donation-terminal-subscription-card-benefit-pets",

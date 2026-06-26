@@ -5,11 +5,9 @@
     xmlns:sf="clr-namespace:Content.Client._Sunrise.Sheetlets.SciFiStyle"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    MaxHeight="980"
-    MaxWidth="1600"
-    MinSize="1080 580"
-    MouseFilter="Stop"
+    MinSize="1200 680"
     SetSize="1200 680"
+    MouseFilter="Stop"
     RectClipContent="True"
     Resizable="True">
 
@@ -161,9 +159,9 @@
                         <BoxContainer
                             HorizontalExpand="True"
                             Orientation="Horizontal"
-                            SeparationOverride="14">
+                            SeparationOverride="10">
                             <BoxContainer
-                                MinWidth="150"
+                                MinWidth="128"
                                 Orientation="Vertical"
                                 SeparationOverride="4"
                                 VerticalAlignment="Center">
@@ -179,17 +177,17 @@
                                     Align="Center"
                                     FontColorOverride="{x:Static sf:SciFiPalette.TextMuted}"
                                     HorizontalExpand="True"
-                                    MaxWidth="150"
+                                    MaxWidth="128"
                                     Name="MainSponsorTierBadgeCaption"
                                     Text="" />
                             </BoxContainer>
 
                             <BoxContainer
                                 HorizontalExpand="True"
+                                MinWidth="410"
                                 Orientation="Vertical"
                                 SeparationOverride="8"
-                                VerticalAlignment="Center"
-                                MaxWidth="600">
+                                VerticalAlignment="Center">
                                 <Label
                                     Access="Public"
                                     FontColorOverride="{x:Static sf:SciFiPalette.Text}"
@@ -225,9 +223,8 @@
                             <PanelContainer StyleClasses="SciFiDivider" />
 
                             <BoxContainer
-                                HorizontalExpand="True"
-                                MaxWidth="410"
-                                MinWidth="390"
+                                MaxWidth="380"
+                                MinWidth="340"
                                 Orientation="Vertical"
                                 SeparationOverride="7"
                                 VerticalAlignment="Center">

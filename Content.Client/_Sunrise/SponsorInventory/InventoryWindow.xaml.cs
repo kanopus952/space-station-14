@@ -62,6 +62,7 @@ public sealed partial class InventoryWindow : DefaultWindow
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly PlayerCacheManager _playerCache = default!;
+    [Dependency] private readonly ILocalizationManager _loc = default!;
 
     private static readonly ProtoId<ItemSizePrototype> PocketableItemSize = "Small";
     private const string PlacementFilterAll = "";
@@ -71,6 +72,7 @@ public sealed partial class InventoryWindow : DefaultWindow
     private const string StorageTileBlockedTexturePath = "Storage/tile_blocked";
     private const int BagTileSize = 32;
 
+    // InventoryDisplay uses logical grid coordinates, so Sunrise-only slots get stable positions here instead of relying on prototype order.
     private static readonly Dictionary<string, Vector2i> LogicalSlotPositions = new()
     {
         ["head"] = new Vector2i(2, 0),
@@ -96,11 +98,13 @@ public sealed partial class InventoryWindow : DefaultWindow
         ["pocket2"] = new Vector2i(4, 4),
         ["suitstorage"] = new Vector2i(5, 4),
 
-        ["pocket3"] = new Vector2i(3, 6),
-        ["pocket4"] = new Vector2i(4, 6),
+        ["pocket3"] = new Vector2i(3, 5),
+        ["pocket4"] = new Vector2i(4, 5),
     };
 
     private readonly DragDropHelper<InventoryPaletteItemControl> _dragHelper;
+
+    // OptionButton only reports integer ids, so these lists map UI ids back to job ids and placement filter values.
     private readonly List<string?> _jobOptions = new();
     private readonly List<string> _placementOptions = new();
     private readonly Dictionary<SlotControl, string> _slotControls = new();
@@ -114,8 +118,10 @@ public sealed partial class InventoryWindow : DefaultWindow
     private InventorySystem _inventory = default!;
     private SharedStorageSystem _storage = default!;
     private ItemSystem _item = default!;
+    private SpriteSystem _sprite = default!;
     private EntityWhitelistSystem _whitelist = default!;
 
+    // Edited data is cloned into the window first; SaveButton is the only path that publishes it back to the caller.
     private HumanoidCharacterProfile? _characterProfile;
     private SunriseInventoryProfile _editedInventoryProfile = new();
     private int? _characterSlot;
@@ -145,6 +151,8 @@ public sealed partial class InventoryWindow : DefaultWindow
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         IoCManager.Instance!.TryResolveType(out _sponsors);
+
+        // These style classes are applied here because the panels are shared across tab and editor modes.
         ContentPanel.AddStyleClass(SunriseStyleClass.SponsorInventoryContentPanel);
         BagPanel.AddStyleClass(SunriseStyleClass.SponsorInventoryBagPanel);
         PalettePanel.AddStyleClass(SunriseStyleClass.SponsorInventoryPalettePanel);
@@ -155,13 +163,16 @@ public sealed partial class InventoryWindow : DefaultWindow
         _inventory = _entManager.System<InventorySystem>();
         _storage = _entManager.System<SharedStorageSystem>();
         _item = _entManager.System<ItemSystem>();
+        _sprite = _entManager.System<SpriteSystem>();
         _whitelist = _entManager.System<EntityWhitelistSystem>();
+
+        // DragDropHelper owns gesture timing; target resolution stays in this window because it depends on current tab state.
         _dragHelper = new DragDropHelper<InventoryPaletteItemControl>(OnBeginDrag, OnContinueDrag, OnEndDrag);
 
-        SourceFilter.AddItem(Loc.GetString("sunrise-inventory-filter-all"), (int) InventoryPaletteSourceFilter.All);
-        SourceFilter.AddItem(Loc.GetString("sunrise-inventory-filter-loadout"), (int) InventoryPaletteSourceFilter.Loadout);
-        SourceFilter.AddItem(Loc.GetString("sunrise-inventory-filter-sponsor"), (int) InventoryPaletteSourceFilter.Sponsor);
-        SourceFilter.SelectId((int) InventoryPaletteSourceFilter.All);
+        SourceFilter.AddItem(Loc.GetString("sunrise-inventory-filter-all"), (int)InventoryPaletteSourceFilter.All);
+        SourceFilter.AddItem(Loc.GetString("sunrise-inventory-filter-loadout"), (int)InventoryPaletteSourceFilter.Loadout);
+        SourceFilter.AddItem(Loc.GetString("sunrise-inventory-filter-sponsor"), (int)InventoryPaletteSourceFilter.Sponsor);
+        SourceFilter.SelectId((int)InventoryPaletteSourceFilter.All);
         SourceFilter.OnItemSelected += args =>
         {
             SourceFilter.SelectId(args.Id);
@@ -172,7 +183,7 @@ public sealed partial class InventoryWindow : DefaultWindow
         {
             PlacementFilter.SelectId(args.Id);
             _placementFilter = args.Id;
-            var placement = CurrentPlacementFilter;
+            var placement = CurrentPlacementFilter();
             _selectedEquipmentSlot = IsSpecificSlotFilter(placement)
                 ? placement
                 : null;
@@ -183,6 +194,7 @@ public sealed partial class InventoryWindow : DefaultWindow
         ItemSearch.OnTextChanged += _ => RefreshPalette();
         BagGridHost.MouseFilter = MouseFilterMode.Stop;
 
+        // Changing jobs invalidates the preview dummy, slot layout, bag grid, and palette placement filters.
         JobOption.OnItemSelected += args =>
         {
             JobOption.SelectId(args.Id);
@@ -207,6 +219,11 @@ public sealed partial class InventoryWindow : DefaultWindow
         {
             _previewRotation = _previewRotation.TurnCcw();
             SetPreviewRotation(_previewRotation);
+        };
+        HideClothesButton.OnToggled += _ =>
+        {
+            UpdateHideClothesButtonText();
+            RefreshPreviewClothingVisibility();
         };
         BagEditorButton.ToggleMode = true;
         BagEditorButton.OnPressed += _ =>
@@ -240,6 +257,7 @@ public sealed partial class InventoryWindow : DefaultWindow
         SaveButton.Disabled = _characterProfile == null || _characterSlot == null;
         ProfileName.Text = _characterProfile?.Name ?? Loc.GetString("sunrise-inventory-no-profile");
 
+        // Keep the previously selected job when possible; otherwise fall back to the profile's preferred job order.
         BuildJobOptions(previousJob);
         RefreshSelectedTab();
     }
@@ -255,6 +273,7 @@ public sealed partial class InventoryWindow : DefaultWindow
         var localSession = _player.LocalSession;
         var availablePets = GetAvailablePets(localSession);
 
+        // Pet selection is saved by the owning lobby/profile flow, so these buttons only raise a selection callback.
         var clearButton = new Button
         {
             Text = Loc.GetString("sunrise-inventory-pets-clear"),
@@ -328,6 +347,7 @@ public sealed partial class InventoryWindow : DefaultWindow
     {
         _selectedTab = tab;
 
+        // Keep both button state and content visibility explicit; the buttons are not a built-in TabContainer.
         LoadoutTabButton.Pressed = tab == InventoryTab.Equipment;
         PetsTabButton.Pressed = tab == InventoryTab.Pets;
 
@@ -362,6 +382,7 @@ public sealed partial class InventoryWindow : DefaultWindow
             AddJobOption(job.LocalizedName, job.ID);
         }
 
+        // Option ids are dense list indices, so selectedJob must be resolved after the list has been rebuilt.
         var selectedJob = IsSelectableJob(previousJob)
             ? previousJob
             : GetPreferredProfileJob();

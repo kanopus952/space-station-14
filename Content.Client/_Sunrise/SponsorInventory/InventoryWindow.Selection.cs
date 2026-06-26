@@ -118,6 +118,7 @@ public sealed partial class InventoryWindow
         if (_characterProfile == null)
             return;
 
+        // Work on a clone so canceling the lobby window can still discard all local sponsor inventory edits.
         var inventory = _editedInventoryProfile.Clone();
 
         if (removeGlobalSlot != null)
@@ -133,6 +134,7 @@ public sealed partial class InventoryWindow
 
         update(selection);
 
+        // Empty job selections collapse back to global-only data instead of leaving no-op per-job records.
         if (jobId == null)
         {
             inventory.Global = selection;
@@ -164,6 +166,7 @@ public sealed partial class InventoryWindow
             var selection = jobSelection.Clone();
             selection.SlotItems.Remove(slot);
 
+            // Removing a sponsor slot because a loadout took it must clear both global and current job overrides.
             if (selection.IsEmpty())
                 inventory.Jobs.Remove(jobId);
             else
@@ -178,6 +181,7 @@ public sealed partial class InventoryWindow
         if (_characterProfile == null)
             return new SunriseInventorySelection();
 
+        // Effective selection overlays current job overrides on top of global sponsor inventory picks.
         return SunriseInventoryValidation.GetEffectiveSelection(_editedInventoryProfile, CurrentJobId);
     }
 
@@ -200,12 +204,13 @@ public sealed partial class InventoryWindow
     {
         var equipment = new Dictionary<string, EntProtoId>();
 
-        if (_prototype.Resolve(loadout.StartingGear, out StartingGearPrototype? startingGear))
+        if (_prototype.Resolve(loadout.StartingGear, out var startingGear))
         {
             foreach (var (slot, prototype) in startingGear.Equipment)
                 equipment[slot] = prototype;
         }
 
+        // Explicit loadout equipment wins over inherited starting gear for the same slot.
         foreach (var (slot, prototype) in loadout.Equipment)
             equipment[slot] = prototype;
 
@@ -216,12 +221,13 @@ public sealed partial class InventoryWindow
     {
         var storage = new Dictionary<string, List<EntProtoId>>();
 
-        if (_prototype.Resolve(loadout.StartingGear, out StartingGearPrototype? startingGear))
+        if (_prototype.Resolve(loadout.StartingGear, out var startingGear))
         {
             foreach (var (slot, prototypes) in startingGear.Storage)
                 storage[slot] = prototypes.ToList();
         }
 
+        // Storage entries are additive: loadout storage extends starting gear storage instead of replacing it.
         foreach (var (slot, prototypes) in loadout.Storage)
         {
             if (!storage.TryGetValue(slot, out var list))

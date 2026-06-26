@@ -33,6 +33,7 @@ public sealed partial class InventoryWindow
             if (!TryGetSponsorItem(itemId, out var item))
                 continue;
 
+            // Replacing a storage item must preserve its contents or restore the previous item if the sponsor item cannot fit.
             var spawned = _entManager.SpawnEntity(item.EntityPrototype, MapCoordinates.Nullspace);
             List<EntityUid>? previousStorageItems = null;
             EntityUid? previousItem = null;
@@ -88,6 +89,7 @@ public sealed partial class InventoryWindow
             var existingCounts = CountStoragePrototypes(storage);
             foreach (var prototype in prototypes)
             {
+                // Only add missing instances; LoadProfileEntity may already have placed the starting gear storage contents.
                 var id = prototype.Id;
                 if (existingCounts.TryGetValue(id, out var existingCount) && existingCount > 0)
                 {
@@ -161,6 +163,7 @@ public sealed partial class InventoryWindow
             if (!TryGetSponsorItem(itemId, out var item))
                 continue;
 
+            // The spawned entity id is kept only for this preview rebuild so bag remove buttons can map back to sponsor item ids.
             var spawned = _entManager.SpawnEntity(item.EntityPrototype, MapCoordinates.Nullspace);
             if (!_entManager.TryGetComponent<ItemComponent>(spawned, out var itemComp) ||
                 !_storage.TryGetAvailableGridSpace((back, storage), (spawned, itemComp), out var location) ||
@@ -186,6 +189,8 @@ public sealed partial class InventoryWindow
         var height = (bounds.Height + 1) * BagTileSize;
         BagGridHost.SetWidth = width;
         BagGridHost.SetHeight = height;
+
+        // The bag grid is rendered from the preview storage component, so loadout and sponsor items share one view.
         BagTitle.Text = Loc.GetString("sunrise-inventory-bag-title-named", ("bag", GetEntityName(back)));
         BagCapacityLabel.Text = Loc.GetString(
             "sunrise-inventory-bag-capacity",
@@ -329,13 +334,17 @@ public sealed partial class InventoryWindow
         back = default;
         storage = default!;
 
-        if (_previewDummy == null ||
-            !_inventory.TryGetSlotEntity(_previewDummy.Value, "back", out var backEntity) ||
-            !_entManager.TryGetComponent<StorageComponent>(backEntity.Value, out var storageComp) ||
-            !backEntity.Value.IsValid())
-        {
+        if (_previewDummy == null)
             return false;
-        }
+
+        if (!_inventory.TryGetSlotEntity(_previewDummy.Value, "back", out var backEntity))
+            return false;
+
+        if (!_entManager.TryGetComponent<StorageComponent>(backEntity.Value, out var storageComp))
+            return false;
+
+        if (!backEntity.Value.IsValid())
+            return false;
 
         back = backEntity.Value;
         storage = storageComp;
@@ -356,6 +365,7 @@ public sealed partial class InventoryWindow
             return slots;
         }
 
+        // Spawn a nullspace probe so the real inventory whitelist/dependency checks can be reused for prototype filtering.
         var item = _entManager.SpawnEntity(entityPrototype, MapCoordinates.Nullspace);
         foreach (var slot in slotDefinitions)
         {
@@ -376,6 +386,7 @@ public sealed partial class InventoryWindow
         if (slot.DependsOn != null && !_inventory.TryGetSlotEntity(target, slot.DependsOn, out dependency))
             return false;
 
+        // Some slots are only valid when another equipped item exposes the matching dependency component.
         if (slot.DependsOnComponents is { } componentRegistry && dependency is { } dependencyUid)
         {
             foreach (var (_, entry) in componentRegistry)
@@ -393,15 +404,17 @@ public sealed partial class InventoryWindow
 
         _entManager.TryGetComponent<ClothingComponent>(itemUid, out var clothing);
         _entManager.TryGetComponent<ItemComponent>(itemUid, out var item);
+
+        // Pocket slots accept small non-clothing items, while normal equipment slots require matching ClothingComponent flags.
         var fitsPocket = slot.SlotFlags.HasFlag(SlotFlags.POCKET) &&
                          item != null &&
                          _item.GetSizePrototype(item.Size) <= _item.GetSizePrototype(PocketableItemSize);
 
-        if (clothing == null && !fitsPocket ||
-            clothing != null && !clothing.Slots.HasFlag(slot.SlotFlags) && !fitsPocket)
-        {
+        if (clothing == null && !fitsPocket)
             return false;
-        }
+
+        if (clothing != null && !clothing.Slots.HasFlag(slot.SlotFlags) && !fitsPocket)
+            return false;
 
         return !_whitelist.IsWhitelistFail(slot.Whitelist, itemUid) &&
                !_whitelist.IsWhitelistPass(slot.Blacklist, itemUid);
@@ -409,11 +422,11 @@ public sealed partial class InventoryWindow
 
     private bool CanAddSponsorItemToBag(string itemId)
     {
-        if (!TryGetSponsorItem(itemId, out var item) ||
-            !TryGetPreviewBackStorage(out var back, out var storage))
-        {
+        if (!TryGetSponsorItem(itemId, out var item))
             return false;
-        }
+
+        if (!TryGetPreviewBackStorage(out var back, out var storage))
+            return false;
 
         var spawned = _entManager.SpawnEntity(item.EntityPrototype, MapCoordinates.Nullspace);
         var canInsert = _entManager.TryGetComponent<ItemComponent>(spawned, out var itemComp) &&

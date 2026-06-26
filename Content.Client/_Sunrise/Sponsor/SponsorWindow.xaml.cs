@@ -30,6 +30,8 @@ public sealed partial class SponsorWindow : BaseWindow
     private DonationTerminalTab _selectedTab = DonationTerminalTab.Main;
     private string _accountFundsLink = string.Empty;
     private string _accountManagementUrl = string.Empty;
+    private string _sponsorDonateUrlTemplate = string.Empty;
+    private string _sponsorDonateUrl = string.Empty;
     private int _currentSponsorTier;
 
     public SponsorWindow()
@@ -46,9 +48,9 @@ public sealed partial class SponsorWindow : BaseWindow
         ShopTabButton.OnPressed += _ => SelectTab(DonationTerminalTab.Shop);
         SubscriptionsTabButton.OnPressed += _ => SelectTab(DonationTerminalTab.Subscriptions);
         MainSubscriptionDetailsButton.OnPressed += _ => OpenSponsorTierDetails();
-        MainSubscriptionPurchaseButton.OnPressed += _ => OpenAccountFundsLink();
+        MainSubscriptionPurchaseButton.OnPressed += _ => OpenSponsorDonateLink();
         MainAccountManageButton.OnPressed += _ => OpenAccountManagementLink();
-        SubscriptionPurchaseButton.OnPressed += _ => OpenAccountFundsLink();
+        SubscriptionPurchaseButton.OnPressed += _ => OpenSponsorDonateLink();
         MainSubscriptionDetailsButton.TextAlign = Label.AlignMode.Center;
         MainSubscriptionPurchaseButton.TextAlign = Label.AlignMode.Center;
         MainAccountManageButton.TextAlign = Label.AlignMode.Center;
@@ -83,6 +85,7 @@ public sealed partial class SponsorWindow : BaseWindow
     private void SubscribeExternalSources()
     {
         _config.OnValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged, true);
+        _config.OnValueChanged(SunriseCCVars.SponsorDonateUrlTemplate, OnSponsorDonateUrlTemplateChanged, true);
         _config.OnValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged, true);
 
         if (_sponsorsManager != null)
@@ -99,6 +102,7 @@ public sealed partial class SponsorWindow : BaseWindow
     private void UnsubscribeExternalSources()
     {
         _config.UnsubValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged);
+        _config.UnsubValueChanged(SunriseCCVars.SponsorDonateUrlTemplate, OnSponsorDonateUrlTemplateChanged);
         _config.UnsubValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged);
 
         if (_sponsorsManager != null)
@@ -116,6 +120,7 @@ public sealed partial class SponsorWindow : BaseWindow
     {
         RefreshPlayerInfo();
         RefreshBindings(_accountBindingsManager?.GetSnapshot() ?? AccountBindingsSnapshot.Unavailable());
+        RefreshSponsorDonateUrl();
 
         if (_sponsorsManager != null)
             RefreshSponsorTiers(_sponsorsManager.GetSponsorTiers());

@@ -424,10 +424,9 @@ public sealed class SunriseInventorySystem : EntitySystem
         var effectiveJobLoadoutId = LoadoutSystem.GetEffectiveRolePrototype(jobLoadoutId, _prototype);
         if (_prototype.TryIndex<RoleLoadoutPrototype>(effectiveJobLoadoutId, out var roleProto))
         {
-            var sponsorPrototypes = GetSponsorLoadoutPrototypes(session);
             profile.Loadouts.TryGetValue(jobLoadoutId, out var loadout);
             loadout ??= new RoleLoadout(jobLoadoutId);
-            loadout.SetDefault(profile, session, _prototype, sponsorPrototypes);
+            loadout.SetDefault(profile, session, _prototype);
             _spawn.EquipRoleLoadout(dummy, loadout, roleProto);
         }
 
@@ -435,18 +434,6 @@ public sealed class SunriseInventorySystem : EntitySystem
             _spawn.EquipStartingGear(dummy, job.StartingGear, raiseEvent: false);
 
         return dummy;
-    }
-
-    private string[] GetSponsorLoadoutPrototypes(ICommonSession session)
-    {
-        if (_sponsors != null &&
-            _sponsors.TryGetPrototypes(session.UserId, out var prototypes) &&
-            prototypes != null)
-        {
-            return prototypes.ToArray();
-        }
-
-        return [];
     }
 
     private static SunriseInventorySelection GetJobSpecificSelection(

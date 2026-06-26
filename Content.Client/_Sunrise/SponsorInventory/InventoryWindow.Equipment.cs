@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using Content.Client.Inventory;
 using Content.Client.Lobby;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Inventory.Controls;
@@ -8,11 +7,10 @@ using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
-using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Input;
-using Robust.Shared.Maths;
 
 namespace Content.Client._Sunrise.SponsorInventory;
 
@@ -20,6 +18,14 @@ public sealed partial class InventoryWindow
 {
     private const string DefaultSlotHighlightTexturePath = "slot_highlight";
     private const string SponsorSlotHighlightTexturePath = "/Textures/Interface/Clockwork/slot_highlight.png";
+    private const string StorageSlotsTexturePath = "Slots/back";
+    private const string StorageTemplateFallback = "template_small";
+    private static readonly HashSet<string> PreviewUnderwearSlots = new()
+    {
+        "bra",
+        "pants",
+        "socks",
+    };
 
     // Equipment slot layout and slot-selection behavior for the sponsor inventory window.
     private void RefreshEquipment()
@@ -29,14 +35,18 @@ public sealed partial class InventoryWindow
         _slotLabels.Clear();
         _paletteEntries.Clear();
         _sponsorBagPreviewItems.Clear();
+
         InventoryHost.RemoveAllChildren();
         BagGridHost.RemoveAllChildren();
         ItemPalette.RemoveAllChildren();
+
         CharacterPreview.SetEntity(null);
+
         BagTitle.Text = Loc.GetString("sunrise-inventory-bag-title");
         BagCapacityLabel.Text = string.Empty;
         BagHint.Text = string.Empty;
         StatusLabel.Text = string.Empty;
+
         UpdateBagEditorControls(enabled: false);
 
         if (_characterProfile == null)
@@ -63,11 +73,14 @@ public sealed partial class InventoryWindow
         var roleLoadout = EnsureRoleLoadout(jobId);
         _previewDummy = UserInterfaceManager.GetUIController<LobbyUIController>()
             .LoadProfileEntity(_characterProfile, job, true);
+        ApplySpeciesInventoryTemplateToPreview(_previewDummy.Value, job);
 
+        // The preview entity is the canonical temporary model: slot checks, bag fitting, palette filtering, and rendering all use it.
         ApplySponsorSlotsToPreview(_previewDummy.Value, GetSponsorSelectionSnapshot());
         EnsureSelectedLoadoutStorage(_previewDummy.Value, roleLoadout);
         CharacterPreview.SetEntity(_previewDummy);
         SetPreviewRotation(_previewRotation);
+        RefreshPreviewClothingVisibility();
 
         var displayedSlots = GetDisplayedSlots();
         if (_selectedEquipmentSlot != null && displayedSlots.All(s => s.Name != _selectedEquipmentSlot))
@@ -85,9 +98,9 @@ public sealed partial class InventoryWindow
     {
         var jobLoadoutId = LoadoutSystem.GetJobPrototype(jobId);
         var roleLoadout = GetRoleLoadout(jobLoadoutId);
-        var sponsorPrototypes = _sponsors?.GetClientPrototypes().ToArray() ?? [];
 
-        roleLoadout.SetDefault(_characterProfile, _player.LocalSession, _prototype, sponsorPrototypes);
+        // SetDefault can add required loadouts, so write the normalized loadout back to the cloned profile before rendering.
+        roleLoadout.SetDefault(_characterProfile, _player.LocalSession, _prototype);
         _characterProfile = _characterProfile?.WithLoadout(roleLoadout);
         return roleLoadout;
     }
@@ -100,10 +113,71 @@ public sealed partial class InventoryWindow
         return new RoleLoadout(jobLoadoutId);
     }
 
+    private void ApplySpeciesInventoryTemplateToPreview(EntityUid dummy, JobPrototype job)
+    {
+        if (_characterProfile == null)
+            return;
+
+        if (job.JobPreviewEntity != null || job.JobEntity != null)
+            return;
+
+        if (!_entManager.TryGetComponent<InventoryComponent>(dummy, out var inventory))
+            return;
+
+        if (!_prototype.TryIndex(_characterProfile.Species, out var species))
+            return;
+
+        if (!_prototype.TryIndex(species.Prototype, out var speciesPrototype))
+            return;
+
+        if (!speciesPrototype.TryGetComponent<InventoryComponent>(out var speciesInventory, _entManager.ComponentFactory))
+            return;
+
+        _inventory.SetTemplateId((dummy, inventory), speciesInventory.TemplateId);
+    }
+
+    private void RefreshPreviewClothingVisibility()
+    {
+        if (_previewDummy == null)
+            return;
+
+        if (!_entManager.TryGetComponent<SpriteComponent>(_previewDummy.Value, out var sprite))
+            return;
+
+        if (!_entManager.TryGetComponent<InventorySlotsComponent>(_previewDummy.Value, out var inventorySlots))
+            return;
+
+        var preview = _previewDummy.Value;
+        var hideClothes = HideClothesButton.Pressed;
+        var visible = !hideClothes;
+
+        foreach (var (slot, revealedLayers) in inventorySlots.VisualLayerKeys)
+        {
+            if (hideClothes && PreviewUnderwearSlots.Contains(slot))
+                continue;
+
+            foreach (var layerKey in revealedLayers)
+            {
+                if (_sprite.LayerMapTryGet((preview, sprite), layerKey, out var layer, false))
+                    _sprite.LayerSetVisible((preview, sprite), layer, visible);
+            }
+        }
+    }
+
+    private void UpdateHideClothesButtonText()
+    {
+        HideClothesButton.Text = Loc.GetString(HideClothesButton.Pressed
+            ? "sunrise-inventory-show-clothes"
+            : "sunrise-inventory-hide-clothes");
+    }
+
     private List<SlotDefinition> GetDisplayedSlots()
     {
-        if (_previewDummy == null || !_inventory.TryGetSlots(_previewDummy.Value, out var slots))
-            return new List<SlotDefinition>();
+        if (_previewDummy == null)
+            return [];
+
+        if (!_inventory.TryGetSlots(_previewDummy.Value, out var slots))
+            return [];
 
         return slots
             .Where(s => s.ShowInWindow)
@@ -130,14 +204,15 @@ public sealed partial class InventoryWindow
         };
         InventoryHost.AddChild(display);
 
+        // Labels are cached by slot id because later palette/status messages only know the string slot name.
         var selection = GetSponsorSelectionSnapshot();
         foreach (var slot in slots)
         {
             var button = new SlotButton
             {
                 ButtonTexturePath = GetSlotTexturePath(slot.TextureName),
-                FullButtonTexturePath = slot.FullTextureName ?? "template_small",
-                StorageTexturePath = "Slots/back",
+                FullButtonTexturePath = slot.FullTextureName ?? StorageTemplateFallback,
+                StorageTexturePath = StorageSlotsTexturePath,
                 SlotName = slot.Name,
             };
             UpdateSlotHighlight(button, selection.SlotItems.ContainsKey(slot.Name), slot.Name == _selectedEquipmentSlot);
@@ -188,6 +263,7 @@ public sealed partial class InventoryWindow
         if (occupiedPositions.Add(position))
             return position;
 
+        // Custom slots can collide with upstream UIWindowPosition values; walk diagonally until a free display cell is found.
         for (var distance = 1; distance < 32; distance++)
         {
             for (var xOffset = 0; xOffset <= distance; xOffset++)
@@ -215,6 +291,8 @@ public sealed partial class InventoryWindow
         var wasBagEditorOpen = _bagEditorOpen;
         _bagEditorOpen = false;
         _selectedEquipmentSlot = slot;
+
+        // Selecting a slot also selects the matching placement filter so search results stay scoped to that slot.
         var placementIndex = _placementOptions.IndexOf(slot);
         if (placementIndex >= 0)
         {

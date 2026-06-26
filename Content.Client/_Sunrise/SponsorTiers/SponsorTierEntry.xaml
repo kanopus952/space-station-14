@@ -140,16 +140,6 @@
                     <Label Text="{Loc 'sponsor-tiers-gui-allowed-markings-description'}" StyleClasses="LabelKeyText"/>
                     <GridContainer Name="AllowedMarkingsGrid" Columns="6" Margin="0 5" />
                 </BoxContainer>
-                <!-- Лоадауты -->
-                <BoxContainer Orientation="Vertical" Name="AllowedLoadoutsBox" Visible="False" >
-                    <BoxContainer Orientation="Horizontal" >
-                        <customControls:HSeparator Color="#4972A1" HorizontalExpand="True" MaxHeight="2" />
-                        <Label Text="{Loc 'sponsor-tiers-gui-allowed-loadouts'}" StyleClasses="LabelKeyText"/>
-                        <customControls:HSeparator Color="#4972A1" HorizontalExpand="True" MaxHeight="2" />
-                    </BoxContainer>
-                    <Label Text="{Loc 'sponsor-tiers-gui-allowed-loadouts-description'}" StyleClasses="LabelKeyText"/>
-                    <GridContainer Name="AllowedLoadoutsGrid" Columns="6" Margin="0 5" />
-                </BoxContainer>
                 <!-- Скины призрака -->
                 <BoxContainer Orientation="Vertical" Name="GhostThemesBox" Visible="False" >
                     <BoxContainer Orientation="Horizontal" >

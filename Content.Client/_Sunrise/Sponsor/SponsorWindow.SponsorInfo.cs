@@ -9,6 +9,8 @@ public sealed partial class SponsorWindow
 {
     private void RefreshSponsorInfo()
     {
+        RefreshSponsorDonateUrl();
+
         if (_sponsorsManager == null)
             return;
 

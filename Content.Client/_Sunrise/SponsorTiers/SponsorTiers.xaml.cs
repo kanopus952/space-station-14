@@ -18,6 +18,9 @@ public sealed partial class SponsorTiers : Control
     [Dependency] private readonly IResourceCache _resourceCache = default!;
 
     private readonly ISharedSponsorsManager? _sponsorsManager;
+    private readonly Dictionary<int, int> _tierTabs = new();
+
+    private int? _pendingSponsorTier;
 
     public SponsorTiers()
     {
@@ -38,11 +41,13 @@ public sealed partial class SponsorTiers : Control
         if (Disposed)
             return;
 
+        _tierTabs.Clear();
         SponsorTiersContainer.RemoveAllChildren();
         for (var i = 0; i < sponsorTiers.Count; i++)
         {
             var sponsorTier = sponsorTiers[i];
             var entry = new SponsorTierEntry(sponsorTier, i);
+            _tierTabs[sponsorTier.Tier] = i;
             SponsorTiersContainer.AddChild(entry);
             SponsorTiersContainer.SetTabTitle(i, sponsorTier.Title ?? "No Title");
             var stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
@@ -65,6 +70,33 @@ public sealed partial class SponsorTiers : Control
             stylesheet = new Stylesheet(rules.ToArray());
             SponsorTiersContainer.Stylesheet = stylesheet;
         }
+
+        if (_pendingSponsorTier != null && TrySelectSponsorTier(_pendingSponsorTier.Value))
+            _pendingSponsorTier = null;
+    }
+
+    public void SelectSponsorTier(int sponsorTier)
+    {
+        if (TrySelectSponsorTier(sponsorTier))
+        {
+            _pendingSponsorTier = null;
+            return;
+        }
+
+        _pendingSponsorTier = sponsorTier;
+    }
+
+    private bool TrySelectSponsorTier(int sponsorTier)
+    {
+        if (!_tierTabs.TryGetValue(sponsorTier, out var tab) ||
+            tab < 0 ||
+            tab >= SponsorTiersContainer.ChildCount)
+        {
+            return false;
+        }
+
+        SponsorTiersContainer.CurrentTab = tab;
+        return true;
     }
 
     protected override void Dispose(bool disposing)

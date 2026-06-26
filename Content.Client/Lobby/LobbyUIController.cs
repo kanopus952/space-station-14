@@ -393,15 +393,11 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         var job = jobProto ?? GetPreferredJob(profile);
         GiveDummyJobClothes(dummy, profile, job);
 
-        // Sunrise-Start
-        var sponsorPrototypes = _sponsorsManager?.GetClientPrototypes().ToArray() ?? [];
-
         var jobLoadoutId = LoadoutSystem.GetJobPrototype(job.ID);
         var effectiveJobLoadoutId = LoadoutSystem.GetEffectiveRolePrototype(jobLoadoutId, _prototypeManager);
         if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(effectiveJobLoadoutId))
-        // Sunrise-end
         {
-            var loadout = profile.GetLoadoutOrDefault(jobLoadoutId, _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager, sponsorPrototypes); // Sunrise-edit
+            var loadout = profile.GetLoadoutOrDefault(jobLoadoutId, _playerManager.LocalSession, _prototypeManager); // Sunrise-edit
             GiveDummyLoadout(dummy, loadout, true);
         }
     }
@@ -532,10 +528,6 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     {
         EntityUid dummyEnt;
 
-        // Sunrise-Start
-        var sponsorPrototypes = _sponsorsManager?.GetClientPrototypes().ToArray() ?? [];
-        // Sunrise-End
-
         EntProtoId? previewEntity = null;
         if (humanoid != null && jobClothes)
         {
@@ -572,7 +564,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(effectiveJobLoadoutId))
             // Sunrise-end
             {
-                var loadout = humanoid.GetLoadoutOrDefault(jobLoadoutId, _playerManager.LocalSession, humanoid.Species, EntityManager, _prototypeManager, sponsorPrototypes);  // Sunrise-edit
+                var loadout = humanoid.GetLoadoutOrDefault(jobLoadoutId, _playerManager.LocalSession, _prototypeManager);  // Sunrise-edit
                 GiveDummyLoadout(dummyEnt, loadout, jobClothes);
             }
         }

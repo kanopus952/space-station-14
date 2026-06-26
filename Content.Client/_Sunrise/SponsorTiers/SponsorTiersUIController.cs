@@ -32,6 +32,15 @@ public partial class SponsorTiersUIController : UIController, IOnStateEntered<Lo
         _sponsorTiersUi.MoveToFront();
     }
 
+    public void OpenWindow(int sponsorTier)
+    {
+        EnsureWindow();
+
+        _sponsorTiersUi.SelectSponsorTier(sponsorTier);
+        _sponsorTiersUi.OpenCentered();
+        _sponsorTiersUi.MoveToFront();
+    }
+
     private void EnsureWindow()
     {
         if (_sponsorTiersUi is { Disposed: false })

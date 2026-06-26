@@ -24,4 +24,9 @@ public sealed partial class SponsorTiersUi : DefaultWindow
     {
 
     }
+
+    public void SelectSponsorTier(int sponsorTier)
+    {
+        SponsorsTiersBody.SelectSponsorTier(sponsorTier);
+    }
 }

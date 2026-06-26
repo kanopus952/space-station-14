@@ -84,11 +84,6 @@ public sealed partial class SponsorWindow
             "\u2715",
             markerColor);
         AddMainBenefitRow(
-            Loc.GetString("donation-terminal-main-potential-benefit-loadouts"),
-            SciFiPalette.Text,
-            "\u2715",
-            markerColor);
-        AddMainBenefitRow(
             Loc.GetString("donation-terminal-main-potential-benefit-flavor"),
             SciFiPalette.Text,
             "\u2715",
@@ -105,7 +100,7 @@ public sealed partial class SponsorWindow
         var row = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 6,
+            SeparationOverride = 5,
             HorizontalExpand = true,
         };
 
@@ -113,7 +108,7 @@ public sealed partial class SponsorWindow
         {
             Text = marker,
             Align = Label.AlignMode.Center,
-            MinWidth = 18,
+            MinWidth = 12,
             FontOverride = GetBenefitMarkerFont(),
             FontColorOverride = markerColor ?? SciFiPalette.Accent,
             StyleClasses = { StyleClass.LabelSubText },
@@ -123,7 +118,6 @@ public sealed partial class SponsorWindow
         var benefitLabel = new RichTextLabel
         {
             MaxWidth = 340,
-            HorizontalExpand = true,
             StyleClasses = { StyleClass.LabelSubText },
         };
         benefitLabel.SetMessage(FormattedMessage.FromUnformatted(text), color);

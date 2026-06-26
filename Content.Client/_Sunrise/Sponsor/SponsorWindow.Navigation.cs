@@ -10,11 +10,13 @@ public sealed partial class SponsorWindow
     private void OnAccountFundsLinkChanged(string url)
     {
         _accountFundsLink = url;
-        var disabled = string.IsNullOrWhiteSpace(url);
-        BalanceButton.Disabled = disabled;
-        MainSubscriptionPurchaseButton.Disabled = disabled;
-        SubscriptionPurchaseButton.Disabled = disabled;
-        RefreshSubscriptionCards();
+        BalanceButton.Disabled = string.IsNullOrWhiteSpace(url);
+    }
+
+    private void OnSponsorDonateUrlTemplateChanged(string urlTemplate)
+    {
+        _sponsorDonateUrlTemplate = urlTemplate;
+        RefreshSponsorDonateUrl();
     }
 
     private void OnAccountManagementUrlChanged(string url)
@@ -29,6 +31,43 @@ public sealed partial class SponsorWindow
             return;
 
         _uri.OpenUri(_accountFundsLink);
+    }
+
+    private void RefreshSponsorDonateUrl()
+    {
+        _sponsorDonateUrl = BuildSponsorDonateUrl(_sponsorsManager?.GetSponsorProjectName());
+        var disabled = string.IsNullOrWhiteSpace(_sponsorDonateUrl);
+        MainSubscriptionPurchaseButton.Disabled = disabled;
+        SubscriptionPurchaseButton.Disabled = disabled;
+    }
+
+    private string BuildSponsorDonateUrl(string? projectName)
+    {
+        if (string.IsNullOrWhiteSpace(_sponsorDonateUrlTemplate))
+            return string.Empty;
+
+        var donateUrl = _sponsorDonateUrlTemplate.Trim();
+        if (!donateUrl.Contains("{0}", StringComparison.Ordinal))
+            return donateUrl;
+
+        if (string.IsNullOrWhiteSpace(projectName))
+            return string.Empty;
+
+        return donateUrl.Replace(
+            "{0}",
+            Uri.EscapeDataString(projectName.Trim()),
+            StringComparison.Ordinal);
+    }
+
+    private void OpenSponsorDonateLink()
+    {
+        if (string.IsNullOrWhiteSpace(_sponsorDonateUrl))
+            RefreshSponsorDonateUrl();
+
+        if (string.IsNullOrWhiteSpace(_sponsorDonateUrl))
+            return;
+
+        _uri.OpenUri(_sponsorDonateUrl);
     }
 
     private void OpenAccountManagementLink()
@@ -77,5 +116,10 @@ public sealed partial class SponsorWindow
     private void OpenSponsorTierDetails()
     {
         _sponsorTiersController.OpenWindow();
+    }
+
+    private void OpenSponsorTierDetails(int sponsorTier)
+    {
+        _sponsorTiersController.OpenWindow(sponsorTier);
     }
 }
