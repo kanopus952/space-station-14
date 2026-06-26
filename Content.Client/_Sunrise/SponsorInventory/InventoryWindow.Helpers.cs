@@ -6,7 +6,6 @@ using Content.Client.Stylesheets;
 using Content.Shared._Sunrise.SponsorInventory;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
-using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Sunrise.Interfaces.Shared;
 using Robust.Client.UserInterface;
@@ -150,7 +149,6 @@ public sealed partial class InventoryWindow
         {
             message.PushNewline();
             message.PushNewline();
-            AddTooltipStatusMarker(message, entry.Enabled);
             message.AddMarkupPermissive(entry.Requirements);
         }
 
@@ -186,9 +184,27 @@ public sealed partial class InventoryWindow
         string? statusType = null,
         string? color = null)
     {
+        message.AddMarkupOrThrow(GetTooltipStatusMarkerMarkup(enabled, statusType, color));
+    }
+
+    private static string GetTooltipStatusMarkerMarkup(
+        bool enabled,
+        string? statusType = null,
+        string? color = null)
+    {
         statusType ??= enabled ? TooltipGoodStatus : TooltipBadStatus;
         color ??= enabled ? TooltipGoodColor : TooltipBadColor;
-        message.AddMarkupOrThrow($"[sinvstatus type=\"{statusType}\" color=\"{color}\" /] ");
+        return $"[sinvstatus type=\"{statusType}\" color=\"{color}\" /] ";
+    }
+
+    private static string GetTooltipRequirementLine(string text, bool enabled)
+    {
+        return GetTooltipStatusMarkerMarkup(enabled) + FormattedMessage.EscapeText(text);
+    }
+
+    private static string GetTooltipRequirementMarkupLine(string markup, bool enabled)
+    {
+        return GetTooltipStatusMarkerMarkup(enabled) + markup;
     }
 
     private static void AddTooltipColoredText(FormattedMessage message, string text, string color, bool bold = false)
@@ -269,51 +285,60 @@ public sealed partial class InventoryWindow
     private static string GetLoadoutRequirements(bool enabled, FormattedMessage? reason)
     {
         return enabled
-            ? Loc.GetString("sunrise-inventory-requirement-loadout")
-            : reason?.ToMarkup() ?? Loc.GetString("sunrise-inventory-requirement-unavailable-short");
+            ? GetTooltipRequirementLine(Loc.GetString("sunrise-inventory-requirement-loadout"), enabled: true)
+            : GetTooltipRequirementMarkupLine(
+                reason?.ToMarkup() ?? FormattedMessage.EscapeText(Loc.GetString("sunrise-inventory-requirement-unavailable-short")),
+                enabled: false);
     }
 
-    private string GetSponsorRequirements(SponsorInventoryItemInfo item, string? reason)
+    private string GetSponsorRequirements(SponsorInventoryItemInfo item, string? reason, bool placementUnavailable)
     {
         var lines = new List<string>();
         var purchased = _sponsorInventory.GetPurchasedInventoryItems().Contains(item.Id);
+        var sponsorTier = _sponsorInventory.GetSponsorTier();
+        var hasFailedRequirement = false;
 
         if (purchased)
-            lines.Add(Loc.GetString("sunrise-inventory-requirement-owned"));
+            lines.Add(GetTooltipRequirementLine(Loc.GetString("sunrise-inventory-requirement-owned"), enabled: true));
 
         if (!purchased && item.SponsorLevel != null)
         {
-            lines.Add(Loc.GetString(
+            var sponsorLevelRequirement = Loc.GetString(
                 "sunrise-inventory-requirement-sponsor-tier",
-                ("level", item.SponsorLevel.Value)));
-        }
-
-        if (!purchased && item.Price > 0)
-        {
-            lines.Add(Loc.GetString(
-                "sunrise-inventory-requirement-price",
-                ("price", item.Price)));
+                ("level", item.SponsorLevel.Value));
+            var sponsorLevelMet = sponsorTier >= item.SponsorLevel.Value;
+            hasFailedRequirement |= !sponsorLevelMet;
+            lines.Add(GetTooltipRequirementLine(sponsorLevelRequirement, sponsorLevelMet));
         }
 
         if (item.AvailableJobs is { Length: > 0 })
         {
-            var jobs = string.Join(", ", item.AvailableJobs.Select(GetJobName));
-            lines.Add(Loc.GetString("sunrise-inventory-requirement-jobs", ("jobs", jobs)));
+            var jobAllowed = IsSponsorItemJobAllowed(item);
+            hasFailedRequirement |= !jobAllowed;
+            lines.Add(GetTooltipRequirementLine(
+                Loc.GetString(jobAllowed
+                    ? "sunrise-inventory-requirement-job-allowed"
+                    : "sunrise-inventory-requirement-job-unavailable"),
+                jobAllowed));
         }
 
-        if (reason != null)
-            lines.Add(Loc.GetString("sunrise-inventory-requirement-unavailable", ("reason", reason)));
+        if (reason != null && (placementUnavailable || !hasFailedRequirement))
+            lines.Add(GetTooltipRequirementLine(
+                Loc.GetString("sunrise-inventory-requirement-unavailable", ("reason", reason)),
+                enabled: false));
 
         return lines.Count == 0
-            ? Loc.GetString("sunrise-inventory-requirement-none")
+            ? GetTooltipRequirementLine(Loc.GetString("sunrise-inventory-requirement-none"), enabled: true)
             : string.Join("\n", lines);
     }
 
-    private string GetJobName(string jobId)
+    private bool IsSponsorItemJobAllowed(SponsorInventoryItemInfo item)
     {
-        return _prototype.TryIndex<JobPrototype>(jobId, out var job)
-            ? job.LocalizedName
-            : jobId;
+        if (item.AvailableJobs is not { Length: > 0 })
+            return true;
+
+        var jobId = CurrentJobId;
+        return jobId != null && item.AvailableJobs.Contains(jobId);
     }
 
     private List<EntityUid> TakeStorageItems(EntityUid storageEntity)

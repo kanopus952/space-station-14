@@ -7,12 +7,6 @@
       <stop offset="0.7" stop-color="#808080"/>
       <stop offset="1" stop-color="#FFFFFF"/>
     </linearGradient>
-    <linearGradient id="inner-border" x1="7" y1="7" x2="41" y2="41" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#B8B8B8"/>
-      <stop offset="0.45" stop-color="#D8D8D8"/>
-      <stop offset="1" stop-color="#FFFFFF"/>
-    </linearGradient>
   </defs>
   <path d="M18 1H30L47 18V30L30 47H18L1 30V18Z" fill="none" stroke="url(#outer-border)" stroke-width="2" stroke-linejoin="miter"/>
-  <path d="M18 7H30L41 18V30L30 41H18L7 30V18Z" fill="none" stroke="url(#inner-border)" stroke-width="1" stroke-linejoin="miter" opacity="0.65"/>
 </svg>

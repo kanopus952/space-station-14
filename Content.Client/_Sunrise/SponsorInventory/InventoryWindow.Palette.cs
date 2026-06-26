@@ -172,7 +172,7 @@ public sealed partial class InventoryWindow
                 GetSponsorItemName(sponsorItem),
                 sponsorItem.EntityPrototype,
                 GetEntityDescription(sponsorItem.EntityPrototype),
-                GetSponsorRequirements(sponsorItem, reason),
+                GetSponsorRequirements(sponsorItem, reason, canUse && !enabled),
                 targetSlots,
                 new List<string> { sponsorItem.EntityPrototype },
                 canPlaceInBag,
