@@ -379,25 +379,6 @@ public sealed class SponsorInventoryPurchaseRequest
 }
 
 /// <summary>
-/// API request used to save a server-validated sponsor inventory profile.
-/// </summary>
-[Serializable]
-public sealed class SponsorInventoryProfileSaveApiRequest
-{
-    [JsonPropertyName("userId")]
-    public string UserId { get; set; } = string.Empty;
-
-    [JsonPropertyName("serverId")]
-    public string ServerId { get; set; } = string.Empty;
-
-    [JsonPropertyName("slot")]
-    public int Slot { get; set; }
-
-    [JsonPropertyName("profile")]
-    public SponsorInventoryProfileInfo Profile { get; set; } = new();
-}
-
-/// <summary>
 /// Result returned after saving a sponsor inventory profile.
 /// </summary>
 [Serializable, NetSerializable]
@@ -436,34 +417,6 @@ public sealed class SponsorInventoryPurchaseResult
     /// </summary>
     [JsonPropertyName("error")]
     public string? Error { get; set; }
-}
-
-/// <summary>
-/// API request used to purchase one sponsor inventory item or pack.
-/// </summary>
-[Serializable]
-public sealed class SponsorInventoryPurchaseApiRequest
-{
-    [JsonPropertyName("userId")]
-    public string UserId { get; set; } = string.Empty;
-
-    [JsonPropertyName("serverId")]
-    public string ServerId { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Item ID to purchase, or null when the command purchases a pack.
-    /// </summary>
-    [JsonPropertyName("itemId")]
-    public string? ItemId { get; set; }
-
-    /// <summary>
-    /// Pack ID to purchase, or null when the command purchases a single item.
-    /// </summary>
-    [JsonPropertyName("packId")]
-    public string? PackId { get; set; }
-
-    [JsonPropertyName("idempotencyKey")]
-    public string IdempotencyKey { get; set; } = string.Empty;
 }
 
 [Serializable, NetSerializable]
