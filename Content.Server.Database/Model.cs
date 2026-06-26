@@ -1532,7 +1532,6 @@ namespace Content.Server.Database
     [Table("sponsor_inventory_profile"), Index(nameof(PlayerUserId)), PrimaryKey(nameof(PlayerUserId), nameof(Slot))]
     public sealed class SponsorInventoryProfile
     {
-        [ForeignKey("Player")]
         public required Guid PlayerUserId { get; set; }
 
         public Player Player { get; set; } = default!;
