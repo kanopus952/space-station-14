@@ -58,53 +58,72 @@ public sealed partial class SponsorWindow : BaseWindow
 
         SelectTab(_selectedTab);
 
-        _config.OnValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged, true);
-        _config.OnValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged, true);
-
         BalanceButton.OnPressed += _ => OpenAccountFundsLink();
         InitializeSponsorShopUi();
 
         RefreshPlayerInfo();
         RefreshBindings(_accountBindingsManager?.GetSnapshot() ?? AccountBindingsSnapshot.Unavailable());
+    }
+
+    protected override void EnteredTree()
+    {
+        base.EnteredTree();
+
+        SubscribeExternalSources();
+        RefreshExternalData();
+    }
+
+    protected override void ExitedTree()
+    {
+        base.ExitedTree();
+
+        UnsubscribeExternalSources();
+    }
+
+    private void SubscribeExternalSources()
+    {
+        _config.OnValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged, true);
+        _config.OnValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged, true);
 
         if (_sponsorsManager != null)
         {
             _sponsorsManager.LoadedSponsorInfo += RefreshSponsorInfo;
             _sponsorsManager.LoadedSponsorTiers += RefreshSponsorTiers;
-            RefreshSponsorTiers(_sponsorsManager.GetSponsorTiers());
-        }
-        else
-        {
-            SetSubscriptionText(Loc.GetString("donation-terminal-unavailable"));
         }
 
-        if (_accountBindingsManager != null)
-        {
-            _accountBindingsManager.BindingsChanged += OnBindingsChanged;
-            _accountBindingsManager.RequestBindingsRefresh();
-        }
+        _accountBindingsManager?.BindingsChanged += OnBindingsChanged;
+
+        SubscribeSponsorShopUi();
     }
 
-    protected override void Dispose(bool disposing)
+    private void UnsubscribeExternalSources()
     {
-        if (disposing)
+        _config.UnsubValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged);
+        _config.UnsubValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged);
+
+        if (_sponsorsManager != null)
         {
-            _config.UnsubValueChanged(SunriseCCVars.AccountFundsLink, OnAccountFundsLinkChanged);
-            _config.UnsubValueChanged(CCVars.InfoLinksAccountManagement, OnAccountManagementUrlChanged);
-
-            if (_sponsorsManager != null)
-            {
-                _sponsorsManager.LoadedSponsorInfo -= RefreshSponsorInfo;
-                _sponsorsManager.LoadedSponsorTiers -= RefreshSponsorTiers;
-            }
-
-            if (_accountBindingsManager != null)
-                _accountBindingsManager.BindingsChanged -= OnBindingsChanged;
-
-            DisposeSponsorShopUi();
+            _sponsorsManager.LoadedSponsorInfo -= RefreshSponsorInfo;
+            _sponsorsManager.LoadedSponsorTiers -= RefreshSponsorTiers;
         }
 
-        base.Dispose(disposing);
+        _accountBindingsManager?.BindingsChanged -= OnBindingsChanged;
+
+        UnsubscribeSponsorShopUi();
+    }
+
+    private void RefreshExternalData()
+    {
+        RefreshPlayerInfo();
+        RefreshBindings(_accountBindingsManager?.GetSnapshot() ?? AccountBindingsSnapshot.Unavailable());
+
+        if (_sponsorsManager != null)
+            RefreshSponsorTiers(_sponsorsManager.GetSponsorTiers());
+        else
+            SetSubscriptionText(Loc.GetString("donation-terminal-unavailable"));
+
+        _accountBindingsManager?.RequestBindingsRefresh();
+        RefreshSponsorShopUi();
     }
 
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)

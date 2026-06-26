@@ -17,12 +17,12 @@ namespace Content.Client._Sunrise.Sponsor;
 [GenerateTypedNameReferences]
 public sealed partial class SponsorSubscriptionCard : BoxContainer
 {
+    [Dependency] private readonly IResourceCache _resource = default!;
     private const int SubscriptionBenefitTextWidth = 260;
+    private const int MaxSubscriptionTitleLenght = 25;
     private const int SubscriptionBenefitLineLength = 34;
     private const int SubscriptionTierBadgeFontSize = 24;
     private const int BenefitMarkerFontSize = 14;
-
-    [Dependency] private readonly IResourceCache _resource = default!;
 
     private Font? _subscriptionTierBadgeFont;
     private Font? _benefitMarkerFont;
@@ -43,7 +43,7 @@ public sealed partial class SponsorSubscriptionCard : BoxContainer
         TierBadgeLabel.Text = SponsorUiHelpers.ToRomanNumeral(tier);
         TierBadgeLabel.FontOverride = GetSubscriptionTierBadgeFont();
         TierBadgeLabel.FontColorOverride = accent;
-        TitleLabel.Text = title.WrapText(25, 3);
+        TitleLabel.Text = title.TruncateWithEllipsis(MaxSubscriptionTitleLenght);
         TitleLabel.ToolTip = title;
         TitleLabel.FontColorOverride = accent;
 
@@ -76,7 +76,7 @@ public sealed partial class SponsorSubscriptionCard : BoxContainer
     {
         var row = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            Orientation = LayoutOrientation.Horizontal,
             SeparationOverride = 6,
             HorizontalExpand = true,
         };
@@ -125,7 +125,7 @@ public sealed partial class SponsorSubscriptionCard : BoxContainer
         return string.Join('\n', lines);
     }
 
-    private string BuildBenefitsText(IReadOnlyList<string> benefits)
+    private static string BuildBenefitsText(IReadOnlyList<string> benefits)
     {
         if (benefits.Count == 0)
             return Loc.GetString("donation-terminal-subscription-card-no-benefits");

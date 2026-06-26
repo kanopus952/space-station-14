@@ -194,13 +194,14 @@ public sealed partial class SponsorWindow
         SponsorInventoryItemInfo? item,
         HashSet<string> purchasedItems)
     {
-        if (item == null ||
-            string.IsNullOrWhiteSpace(item.Id) ||
-            string.IsNullOrWhiteSpace(item.EntityPrototype) ||
-            !_prototype.TryIndex<EntityPrototype>(item.EntityPrototype, out var entityPrototype))
-        {
+        if (item == null)
             return null;
-        }
+
+        if (string.IsNullOrWhiteSpace(item.Id) || string.IsNullOrWhiteSpace(item.EntityPrototype))
+            return null;
+
+        if (!_prototype.TryIndex<EntityPrototype>(item.EntityPrototype, out var entityPrototype))
+            return null;
 
         var owned = purchasedItems.Contains(item.Id);
         var details = BuildStoreDetails(item, entityPrototype, owned);
@@ -227,12 +228,14 @@ public sealed partial class SponsorWindow
         HashSet<string> purchasedItems)
     {
         var packItemIds = pack?.InventoryItemIds;
-        if (pack == null ||
-            string.IsNullOrWhiteSpace(pack.Id) ||
-            packItemIds is not { Length: > 0 })
-        {
+        if (pack == null)
             return null;
-        }
+
+        if (string.IsNullOrWhiteSpace(pack.Id))
+            return null;
+
+        if (packItemIds is not { Length: > 0 })
+            return null;
 
         var itemNames = new List<string>();
         var previewPrototypes = new List<string>();

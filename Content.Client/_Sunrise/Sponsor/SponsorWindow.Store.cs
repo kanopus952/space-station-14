@@ -29,8 +29,6 @@ public sealed partial class SponsorWindow
     private void InitializeSponsorShopUi()
     {
         _sponsorInventory = _entity.System<SunriseInventorySystem>();
-        _sponsorInventory.InventoryDataChanged += OnSponsorInventoryDataChanged;
-        _sponsorInventory.InventoryPurchaseResultReceived += OnSponsorInventoryPurchaseResult;
 
         StoreSearch.OnTextChanged += _ => RefreshStoreCatalog();
         StoreDetailsBuyButton.OnPressed += _ =>
@@ -44,16 +42,26 @@ public sealed partial class SponsorWindow
 
         PopulateStoreCategories();
         PopulateStoreFilters();
+    }
+
+    private void SubscribeSponsorShopUi()
+    {
+        _sponsorInventory.InventoryDataChanged += OnSponsorInventoryDataChanged;
+        _sponsorInventory.InventoryPurchaseResultReceived += OnSponsorInventoryPurchaseResult;
+    }
+
+    private void UnsubscribeSponsorShopUi()
+    {
+        _sponsorInventory.InventoryDataChanged -= OnSponsorInventoryDataChanged;
+        _sponsorInventory.InventoryPurchaseResultReceived -= OnSponsorInventoryPurchaseResult;
+    }
+
+    private void RefreshSponsorShopUi()
+    {
         RefreshBalance();
         RefreshStoreCatalog();
         RefreshSubscriptionCards();
         _sponsorInventory.RequestInitialData();
-    }
-
-    private void DisposeSponsorShopUi()
-    {
-        _sponsorInventory.InventoryDataChanged -= OnSponsorInventoryDataChanged;
-        _sponsorInventory.InventoryPurchaseResultReceived -= OnSponsorInventoryPurchaseResult;
     }
 
     private void OnSponsorInventoryDataChanged()

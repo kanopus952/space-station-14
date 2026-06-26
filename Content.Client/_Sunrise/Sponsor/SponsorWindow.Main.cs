@@ -15,7 +15,7 @@ public sealed partial class SponsorWindow
         var sponsorTier = GetSponsorTier(_currentSponsorTier);
         var accent = active ? GetSubscriptionAccentColor(_currentSponsorTier) : Color.Red;
 
-        MainSponsorTierBadgeLabel.Text = active ? SponsorUiHelpers.ToRomanNumeral(_currentSponsorTier) : "-";
+        MainSponsorTierBadgeLabel.Text = active ? SponsorUiHelpers.ToRomanNumeral(_currentSponsorTier) : "X";
         MainSponsorTierBadgeLabel.FontColorOverride = accent;
         MainSponsorTierBadgeCaption.Text = active
             ? Loc.GetString("donation-terminal-subscription-card-tier", ("tier", _currentSponsorTier))
@@ -67,6 +67,7 @@ public sealed partial class SponsorWindow
 
     private void AddMainPotentialBenefitRows(Color markerColor)
     {
+        // \u2715 = ✕
         AddMainBenefitRow(
             Loc.GetString("donation-terminal-main-potential-benefit-slots"),
             SciFiPalette.Text,
@@ -97,6 +98,7 @@ public sealed partial class SponsorWindow
     private void AddMainBenefitRow(
         string text,
         Color color,
+        // ✓
         string marker = "\u2713",
         Color? markerColor = null)
     {

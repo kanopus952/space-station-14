@@ -8,6 +8,8 @@ namespace Content.Client._Sunrise.Sponsor;
 
 public sealed partial class SponsorWindow
 {
+    private const int PurchaseTextMaxLineLength = 34;
+    private const int PurchaseTextMaxLines = 2;
     private void ShowPurchaseConfirmation(SponsorStoreEntry entry)
     {
         _pendingPurchaseEntry = entry;
@@ -37,7 +39,7 @@ public sealed partial class SponsorWindow
 
         var entry = _pendingPurchaseEntry;
         PurchasePreviewHost.RemoveAllChildren();
-        PurchaseNameLabel.Text = entry.Name.WrapText(34, 2);
+        PurchaseNameLabel.Text = entry.Name.WrapText(PurchaseTextMaxLineLength, PurchaseTextMaxLines);
         PurchaseNameLabel.ToolTip = entry.Name;
         SetCurrencyPriceRow(PurchasePriceLabel, PurchasePriceIcon, PurchasePriceValueLabel, entry.Price);
         AddStoreEntryPreview(PurchasePreviewHost, entry, PurchasePreviewSize, 4f, true);
@@ -87,7 +89,7 @@ public sealed partial class SponsorWindow
 
     private void SetPurchaseDetailsValue(Label label, string text)
     {
-        label.Text = text.WrapText(PurchaseDetailsLineLength, PurchaseDetailsLines);
+        label.Text = text.TruncateWithEllipsis(PurchaseDetailsLineLength);
         label.ToolTip = text;
     }
 }
