@@ -89,7 +89,10 @@ public sealed partial class SunriseInventoryProfile : IEquatable<SunriseInventor
     /// </summary>
     public bool IsEmpty()
     {
-        return (Global == null || Global.IsEmpty()) && (Jobs == null || Jobs.Count == 0);
+        var globalState = Global == null || Global.IsEmpty();
+        var jobsState = Jobs == null || Jobs.Values.All(selection => selection == null || selection.IsEmpty());
+
+        return globalState && jobsState;
     }
 
     /// <summary>

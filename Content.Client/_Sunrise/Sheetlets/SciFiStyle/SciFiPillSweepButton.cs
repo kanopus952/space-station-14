@@ -48,6 +48,9 @@ public class SciFiPillSweepButton : SciFiSweepButton
         var output = _clipOutputVertices;
         var inputCount = _surfaceVertices.Length;
 
+        // Clip the shine facet against every edge of the convex capsule.
+        // This is the Sutherland-Hodgman algorithm: after each edge, the output
+        // polygon becomes the input polygon for the next clip edge.
         for (var i = 0; i < clipCount; i++)
         {
             var clipStart = _capsuleVertices[i];
@@ -81,6 +84,9 @@ public class SciFiPillSweepButton : SciFiSweepButton
         var rightCenterX = box.Right - radius;
         var count = 0;
 
+        // Build the convex capsule polygon clockwise in screen coordinates
+        // where the Y axis points down: top edge, right arc, bottom edge, left arc.
+        // Keeping this winding consistent is required by IsInsideClipEdge.
         count = AddClipVertex(_capsuleVertices, count, new Vector2(leftCenterX, box.Top));
         count = AddClipVertex(_capsuleVertices, count, new Vector2(rightCenterX, box.Top));
 
@@ -125,6 +131,8 @@ public class SciFiPillSweepButton : SciFiSweepButton
         var previous = input[inputCount - 1];
         var previousInside = IsInsideClipEdge(previous, clipStart, clipEnd);
 
+        // One Sutherland-Hodgman step: test every edge of the current polygon,
+        // previous -> current, against a single clipping boundary.
         for (var i = 0; i < inputCount; i++)
         {
             var current = input[i];
@@ -157,6 +165,9 @@ public class SciFiPillSweepButton : SciFiSweepButton
         Vector2 clipStart,
         Vector2 clipEnd)
     {
+        // The four standard segment clipping cases:
+        // outside->outside adds nothing, inside->outside adds the intersection,
+        // outside->inside adds the intersection and current point, inside->inside adds the current point.
         return (previousInside, currentInside) switch
         {
             (false, false) => outputCount,
@@ -186,11 +197,17 @@ public class SciFiPillSweepButton : SciFiSweepButton
 
     private static bool IsInsideClipEdge(Vector2 point, Vector2 edgeStart, Vector2 edgeEnd)
     {
+        // The capsule polygon is visually clockwise, but screen-space Y points down.
+        // Because of that, the inside half-plane for an edge corresponds to a
+        // non-negative edge x point cross product.
         return Cross(edgeEnd - edgeStart, point - edgeStart) >= -ClipEdgeEpsilon;
     }
 
     private static Vector2 GetLineIntersection(Vector2 lineStart, Vector2 lineEnd, Vector2 clipStart, Vector2 clipEnd)
     {
+        // The intersection is only needed when an input polygon edge crosses the
+        // clipping boundary. Nearly parallel lines fall back to the endpoint to
+        // avoid inflated coordinates from division by a very small value.
         var line = lineEnd - lineStart;
         var clip = clipEnd - clipStart;
         var denominator = Cross(line, clip);

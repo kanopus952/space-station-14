@@ -47,16 +47,18 @@ public sealed partial class SponsorWindow
             return string.Empty;
 
         var donateUrl = _sponsorDonateUrlTemplate.Trim();
-        if (!donateUrl.Contains("{0}", StringComparison.Ordinal))
+        var hasProjectPlaceholder =
+            donateUrl.Contains(SponsorDonateProjectPlaceholder, StringComparison.OrdinalIgnoreCase);
+
+        if (!hasProjectPlaceholder)
             return donateUrl;
 
         if (string.IsNullOrWhiteSpace(projectName))
             return string.Empty;
 
-        return donateUrl.Replace(
-            "{0}",
-            Uri.EscapeDataString(projectName.Trim()),
-            StringComparison.Ordinal);
+        var escapedProjectName = Uri.EscapeDataString(projectName.Trim());
+        return donateUrl
+            .Replace(SponsorDonateProjectPlaceholder, escapedProjectName, StringComparison.OrdinalIgnoreCase);
     }
 
     private void OpenSponsorDonateLink()

@@ -111,7 +111,7 @@ public static class StringExtensions
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxLineLength);
 
         var currentLine = string.Empty;
-        foreach (var rawWord in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        foreach (var rawWord in text.Split([' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
         {
             var word = rawWord.Trim();
             while (word.Length > maxLineLength)

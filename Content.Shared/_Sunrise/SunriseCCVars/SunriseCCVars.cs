@@ -109,8 +109,11 @@ public sealed partial class SunriseCCVars : CVars
     public static readonly CVarDef<string> SponsorProjectName =
         CVarDef.Create("sponsor.project_name", string.Empty, CVar.SERVERONLY);
 
+    /// <summary>
+    /// Template for the sponsor donation page URL. Use %project% as the escaped sponsor project name.
+    /// </summary>
     public static readonly CVarDef<string> SponsorDonateUrlTemplate =
-        CVarDef.Create("sponsor.donate_url_template", "https://stellarstories.ru/projects/{0}/donate", CVar.SERVER | CVar.REPLICATED);
+        CVarDef.Create("sponsor.donate_url_template", "https://stellarstories.ru/projects/%project%/donate", CVar.SERVER | CVar.REPLICATED);
 
     public static readonly CVarDef<int> SponsorMinPlaytimeHours =
         CVarDef.Create("sponsor.min_playtime_hours", 0, CVar.SERVERONLY | CVar.ARCHIVE);

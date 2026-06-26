@@ -22,6 +22,7 @@ public sealed partial class SponsorWindow : BaseWindow
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly IUriOpener _uri = default!;
     private const int DragMarginSize = 7;
+    private const string SponsorDonateProjectPlaceholder = "%project%";
     private readonly ISharedSponsorsManager? _sponsorsManager;
     private readonly ISharedAccountBindingsManager? _accountBindingsManager;
     private readonly List<SponsorInfo> _sponsorTiers = new();
