@@ -914,4 +914,12 @@
                 Text="{Loc 'donation-terminal-footer-right'}" />
         </BoxContainer>
     </BoxContainer>
+
+    <s:SponsorWindowOpenAnimationOverlay
+        Access="Public"
+        HorizontalExpand="True"
+        MouseFilter="Ignore"
+        Name="OpenAnimationOverlay"
+        VerticalExpand="True"
+        Visible="False" />
 </s:SponsorWindow>
