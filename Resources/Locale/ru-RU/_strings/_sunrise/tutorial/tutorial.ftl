@@ -3,7 +3,7 @@
 ui-tutorial = Обучение
 ui-tutorial-available = Доступные туториалы
 ui-tutorial-auto-open = Всегда показывать окно обучения
-tutorial-time = Время: [color=cyan]{ $time } мин.[/color]
+tutorial-time = Время: { $time } мин.
 tutorial-status = Статус: { $status }
 tutorial-completed = [color=green]Пройдено[/color]
 tutorial-is-not-completed = [color=red]Не пройдено[/color]

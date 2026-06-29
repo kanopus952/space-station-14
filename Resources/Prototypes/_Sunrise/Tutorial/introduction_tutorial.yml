@@ -1,6 +1,6 @@
 - type: tutorialSequence
   id: IntroductionTutorial
-  duration: 900
+  duration: 600
   name: introduction-tutorial-name
   tooltip: introduction-tutorial-tooltip
   texture: /Textures/_Sunrise/Tutorial/introduction_tutorial.png
