@@ -39,9 +39,17 @@ intro-tut-go-locker-room-bubble = Отправляйтесь в раздевал
 intro-tut-go-locker-room-chat = Добро пожаловать на борт нашей небольшой космической станции! Давай сначала зайдём в раздевалку и подберём одежду.
 intro-tut-go-locker-room-tts = Добро пожаловать на борт нашей небольшой космической станции! Давай сначала зайдём в раздевалку и подберём одежду.
 
+intro-tut-examine-clothing-vendor-bubble = Осмотрите раздатчик одежды [tutkeybind="ExamineEntity"].
+intro-tut-examine-clothing-vendor-chat = Перед тем как использовать незнакомый объект, его можно осмотреть. Так вы часто узнаете, что перед вами и что с этим делать.
+intro-tut-examine-clothing-vendor-tts = Перед тем как использовать незнакомый объект, его можно осмотреть. Так вы часто узнаете, что перед вами и что с этим делать.
+
+intro-tut-open-clothing-vendor-bubble = Откройте раздатчик одежды [tutkeybind="UIClick"].
+intro-tut-open-clothing-vendor-chat = Теперь взаимодействуйте с раздатчиком. У многих объектов на станции есть своё окно с кнопками, предметами или настройками.
+intro-tut-open-clothing-vendor-tts = Теперь взаимодействуйте с раздатчиком. У многих объектов на станции есть своё окно с кнопками, предметами или настройками.
+
 intro-tut-take-clothing-bubble = Возьмите берет из раздатчика. Нажмите [tutkeybind="UIClick"] на нужный предмет.
-intro-tut-take-clothing-chat = Здесь стоит автомат с одеждой. Откройте его, нажав на его модельку, и выберите там берет.
-intro-tut-take-clothing-tts = Здесь стоит автомат с одеждой. Откройте его, нажав на его модельку, и выберите там берет.
+intro-tut-take-clothing-chat = В открытом раздатчике выберите берет. Предмет появится в вашей руке.
+intro-tut-take-clothing-tts = В открытом раздатчике выберите берет. Предмет появится в вашей руке.
 
 intro-tut-equip-clothing-bubble = Наденьте берет. Откройте инвентарь [tutkeybind="OpenInventoryMenu"] и перетащите предмет в нужный слот, или нажмите [tutkeybind="ActivateItemInHand"] для быстрого надевания.
 intro-tut-equip-clothing-chat = Наденьте крутой берет, вам подойдет.
