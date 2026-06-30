@@ -14,6 +14,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Client._Sunrise.Tutorial.TutorialBubbleControl;
+using Content.Client._Sunrise.Tutorial.UiHighlight;
 
 namespace Content.Client._Sunrise.Tutorial;
 
@@ -52,6 +53,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     public readonly HashSet<string> CompletedTutorials = [];
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer? _tutorialBubbleRoot;
+    private TutorialUiHighlightOverlay? _uiHighlightOverlay;
 
     public override void Initialize()
     {
@@ -80,11 +82,13 @@ public sealed class TutorialSystem : SharedTutorialSystem
         if (ev.New is not InGameScreen)
         {
             SetHighlight(null);
+            ClearUiHighlight();
             _tutorialBubbleRoot?.Orphan();
             return;
         }
 
         RefreshBubbles();
+        RefreshUiHighlight();
     }
 
     private void OnStartDenied(TutorialStartDeniedEvent msg, EntitySessionEventArgs args)
@@ -103,6 +107,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     private void OnPlayerDetached(Entity<TutorialBubbleComponent> ent, ref LocalPlayerDetachedEvent ev)
     {
         SetHighlight(null);
+        ClearUiHighlight();
         _tutorialBubbleRoot?.Orphan();
     }
 
@@ -118,6 +123,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
             SetHighlight(null);
 
         RefreshBubbles();
+        UpdateUiHighlight(ent);
     }
 
     private void SetHighlight(EntityUid? target)
@@ -255,6 +261,65 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _tutorialBubbleRoot.SetPositionLast();
     }
 
+    private void RefreshUiHighlight()
+    {
+        if (_player.LocalEntity is not { } localPlayer ||
+            !TryComp(localPlayer, out TutorialPlayerComponent? tutorialPlayer))
+        {
+            ClearUiHighlight();
+            return;
+        }
+
+        UpdateUiHighlight((localPlayer, tutorialPlayer));
+    }
+
+    private void UpdateUiHighlight(Entity<TutorialPlayerComponent> ent)
+    {
+        if (_player.LocalEntity != ent.Owner)
+            return;
+
+        if (!ent.Comp.TutorialInitialized ||
+            !TryGetCurrentStep(ent, out var step) ||
+            !HasUiHighlight(step))
+        {
+            ClearUiHighlight();
+            return;
+        }
+
+        SetUiHighlight(step.UiHighlight);
+    }
+
+    private static bool HasUiHighlight(TutorialStepPrototype step)
+    {
+        return step.UiHighlight.Count > 0;
+    }
+
+    private void SetUiHighlight(IReadOnlyList<TutorialUiHighlightSelector> selectors)
+    {
+        if (_ui.ActiveScreen is not InGameScreen screen)
+        {
+            ClearUiHighlight();
+            return;
+        }
+
+        _uiHighlightOverlay ??= new TutorialUiHighlightOverlay(screen, selectors);
+        _uiHighlightOverlay.SetTarget(screen, selectors);
+
+        if (_uiHighlightOverlay.Parent != screen)
+        {
+            _uiHighlightOverlay.Orphan();
+            screen.AddChild(_uiHighlightOverlay);
+            LayoutContainer.SetAnchorPreset(_uiHighlightOverlay, LayoutContainer.LayoutPreset.Wide);
+        }
+
+        _uiHighlightOverlay.SetPositionLast();
+    }
+
+    private void ClearUiHighlight()
+    {
+        _uiHighlightOverlay?.Orphan();
+    }
+
     /// <summary>
     /// Requests that the server ends the local player's active tutorial session.
     /// </summary>
@@ -291,6 +356,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     {
         base.Shutdown();
         SetHighlight(null);
+        ClearUiHighlight();
         _ui.OnScreenChanged -= OnScreenChanged;
         _overlayManager.RemoveOverlay<TutorialPathOverlay>();
 

@@ -138,6 +138,7 @@ public abstract class SharedTutorialSystem : EntitySystem
         ResetTracking(ent);
         ClearTutorialBubble(ent);
         ent.Comp.Target = null;
+        ent.Comp.StepStartedAt = _timing.CurTime;
         Dirty(ent, ent.Comp);
 
         RaiseLocalEvent(ent, new TutorialStepChangedEvent());

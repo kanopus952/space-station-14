@@ -41,6 +41,12 @@ public sealed partial class TutorialPlayerComponent : Component
     public bool TutorialInitialized;
 
     /// <summary>
+    /// Game time when the current tutorial step became active.
+    /// </summary>
+    [ViewVariables, AutoPausedField]
+    public TimeSpan StepStartedAt;
+
+    /// <summary>
     /// Absolute game time when this tutorial session expires.
     /// </summary>
     [ViewVariables, AutoPausedField]

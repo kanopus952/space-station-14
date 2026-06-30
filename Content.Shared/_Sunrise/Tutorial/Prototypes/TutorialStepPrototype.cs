@@ -38,6 +38,13 @@ public sealed partial class TutorialStepPrototype : IPrototype, IInheritingProto
     public TutorialBubbleData? Bubble;
 
     /// <summary>
+    ///     Path to a UI control on the active in-game screen that should be highlighted while this step is active.
+    ///     Each selector is resolved from the previous selected control.
+    /// </summary>
+    [DataField]
+    public List<TutorialUiHighlightSelector> UiHighlight = [];
+
+    /// <summary>
     ///     Chat message sent when this step becomes active.
     /// </summary>
     [DataField]
@@ -118,4 +125,54 @@ public sealed partial class TutorialBubbleData
     /// </summary>
     [DataField]
     public bool AttachToTarget;
+}
+
+/// <summary>
+///     Base selector used to find a tutorial UI highlight target.
+/// </summary>
+[ImplicitDataDefinitionForInheritors]
+public abstract partial class TutorialUiHighlightSelector
+{
+}
+
+/// <summary>
+///     Finds a descendant control by its XAML/control name.
+/// </summary>
+public sealed partial class UiByName : TutorialUiHighlightSelector
+{
+    [DataField(required: true)]
+    public string Name = string.Empty;
+}
+
+/// <summary>
+///     Selects a direct child control by index.
+/// </summary>
+public sealed partial class UiByChildIndex : TutorialUiHighlightSelector
+{
+    [DataField(required: true)]
+    public int Index;
+}
+
+/// <summary>
+///     Finds a descendant control by CLR type name or full name.
+/// </summary>
+public sealed partial class UiByType : TutorialUiHighlightSelector
+{
+    [DataField(required: true)]
+    public string ControlType = string.Empty;
+
+    [DataField]
+    public int Index;
+}
+
+/// <summary>
+///     Finds a descendant entity-backed control whose entity has the specified prototype.
+/// </summary>
+public sealed partial class UiByEntityPrototype : TutorialUiHighlightSelector
+{
+    [DataField(required: true)]
+    public EntProtoId Prototype;
+
+    [DataField]
+    public int Index;
 }

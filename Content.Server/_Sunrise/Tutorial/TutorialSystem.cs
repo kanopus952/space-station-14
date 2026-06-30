@@ -57,6 +57,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
     private readonly Dictionary<ICommonSession, TutorialCompletionEui> _completionEuis = new();
     private readonly Dictionary<NetUserId, int> _tutorialTtsRevisions = new();
     private readonly HashSet<NetUserId> _pendingCompletionRespawns = [];
+    private readonly Dictionary<NetUserId, EntityUid> _pendingDetachedTutorialLobbies = [];
+    private readonly List<DetachedTutorialLobbyRequest> _pendingDetachedTutorialLobbyBuffer = [];
 
     public override void Initialize()
     {
@@ -67,6 +69,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEnd);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
@@ -89,6 +92,15 @@ public sealed class TutorialSystem : SharedTutorialSystem
         _completionEuis.Clear();
         _tutorialTtsRevisions.Clear();
         _cooldownData.Clear();
+        _pendingDetachedTutorialLobbies.Clear();
+        _pendingDetachedTutorialLobbyBuffer.Clear();
+    }
+
+    public override void Update(float frameTime)
+    {
+        ProcessPendingDetachedTutorialLobbies();
+
+        base.Update(frameTime);
     }
 
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
@@ -104,14 +116,29 @@ public sealed class TutorialSystem : SharedTutorialSystem
         SchedulePendingRespawnAfterAttach(args.Player);
     }
 
+    private void OnPlayerDetached(PlayerDetachedEvent args)
+    {
+        if (!TryComp(args.Entity, out TutorialPlayerComponent? tutorialPlayer) ||
+            !tutorialPlayer.TutorialInitialized)
+        {
+            return;
+        }
+
+        QueueDetachedTutorialLobby(args.Entity, args.Player);
+    }
+
     private void OnRoundEnd(RoundEndMessageEvent args)
     {
         _pendingCompletionRespawns.Clear();
+        _pendingDetachedTutorialLobbies.Clear();
+        _pendingDetachedTutorialLobbyBuffer.Clear();
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
     {
         _pendingCompletionRespawns.Clear();
+        _pendingDetachedTutorialLobbies.Clear();
+        _pendingDetachedTutorialLobbyBuffer.Clear();
     }
 
     private void OnExpandPvs(Entity<TutorialPlayerComponent> ent, ref ExpandPvsEvent args)
@@ -241,6 +268,55 @@ public sealed class TutorialSystem : SharedTutorialSystem
         QueueRespawnAfterTutorialCompletion(session.UserId);
         EndTutorial((uid, comp));
         return true;
+    }
+
+    private void QueueDetachedTutorialLobby(EntityUid uid, ICommonSession session)
+    {
+        _pendingDetachedTutorialLobbies[session.UserId] = uid;
+    }
+
+    private void ProcessPendingDetachedTutorialLobbies()
+    {
+        if (_pendingDetachedTutorialLobbies.Count == 0)
+            return;
+
+        _pendingDetachedTutorialLobbyBuffer.Clear();
+        foreach (var (userId, uid) in _pendingDetachedTutorialLobbies)
+        {
+            _pendingDetachedTutorialLobbyBuffer.Add(new DetachedTutorialLobbyRequest(userId, uid));
+        }
+
+        _pendingDetachedTutorialLobbies.Clear();
+
+        for (var i = 0; i < _pendingDetachedTutorialLobbyBuffer.Count; i++)
+        {
+            var pending = _pendingDetachedTutorialLobbyBuffer[i];
+
+            if (!_player.TryGetSessionById(pending.UserId, out var session))
+                continue;
+
+            SendDetachedTutorialPlayerToLobby(pending.TutorialEntity, session);
+        }
+
+        _pendingDetachedTutorialLobbyBuffer.Clear();
+    }
+
+    private void SendDetachedTutorialPlayerToLobby(EntityUid uid, ICommonSession session)
+    {
+        if (session.Status != SessionStatus.InGame)
+            return;
+
+        _pendingCompletionRespawns.Remove(session.UserId);
+        _cooldownData[session.UserId] = _timing.CurTime + _cooldown;
+        StopTutorialTts(session);
+        _tutorialTtsRevisions.Remove(session.UserId);
+        CloseCompletionEui(session);
+
+        if (TryComp(uid, out TutorialPlayerComponent? comp) && comp.TutorialInitialized)
+            EndTutorial((uid, comp));
+
+        _pendingCompletionRespawns.Remove(session.UserId);
+        _ticker.Respawn(session);
     }
 
     private bool IsTutorialStepsCompleted(Entity<TutorialPlayerComponent> ent)
@@ -607,4 +683,6 @@ public sealed class TutorialSystem : SharedTutorialSystem
             comp.GridOffsets.Remove(grid);
         }
     }
+
+    private readonly record struct DetachedTutorialLobbyRequest(NetUserId UserId, EntityUid TutorialEntity);
 }
