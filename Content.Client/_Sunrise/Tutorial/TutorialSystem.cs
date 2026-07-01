@@ -280,13 +280,13 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         if (!ent.Comp.TutorialInitialized ||
             !TryGetCurrentStep(ent, out var step) ||
-            !HasUiHighlight(step))
+            !NeedsUiOverlay(step))
         {
             ClearUiHighlight();
             return;
         }
 
-        SetUiHighlight(step.UiHighlight);
+        SetUiHighlight(step.UiHighlight, step.BlockUiInteraction);
     }
 
     private static bool HasUiHighlight(TutorialStepPrototype step)
@@ -294,25 +294,36 @@ public sealed class TutorialSystem : SharedTutorialSystem
         return step.UiHighlight.Count > 0;
     }
 
-    private void SetUiHighlight(IReadOnlyList<TutorialUiHighlightSelector> selectors)
+    private static bool NeedsUiOverlay(TutorialStepPrototype step)
     {
-        if (_ui.ActiveScreen is not InGameScreen screen)
+        return HasUiHighlight(step) || step.BlockUiInteraction;
+    }
+
+    private void SetUiHighlight(IReadOnlyList<TutorialUiHighlightSelector> selectors, bool blockInput)
+    {
+        if (_ui.ActiveScreen is not InGameScreen)
         {
             ClearUiHighlight();
             return;
         }
 
-        _uiHighlightOverlay ??= new TutorialUiHighlightOverlay(screen, selectors);
-        _uiHighlightOverlay.SetTarget(screen, selectors);
+        var root = _ui.RootControl;
+        _uiHighlightOverlay ??= new TutorialUiHighlightOverlay(root, selectors, blockInput);
+        _uiHighlightOverlay.SetTarget(root, selectors, blockInput);
 
-        if (_uiHighlightOverlay.Parent != screen)
+        if (_uiHighlightOverlay.Parent != root)
         {
             _uiHighlightOverlay.Orphan();
-            screen.AddChild(_uiHighlightOverlay);
+            root.AddChild(_uiHighlightOverlay);
             LayoutContainer.SetAnchorPreset(_uiHighlightOverlay, LayoutContainer.LayoutPreset.Wide);
         }
 
         _uiHighlightOverlay.SetPositionLast();
+
+        if (!blockInput)
+            return;
+
+        _ui.ControlFocused = null;
     }
 
     private void ClearUiHighlight()

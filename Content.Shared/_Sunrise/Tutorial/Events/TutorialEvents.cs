@@ -55,3 +55,9 @@ public sealed class TutorialUiButtonPressedEvent(string button) : EntityEventArg
 {
     public string Button = button;
 }
+
+[NetSerializable, Serializable]
+public sealed class TutorialUiControlVisibleEvent(string control) : EntityEventArgs
+{
+    public string Control = control;
+}

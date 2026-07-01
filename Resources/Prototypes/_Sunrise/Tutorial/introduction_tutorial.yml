@@ -1,6 +1,6 @@
 - type: tutorialSequence
   id: IntroductionTutorial
-  duration: 420
+  duration: 450
   name: introduction-tutorial-name
   tooltip: introduction-tutorial-tooltip
   texture: /Textures/_Sunrise/Tutorial/introduction_tutorial.png
@@ -23,13 +23,15 @@
   - IntroTutTakeClothing
   #  8. Explain inventory
   - IntroTutInventory
-  #  9. Equip new clothing
+  #  9. Take the beret in hand
+  - IntroTutHoldBeret
+  # 10. Equip new clothing
   - IntroTutEquipClothing
-  # 10. Drop old clothing (skipped if nothing in hand)
+  # 11. Drop old clothing (skipped if nothing in hand)
   - IntroTutDropOldClothing
-  # 11. Go to the center
+  # 12. Go to the center
   - IntroTutGoCenter
-  # 12. Explain action bar
+  # 13. Explain action bar
   - IntroTutActionBar
 
 
@@ -153,7 +155,22 @@
   - !type:StepDelayCondition
     delay: 5
 
-#  9. Equip the new clothing
+#  9. Take the beret in hand
+- type: tutorialStep
+  id: IntroTutHoldBeret
+  parent: BaseTutorialStepBase
+  bubble:
+    text: intro-tut-hold-beret-bubble
+  chatMessage: intro-tut-hold-beret-chat
+  ttsMessage: intro-tut-hold-beret-tts
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: ClothingHeadHatBeret
+  conditions:
+  - !type:HoldInHandsCondition
+    item: ClothingHeadHatBeret
+
+# 10. Equip the new clothing
 - type: tutorialStep
   id: IntroTutEquipClothing
   parent: BaseTutorialEquipStepBase
@@ -161,12 +178,17 @@
     text: intro-tut-equip-clothing-bubble
   chatMessage: intro-tut-equip-clothing-chat
   ttsMessage: intro-tut-equip-clothing-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: SlotButton_head
   conditions:
   - !type:EquipListenedCondition
     target: ClothingHeadHatBeret
     slot: HEAD
 
-# 10. Drop the old clothing item (skipped if the player has nothing in hand)
+# 11. Drop the old clothing item (skipped if the player has nothing in hand)
 - type: tutorialStep
   id: IntroTutDropOldClothing
   parent: BaseTutorialDropStepBase
@@ -180,7 +202,7 @@
   conditions:
   - !type:DropListenedCondition
 
-# 11. Go to the center of the location
+# 12. Go to the center of the location
 - type: tutorialStep
   id: IntroTutGoCenter
   parent: BaseTutorialReachStepBase
@@ -195,7 +217,7 @@
     marker: IntroTutMarkerCenter
     distance: 2
 
-# 12. Explain action bar
+# 13. Explain action bar
 - type: tutorialStep
   id: IntroTutActionBar
   parent: BaseTutorialStepBase

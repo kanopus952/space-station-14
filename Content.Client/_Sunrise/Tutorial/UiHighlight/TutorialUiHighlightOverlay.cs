@@ -17,7 +17,6 @@ public sealed class TutorialUiHighlightOverlay : Control
     private const float HighlightPadding = 6f;
     private const float BorderThickness = 2f;
 
-    private static readonly Color DimColor = Color.Black.WithAlpha(0.45f);
     private static readonly Color HighlightColor = Color.FromHex("#D8A63A33");
     private static readonly Color BorderColor = Color.FromHex("#D8A63AFF");
 
@@ -25,18 +24,18 @@ public sealed class TutorialUiHighlightOverlay : Control
     private readonly List<TutorialUiHighlightSelector> _selectors = [];
     private readonly TutorialUiControlResolver _resolver = new(IoCManager.Resolve<IEntityManager>());
 
-    public TutorialUiHighlightOverlay(Control root, IReadOnlyList<TutorialUiHighlightSelector> selectors)
+    public TutorialUiHighlightOverlay(Control root, IReadOnlyList<TutorialUiHighlightSelector> selectors, bool blockInput)
     {
-        MouseFilter = MouseFilterMode.Ignore;
         HorizontalAlignment = HAlignment.Stretch;
         VerticalAlignment = VAlignment.Stretch;
 
-        SetTarget(root, selectors);
+        SetTarget(root, selectors, blockInput);
     }
 
-    public void SetTarget(Control root, IReadOnlyList<TutorialUiHighlightSelector> selectors)
+    public void SetTarget(Control root, IReadOnlyList<TutorialUiHighlightSelector> selectors, bool blockInput)
     {
         _root = root;
+        MouseFilter = blockInput ? MouseFilterMode.Stop : MouseFilterMode.Ignore;
 
         _selectors.Clear();
         _selectors.AddRange(selectors);
@@ -55,6 +54,7 @@ public sealed class TutorialUiHighlightOverlay : Control
         if (!target.VisibleInTree || target.PixelSize.X <= 0 || target.PixelSize.Y <= 0)
             return;
 
+        var fullRect = UIBox2.FromDimensions(0f, 0f, PixelSize.X, PixelSize.Y);
         var origin = new Vector2(GlobalPixelPosition.X, GlobalPixelPosition.Y);
         var targetRect = ((UIBox2)target.GlobalPixelRect).Translated(-origin);
         var padding = HighlightPadding * UIScale;
@@ -64,7 +64,6 @@ public sealed class TutorialUiHighlightOverlay : Control
             targetRect.Right + padding,
             targetRect.Bottom + padding);
 
-        var fullRect = UIBox2.FromDimensions(0f, 0f, PixelSize.X, PixelSize.Y);
         var clampedRect = new UIBox2(
             Math.Clamp(targetRect.Left, fullRect.Left, fullRect.Right),
             Math.Clamp(targetRect.Top, fullRect.Top, fullRect.Bottom),
@@ -73,11 +72,6 @@ public sealed class TutorialUiHighlightOverlay : Control
 
         if (clampedRect.Right <= clampedRect.Left || clampedRect.Bottom <= clampedRect.Top)
             return;
-
-        DrawFilledRect(handle, new UIBox2(fullRect.Left, fullRect.Top, fullRect.Right, clampedRect.Top), DimColor);
-        DrawFilledRect(handle, new UIBox2(fullRect.Left, clampedRect.Bottom, fullRect.Right, fullRect.Bottom), DimColor);
-        DrawFilledRect(handle, new UIBox2(fullRect.Left, clampedRect.Top, clampedRect.Left, clampedRect.Bottom), DimColor);
-        DrawFilledRect(handle, new UIBox2(clampedRect.Right, clampedRect.Top, fullRect.Right, clampedRect.Bottom), DimColor);
 
         DrawFilledRect(handle, clampedRect, HighlightColor);
         DrawBorder(handle, clampedRect);

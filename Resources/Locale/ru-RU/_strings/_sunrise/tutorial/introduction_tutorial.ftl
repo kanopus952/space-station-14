@@ -51,6 +51,10 @@ intro-tut-take-clothing-bubble = Возьмите берет из раздатч
 intro-tut-take-clothing-chat = В открытом раздатчике выберите берет. Предмет появится в вашей руке.
 intro-tut-take-clothing-tts = В открытом раздатчике выберите берет. Предмет появится в вашей руке.
 
+intro-tut-hold-beret-bubble = Возьмите берет в руку. Если он не в руках, нажмите по нему в инвентаре или поднимите с пола.
+intro-tut-hold-beret-chat = Перед тем как надеть вещь, она должна быть у вас в руке. Держите берет в активной руке.
+intro-tut-hold-beret-tts = Перед тем как надеть вещь, она должна быть у вас в руке. Держите берет в активной руке.
+
 intro-tut-equip-clothing-bubble = Наденьте берет. Откройте инвентарь [tutkeybind="OpenInventoryMenu"] и перетащите предмет в нужный слот, или нажмите [tutkeybind="ActivateItemInHand"] для быстрого надевания.
 intro-tut-equip-clothing-chat = Наденьте крутой берет, вам подойдет.
 intro-tut-equip-clothing-tts = Наденьте крутой берет, вам подойдет.

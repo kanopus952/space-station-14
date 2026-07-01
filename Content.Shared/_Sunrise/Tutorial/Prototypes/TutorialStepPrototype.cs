@@ -45,6 +45,12 @@ public sealed partial class TutorialStepPrototype : IPrototype, IInheritingProto
     public List<TutorialUiHighlightSelector> UiHighlight = [];
 
     /// <summary>
+    ///     Если true, UI highlight overlay перехватывает ввод и не дает нажимать элементы под ним.
+    /// </summary>
+    [DataField]
+    public bool BlockUiInteraction;
+
+    /// <summary>
     ///     Chat message sent when this step becomes active.
     /// </summary>
     [DataField]

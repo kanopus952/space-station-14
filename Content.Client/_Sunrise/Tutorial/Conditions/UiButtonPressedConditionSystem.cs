@@ -74,7 +74,7 @@ public sealed class UiButtonPressedConditionSystem : EntitySystem
             SetActiveContext(context);
         }
 
-        UpdateConditionSubscriptions(context.Screen);
+        UpdateConditionSubscriptions(context.Root);
     }
 
     private bool TryGetTutorialContext(out TutorialButtonContext context)
@@ -96,7 +96,7 @@ public sealed class UiButtonPressedConditionSystem : EntitySystem
         if (!_tutorial.TryGetCurrentStep((player, tutorialPlayer), out var step))
             return false;
 
-        context = new TutorialButtonContext(screen, player, tutorialPlayer, step);
+        context = new TutorialButtonContext(screen, _ui.RootControl, player, tutorialPlayer, step);
         return true;
     }
 
@@ -172,13 +172,21 @@ public sealed class UiButtonPressedConditionSystem : EntitySystem
 
     private void AddSubscription(UiButtonPressedCondition condition, Control control)
     {
-        void Handler(GUIBoundKeyEventArgs args)
+        Action<GUIBoundKeyEventArgs>? keyHandler = null;
+        Action<BaseButton.ButtonEventArgs>? pressedHandler = null;
+
+        if (control is BaseButton button)
         {
-            OnControlKeyBindDown(condition.Button, args);
+            pressedHandler = _ => RaiseButtonPressed(condition.Button);
+            button.OnPressed += pressedHandler;
+        }
+        else
+        {
+            keyHandler = args => OnControlKeyBindDown(condition.Button, args);
+            control.OnKeyBindDown += keyHandler;
         }
 
-        control.OnKeyBindDown += Handler;
-        _subscriptions[condition] = new ButtonSubscription(control, Handler);
+        _subscriptions[condition] = new ButtonSubscription(control, keyHandler, pressedHandler);
     }
 
     private void RemoveSubscription(UiButtonPressedCondition condition)
@@ -186,14 +194,14 @@ public sealed class UiButtonPressedConditionSystem : EntitySystem
         if (!_subscriptions.Remove(condition, out var subscription))
             return;
 
-        subscription.Control.OnKeyBindDown -= subscription.Handler;
+        RemoveSubscription(subscription);
     }
 
     private void ClearState()
     {
         foreach (var subscription in _subscriptions.Values)
         {
-            subscription.Control.OnKeyBindDown -= subscription.Handler;
+            RemoveSubscription(subscription);
         }
 
         _subscriptions.Clear();
@@ -209,13 +217,34 @@ public sealed class UiButtonPressedConditionSystem : EntitySystem
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
 
+        RaiseButtonPressed(button);
+    }
+
+    private void RaiseButtonPressed(string button)
+    {
         RaiseNetworkEvent(new TutorialUiButtonPressedEvent(button));
     }
 
-    private sealed record ButtonSubscription(Control Control, Action<GUIBoundKeyEventArgs> Handler);
+    private static void RemoveSubscription(ButtonSubscription subscription)
+    {
+        if (subscription.KeyHandler != null)
+            subscription.Control.OnKeyBindDown -= subscription.KeyHandler;
+
+        if (subscription.PressedHandler != null &&
+            subscription.Control is BaseButton button)
+        {
+            button.OnPressed -= subscription.PressedHandler;
+        }
+    }
+
+    private sealed record ButtonSubscription(
+        Control Control,
+        Action<GUIBoundKeyEventArgs>? KeyHandler,
+        Action<BaseButton.ButtonEventArgs>? PressedHandler);
 
     private readonly record struct TutorialButtonContext(
         InGameScreen Screen,
+        Control Root,
         EntityUid Player,
         TutorialPlayerComponent TutorialPlayer,
         TutorialStepPrototype Step);
