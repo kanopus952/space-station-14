@@ -1,0 +1,116 @@
+- type: tutorialSequence
+  id: TreatmentTutorial
+  duration: 450
+  name: treanment-tutorial-name
+  tooltip: treatment-tutorial-tooltip
+  texture: /Textures/_Sunrise/Tutorial/introduction_tutorial.png
+  grid: /Maps/_Sunrise/Tutorials/treatment_tutorial.yml
+  playerEntity: IntroductionTutorialPlayer
+  steps:
+
+
+
+
+# Go to the first ward
+- type: tutorialStep
+  id: TreatmentTutGoBandageWard
+  parent: BaseTutorialReachStepBase
+  target: TreatmentTutMarkerBandageWard
+  bubble:
+    text: treatment-tut-go-bandage-ward-bubble
+  chatMessage: treatment-tut-go-bandage-ward-chat
+  ttsMessage: treatment-tut-go-bandage-ward-tts
+  observeRange: 30
+  conditions:
+  - !type:ReachMarkerCondition
+    marker: TreatmentTutMarkerBandageWard
+    distance: 1
+
+# take the analyzer in hand
+- type: tutorialStep
+  id: TreatmentTutHoldAnalyzer
+  parent: BaseTutorialStepBase
+  bubble:
+    text: treatment-tut-hold-analyzer-bubble
+  chatMessage: treatment-tut-hold-analyzer-chat
+  ttsMessage: treatment-tut-hold-analyzer-tts
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: HandheldHealthAnalyzer
+  conditions:
+  - !type:HoldInHandsCondition
+    item: HandheldHealthAnalyzer
+
+#player scaning the human
+- type: tutorialStep
+  id: TreatmentTutScaning
+  parent: BaseTutorialStepBase
+  abstract: true
+  chatMessage: treatment-tut-scan-chat
+  ttsMessage: treatment-tut-scan-tts
+  conditions:
+  - !type:UseListenedCondition
+
+# Player attacks the urist.
+- type: tutorialStep
+  id: TreatmentTutAttackKnife
+  parent: BaseTutorialStepBase
+  abstract: true
+  chatMessage: treatment-tut-attack-knife-chat
+  ttsMessage: treatment-tut-attack-knife-tts
+  conditions:
+  - !type:AttackListenedCondition
+    target: MobHuman
+    count: 3
+
+
+# Go to the second ward
+- type: tutorialStep
+  id: TreatmentTutGoBlantWard
+  parent: BaseTutorialReachStepBase
+  target: TreatmentTutMarkerBlantWard
+  bubble:
+    text: treatment-tut-go-blant-ward-bubble
+  chatMessage: treatment-tut-go-blant-ward-chat
+  ttsMessage: treatment-tut-go-blant-ward-tts
+  observeRange: 30
+  conditions:
+  - !type:ReachMarkerCondition
+    marker: TreatmentTutMarkerBlantWard
+    distance: 1
+
+
+# Go to the third ward
+- type: tutorialStep
+  id: TreatmentTutGoBurnWard
+  parent: BaseTutorialReachStepBase
+  target: TreatmentTutMarkerBurnWard
+  bubble:
+    text: treatment-tut-go-burn-ward-bubble
+  chatMessage: treatment-tut-go-burn-ward-chat
+  ttsMessage: treatment-tut-go-burn-ward-tts
+  observeRange: 30
+  conditions:
+  - !type:ReachMarkerCondition
+    marker: TreatmentTutMarkerBurnWard
+    distance: 1
+
+
+
+
+- type: startingGear
+  id: TreatmentTutorialPlayerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMedicalDoctor
+    shoes: ClothingShoesColorCyan
+    back: ClothingBackpackSatchelMedical
+    id: MedicalInternPDA
+    ears: ClothingHeadsetMedical
+
+- type: entity
+  parent: BaseTutorialPlayer
+  id: TreatmentTutorialPlayer
+  components:
+  - type: Loadout
+    prototypes: [TreatmentTutorialPlayerGear]
+  - type: Godmode

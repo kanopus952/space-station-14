@@ -73,3 +73,20 @@
   name: intro shooting range marker
   id: IntroTutMarkerRange
   parent: TutorialGoalMarker
+
+# --- Treatment Tutorial Markers ---
+
+- type: entity
+  name: treatment bandage ward marker
+  id: TreatmentTutMarkerBandageWard
+  parent: TutorialGoalMarker
+
+- type: entity
+  name: treatment blunt ward marker
+  id: TreatmentTutMarkerBlantWard
+  parent: TutorialGoalMarker
+
+- type: entity
+  name: treatment burn ward marker
+  id: TreatmentTutMarkerBurnWard
+  parent: TutorialGoalMarker
