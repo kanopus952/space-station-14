@@ -15,7 +15,6 @@ public sealed partial class SponsorWindow
     private const int StoreDetailsTierLines = 2;
     private const int PurchasePreviewSize = 112;
     private const int SubscriptionCardMinHeight = 360;
-    private const int AccountValueLineLength = 34;
     private const int AccountValueLines = 2;
     private const int PurchaseDetailsLineLength = 34;
     private const int PurchaseDetailsLines = 2;

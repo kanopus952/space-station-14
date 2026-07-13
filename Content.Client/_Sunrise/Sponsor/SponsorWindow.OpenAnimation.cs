@@ -39,6 +39,8 @@ public sealed partial class SponsorWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        ProcessSponsorTierDetailsBuild();
+        UpdateSponsorTierPreviewDirections(args.DeltaSeconds);
 
         if (_openAnimationQueued)
             StartOpenAnimation();

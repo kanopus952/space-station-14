@@ -1,4 +1,4 @@
-using Content.Client._Sunrise.SponsorTiers;
+using Content.Client._Sunrise.Sponsor;
 using Content.Client.Lobby;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.CCVar;
@@ -23,7 +23,7 @@ public sealed partial class UserProfile : Control
     [Dependency] private readonly IClientPreferencesManager _preferences = default!;
 
     private readonly UserProfileAccountInfoUIController _accountInfoUIController;
-    private readonly SponsorTiersUIController _sponsorTiersUIController;
+    private readonly SponsorWindowUIController _sponsorWindowUIController;
     private readonly ISharedAccountBindingsManager? _accountBindingsManager;
     private readonly ISharedSponsorsManager? _sponsorsManager;
 
@@ -41,7 +41,7 @@ public sealed partial class UserProfile : Control
         IoCManager.Instance!.TryResolveType(out _accountBindingsManager);
 
         _accountInfoUIController = UserInterfaceManager.GetUIController<UserProfileAccountInfoUIController>();
-        _sponsorTiersUIController = UserInterfaceManager.GetUIController<SponsorTiersUIController>();
+        _sponsorWindowUIController = UserInterfaceManager.GetUIController<SponsorWindowUIController>();
 
         ManageAccountButton.OnPressed += ManageAccountPressed;
         AccountInfoButton.OnPressed += AccountInfoPressed;
@@ -236,6 +236,6 @@ public sealed partial class UserProfile : Control
 
     private void InfoSponsorPressed(BaseButton.ButtonEventArgs args)
     {
-        _sponsorTiersUIController.ToggleWindow();
+        _sponsorWindowUIController.ToggleWindow();
     }
 }

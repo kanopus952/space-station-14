@@ -37,6 +37,7 @@ public sealed partial class SunriseInventorySystem : EntitySystem
     private const int MaxInventoryPurchaseIdLength = 128;
     private const int MaxPetSelectionIdLength = 128;
     private static readonly TimeSpan InitialDataRequestCooldown = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan PurchaseRequestTimeout = TimeSpan.FromSeconds(15);
 
     private readonly Dictionary<NetUserId, Dictionary<int, SunriseInventoryProfile>> _profiles = new();
     private readonly Dictionary<NetUserId, TimeSpan> _nextInitialDataRequests = new();

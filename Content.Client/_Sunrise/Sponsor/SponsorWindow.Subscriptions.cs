@@ -25,7 +25,7 @@ public sealed partial class SponsorWindow
         }
 
         var tiers = new List<SponsorInfo>(_sponsorTiers);
-        tiers.Sort((a, b) => a.Tier.CompareTo(b.Tier));
+        tiers.Sort((a, b) => b.Tier.CompareTo(a.Tier));
 
         for (var i = 0; i < tiers.Count; i++)
         {
@@ -95,6 +95,11 @@ public sealed partial class SponsorWindow
     {
         var benefits = new List<string>();
 
+        AddCountBenefit(
+            benefits,
+            "donation-terminal-subscription-card-benefit-antags",
+            sponsorTier.OpenAntags.Length + sponsorTier.PriorityAntags.Length);
+
         if (sponsorTier.HavePriorityJoin)
             benefits.Add(Loc.GetString("donation-terminal-subscription-card-benefit-priority"));
 
@@ -122,10 +127,6 @@ public sealed partial class SponsorWindow
             benefits,
             "donation-terminal-subscription-card-benefit-roles",
             sponsorTier.OpenRoles.Length + sponsorTier.PriorityRoles.Length + sponsorTier.BypassRoles.Length);
-        AddCountBenefit(
-            benefits,
-            "donation-terminal-subscription-card-benefit-antags",
-            sponsorTier.OpenAntags.Length + sponsorTier.PriorityAntags.Length);
         AddCountBenefit(
             benefits,
             "donation-terminal-subscription-card-benefit-ghosts",

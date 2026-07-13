@@ -69,12 +69,12 @@ public sealed partial class SponsorWindow
     {
         // \u2715 = ✕
         AddMainBenefitRow(
-            Loc.GetString("donation-terminal-main-potential-benefit-slots"),
+            Loc.GetString("donation-terminal-main-potential-benefit-priority-antags"),
             SciFiPalette.Text,
             "\u2715",
             markerColor);
         AddMainBenefitRow(
-            Loc.GetString("donation-terminal-main-potential-benefit-priority-antags"),
+            Loc.GetString("donation-terminal-main-potential-benefit-slots"),
             SciFiPalette.Text,
             "\u2715",
             markerColor);

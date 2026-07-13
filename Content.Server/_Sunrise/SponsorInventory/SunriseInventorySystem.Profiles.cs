@@ -74,9 +74,16 @@ public sealed partial class SunriseInventorySystem
         var profiles = new Dictionary<int, SunriseInventoryProfile>();
         if (_preferences.TryGetCachedPreferences(session.UserId, out var preferences))
         {
+            var profileTasks = new Dictionary<int, Task<SunriseInventoryProfile>>(preferences.Characters.Count);
             foreach (var slot in preferences.Characters.Keys)
             {
-                var profile = await GetInventoryProfileAsync(session.UserId, slot, initialData);
+                profileTasks[slot] = GetInventoryProfileAsync(session.UserId, slot, initialData).AsTask();
+            }
+
+            await Task.WhenAll(profileTasks.Values);
+            foreach (var (slot, profileTask) in profileTasks)
+            {
+                var profile = await profileTask;
                 var validProfile = _sponsors != null
                     ? SunriseInventoryValidation.EnsureValid(profile, session, _prototype, _sponsors)
                     : new SunriseInventoryProfile();

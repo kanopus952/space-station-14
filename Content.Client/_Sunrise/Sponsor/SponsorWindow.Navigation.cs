@@ -39,6 +39,7 @@ public sealed partial class SponsorWindow
         var disabled = string.IsNullOrWhiteSpace(_sponsorDonateUrl);
         MainSubscriptionPurchaseButton.Disabled = disabled;
         SubscriptionPurchaseButton.Disabled = disabled;
+        SubscriptionDetailsPurchaseButton.Disabled = disabled;
     }
 
     private string BuildSponsorDonateUrl(string? projectName)
@@ -82,11 +83,18 @@ public sealed partial class SponsorWindow
 
     private void SelectTab(DonationTerminalTab tab)
     {
+        if (SubscriptionDetailsContent.Visible)
+        {
+            SubscriptionDetailsBenefitsList.RemoveAllChildren();
+            ClearSponsorTierDetailsPreviews();
+        }
+
         _selectedTab = tab;
 
         MainContent.Visible = tab == DonationTerminalTab.Main;
         ShopContent.Visible = tab == DonationTerminalTab.Shop;
         SubscriptionsContent.Visible = tab == DonationTerminalTab.Subscriptions;
+        SubscriptionDetailsContent.Visible = false;
         PurchaseConfirmationContent.Visible = false;
 
         switch (tab)
@@ -113,15 +121,5 @@ public sealed partial class SponsorWindow
             button.AddStyleClass(SunriseStyleClass.StyleClassSciFiTabActive);
         else
             button.RemoveStyleClass(SunriseStyleClass.StyleClassSciFiTabActive);
-    }
-
-    private void OpenSponsorTierDetails()
-    {
-        _sponsorTiersController.OpenWindow();
-    }
-
-    private void OpenSponsorTierDetails(int sponsorTier)
-    {
-        _sponsorTiersController.OpenWindow(sponsorTier);
     }
 }

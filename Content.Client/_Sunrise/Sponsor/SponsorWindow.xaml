@@ -44,50 +44,12 @@
                 Text="{Loc 'donation-terminal-title'}"
                 VAlign="Center" />
             <Control HorizontalExpand="True" />
-            <BoxContainer VerticalAlignment="Center">
-                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                    <Label
-                        FontColorOverride="{x:Static sf:SciFiPalette.TextMuted}"
-                        Text="{Loc 'donation-terminal-balance'}"
-                        VAlign="Center" />
-                    <TextureRect
-                        SetSize="20 20"
-                        Stretch="KeepAspectCentered"
-                        TexturePath="/Textures/_Sunrise/Interface/Sponsor/telecrystal.png" />
-                    <Label
-                        Access="Public"
-                        FontColorOverride="{x:Static sf:SciFiPalette.Accent}"
-                        Name="BalanceLabel"
-                        StyleClasses="LabelHeading"
-                        Text="0"
-                        VAlign="Center" />
-                    <sf:SciFiSweepButton
-                        Access="Public"
-                        Disabled="True"
-                        MinHeight="25"
-                        MinWidth="25"
-                        Name="BalanceButton"
-                        StyleClasses="SciFiIconButton"
-                        VerticalAlignment="Center">
-                        <TextureRect
-                            SetSize="20 20"
-                            Stretch="KeepAspectCentered"
-                            StyleClasses="SciFiIconButtonIcon"
-                            TexturePath="/Textures/Interface/VerbIcons/plus.svg.192dpi.png" />
-                    </sf:SciFiSweepButton>
-                </BoxContainer>
-            </BoxContainer>
             <TextureButton
                 Access="Public"
                 Name="CloseButton"
                 StyleClasses="windowCloseButton"
                 VerticalAlignment="Center" />
         </BoxContainer>
-
-        <controls:HLine
-            Color="{x:Static sf:SciFiPalette.Border}"
-            Margin="0 4 0 0"
-            Thickness="1" />
 
         <PanelContainer
             Margin="0 8 0 0"
@@ -120,6 +82,41 @@
                     StyleClasses="SciFiTab"
                     SweepIntensity="1.7"
                     Text="{Loc 'donation-terminal-tab-subscriptions'}" />
+                <Control HorizontalExpand="True" />
+                <BoxContainer
+                    Orientation="Horizontal"
+                    SeparationOverride="6"
+                    VerticalAlignment="Center">
+                    <Label
+                        FontColorOverride="{x:Static sf:SciFiPalette.TextMuted}"
+                        Text="{Loc 'donation-terminal-balance'}"
+                        VAlign="Center" />
+                    <TextureRect
+                        SetSize="20 20"
+                        Stretch="KeepAspectCentered"
+                        TexturePath="/Textures/_Sunrise/Interface/Sponsor/telecrystal.png" />
+                    <Label
+                        Access="Public"
+                        FontColorOverride="{x:Static sf:SciFiPalette.Accent}"
+                        Name="BalanceLabel"
+                        StyleClasses="LabelHeading"
+                        Text="0"
+                        VAlign="Center" />
+                    <sf:SciFiSweepButton
+                        Access="Public"
+                        Disabled="True"
+                        MinHeight="25"
+                        MinWidth="25"
+                        Name="BalanceButton"
+                        StyleClasses="SciFiIconButton"
+                        VerticalAlignment="Center">
+                        <TextureRect
+                            SetSize="20 20"
+                            Stretch="KeepAspectCentered"
+                            StyleClasses="SciFiIconButtonIcon"
+                            TexturePath="/Textures/Interface/VerbIcons/plus.svg.192dpi.png" />
+                    </sf:SciFiSweepButton>
+                </BoxContainer>
             </BoxContainer>
         </PanelContainer>
 
@@ -440,6 +437,64 @@
                         Name="CurrentSubscriptionValue"
                         Text=""
                         Visible="False" />
+                </BoxContainer>
+
+                <BoxContainer
+                    Access="Public"
+                    HorizontalExpand="True"
+                    Name="SubscriptionDetailsContent"
+                    Orientation="Vertical"
+                    SeparationOverride="10"
+                    VerticalExpand="True"
+                    Visible="False">
+                    <ScrollContainer
+                        HScrollEnabled="True"
+                        HorizontalExpand="True"
+                        MaxHeight="42"
+                        VScrollEnabled="False">
+                        <BoxContainer
+                            Access="Public"
+                            Name="SubscriptionDetailsTierButtons"
+                            Orientation="Horizontal"
+                            SeparationOverride="6" />
+                    </ScrollContainer>
+                    <ScrollContainer
+                        HScrollEnabled="False"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        VScrollEnabled="True">
+                        <BoxContainer
+                            HorizontalAlignment="Center"
+                            HorizontalExpand="True"
+                            MaxWidth="980"
+                            Orientation="Vertical"
+                            SeparationOverride="10">
+                            <BoxContainer
+                                Access="Public"
+                                HorizontalExpand="True"
+                                Name="SubscriptionDetailsBenefitsList"
+                                Orientation="Vertical"
+                                SeparationOverride="10" />
+                        </BoxContainer>
+                    </ScrollContainer>
+                    <BoxContainer
+                        HorizontalExpand="True"
+                        Orientation="Horizontal"
+                        SeparationOverride="6">
+                        <Button
+                            Access="Public"
+                            MinWidth="132"
+                            Name="SubscriptionDetailsBackButton"
+                            StyleClasses="SciFiDonateButton"
+                            Text="{Loc 'donation-terminal-subscription-details-back'}" />
+                        <Control HorizontalExpand="True" />
+                        <sf:SciFiSweepButton
+                            Access="Public"
+                            MinWidth="170"
+                            Name="SubscriptionDetailsPurchaseButton"
+                            StyleClasses="SciFiButton"
+                            Text="{Loc 'donation-terminal-purchase-sponsor'}" />
+                    </BoxContainer>
                 </BoxContainer>
 
                 <BoxContainer

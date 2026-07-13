@@ -103,5 +103,6 @@ public sealed partial class SponsorWindow
         MainSubscriptionValue.Text = text;
         CurrentSubscriptionValue.Text = text;
         RefreshMainSponsorSummary();
+        RefreshSponsorTierDetails();
     }
 }

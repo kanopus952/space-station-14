@@ -20,6 +20,7 @@ public sealed partial class SponsorWindow
         MainContent.Visible = false;
         ShopContent.Visible = false;
         SubscriptionsContent.Visible = false;
+        SubscriptionDetailsContent.Visible = false;
         PurchaseConfirmationContent.Visible = true;
         Footer.Text = Loc.GetString("donation-terminal-footer-purchase");
 

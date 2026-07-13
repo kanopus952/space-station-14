@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._Sunrise.SponsorInventory;
 using Content.Shared.Clothing;
+using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Storage;
+using Content.Sunrise.Interfaces.Shared;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -30,85 +33,44 @@ public sealed partial class SunriseInventorySystem
             return new SunriseInventoryProfile();
         }
 
-        var valid = new SunriseInventoryProfile
-        {
-            Global = EnsureValidSelectionForCharacter(session, humanoid, null, profile.Global, validateBag: false),
-        };
-
-        foreach (var (jobId, selection) in profile.Jobs ?? new Dictionary<string, SunriseInventorySelection>())
-        {
-            if (selection == null || !_prototype.HasIndex<JobPrototype>(jobId))
-                continue;
-
-            var effectiveProfile = new SunriseInventoryProfile
-            {
-                Global = valid.Global.Clone(),
-                Jobs = { [jobId] = selection.Clone() },
-            };
-            var effectiveSelection = SunriseInventoryValidation.GetEffectiveSelection(effectiveProfile, jobId);
-            var validEffectiveSelection = EnsureValidSelectionForCharacter(session, humanoid, jobId, effectiveSelection, validateBag: true);
-            var validSelection = GetJobSpecificSelection(selection, validEffectiveSelection);
-            if (!validSelection.IsEmpty())
-                valid.Jobs[jobId] = validSelection;
-        }
-
-        return valid;
-    }
-
-    private SunriseInventorySelection EnsureValidSelectionForCharacter(
-        ICommonSession session,
-        HumanoidCharacterProfile profile,
-        string? jobId,
-        SunriseInventorySelection selection,
-        bool validateBag)
-    {
-        var valid = new SunriseInventorySelection();
-        selection ??= new SunriseInventorySelection();
-
-        var dummy = SpawnValidationDummy(session, profile, jobId);
+        var dummy = SpawnValidationDummy(humanoid);
         if (dummy == null)
-            return valid;
+            return new SunriseInventoryProfile();
 
         try
         {
             var items = BuildSponsorItemLookup(_sponsors?.GetSponsorInventoryConfig());
-            var usedItems = new HashSet<string>();
-
-            foreach (var (slot, itemId) in selection.SlotItems)
+            var valid = new SunriseInventoryProfile
             {
-                if (!usedItems.Add(itemId) ||
-                    !items.TryGetValue(itemId, out var item))
+                Global = EnsureValidSelectionForCharacter(
+                    dummy.Value,
+                    profile.Global,
+                    validateBag: false,
+                    items: items),
+            };
+
+            foreach (var (jobId, selection) in profile.Jobs ?? new Dictionary<string, SunriseInventorySelection>())
+            {
+                if (selection == null || !_prototype.TryIndex<JobPrototype>(jobId, out var job))
                     continue;
 
-                if (!TryEquipSponsorItem(dummy.Value, slot, item))
+                ClearValidationDummyEquipment(dummy.Value);
+                EquipValidationDummyForJob(session, humanoid, dummy.Value, job);
+
+                var effectiveProfile = new SunriseInventoryProfile
                 {
-                    usedItems.Remove(itemId);
-                    continue;
-                }
-
-                valid.SlotItems[slot] = itemId;
-            }
-
-            if (!validateBag ||
-                !_inventory.TryGetSlotEntity(dummy.Value, "back", out var backEntity) ||
-                !TryComp<StorageComponent>(backEntity, out var storage))
-            {
-                return valid;
-            }
-
-            foreach (var itemId in selection.BagItems)
-            {
-                if (!usedItems.Add(itemId) ||
-                    !items.TryGetValue(itemId, out var item))
-                    continue;
-
-                if (!TryStoreSponsorItem(backEntity.Value, storage, item))
-                {
-                    usedItems.Remove(itemId);
-                    continue;
-                }
-
-                valid.BagItems.Add(itemId);
+                    Global = valid.Global.Clone(),
+                    Jobs = { [jobId] = selection.Clone() },
+                };
+                var effectiveSelection = SunriseInventoryValidation.GetEffectiveSelection(effectiveProfile, jobId);
+                var validEffectiveSelection = EnsureValidSelectionForCharacter(
+                    dummy.Value,
+                    effectiveSelection,
+                    validateBag: true,
+                    items: items);
+                var validSelection = GetJobSpecificSelection(selection, validEffectiveSelection);
+                if (!validSelection.IsEmpty())
+                    valid.Jobs[jobId] = validSelection;
             }
 
             return valid;
@@ -119,20 +81,72 @@ public sealed partial class SunriseInventorySystem
         }
     }
 
-    private EntityUid? SpawnValidationDummy(
-        ICommonSession session,
-        HumanoidCharacterProfile profile,
-        string? jobId)
+    private SunriseInventorySelection EnsureValidSelectionForCharacter(
+        EntityUid dummy,
+        SunriseInventorySelection selection,
+        bool validateBag,
+        IReadOnlyDictionary<string, SponsorInventoryItemInfo> items)
+    {
+        var valid = new SunriseInventorySelection();
+        selection ??= new SunriseInventorySelection();
+        var usedItems = new HashSet<string>();
+
+        foreach (var (slot, itemId) in selection.SlotItems)
+        {
+            if (!usedItems.Add(itemId) ||
+                !items.TryGetValue(itemId, out var item))
+                continue;
+
+            if (!TryEquipSponsorItem(dummy, slot, item))
+            {
+                usedItems.Remove(itemId);
+                continue;
+            }
+
+            valid.SlotItems[slot] = itemId;
+        }
+
+        if (!validateBag ||
+            !_inventory.TryGetSlotEntity(dummy, "back", out var backEntity) ||
+            !TryComp<StorageComponent>(backEntity, out var storage))
+        {
+            return valid;
+        }
+
+        foreach (var itemId in selection.BagItems)
+        {
+            if (!usedItems.Add(itemId) ||
+                !items.TryGetValue(itemId, out var item))
+                continue;
+
+            if (!TryStoreSponsorItem(backEntity.Value, storage, item))
+            {
+                usedItems.Remove(itemId);
+                continue;
+            }
+
+            valid.BagItems.Add(itemId);
+        }
+
+        return valid;
+    }
+
+    private EntityUid? SpawnValidationDummy(HumanoidCharacterProfile profile)
     {
         if (!_prototype.TryIndex(profile.Species, out var species))
             return null;
 
         var dummy = Spawn(species.DollPrototype, MapCoordinates.Nullspace);
         _humanoid.LoadProfile(dummy, profile);
+        return dummy;
+    }
 
-        if (jobId == null || !_prototype.TryIndex<JobPrototype>(jobId, out var job))
-            return dummy;
-
+    private void EquipValidationDummyForJob(
+        ICommonSession session,
+        HumanoidCharacterProfile profile,
+        EntityUid dummy,
+        JobPrototype job)
+    {
         var jobLoadoutId = LoadoutSystem.GetJobPrototype(job.ID);
         var effectiveJobLoadoutId = LoadoutSystem.GetEffectiveRolePrototype(jobLoadoutId, _prototype);
         if (_prototype.TryIndex(effectiveJobLoadoutId, out var roleProto))
@@ -145,8 +159,45 @@ public sealed partial class SunriseInventorySystem
 
         if (job.StartingGear != null)
             _spawn.EquipStartingGear(dummy, job.StartingGear, raiseEvent: false);
+    }
 
-        return dummy;
+    private void ClearValidationDummyEquipment(EntityUid dummy)
+    {
+        if (TryComp<InventoryComponent>(dummy, out var inventory))
+        {
+            var slots = _inventory.GetSlotEnumerator((dummy, inventory));
+            while (slots.NextItem(out _, out var slot))
+            {
+                if (_inventory.TryUnequip(
+                        dummy,
+                        slot.Name,
+                        out var removed,
+                        silent: true,
+                        force: true,
+                        inventory: inventory,
+                        reparent: false))
+                {
+                    QueueDel(removed.Value);
+                }
+            }
+        }
+
+        if (!TryComp<HandsComponent>(dummy, out var hands))
+            return;
+
+        foreach (var handId in hands.Hands.Keys)
+        {
+            if (!_container.TryGetContainer(dummy, handId, out var container))
+                continue;
+
+            foreach (var held in container.ContainedEntities.ToArray())
+            {
+                if (!_container.Remove(held, container, reparent: false, force: true))
+                    continue;
+
+                QueueDel(held);
+            }
+        }
     }
 
     private static SunriseInventorySelection GetJobSpecificSelection(

@@ -59,7 +59,7 @@ public sealed partial class SponsorWindow
 
     private void SetAccountValue(Label label, string text)
     {
-        label.Text = text.WrapText(AccountValueLineLength, AccountValueLines);
+        label.Text = text;
         label.ToolTip = text;
     }
 }

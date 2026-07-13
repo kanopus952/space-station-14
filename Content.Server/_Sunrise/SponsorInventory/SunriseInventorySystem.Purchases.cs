@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Content.Shared._Sunrise.SponsorInventory;
 using Content.Sunrise.Interfaces.Shared;
@@ -27,9 +28,25 @@ public sealed partial class SunriseInventorySystem
             return;
         }
 
-        var result = await sponsors.PurchaseSponsorInventoryItemAsync(
-            session.UserId,
-            request);
+        SponsorInventoryPurchaseResult result;
+        using (var timeout = new CancellationTokenSource(PurchaseRequestTimeout))
+        {
+            try
+            {
+                result = await sponsors.PurchaseSponsorInventoryItemAsync(
+                    session.UserId,
+                    request,
+                    timeout.Token);
+            }
+            catch (OperationCanceledException) when (timeout.IsCancellationRequested)
+            {
+                result = new SponsorInventoryPurchaseResult
+                {
+                    Success = false,
+                    Error = "request-timeout",
+                };
+            }
+        }
 
         RaiseNetworkEvent(new SunriseInventoryPurchaseResultEvent(result), session);
 
