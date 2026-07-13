@@ -1,8 +1,10 @@
 using System;
 using Content.Shared._Sunrise.SponsorInventory;
 using Content.Shared.GameTicking;
+using Content.Sunrise.Interfaces.Shared;
 using Robust.Shared.Enums;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 
 namespace Content.Server._Sunrise.SponsorInventory;
@@ -18,6 +20,7 @@ public sealed partial class SunriseInventorySystem
             return;
 
         _profiles.Remove(args.Session.UserId);
+        _nextInitialDataRequests.Remove(args.Session.UserId);
     }
 
     private async void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
@@ -34,6 +37,11 @@ public sealed partial class SunriseInventorySystem
 
     private async void OnInitialDataRequest(SunriseInventoryInitialDataRequestEvent ev, EntitySessionEventArgs args)
     {
+        var userId = args.SenderSession.UserId;
+        if (_nextInitialDataRequests.TryGetValue(userId, out var nextRequest) && nextRequest > _timing.CurTime)
+            return;
+
+        _nextInitialDataRequests[userId] = _timing.CurTime + InitialDataRequestCooldown;
         try
         {
             await SendInitialData(args.SenderSession);
@@ -41,6 +49,23 @@ public sealed partial class SunriseInventorySystem
         catch (Exception e)
         {
             Log.Error($"Failed to send sponsor inventory initial data for {args.SenderSession.UserId}: {e}");
+        }
+    }
+
+    private async void OnSponsorInventoryInitialDataLoaded(
+        NetUserId userId,
+        SponsorInventoryInitialData initialData)
+    {
+        if (!_player.TryGetSessionById(userId, out var session))
+            return;
+
+        try
+        {
+            await SendInitialData(session, initialData);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to push updated sponsor inventory initial data for {userId}: {e}");
         }
     }
 

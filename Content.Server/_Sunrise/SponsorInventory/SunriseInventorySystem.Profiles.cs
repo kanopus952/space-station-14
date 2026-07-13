@@ -62,11 +62,13 @@ public sealed partial class SunriseInventorySystem
                preferences.Characters.ContainsKey(slot);
     }
 
-    private async Task SendInitialData(ICommonSession session)
+    private async Task SendInitialData(
+        ICommonSession session,
+        SponsorInventoryInitialData? cachedInitialData = null)
     {
-        var initialData = _sponsors != null
+        var initialData = cachedInitialData ?? (_sponsors != null
             ? await _sponsors.GetSponsorInventoryInitialDataAsync(session.UserId)
-            : new SponsorInventoryInitialData();
+            : new SponsorInventoryInitialData());
         initialData ??= new SponsorInventoryInitialData();
 
         var profiles = new Dictionary<int, SunriseInventoryProfile>();

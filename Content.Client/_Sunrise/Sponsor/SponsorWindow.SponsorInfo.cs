@@ -23,7 +23,8 @@ public sealed partial class SponsorWindow
             return;
         }
 
-        if (!_sponsorsManager.ClientIsSponsor())
+        var currentTier = _sponsorInventory.GetSponsorTier();
+        if (!_sponsorsManager.ClientIsSponsor() && currentTier <= 0)
         {
             _currentSponsorTier = 0;
             SetSubscriptionText(Loc.GetString("donation-terminal-rank-none"));
@@ -31,7 +32,6 @@ public sealed partial class SponsorWindow
             return;
         }
 
-        var currentTier = _sponsorsManager.GetSponsorTier(session.UserId);
         if (!_sponsorsManager.TryGetOocTitle(session.UserId, out var sponsorTitle) ||
             string.IsNullOrWhiteSpace(sponsorTitle))
         {

@@ -13,6 +13,7 @@ using Robust.Server.Player;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Sunrise.SponsorInventory;
 
@@ -31,11 +32,14 @@ public sealed partial class SunriseInventorySystem : EntitySystem
     [Dependency] private readonly SponsorValidationSystem _validation = default!;
     [Dependency] private readonly IServerPreferencesManager _preferences = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private const int MaxInventoryPurchaseIdLength = 128;
     private const int MaxPetSelectionIdLength = 128;
+    private static readonly TimeSpan InitialDataRequestCooldown = TimeSpan.FromSeconds(1);
 
     private readonly Dictionary<NetUserId, Dictionary<int, SunriseInventoryProfile>> _profiles = new();
+    private readonly Dictionary<NetUserId, TimeSpan> _nextInitialDataRequests = new();
     private ISharedSponsorsManager? _sponsors;
 
     public override void Initialize()
@@ -49,6 +53,7 @@ public sealed partial class SunriseInventorySystem : EntitySystem
         SubscribeNetworkEvent<SunriseInventoryProfileChangedEvent>(OnInventoryProfileChanged);
         SubscribeNetworkEvent<SunriseInventoryPurchaseRequestEvent>(OnPurchaseRequest);
         _player.PlayerStatusChanged += OnPlayerStatusChanged;
+        _sponsors?.LoadedSponsorInventoryInitialData += OnSponsorInventoryInitialDataLoaded;
     }
 
     public override void Shutdown()
@@ -56,6 +61,8 @@ public sealed partial class SunriseInventorySystem : EntitySystem
         base.Shutdown();
 
         _player.PlayerStatusChanged -= OnPlayerStatusChanged;
+        _sponsors?.LoadedSponsorInventoryInitialData -= OnSponsorInventoryInitialDataLoaded;
         _profiles.Clear();
+        _nextInitialDataRequests.Clear();
     }
 }

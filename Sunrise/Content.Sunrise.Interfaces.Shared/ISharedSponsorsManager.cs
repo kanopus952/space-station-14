@@ -20,6 +20,11 @@ public interface ISharedSponsorsManager
         add { }
         remove { }
     }
+    public event Action<NetUserId, SponsorInventoryInitialData>? LoadedSponsorInventoryInitialData
+    {
+        add { }
+        remove { }
+    }
 
     // Client
     public List<string> GetClientPrototypes();

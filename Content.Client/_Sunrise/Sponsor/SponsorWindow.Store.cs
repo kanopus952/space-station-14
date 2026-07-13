@@ -69,6 +69,7 @@ public sealed partial class SponsorWindow
         RefreshBalance();
         RefreshStoreCatalog();
         RefreshPurchaseConfirmation();
+        RefreshSponsorInfo();
     }
 
     private void OnSponsorInventoryPurchaseResult(SponsorInventoryPurchaseResult result)

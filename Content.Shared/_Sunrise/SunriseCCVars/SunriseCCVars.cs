@@ -100,6 +100,18 @@ public sealed partial class SunriseCCVars : CVars
     public static readonly CVarDef<string> SponsorApiToken =
         CVarDef.Create("sponsor.api_token", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
+    public static readonly CVarDef<string> SponsorInventoryWebhookToken =
+        CVarDef.Create("sponsor.inventory_webhook_token", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    public static readonly CVarDef<bool> SponsorInventoryWebhookIpAllowlistEnabled =
+        CVarDef.Create("sponsor.inventory_webhook_ip_allowlist_enabled", false, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<string> SponsorInventoryWebhookIpAllowlist =
+        CVarDef.Create("sponsor.inventory_webhook_ip_allowlist", "", CVar.SERVERONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<string> SponsorInventoryWebhookTrustedProxyCidrs =
+        CVarDef.Create("sponsor.inventory_webhook_trusted_proxy_cidrs", "", CVar.SERVERONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<string> SponsorGhostTheme =
         CVarDef.Create("sponsor.ghost_theme", "", CVar.CLIENTONLY | CVar.ARCHIVE);
 
