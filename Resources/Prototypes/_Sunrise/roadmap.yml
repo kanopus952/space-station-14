@@ -3,6 +3,10 @@
   versions:
   - name: roadmap-available-now
     goals:
+    - id: ingame-tutorial-name
+      name: roadmap-goal-ingame-tutorial-name
+      desc: roadmap-goal-ingame-tutorial-desc
+      state: Complete
     - id: planet-prison-name
       name: roadmap-goal-planet-prison-name
       desc: roadmap-goal-planet-prison-desc
@@ -89,10 +93,6 @@
       name: roadmap-goal-virusology-name
       desc: roadmap-goal-virusology-desc
       state: InProgress
-    - id: ingame-tutorial-name
-      name: roadmap-goal-ingame-tutorial-name
-      desc: roadmap-goal-ingame-tutorial-desc
-      state: InProgress
     - id: vampires-name
       name: roadmap-goal-vampires-name
       desc: roadmap-goal-vampires-desc
@@ -100,6 +100,30 @@
     - id: pirates-name
       name: roadmap-goal-pirates-name
       desc: roadmap-goal-pirates-desc
+      state: InProgress
+    - id: light-shader-improvement-name
+      name: roadmap-goal-light-shader-improvement-name
+      desc: roadmap-goal-light-shader-improvement-desc
+      state: InProgress
+    - id: object-shadows-name
+      name: roadmap-goal-object-shadows-name
+      desc: roadmap-goal-object-shadows-desc
+      state: InProgress
+    - id: walking-animations-name
+      name: roadmap-goal-walking-animations-name
+      desc: roadmap-goal-walking-animations-desc
+      state: InProgress
+    - id: station-ai-body-name
+      name: roadmap-goal-station-ai-body-name
+      desc: roadmap-goal-station-ai-body-desc
+      state: InProgress
+    - id: species-languages-name
+      name: roadmap-goal-species-languages-name
+      desc: roadmap-goal-species-languages-desc
+      state: InProgress
+    - id: atmospheric-visual-effects-name
+      name: roadmap-goal-atmospheric-visual-effects-name
+      desc: roadmap-goal-atmospheric-visual-effects-desc
       state: InProgress
   - name: roadmap-planned
     goals:
@@ -138,4 +162,12 @@
     - id: limbo-name
       name: roadmap-goal-limbo-name
       desc: roadmap-goal-limbo-desc
+      state: Planned
+    - id: background-music-name
+      name: roadmap-goal-background-music-name
+      desc: roadmap-goal-background-music-desc
+      state: Planned
+    - id: particles-name
+      name: roadmap-goal-particles-name
+      desc: roadmap-goal-particles-desc
       state: Planned

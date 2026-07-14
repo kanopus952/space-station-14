@@ -79,6 +79,24 @@ roadmap-goal-pirates-desc = A squad of space pirates raiding the station for loo
 roadmap-goal-alt-jobs-name = Alternative Jobs
 roadmap-goal-alt-jobs-desc = New alternative jobs and roles to diversify gameplay.
 
+roadmap-goal-light-shader-improvement-name = Light Shader Improvement
+roadmap-goal-light-shader-improvement-desc = Improving the quality and visual expressiveness of lighting.
+
+roadmap-goal-object-shadows-name = Object Shadows
+roadmap-goal-object-shadows-desc = Shadows cast by all static objects and character models.
+
+roadmap-goal-walking-animations-name = Walking Animations
+roadmap-goal-walking-animations-desc = New character movement animations.
+
+roadmap-goal-station-ai-body-name = Station AI Body
+roadmap-goal-station-ai-body-desc = A dedicated body that the station AI can transfer into.
+
+roadmap-goal-species-languages-name = Species Languages
+roadmap-goal-species-languages-desc = Unique languages for different species.
+
+roadmap-goal-atmospheric-visual-effects-name = Numerous Atmospheric Visual Effects
+roadmap-goal-atmospheric-visual-effects-desc = A variety of visual effects: consoles spark when struck, while damaged lights flicker.
+
 # ---- Planned ----
 
 roadmap-goal-economy-name = Economy
@@ -107,3 +125,9 @@ roadmap-goal-arena-desc = An arena where ghosts can spend their time instead of 
 
 roadmap-goal-limbo-name = Limbo
 roadmap-goal-limbo-desc = A separate world for ghosts where there are no rules.
+
+roadmap-goal-background-music-name = Background Music
+roadmap-goal-background-music-desc = Background music that sets the atmosphere during a round.
+
+roadmap-goal-particles-name = Particles
+roadmap-goal-particles-desc = Beautiful particle effects for fires, broken objects, and other events.
