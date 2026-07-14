@@ -125,6 +125,10 @@
       name: roadmap-goal-atmospheric-visual-effects-name
       desc: roadmap-goal-atmospheric-visual-effects-desc
       state: InProgress
+    - id: loadout-improvements-name
+      name: roadmap-goal-loadout-improvements-name
+      desc: roadmap-goal-loadout-improvements-desc
+      state: InProgress
   - name: roadmap-planned
     goals:
     - id: economy-name

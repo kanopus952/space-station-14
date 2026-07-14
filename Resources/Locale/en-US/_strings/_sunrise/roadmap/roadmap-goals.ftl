@@ -97,6 +97,9 @@ roadmap-goal-species-languages-desc = Unique languages for different species.
 roadmap-goal-atmospheric-visual-effects-name = Numerous Atmospheric Visual Effects
 roadmap-goal-atmospheric-visual-effects-desc = A variety of visual effects: consoles spark when struck, while damaged lights flicker.
 
+roadmap-goal-loadout-improvements-name = Loadout Functionality and UI Improvements
+roadmap-goal-loadout-improvements-desc = Expanded functionality and a redesigned loadout interface.
+
 # ---- Planned ----
 
 roadmap-goal-economy-name = Economy
