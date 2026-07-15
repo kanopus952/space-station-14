@@ -1,9 +1,9 @@
-# Roadmap groups
+## Roadmap groups
 roadmap-visual-and-sound = Visual and Sound
 roadmap-quality-of-life = Quality of Life
 roadmap-new-content = New Content
 
-# Visual and Sound
+## Visual and Sound
 roadmap-goal-light-shader-improvement-name = Light Shader Improvement
 roadmap-goal-light-shader-improvement-desc = Improving the quality and visual expressiveness of lighting.
 
@@ -22,7 +22,7 @@ roadmap-goal-background-music-desc = Background music that sets the atmosphere d
 roadmap-goal-particles-name = Particles
 roadmap-goal-particles-desc = Beautiful particle effects for fires, broken objects, and other events.
 
-# Quality of Life
+## Quality of Life
 roadmap-goal-starting-guides-name = Starting Guides
 roadmap-goal-starting-guides-desc = Basic guides for learning the game and its core mechanics.
 
@@ -35,7 +35,7 @@ roadmap-goal-department-guides-desc = Guides for departments, jobs, and crew res
 roadmap-goal-ingame-tutorial-name = In-Game Tutorial
 roadmap-goal-ingame-tutorial-desc = A tutorial mode for new players inside the game itself.
 
-# New Content
+## New Content
 roadmap-goal-virusology-name = Virology
 roadmap-goal-virusology-desc = Reviving virology — you will be able to create and research diseases.
 

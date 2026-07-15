@@ -1,9 +1,9 @@
-# Группы роадмапа
+## Группы роадмапа
 roadmap-visual-and-sound = Визуал и звук
 roadmap-quality-of-life = Качество жизни
 roadmap-new-content = Новый контент
 
-# Визуал и звук
+## Визуал и звук
 roadmap-goal-light-shader-improvement-name = Улучшение шейдера света
 roadmap-goal-light-shader-improvement-desc = Улучшение качества и визуальной выразительности освещения.
 
@@ -22,20 +22,20 @@ roadmap-goal-background-music-desc = Фоновая музыка, создающ
 roadmap-goal-particles-name = Частицы
 roadmap-goal-particles-desc = Красивые частицы при возгорании, поломке объектов и других событиях.
 
-# Качество жизни
-roadmap-goal-starting-guides-name = Начальные гайды
+## Качество жизни
+roadmap-goal-starting-guides-name = Начальные туториалы
 roadmap-goal-starting-guides-desc = Базовые руководства для знакомства с игрой и её основными механиками.
 
 roadmap-goal-loadout-improvements-name = Улучшение функционала и UI лодаута
 roadmap-goal-loadout-improvements-desc = Расширение возможностей и переработка интерфейса лодаута.
 
-roadmap-goal-department-guides-name = Гайды по отделам
+roadmap-goal-department-guides-name = Туториалы по отделам
 roadmap-goal-department-guides-desc = Руководства по отделам, должностям и обязанностям экипажа.
 
 roadmap-goal-ingame-tutorial-name = Внутриигровое обучение
 roadmap-goal-ingame-tutorial-desc = Обучающий режим для новых игроков прямо внутри игры.
 
-# Новый контент
+## Новый контент
 roadmap-goal-virusology-name = Вирусология
 roadmap-goal-virusology-desc = Оживление вирусологии — вы сможете создавать и исследовать болезни.
 
