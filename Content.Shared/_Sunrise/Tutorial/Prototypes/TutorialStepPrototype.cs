@@ -1,5 +1,6 @@
 using Content.Shared._Sunrise.TTS;
 using Content.Shared._Sunrise.Tutorial.Conditions;
+using Content.Shared._Sunrise.Tutorial.Effects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
@@ -105,11 +106,48 @@ public sealed partial class TutorialStepPrototype : IPrototype, IInheritingProto
     public List<TutorialCondition> Preconditions = [];
 
     /// <summary>
+    ///     Conditions that temporarily switch the player to a repair step when the current step can no longer proceed normally.
+    /// </summary>
+    [DataField]
+    public List<TutorialFailureRule> Failures = [];
+
+    /// <summary>
+    ///     Effects applied while this step is active.
+    /// </summary>
+    [DataField]
+    public List<TutorialEffect> Effects = [];
+
+    /// <summary>
     ///     Optional step to jump to if <see cref="Preconditions"/> are not met.
     ///     If unset, failed preconditions skip this step and continue with the next one.
     /// </summary>
     [DataField]
     public ProtoId<TutorialStepPrototype>? PreconditionFailStep;
+}
+
+/// <summary>
+///     Data describing a recoverable tutorial failure and the repair step used to fix it.
+/// </summary>
+[DataDefinition]
+public sealed partial class TutorialFailureRule
+{
+    /// <summary>
+    ///     Conditions that all must be satisfied to enter the repair step.
+    /// </summary>
+    [DataField]
+    public List<TutorialCondition> Conditions = [];
+
+    /// <summary>
+    ///     Alternative conditions. If set, any of these must also be satisfied to enter the repair step.
+    /// </summary>
+    [DataField]
+    public List<TutorialCondition> AnyConditions = [];
+
+    /// <summary>
+    ///     Step shown until the player repairs the failed state.
+    /// </summary>
+    [DataField(required: true)]
+    public ProtoId<TutorialStepPrototype> RepairStep;
 }
 
 /// <summary>

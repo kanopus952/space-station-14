@@ -1,9 +1,10 @@
 - type: tutorialSequence
   id: CommunicationTutorial
   duration: 960
+  priority: 10
   name: communication-tutorial-name
   tooltip: communication-tutorial-tooltip
-  texture: /Textures/_Sunrise/Tutorial/introduction_tutorial.png
+  texture: /Textures/_Sunrise/Tutorial/communication_tutorial.png
   grid: /Maps/_Sunrise/Tutorials/communication_tutorial.yml
   playerEntity: CommunicationTutorialPlayer
   steps:

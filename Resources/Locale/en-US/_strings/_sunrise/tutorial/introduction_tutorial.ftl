@@ -6,7 +6,7 @@ base-tutorial-sender = Instructor:
 tutorial-base-step-examine-bubble = Examine the item. Use [tutkeybind="ExamineEntity"].
 tutorial-base-step-examine-chat = Great! Let's start by examining items.
 tutorial-base-step-examine-tts = Great! Let's start by examining items.
-tutorial-base-step-pickup-bubble = Pick up the item.
+tutorial-base-step-pickup-bubble = Pick up the item with [tutkeybind="UIClick"].
 tutorial-base-step-pickup-chat = Pick up the item to hold it in your hand.
 tutorial-base-step-pickup-tts = Pick up the item to hold it in your hand.
 tutorial-base-step-activate-action-chat = Activate the button with an icon on the action panel, either on the left or at the top.
@@ -14,7 +14,7 @@ tutorial-base-step-activate-action-tts = Activate the action.
 tutorial-base-step-use-bubble = Use the item in your hand. Press [tutkeybind="UseItemInHand"].
 tutorial-base-step-use-chat = Now use the item in your hand.
 tutorial-base-step-use-tts = Now use the item in your hand.
-tutorial-base-step-equip-bubble = Equip the item into a clothing slot.
+tutorial-base-step-equip-bubble = Equip the item into a clothing slot with [tutkeybind="UIClick"] or [tutkeybind="ActivateItemInHand"].
 tutorial-base-step-equip-chat = Drag the item onto yourself to wear it.
 tutorial-base-step-equip-tts = Drag the item onto yourself to wear it.
 tutorial-base-step-drop-bubble = Drop the item on the floor with [tutkeybind="Drop"].
@@ -24,7 +24,7 @@ tutorial-base-step-interact-chat = Interact with the object.
 tutorial-base-step-interact-tts = Interact with the object.
 tutorial-base-step-reach-chat = Reach the marked location.
 tutorial-base-step-reach-tts = Reach the marked location.
-tutorial-base-step-attack-bubble = Hit any item or wall.
+tutorial-base-step-attack-bubble = Hit any item or wall with [tutkeybind="UIClick"].
 tutorial-base-step-attack-chat = Try attacking.
 tutorial-base-step-attack-tts = Try attacking.
 tutorial-base-walk-bubble = Walk around a little. Use [tutkeybind="MoveUp"] [tutkeybind="MoveLeft"] [tutkeybind="MoveDown"] [tutkeybind="MoveRight"].
@@ -51,7 +51,7 @@ intro-tut-take-clothing-bubble = Take the beret from the vendor. Press [tutkeybi
 intro-tut-take-clothing-chat = In the open vendor, choose the beret. The item will appear in your hand.
 intro-tut-take-clothing-tts = In the open vendor, choose the beret. The item will appear in your hand.
 
-intro-tut-hold-beret-bubble = Hold the beret in your hand. If it is not in your hands, click it in the inventory or pick it up from the floor.
+intro-tut-hold-beret-bubble = Hold the beret in your hand with [tutkeybind="UIClick"]. If it is not in your hands, click it in the inventory or pick it up from the floor.
 intro-tut-hold-beret-chat = Before you wear something, it should be in your hand. Hold the beret in your active hand.
 intro-tut-hold-beret-tts = Before you wear something, it should be in your hand. Hold the beret in your active hand.
 
@@ -154,6 +154,10 @@ intro-tut-pickup-pistol-tts = Here is the range. A great chance to practice shoo
 intro-tut-action-bar-bubble = This is the action bar. Character abilities and quick actions appear here.
 intro-tut-action-bar-chat = The action bar is useful for combat mode and abilities. If a new button appears, it is probably worth checking.
 intro-tut-action-bar-tts = The action bar is useful for combat mode and abilities. If a new button appears, it is probably worth checking.
+
+intro-tut-mhelp-bubble = If you have questions, use MHelp from the top bar. You do not need to open a ticket right now.
+intro-tut-mhelp-chat = MHelp is for questions about mechanics and learning the game. Press the MHelp button on the top bar whenever you need mentor help.
+intro-tut-mhelp-tts = MHelp is for questions about mechanics and learning the game. Press the MHelp button on the top bar whenever you need mentor help.
 
 intro-tut-combat-mode-bubble = Enter combat mode: press the highlighted button on the action bar or [tutkeybind="Num1"].
 intro-tut-combat-mode-chat = To attack with a weapon, you need to enter combat mode. Press the highlighted button or number 1.

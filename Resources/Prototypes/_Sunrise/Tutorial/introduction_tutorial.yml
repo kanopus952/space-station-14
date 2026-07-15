@@ -1,6 +1,7 @@
 - type: tutorialSequence
   id: IntroductionTutorial
   duration: 450
+  priority: 0
   name: introduction-tutorial-name
   tooltip: introduction-tutorial-tooltip
   texture: /Textures/_Sunrise/Tutorial/introduction_tutorial.png
@@ -33,6 +34,8 @@
   - IntroTutGoCenter
   # 13. Explain action bar
   - IntroTutActionBar
+  # 14. Explain MHelp
+  - IntroTutMHelp
 
 
 # ─── Step definitions ──────────────────────────────────────────────────────────
@@ -152,17 +155,25 @@
   - !type:UiByName
     name: InventoryButton
   conditions:
-  - !type:StepDelayCondition
-    delay: 5
+  - !type:UiControlVisibleCondition
+    control: InventoryHeadSlot
+    selectors:
+    - !type:UiByName
+      name: Inventory
+    - !type:UiByName
+      name: SlotButton_head
 
 #  9. Take the beret in hand
 - type: tutorialStep
   id: IntroTutHoldBeret
   parent: BaseTutorialStepBase
+  target: ClothingHeadHatBeret
   bubble:
     text: intro-tut-hold-beret-bubble
+    attachToTarget: true
   chatMessage: intro-tut-hold-beret-chat
   ttsMessage: intro-tut-hold-beret-tts
+  observeRange: 12
   uiHighlight:
   - !type:UiByEntityPrototype
     prototype: ClothingHeadHatBeret
@@ -233,6 +244,23 @@
   conditions:
   - !type:StepDelayCondition
     delay: 5
+
+# 14. Explain MHelp
+- type: tutorialStep
+  id: IntroTutMHelp
+  parent: BaseTutorialStepBase
+  bubble:
+    text: intro-tut-mhelp-bubble
+  chatMessage: intro-tut-mhelp-chat
+  ttsMessage: intro-tut-mhelp-tts
+  uiHighlight:
+  - !type:UiByName
+    name: TopBar
+  - !type:UiByName
+    name: MHelpButton
+  conditions:
+  - !type:StepDelayCondition
+    delay: 7
 
 - type: entity
   parent: BaseTutorialPlayer

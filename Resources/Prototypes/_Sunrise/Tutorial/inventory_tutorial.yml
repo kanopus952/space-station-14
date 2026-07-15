@@ -1,0 +1,758 @@
+- type: tutorialSequence
+  id: InventoryTutorial
+  duration: 720
+  priority: 1
+  name: inventory-tutorial-name
+  tooltip: inventory-tutorial-tooltip
+  grid: /Maps/_Sunrise/Tutorials/inventory_tutorial.yml
+  playerEntity: InventoryTutorialPlayer
+  steps:
+  - InvTutOpenInventory
+  - InvTutPickUpBeret
+  - InvTutEquipBeret
+  - InvTutPickUpSmallItem
+  - InvTutPutSmallItemPocket
+  - InvTutPickUpFlashlight
+  - InvTutOpenBackpack
+  - InvTutPutFlashlightBackpack
+  - InvTutTakeFlashlightBack
+  - InvTutPickUpTool
+  - InvTutOpenToolbelt
+  - InvTutPutToolToolbelt
+  - InvTutDropFlashlight
+  - InvTutPickUpPen
+  - InvTutSwapHandsForScrewdriver
+  - InvTutTakeScrewdriver
+  - InvTutSwapHandsForPen
+  - InvTutDropPen
+  - InvTutSwapHandsForScrewdriverDrop
+  - InvTutDropScrewdriver
+  - InvTutFinalState
+
+- type: tutorialStep
+  id: InvTutOpenInventory
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-open-inventory-bubble
+  chatMessage: inv-tut-open-inventory-chat
+  ttsMessage: inv-tut-open-inventory-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: InventoryButton
+  conditions:
+  - !type:UiControlVisibleCondition
+    control: InventoryHeadSlot
+    selectors:
+    - !type:UiByName
+      name: Inventory
+    - !type:UiByName
+      name: SlotButton_head
+
+- type: tutorialStep
+  id: InvTutPickUpBeret
+  parent: BaseTutorialStepBase
+  target: ClothingHeadHatBeret
+  bubble:
+    text: inv-tut-pick-up-beret-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-pick-up-beret-chat
+  ttsMessage: inv-tut-pick-up-beret-tts
+  observeRange: 12
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: ClothingHeadHatBeret
+  conditions:
+  - !type:PickupListenedCondition
+    target: ClothingHeadHatBeret
+
+- type: tutorialStep
+  id: InvTutEquipBeret
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-equip-beret-bubble
+  chatMessage: inv-tut-equip-beret-chat
+  ttsMessage: inv-tut-equip-beret-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: SlotButton_head
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - ClothingHeadHatBeret
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-use-highlighted-inventory
+  preconditions:
+  - !type:ItemHandledCondition
+    item: ClothingHeadHatBeret
+    slot: HEAD
+  preconditionFailStep: InvTutPickUpBeret
+  conditions:
+  - !type:InventorySlotContainsCondition
+    slot: HEAD
+    item: ClothingHeadHatBeret
+
+- type: tutorialStep
+  id: InvTutPickUpSmallItem
+  parent: BaseTutorialStepBase
+  target: Paper
+  bubble:
+    text: inv-tut-pick-up-small-item-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-pick-up-small-item-chat
+  ttsMessage: inv-tut-pick-up-small-item-tts
+  observeRange: 12
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: Paper
+  conditions:
+  - !type:PickupListenedCondition
+    target: Paper
+
+- type: tutorialStep
+  id: InvTutPutSmallItemPocket
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-put-small-item-pocket-bubble
+  chatMessage: inv-tut-put-small-item-pocket-chat
+  ttsMessage: inv-tut-put-small-item-pocket-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: MainHotbar
+  - !type:UiByName
+    name: SlotButton_pocket1
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Paper
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-use-highlighted-inventory
+  preconditions:
+  - !type:ItemHandledCondition
+    item: Paper
+    slot: POCKET
+  preconditionFailStep: InvTutPickUpSmallItem
+  conditions:
+  - !type:InventorySlotContainsCondition
+    slot: POCKET
+    item: Paper
+
+- type: tutorialStep
+  id: InvTutPickUpFlashlight
+  parent: BaseTutorialStepBase
+  target: FlashlightLantern
+  bubble:
+    text: inv-tut-pick-up-flashlight-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-pick-up-flashlight-chat
+  ttsMessage: inv-tut-pick-up-flashlight-tts
+  observeRange: 12
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: FlashlightLantern
+  conditions:
+  - !type:PickupListenedCondition
+    target: FlashlightLantern
+
+- type: tutorialStep
+  id: InvTutOpenBackpack
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-open-backpack-bubble
+  chatMessage: inv-tut-open-backpack-chat
+  ttsMessage: inv-tut-open-backpack-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
+  - !type:UiByName
+    name: SlotButton_back
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialUnequipSoftLock
+      slots: BACK
+      items:
+      - ClothingBackpack
+      popup: tutorial-softlock-open-storage-first
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - FlashlightLantern
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-open-storage-first
+  preconditions:
+  - !type:ItemHandledCondition
+    item: FlashlightLantern
+    storage: ClothingBackpack
+  preconditionFailStep: InvTutPickUpFlashlight
+  conditions:
+  - !type:BuiOpenListenedCondition
+    target: ClothingBackpack
+  failures:
+  - conditions:
+    - !type:InventorySlotContainsCondition
+      slot: BACK
+      item: ClothingBackpack
+      inverted: true
+    repairStep: InvTutRepairEquipBackpack
+  - conditions:
+    - !type:InventorySlotContainsCondition
+      slot: POCKET
+      item: FlashlightLantern
+    repairStep: InvTutRepairFlashlightToHand
+
+- type: tutorialStep
+  id: InvTutPutFlashlightBackpack
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-put-flashlight-backpack-bubble
+  chatMessage: inv-tut-put-flashlight-backpack-chat
+  ttsMessage: inv-tut-put-flashlight-backpack-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: SlotButton_back
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialUnequipSoftLock
+      slots: BACK
+      items:
+      - ClothingBackpack
+      popup: tutorial-softlock-keep-backpack
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - FlashlightLantern
+      targets:
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-backpack
+  preconditions:
+  - !type:ItemHandledCondition
+    item: FlashlightLantern
+    storage: ClothingBackpack
+  preconditionFailStep: InvTutPickUpFlashlight
+  conditions:
+  - !type:StorageContainsCondition
+    storage: ClothingBackpack
+    item: FlashlightLantern
+  failures:
+  - conditions:
+    - !type:InventorySlotContainsCondition
+      slot: BACK
+      item: ClothingBackpack
+      inverted: true
+    repairStep: InvTutRepairEquipBackpack
+  - conditions:
+    - !type:InventorySlotContainsCondition
+      slot: POCKET
+      item: FlashlightLantern
+    repairStep: InvTutRepairFlashlightToHand
+
+- type: tutorialStep
+  id: InvTutTakeFlashlightBack
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-take-flashlight-back-bubble
+  chatMessage: inv-tut-take-flashlight-back-chat
+  ttsMessage: inv-tut-take-flashlight-back-tts
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: FlashlightLantern
+  preconditions:
+  - !type:ItemHandledCondition
+    item: FlashlightLantern
+    storage: ClothingBackpack
+  preconditionFailStep: InvTutPutFlashlightBackpack
+  conditions:
+  - !type:HoldInHandsCondition
+    item: FlashlightLantern
+
+- type: tutorialStep
+  id: InvTutPickUpTool
+  parent: BaseTutorialStepBase
+  target: Screwdriver
+  bubble:
+    text: inv-tut-pick-up-tool-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-pick-up-tool-chat
+  ttsMessage: inv-tut-pick-up-tool-tts
+  observeRange: 12
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: Screwdriver
+  conditions:
+  - !type:PickupListenedCondition
+    target: Screwdriver
+
+- type: tutorialStep
+  id: InvTutOpenToolbelt
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-open-toolbelt-bubble
+  chatMessage: inv-tut-open-toolbelt-chat
+  ttsMessage: inv-tut-open-toolbelt-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: SlotButton_belt
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialUnequipSoftLock
+      slots: BELT
+      items:
+      - ClothingBeltUtility
+      popup: tutorial-softlock-open-storage-first
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Screwdriver
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-open-storage-first
+  preconditions:
+  - !type:ItemHandledCondition
+    item: Screwdriver
+    storage: ClothingBeltUtility
+  preconditionFailStep: InvTutPickUpTool
+  conditions:
+  - !type:BuiOpenListenedCondition
+    target: ClothingBeltUtility
+  failures:
+  - conditions:
+    - !type:InventorySlotContainsCondition
+      slot: BELT
+      item: ClothingBeltUtility
+      inverted: true
+    repairStep: InvTutRepairEquipToolbelt
+  - conditions:
+    - !type:StorageContainsCondition
+      storage: ClothingBeltUtility
+      item: Screwdriver
+      inverted: true
+    - !type:ItemHandledCondition
+      item: Screwdriver
+    repairStep: InvTutPutToolToolbelt
+
+- type: tutorialStep
+  id: InvTutPutToolToolbelt
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-put-tool-toolbelt-bubble
+  chatMessage: inv-tut-put-tool-toolbelt-chat
+  ttsMessage: inv-tut-put-tool-toolbelt-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: SlotButton_belt
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialUnequipSoftLock
+      slots: BELT
+      items:
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-belt
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Screwdriver
+      targets:
+      - ClothingBackpack
+      popup: tutorial-softlock-keep-belt
+  preconditions:
+  - !type:ItemHandledCondition
+    item: Screwdriver
+    storage: ClothingBeltUtility
+  preconditionFailStep: InvTutPickUpTool
+  conditions:
+  - !type:StorageContainsCondition
+    storage: ClothingBeltUtility
+    item: Screwdriver
+  failures:
+  - conditions:
+    - !type:InventorySlotContainsCondition
+      slot: BELT
+      item: ClothingBeltUtility
+      inverted: true
+    repairStep: InvTutRepairEquipToolbelt
+  - conditions:
+    - !type:StorageContainsCondition
+      storage: ClothingBeltUtility
+      item: Screwdriver
+      inverted: true
+    - !type:ItemHandledCondition
+      item: Screwdriver
+    repairStep: InvTutRepairToolToHand
+
+- type: tutorialStep
+  id: InvTutDropFlashlight
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-drop-flashlight-bubble
+  chatMessage: inv-tut-drop-flashlight-chat
+  ttsMessage: inv-tut-drop-flashlight-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - FlashlightLantern
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-drop-active-item
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: FlashlightLantern
+  conditions:
+  - !type:DropListenedCondition
+    target: FlashlightLantern
+
+- type: tutorialStep
+  id: InvTutPickUpPen
+  parent: BaseTutorialStepBase
+  target: Pen
+  bubble:
+    text: inv-tut-pick-up-pen-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-pick-up-pen-chat
+  ttsMessage: inv-tut-pick-up-pen-tts
+  observeRange: 12
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: Pen
+  conditions:
+  - !type:PickupListenedCondition
+    target: Pen
+
+- type: tutorialStep
+  id: InvTutSwapHandsForScrewdriver
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-swap-hands-for-screwdriver-bubble
+  chatMessage: inv-tut-swap-hands-for-screwdriver-chat
+  ttsMessage: inv-tut-swap-hands-for-screwdriver-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialDropSoftLock
+      popup: tutorial-softlock-keep-active-hand-items
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Pen
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-active-hand-items
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: Pen
+  preconditionFailStep: InvTutPickUpPen
+  conditions:
+  - !type:SwapHandsListenedCondition
+
+- type: tutorialStep
+  id: InvTutTakeScrewdriver
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-take-screwdriver-bubble
+  chatMessage: inv-tut-take-screwdriver-chat
+  ttsMessage: inv-tut-take-screwdriver-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
+  - !type:UiByName
+    name: SlotButton_belt
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialDropSoftLock
+      popup: tutorial-softlock-keep-active-hand-items
+    - type: TutorialUnequipSoftLock
+      slots: BELT
+      items:
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-active-hand-items
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Pen
+      - Screwdriver
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-active-hand-items
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: Pen
+  preconditionFailStep: InvTutPickUpPen
+  conditions:
+  - !type:HoldInHandsCondition
+    item: Screwdriver
+
+- type: tutorialStep
+  id: InvTutSwapHandsForPen
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-swap-hands-for-pen-bubble
+  chatMessage: inv-tut-swap-hands-for-pen-chat
+  ttsMessage: inv-tut-swap-hands-for-pen-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialDropSoftLock
+      popup: tutorial-softlock-keep-active-hand-items
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Pen
+      - Screwdriver
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-active-hand-items
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: Pen
+  - !type:HoldInHandsCondition
+    item: Screwdriver
+  preconditionFailStep: InvTutTakeScrewdriver
+  conditions:
+  - !type:SwapHandsListenedCondition
+
+- type: tutorialStep
+  id: InvTutDropPen
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-drop-pen-bubble
+  chatMessage: inv-tut-drop-pen-chat
+  ttsMessage: inv-tut-drop-pen-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Pen
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-drop-active-item
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: Pen
+  preconditionFailStep: InvTutPickUpPen
+  conditions:
+  - !type:DropListenedCondition
+    target: Pen
+
+- type: tutorialStep
+  id: InvTutSwapHandsForScrewdriverDrop
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-swap-hands-for-screwdriver-drop-bubble
+  chatMessage: inv-tut-swap-hands-for-screwdriver-drop-chat
+  ttsMessage: inv-tut-swap-hands-for-screwdriver-drop-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialDropSoftLock
+      popup: tutorial-softlock-keep-active-hand-items
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Screwdriver
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-keep-active-hand-items
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: Screwdriver
+  preconditionFailStep: InvTutTakeScrewdriver
+  conditions:
+  - !type:SwapHandsListenedCondition
+
+- type: tutorialStep
+  id: InvTutDropScrewdriver
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-drop-screwdriver-bubble
+  chatMessage: inv-tut-drop-screwdriver-chat
+  ttsMessage: inv-tut-drop-screwdriver-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Screwdriver
+      targets:
+      - ClothingBackpack
+      - ClothingBeltUtility
+      popup: tutorial-softlock-drop-active-item
+  preconditions:
+  - !type:HoldInHandsCondition
+    item: Screwdriver
+  preconditionFailStep: InvTutTakeScrewdriver
+  conditions:
+  - !type:DropListenedCondition
+    target: Screwdriver
+
+- type: tutorialStep
+  id: InvTutFinalState
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-final-state-bubble
+  chatMessage: inv-tut-final-state-chat
+  ttsMessage: inv-tut-final-state-tts
+  uiHighlight:
+  - !type:UiByName
+    name: TopBar
+  - !type:UiByName
+    name: MHelpButton
+  conditions:
+  - !type:StepDelayCondition
+    delay: 5
+
+- type: tutorialStep
+  id: InvTutRepairEquipBackpack
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-repair-equip-backpack-bubble
+  chatMessage: inv-tut-repair-equip-backpack-chat
+  ttsMessage: inv-tut-repair-equip-backpack-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Inventory
+  - !type:UiByName
+    name: SlotButton_back
+  conditions:
+  - !type:InventorySlotContainsCondition
+    slot: BACK
+    item: ClothingBackpack
+
+- type: tutorialStep
+  id: InvTutRepairEquipToolbelt
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-repair-equip-toolbelt-bubble
+  chatMessage: inv-tut-repair-equip-toolbelt-chat
+  ttsMessage: inv-tut-repair-equip-toolbelt-tts
+  uiHighlight:
+  - !type:UiByName
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
+  - !type:UiByName
+    name: SlotButton_belt
+  conditions:
+  - !type:InventorySlotContainsCondition
+    slot: BELT
+    item: ClothingBeltUtility
+
+- type: tutorialStep
+  id: InvTutRepairPaperToHand
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-repair-paper-to-hand-bubble
+  chatMessage: inv-tut-repair-paper-to-hand-chat
+  ttsMessage: inv-tut-repair-paper-to-hand-tts
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: Paper
+  conditions:
+  - !type:HoldInHandsCondition
+    item: Paper
+
+- type: tutorialStep
+  id: InvTutRepairFlashlightToHand
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-repair-flashlight-to-hand-bubble
+  chatMessage: inv-tut-repair-flashlight-to-hand-chat
+  ttsMessage: inv-tut-repair-flashlight-to-hand-tts
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: FlashlightLantern
+  conditions:
+  - !type:HoldInHandsCondition
+    item: FlashlightLantern
+
+- type: tutorialStep
+  id: InvTutRepairToolToHand
+  parent: BaseTutorialStepBase
+  bubble:
+    text: inv-tut-repair-tool-to-hand-bubble
+  chatMessage: inv-tut-repair-tool-to-hand-chat
+  ttsMessage: inv-tut-repair-tool-to-hand-tts
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: Screwdriver
+  conditions:
+  - !type:HoldInHandsCondition
+    item: Screwdriver
+
+- type: startingGear
+  id: InventoryTutorialPlayerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitEngineering
+    shoes: ClothingShoesColorBlack
+    back: ClothingBackpack
+    belt: ClothingBeltUtility
+
+- type: entity
+  parent: BaseTutorialPlayer
+  id: InventoryTutorialPlayer
+  components:
+  - type: Loadout
+    prototypes: [InventoryTutorialPlayerGear]
+  - type: Godmode
+
+

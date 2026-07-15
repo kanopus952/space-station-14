@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Content.Client._Sunrise.PlayerCache;
 using Content.Client.UserInterface.Screens;
 using Content.Client._Sunrise.Tutorial.Components;
 using Content.Client._Sunrise.Tutorial.Overlays;
@@ -5,6 +8,7 @@ using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.EntitySystems;
 using Content.Shared._Sunrise.Tutorial.Events;
 using Content.Shared._Sunrise.Tutorial.Prototypes;
+using Content.Shared._Sunrise.SunriseCCVars;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -12,6 +16,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Content.Client._Sunrise.Tutorial.TutorialBubbleControl;
 using Content.Client._Sunrise.Tutorial.UiHighlight;
@@ -29,6 +34,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly PlayerCacheManager _playerCache = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     private static readonly ProtoId<ShaderPrototype> TutorialShader = "TutorialTargetOutline";
 
@@ -51,6 +58,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
     /// Prototype IDs of tutorial sequences completed by the local user.
     /// </summary>
     public readonly HashSet<string> CompletedTutorials = [];
+
     private EntityQuery<TutorialBubbleUiComponent> _bubbleUiQuery;
     private LayoutContainer? _tutorialBubbleRoot;
     private TutorialUiHighlightOverlay? _uiHighlightOverlay;
@@ -353,6 +361,24 @@ public sealed class TutorialSystem : SharedTutorialSystem
     public void RequestStartTutorial(ProtoId<TutorialSequencePrototype> sequenceId)
     {
         RaiseNetworkEvent(new TutorialStartRequestEvent(sequenceId));
+    }
+
+    /// <summary>
+    /// Records that the local user has acted on the first-join tutorial prompt.
+    /// </summary>
+    public void MarkTutorialPromptSeen()
+    {
+        _playerCache.SetTutorialPromptSeen();
+    }
+
+    public bool IsTutorialPromptSeen()
+    {
+        return _playerCache.IsTutorialPromptSeen();
+    }
+
+    public float GetTutorialPromptSkipDelay()
+    {
+        return _cfg.GetCVar(SunriseCCVars.TutorialPromptSkipDelay);
     }
 
     private void OnWindowDataResponse(TutorialWindowDataResponseEvent msg, EntitySessionEventArgs args)

@@ -23,6 +23,12 @@ public sealed partial class TutorialPlayerComponent : Component
     public int StepIndex;
 
     /// <summary>
+    /// Temporary step shown instead of the sequence step until a recoverable failure is fixed.
+    /// </summary>
+    [ViewVariables, AutoNetworkedField]
+    public ProtoId<TutorialStepPrototype>? ActiveStepOverride;
+
+    /// <summary>
     /// Entity currently hosting the tutorial bubble, if any.
     /// </summary>
     [ViewVariables, AutoNetworkedField]

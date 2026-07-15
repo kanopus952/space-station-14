@@ -1,0 +1,137 @@
+using Content.Shared._Sunrise.Tutorial.Components;
+using Content.Shared._Sunrise.Tutorial.Events;
+using Content.Shared._Sunrise.Tutorial.Prototypes;
+using Robust.Shared.Prototypes;
+
+namespace Content.Shared._Sunrise.Tutorial.EntitySystems;
+
+public abstract partial class SharedTutorialSystem
+{
+    private void CheckCondition(Entity<TutorialPlayerComponent> ent)
+    {
+        if (!TryGetCurrentStep(ent, out var step))
+            return;
+
+        if (ent.Comp.ActiveStepOverride == null && TryEnterRepairStep(ent, step))
+            return;
+
+        if (!_tutorial.TryConditions(ent, step.Preconditions))
+        {
+            // A missing fail step intentionally means "skip this step".
+            Advance(ent, step.PreconditionFailStep);
+            return;
+        }
+
+        if (!_tutorial.TryConditions(ent, step.Conditions))
+            return;
+
+        if (step.AnyConditions.Count > 0 && !_tutorial.TryAnyCondition(ent, step.AnyConditions))
+            return;
+
+        if (ent.Comp.ActiveStepOverride != null)
+        {
+            ReturnFromRepairStep(ent);
+            return;
+        }
+
+        Advance(ent);
+    }
+
+    private void Advance(Entity<TutorialPlayerComponent> ent, ProtoId<TutorialStepPrototype>? stepId = null)
+    {
+        if (!_proto.TryIndex(ent.Comp.SequenceId, out var sequence))
+            return;
+
+        if (stepId == null)
+        {
+            var nextIndex = ent.Comp.StepIndex + 1;
+
+            ClearActiveStepState(ent);
+            ent.Comp.ActiveStepOverride = null;
+            UpdateProgressBar(ent, nextIndex);
+
+            if (nextIndex >= sequence.Steps.Count)
+            {
+                CompleteTutorial(ent, sequence);
+                return;
+            }
+
+            stepId = sequence.Steps[nextIndex];
+        }
+        else
+        {
+            var index = sequence.Steps.IndexOf(stepId.Value);
+            if (index < 0 || ent.Comp.StepIndex == index)
+                return;
+
+            ClearActiveStepState(ent);
+            ent.Comp.ActiveStepOverride = null;
+            UpdateProgressBar(ent, index);
+        }
+
+        if (!_proto.TryIndex(stepId.Value, out var step))
+            return;
+
+        OnStepChanged(ent, step);
+    }
+
+    private void UpdateProgressBar(Entity<TutorialPlayerComponent> ent, int index)
+    {
+        var progressBar = EnsureComp<TutorialProgressBarComponent>(ent);
+        progressBar.CurrentStepIndex = index;
+        ent.Comp.StepIndex = index;
+        Dirty(ent, progressBar);
+        Dirty(ent, ent.Comp);
+    }
+
+    private void OnStepChanged(Entity<TutorialPlayerComponent> ent, TutorialStepPrototype step)
+    {
+        ResetTracking(ent);
+        ClearTutorialBubble(ent);
+        ent.Comp.Target = null;
+        ent.Comp.StepStartedAt = _timing.CurTime;
+        Dirty(ent, ent.Comp);
+
+        RaiseLocalEvent(ent, new TutorialStepChangedEvent());
+
+        if (_tutorial.TryConditions(ent, step.Preconditions))
+        {
+            UpdateTutorialBubble(ent, step);
+            ApplyStepEffects(ent, step);
+        }
+    }
+
+    /// <summary>
+    /// Stops the tutorial session and clears all tutorial-only runtime state from the player.
+    /// </summary>
+    public void EndTutorial(Entity<TutorialPlayerComponent> ent)
+    {
+        ClearStepEffects(ent);
+        ClearTutorialBubble(ent);
+        ent.Comp.TutorialInitialized = false;
+        ent.Comp.ActiveStepOverride = null;
+        ent.Comp.Target = null;
+
+        ClearTracking(ent);
+        UpdateTimeCounter(ent, null);
+
+        RaiseLocalEvent(ent, new TutorialEndedEvent());
+        Dirty(ent);
+    }
+
+    /// <summary>
+    /// Marks the tutorial sequence as completed and raises completion side-effects.
+    /// </summary>
+    public void CompleteTutorial(Entity<TutorialPlayerComponent> ent, TutorialSequencePrototype sequence)
+    {
+        ent.Comp.StepIndex = sequence.Steps.Count;
+        ent.Comp.ActiveStepOverride = null;
+        ent.Comp.Target = null;
+
+        ClearTutorialBubble(ent);
+        ClearTracking(ent);
+
+        RaiseLocalEvent(ent, new TutorialStepsCompletedEvent());
+        Dirty(ent, ent.Comp);
+    }
+}

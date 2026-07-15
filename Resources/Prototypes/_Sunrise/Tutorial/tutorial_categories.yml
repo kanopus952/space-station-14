@@ -3,4 +3,5 @@
   name: base-tutorials
   tutorials:
   - IntroductionTutorial
+  - InventoryTutorial
   - CommunicationTutorial

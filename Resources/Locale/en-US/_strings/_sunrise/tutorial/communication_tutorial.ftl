@@ -25,11 +25,11 @@ comm-tut-common-radio-bubble = Write in the common radio channel. Start the mess
 comm-tut-common-radio-chat = Now send a message in the common radio channel. This lets you quickly ask the whole station for help.
 comm-tut-common-radio-tts = Now send a message in the common radio channel. This lets you quickly ask the whole station for help.
 
-comm-tut-open-inventory-bubble = Open the inventory with the button on the left panel.
+comm-tut-open-inventory-bubble = Open the inventory with the button on the left panel or [tutkeybind="OpenInventoryMenu"].
 comm-tut-open-inventory-chat = The inventory shows equipped items. Right now we need the ears slot with your headset.
 comm-tut-open-inventory-tts = The inventory shows equipped items. Right now we need the ears slot with your headset.
 
-comm-tut-radio-ui-bubble = Examine the headset in your ears slot. Its description shows the available radio channels.
+comm-tut-radio-ui-bubble = Examine the headset in your ears slot with [tutkeybind="ExamineEntity"]. Its description shows the available radio channels.
 comm-tut-radio-ui-chat = Your headset decides which channels you can use. You have an engineering headset: besides common, it gives you engineering.
 comm-tut-radio-ui-tts = Your headset decides which channels you can use. You have an engineering headset: besides common, it gives you engineering.
 
