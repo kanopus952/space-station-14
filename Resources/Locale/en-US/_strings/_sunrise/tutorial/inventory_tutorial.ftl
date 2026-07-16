@@ -104,3 +104,133 @@ inv-tut-repair-flashlight-to-hand-tts = The flashlight is needed in your hand ri
 inv-tut-repair-tool-to-hand-bubble = Take the screwdriver back into your hand with [tutkeybind="UIClick"].
 inv-tut-repair-tool-to-hand-chat = The screwdriver needs to go into the toolbelt. Take it back into your hand, then move it into the toolbelt.
 inv-tut-repair-tool-to-hand-tts = The screwdriver needs to go into the toolbelt. Take it back into your hand, then move it into the toolbelt.
+
+inventory-tutorial-wardrobe-name = Inventory tutorial wardrobe
+
+tutorial-softlock-pickup-highlighted = Pick up only the highlighted item.
+tutorial-softlock-storage-close = Finish working with the highlighted wardrobe first.
+inv-tut-softlock-keep-hand-item = Do not drop the item from your hand yet.
+inv-tut-softlock-keep-hand-items = Do not drop or store the items in your hands yet.
+inv-tut-softlock-drop-item = Drop the item on the floor during this step.
+inv-tut-softlock-keep-dressed = Keep the clothes you already equipped and do not use other slots.
+inv-tut-softlock-equip-item = Put the item into the highlighted slot first.
+inv-tut-softlock-use-highlighted-slot = Use the highlighted inventory slot.
+inv-tut-softlock-open-storage-first = Open the highlighted storage with its hotkey first.
+inv-tut-softlock-use-open-storage = Put the item into the highlighted storage that is already open.
+inv-tut-softlock-use-hand = Take the item from storage into your hand.
+inv-tut-softlock-keep-backpack = Keep the backpack equipped during this step.
+inv-tut-softlock-keep-belt = Keep the belt equipped during this step.
+
+inv-tut-hands-intro-bubble = You have two hands. The active hand is highlighted on the hand panel: it is the hand used to use, drop, and attack with items [tutkeybind="SwapHands"].
+inv-tut-hands-intro-chat = First we will practice the hands. An item in the inactive hand is not used directly: check the highlight before acting and switch hands when needed.
+inv-tut-hands-intro-tts = First we will practice the hands. An item in the inactive hand is not used directly: check the highlight before acting and switch hands when needed.
+
+inv-tut-pick-up-first-hand-item-bubble = Pick up the highlighted pen into an empty hand [tutkeybind="UIClick"].
+inv-tut-pick-up-first-hand-item-chat = Click the pen near you. It will appear in your active hand and its slot will be visible on the hand panel.
+inv-tut-pick-up-first-hand-item-tts = Click the pen near you. It will appear in your active hand and its slot will be visible on the hand panel.
+inv-tut-switch-to-empty-hand-bubble = Switch to the empty active hand [tutkeybind="SwapHands"].
+inv-tut-switch-to-empty-hand-chat = Switch to the second hand. The pen stays in the first hand, but interactions now use the empty active hand.
+inv-tut-switch-to-empty-hand-tts = Switch to the second hand. The pen stays in the first hand, but interactions now use the empty active hand.
+inv-tut-pick-up-second-hand-item-bubble = Pick up the highlighted screwdriver with the second hand [tutkeybind="UIClick"].
+inv-tut-pick-up-second-hand-item-chat = Each hand now holds a different item. Watch the highlight: it shows which item will be affected by the next action.
+inv-tut-pick-up-second-hand-item-tts = Each hand now holds a different item. Watch the highlight: it shows which item will be affected by the next action.
+inv-tut-drop-second-hand-item-bubble = Drop the screwdriver from the active hand [tutkeybind="Drop"].
+inv-tut-drop-second-hand-item-chat = The drop key affects only the active hand. The pen in your other hand stays with you.
+inv-tut-drop-second-hand-item-tts = The drop key affects only the active hand. The pen in your other hand stays with you.
+inv-tut-switch-to-first-hand-bubble = Switch the active hand to the pen [tutkeybind="SwapHands"].
+inv-tut-switch-to-first-hand-chat = The highlight should move to the hand holding the pen. Only then will the drop key affect the pen.
+inv-tut-switch-to-first-hand-tts = The highlight should move to the hand holding the pen. Only then will the drop key affect the pen.
+inv-tut-drop-first-hand-item-bubble = Drop the pen from the active hand [tutkeybind="Drop"].
+inv-tut-drop-first-hand-item-chat = Both hands are now empty. This rule also matters when using items, attacking, or picking up new things.
+inv-tut-drop-first-hand-item-tts = Both hands are now empty. This rule also matters when using items, attacking, or picking up new things.
+
+inv-tut-open-wardrobe-bubble = Open the highlighted wardrobe by hovering over it and pressing [tutkeybind="ActivateItemInWorld"].
+inv-tut-open-wardrobe-chat = Walk up to the wardrobe, hover over it, and press the interaction key. It contains clothing for every empty slot.
+inv-tut-open-wardrobe-tts = Walk up to the wardrobe, hover over it, and press the interaction key. It contains clothing for every empty slot.
+
+inv-tut-take-shoes-bubble = Take the highlighted shoes from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-shoes-chat = We will start with footwear. Pick up only the highlighted item so it goes into your hand.
+inv-tut-take-shoes-tts = We will start with footwear. Pick up only the highlighted item so it goes into your hand.
+inv-tut-equip-shoes-bubble = Drag the shoes into the highlighted feet slot [tutkeybind="UIClick"].
+inv-tut-equip-shoes-chat = The feet slot is for shoes. Move the shoes from your hand into the highlighted slot.
+inv-tut-equip-shoes-tts = The feet slot is for shoes. Move the shoes from your hand into the highlighted slot.
+inv-tut-take-gloves-bubble = Take the highlighted gloves from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-gloves-chat = Now take the gloves. They belong in the hands slot and should not remain in your active hand.
+inv-tut-take-gloves-tts = Now take the gloves. They belong in the hands slot and should not remain in your active hand.
+inv-tut-equip-gloves-bubble = Drag the gloves into the highlighted hands slot [tutkeybind="UIClick"].
+inv-tut-equip-gloves-chat = The hands slot is for gloves. Use only the highlighted slot.
+inv-tut-equip-gloves-tts = The hands slot is for gloves. Use only the highlighted slot.
+inv-tut-take-eyes-bubble = Take the highlighted glasses from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-eyes-chat = Glasses are eye equipment. Pick them up so you can equip them on the next step.
+inv-tut-take-eyes-tts = Glasses are eye equipment. Pick them up so you can equip them on the next step.
+inv-tut-equip-eyes-bubble = Drag the glasses into the highlighted eyes slot [tutkeybind="UIClick"].
+inv-tut-equip-eyes-chat = The eyes slot is for glasses and other items that cover the eyes.
+inv-tut-equip-eyes-tts = The eyes slot is for glasses and other items that cover the eyes.
+inv-tut-take-ears-bubble = Take the highlighted headset from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-ears-chat = The headset is worn on the ears. Pick it up from the open wardrobe first.
+inv-tut-take-ears-tts = The headset is worn on the ears. Pick it up from the open wardrobe first.
+inv-tut-equip-ears-bubble = Drag the headset into the highlighted ears slot [tutkeybind="UIClick"].
+inv-tut-equip-ears-chat = The ears slot is for headsets and other items worn on the ears.
+inv-tut-equip-ears-tts = The ears slot is for headsets and other items worn on the ears.
+inv-tut-take-mask-bubble = Take the highlighted mask from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-mask-chat = A mask is worn on the face. Pick it up without removing clothing you already equipped.
+inv-tut-take-mask-tts = A mask is worn on the face. Pick it up without removing clothing you already equipped.
+inv-tut-equip-mask-bubble = Drag the mask into the highlighted mask slot [tutkeybind="UIClick"].
+inv-tut-equip-mask-chat = The mask slot is for masks and other face equipment.
+inv-tut-equip-mask-tts = The mask slot is for masks and other face equipment.
+inv-tut-take-head-bubble = Take the highlighted beret from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-head-chat = The beret belongs in the head slot. Pick it up before equipping it.
+inv-tut-take-head-tts = The beret belongs in the head slot. Pick it up before equipping it.
+inv-tut-equip-head-bubble = Drag the beret into the highlighted head slot [tutkeybind="UIClick"].
+inv-tut-equip-head-chat = The head slot is for hats, helmets, and other headwear.
+inv-tut-equip-head-tts = The head slot is for hats, helmets, and other headwear.
+inv-tut-take-neck-bubble = Take the highlighted scarf from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-neck-chat = A scarf belongs in the neck slot. Pick it up from the wardrobe.
+inv-tut-take-neck-tts = A scarf belongs in the neck slot. Pick it up from the wardrobe.
+inv-tut-equip-neck-bubble = Drag the scarf into the highlighted neck slot [tutkeybind="UIClick"].
+inv-tut-equip-neck-chat = The neck slot is for scarves, ties, and other neckwear.
+inv-tut-equip-neck-tts = The neck slot is for scarves, ties, and other neckwear.
+inv-tut-take-outer-bubble = Take the highlighted coat from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-outer-chat = Outer clothing is worn over the jumpsuit. Pick up the coat.
+inv-tut-take-outer-tts = Outer clothing is worn over the jumpsuit. Pick up the coat.
+inv-tut-equip-outer-bubble = Drag the coat into the highlighted outer clothing slot [tutkeybind="UIClick"].
+inv-tut-equip-outer-chat = The outer clothing slot is for coats, armor, and other layers worn over the jumpsuit.
+inv-tut-equip-outer-tts = The outer clothing slot is for coats, armor, and other layers worn over the jumpsuit.
+inv-tut-take-back-bubble = Take the highlighted backpack from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-back-chat = A backpack is worn on the back and will later be used as storage.
+inv-tut-take-back-tts = A backpack is worn on the back and will later be used as storage.
+inv-tut-equip-back-bubble = Drag the backpack into the highlighted back slot [tutkeybind="UIClick"].
+inv-tut-equip-back-chat = The back slot is for backpacks and other large storage containers.
+inv-tut-equip-back-tts = The back slot is for backpacks and other large storage containers.
+inv-tut-take-belt-bubble = Take the highlighted belt from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-belt-chat = A belt is worn around the waist and can serve as separate tool storage.
+inv-tut-take-belt-tts = A belt is worn around the waist and can serve as separate tool storage.
+inv-tut-equip-belt-bubble = Drag the belt into the highlighted belt slot [tutkeybind="UIClick"].
+inv-tut-equip-belt-chat = The belt slot is for belts and their contents. We will use it in the next exercise.
+inv-tut-equip-belt-tts = The belt slot is for belts and their contents. We will use it in the next exercise.
+inv-tut-take-id-bubble = Take the highlighted PDA from the wardrobe [tutkeybind="UIClick"].
+inv-tut-take-id-chat = A PDA goes into the identification card slot. Pick it up before equipping it.
+inv-tut-take-id-tts = A PDA goes into the identification card slot. Pick it up before equipping it.
+inv-tut-equip-id-bubble = Drag the PDA into the highlighted ID card slot [tutkeybind="UIClick"].
+inv-tut-equip-id-chat = The ID card slot is for PDAs and identification cards. Use the highlighted slot.
+inv-tut-equip-id-tts = The ID card slot is for PDAs and identification cards. Use the highlighted slot.
+
+inv-tut-take-screwdriver-storage-bubble = Take the highlighted screwdriver from the open storage [tutkeybind="UIClick"].
+inv-tut-take-screwdriver-storage-chat = For the final storage exercise, take the screwdriver. It belongs in the toolbelt instead of your hand.
+inv-tut-take-screwdriver-storage-tts = For the final storage exercise, take the screwdriver. It belongs in the toolbelt instead of your hand.
+inv-tut-put-screwdriver-toolbelt-bubble = Drag the screwdriver into the open toolbelt [tutkeybind="UIClick"].
+inv-tut-put-screwdriver-toolbelt-chat = Put the screwdriver into the open toolbelt. Your hands will be free afterwards.
+inv-tut-put-screwdriver-toolbelt-tts = Put the screwdriver into the open toolbelt. Your hands will be free afterwards.
+inv-tut-take-screwdriver-back-bubble = Take the screwdriver back out of the toolbelt [tutkeybind="UIClick"].
+inv-tut-take-screwdriver-back-chat = Take an item from storage into your hand so you can use the tool when you need it.
+inv-tut-take-screwdriver-back-tts = Take an item from storage into your hand so you can use the tool when you need it.
+
+inv-tut-take-paper-bubble = Pick up the highlighted paper [tutkeybind="UIClick"].
+inv-tut-take-paper-chat = Paper is a small item that is convenient to store in a pocket, leaving your hands free.
+inv-tut-take-paper-tts = Paper is a small item that is convenient to store in a pocket, leaving your hands free.
+inv-tut-put-paper-pocket-bubble = Drag the paper into the highlighted pocket [tutkeybind="UIClick"].
+inv-tut-put-paper-pocket-chat = Move the paper from your hand into the pocket. Pockets are useful for small items you need to retrieve quickly.
+inv-tut-put-paper-pocket-tts = Move the paper from your hand into the pocket. Pockets are useful for small items you need to retrieve quickly.
+inv-tut-take-flashlight-bubble = Pick up the highlighted flashlight [tutkeybind="UIClick"].
+inv-tut-take-flashlight-chat = Now we will practice the backpack: first take the flashlight into your hand, then put it into the open storage.
+inv-tut-take-flashlight-tts = Now we will practice the backpack: first take the flashlight into your hand, then put it into the open storage.
