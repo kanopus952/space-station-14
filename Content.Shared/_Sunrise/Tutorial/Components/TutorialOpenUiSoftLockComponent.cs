@@ -4,14 +4,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._Sunrise.Tutorial.Components;
 
 /// <summary>
-///     Временно блокирует вставку удерживаемых предметов в выбранные хранилища.
+/// Временно блокирует взаимодействие c указанным UI.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class TutorialStorageInsertSoftLockComponent : Component, ITutorialEntitySoftLockComponent
+public sealed partial class TutorialOpenUiSoftLockComponent : Component, ITutorialEntitySoftLockComponent
 {
-    [DataField, AutoNetworkedField]
-    public List<EntProtoId> Items = [];
-
     [DataField, AutoNetworkedField]
     public List<EntProtoId> Targets = [];
 

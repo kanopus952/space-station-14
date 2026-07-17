@@ -4,13 +4,13 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._Sunrise.Tutorial.Components;
 
 /// <summary>
-/// Временно отмечает сущность, участвующую в storage softlock туториала.
+/// Сущность которая должна быть заблокирована.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class TutorialStorageSoftLockComponent : Component
+public sealed partial class TutorialSoftLockEntityComponent : Component
 {
     /// <summary>
-    /// Игроки, для которых сущность участвует в текущем storage softlock.
+    /// Игроки, для которых сущность участвует в текущем softlock.
     /// </summary>
     [ViewVariables, AutoNetworkedField]
     public HashSet<EntityUid> Players = [];

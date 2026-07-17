@@ -7,7 +7,7 @@ namespace Content.Shared._Sunrise.Tutorial.Components;
 /// Временно запрещает закрывать выбранные хранилища во время шага туториала.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class TutorialStorageCloseSoftLockComponent : Component
+public sealed partial class TutorialStorageCloseSoftLockComponent : Component, ITutorialEntitySoftLockComponent
 {
     /// <summary>
     /// Хранилища, которые нельзя закрывать в текущем шаге.

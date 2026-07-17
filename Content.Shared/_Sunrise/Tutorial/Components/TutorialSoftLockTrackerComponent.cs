@@ -6,7 +6,7 @@ namespace Content.Shared._Sunrise.Tutorial.Components;
 /// Хранит сущности, помеченные storage softlock для текущего шага туториала.
 /// </summary>
 [RegisterComponent]
-public sealed partial class TutorialStorageSoftLockTrackerComponent : Component
+public sealed partial class TutorialSoftLockTrackerComponent : Component
 {
     /// <summary>
     /// Сущности с временным storage softlock текущего игрока.

@@ -103,6 +103,13 @@
   bubble:
     text: intro-tut-examine-clothing-vendor-bubble
     attachToTarget: true
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialOpenUiSoftLock
+      targets:
+      - VendingMachineClothing
+      popup: int-tut-softlock-open-ui
   chatMessage: intro-tut-examine-clothing-vendor-chat
   ttsMessage: intro-tut-examine-clothing-vendor-tts
   observeRange: 12
@@ -133,6 +140,13 @@
   bubble:
     text: intro-tut-take-clothing-bubble
     attachToTarget: true
+  uiHighlight:
+  - !type:UiByType
+    controlType: VendingMachineMenu
+  - !type:UiByName
+    name: VendingContents
+  - !type:UiByEntityPrototype
+    prototype: ClothingHeadHatBeret
   chatMessage: intro-tut-take-clothing-chat
   ttsMessage: intro-tut-take-clothing-tts
   observeRange: 12

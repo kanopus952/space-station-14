@@ -7,7 +7,7 @@ namespace Content.Shared._Sunrise.Tutorial.Components;
 /// Временно блокирует взаимодействие удерживаемым предметом с выбранными хранилищами.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class TutorialStorageInteractSoftLockComponent : Component
+public sealed partial class TutorialStorageInteractSoftLockComponent : Component, ITutorialEntitySoftLockComponent
 {
     [DataField, AutoNetworkedField]
     public List<EntProtoId> Items = [];

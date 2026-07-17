@@ -1,5 +1,6 @@
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Conditions;
+using Content.Shared._Sunrise.Tutorial.EntitySystems.SoftLock;
 using Content.Shared.EntityEffects;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;

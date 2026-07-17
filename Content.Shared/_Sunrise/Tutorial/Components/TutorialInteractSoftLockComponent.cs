@@ -4,10 +4,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._Sunrise.Tutorial.Components;
 
 /// <summary>
-///     Временно блокирует вставку удерживаемых предметов в выбранные хранилища.
+/// Временно блокирует взаимодействие удерживаемым предметом, если он указан, с окружающим миром.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class TutorialStorageInsertSoftLockComponent : Component, ITutorialEntitySoftLockComponent
+public sealed partial class TutorialInteractSoftLockComponent : Component
 {
     [DataField, AutoNetworkedField]
     public List<EntProtoId> Items = [];
