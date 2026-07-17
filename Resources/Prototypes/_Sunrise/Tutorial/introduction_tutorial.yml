@@ -38,8 +38,8 @@
   - IntroTutLieDownStandUp
   # 15. Explain action bar
   - IntroTutActionBar
-  # 16. Explain MHelp
-  - IntroTutMHelp
+  # 16. Mentor help
+  - TutorialMHelp
 
 
 # ─── Step definitions ──────────────────────────────────────────────────────────
@@ -288,23 +288,6 @@
   conditions:
   - !type:StepDelayCondition
     delay: 5
-
-# 16. Explain MHelp
-- type: tutorialStep
-  id: IntroTutMHelp
-  parent: BaseTutorialStepBase
-  bubble:
-    text: intro-tut-mhelp-bubble
-  chatMessage: intro-tut-mhelp-chat
-  ttsMessage: intro-tut-mhelp-tts
-  uiHighlight:
-  - !type:UiByName
-    name: TopBar
-  - !type:UiByName
-    name: MHelpButton
-  conditions:
-  - !type:StepDelayCondition
-    delay: 7
 
 - type: entity
   parent: BaseTutorialPlayer

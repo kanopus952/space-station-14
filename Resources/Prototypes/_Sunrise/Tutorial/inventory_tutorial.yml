@@ -50,6 +50,7 @@
   - InvTutPutScrewdriverToolbelt
   - InvTutTakeScrewdriverBack
   - InvTutFinalState
+  - TutorialMHelp
 
 - type: tutorialStep
   id: InvTutOpenInventory
@@ -1354,11 +1355,6 @@
     text: inv-tut-final-state-bubble
   chatMessage: inv-tut-final-state-chat
   ttsMessage: inv-tut-final-state-tts
-  uiHighlight:
-  - !type:UiByName
-    name: TopBar
-  - !type:UiByName
-    name: MHelpButton
   conditions:
   - !type:StepDelayCondition
     delay: 5

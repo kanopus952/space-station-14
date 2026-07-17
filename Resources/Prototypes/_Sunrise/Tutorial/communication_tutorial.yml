@@ -42,6 +42,8 @@
   - CommTutSendMessenger
   # 17. IC, LOOC and AHelp
   - CommTutAskHelp
+  # 18. Mentor help
+  - TutorialMHelp
 
 - type: tutorialStep
   id: CommTutLocalChat

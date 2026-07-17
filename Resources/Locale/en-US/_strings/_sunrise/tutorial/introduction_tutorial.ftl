@@ -3,6 +3,9 @@ introduction-tutorial-tooltip = A guide for beginners.
 examine-something = Examine an item [tutkeybind="UIClick"/]
 
 base-tutorial-sender = Instructor:
+tutorial-mhelp-bubble = If you still have questions, use MHelp from the highlighted top-bar button.
+tutorial-mhelp-chat = MHelp is for questions about mechanics and learning. A mentor can help you understand what to do next.
+tutorial-mhelp-tts = MHelp is for questions about mechanics and learning. A mentor can help you understand what to do next.
 tutorial-base-step-examine-bubble = Examine the item. Use [tutkeybind="ExamineEntity"].
 tutorial-base-step-examine-chat = Great! Let's start by examining items.
 tutorial-base-step-examine-tts = Great! Let's start by examining items.
@@ -162,10 +165,6 @@ intro-tut-pickup-pistol-tts = Here is the range. A great chance to practice shoo
 intro-tut-action-bar-bubble = This is the action bar. Character abilities and quick actions appear here.
 intro-tut-action-bar-chat = The action bar is useful for combat mode and abilities. If a new button appears, it is probably worth checking.
 intro-tut-action-bar-tts = The action bar is useful for combat mode and abilities. If a new button appears, it is probably worth checking.
-
-intro-tut-mhelp-bubble = If you have questions, use MHelp from the top bar. You do not need to open a ticket right now.
-intro-tut-mhelp-chat = MHelp is for questions about mechanics and learning the game. Press the MHelp button on the top bar whenever you need mentor help.
-intro-tut-mhelp-tts = MHelp is for questions about mechanics and learning the game. Press the MHelp button on the top bar whenever you need mentor help.
 
 intro-tut-combat-mode-bubble = Enter combat mode: press the highlighted button on the action bar or [tutkeybind="Num1"].
 intro-tut-combat-mode-chat = To attack with a weapon, you need to enter combat mode. Press the highlighted button or number 1.

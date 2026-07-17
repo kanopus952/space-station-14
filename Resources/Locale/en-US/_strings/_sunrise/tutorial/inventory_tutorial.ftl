@@ -81,9 +81,9 @@ inv-tut-drop-screwdriver-bubble = Drop the screwdriver from your active hand wit
 inv-tut-drop-screwdriver-chat = Now you have seen the main rule: the active hand decides which item is used, dropped, and used to attack.
 inv-tut-drop-screwdriver-tts = Now you have seen the main rule: the active hand decides which item is used, dropped, and used to attack.
 
-inv-tut-final-state-bubble = Use MHelp if you still have questions.
-inv-tut-final-state-chat = Great! You now know the basics of inventory, storage, and the active hand. If you still have questions, use MHelp.
-inv-tut-final-state-tts = Great! You now know the basics of inventory, storage, and the active hand. If you still have questions, use MHelp.
+inv-tut-final-state-bubble = You have learned the basics of inventory, storage, and the active hand.
+inv-tut-final-state-chat = Great! You now know the basics of inventory, storage, and the active hand.
+inv-tut-final-state-tts = Great! You now know the basics of inventory, storage, and the active hand.
 
 inv-tut-repair-equip-backpack-bubble = Open your inventory with [tutkeybind="OpenInventoryMenu"] and put the backpack back on your back.
 inv-tut-repair-equip-backpack-chat = Your backpack is no longer on your back. Equip it into the back slot so the storage steps can continue.
