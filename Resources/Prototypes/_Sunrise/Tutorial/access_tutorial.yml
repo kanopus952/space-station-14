@@ -1,7 +1,7 @@
 - type: tutorialSequence
   id: AccessTutorial
-  duration: 900
-  priority: 20
+  duration: 600
+  priority: 3
   name: access-tutorial-name
   tooltip: access-tutorial-tooltip
   grid: /Maps/_Sunrise/Tutorials/access_tutorial.yml

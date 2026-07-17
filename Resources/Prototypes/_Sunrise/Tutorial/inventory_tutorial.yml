@@ -1,6 +1,6 @@
 - type: tutorialSequence
   id: InventoryTutorial
-  duration: 900
+  duration: 720
   priority: 1
   name: inventory-tutorial-name
   tooltip: inventory-tutorial-tooltip

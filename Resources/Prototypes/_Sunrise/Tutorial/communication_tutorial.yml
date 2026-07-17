@@ -1,7 +1,7 @@
 - type: tutorialSequence
   id: CommunicationTutorial
   duration: 960
-  priority: 10
+  priority: 2
   name: communication-tutorial-name
   tooltip: communication-tutorial-tooltip
   texture: /Textures/_Sunrise/Tutorial/communication_tutorial.png
