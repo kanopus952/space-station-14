@@ -1,6 +1,6 @@
 - type: tutorialSequence
   id: IntroductionTutorial
-  duration: 450
+  duration: 540
   priority: 0
   name: introduction-tutorial-name
   tooltip: introduction-tutorial-tooltip
@@ -28,13 +28,17 @@
   - IntroTutHoldBeret
   # 10. Equip new clothing
   - IntroTutEquipClothing
-  # 11. Drop old clothing (skipped if nothing in hand)
+  # 11. Point at an entity
+  - IntroTutPointClothingVendor
+  # 12. Drop old clothing (skipped if nothing in hand)
   - IntroTutDropOldClothing
-  # 12. Go to the center
+  # 13. Go to the center
   - IntroTutGoCenter
-  # 13. Explain action bar
+  # 14. Lie down and stand up
+  - IntroTutLieDownStandUp
+  # 15. Explain action bar
   - IntroTutActionBar
-  # 14. Explain MHelp
+  # 16. Explain MHelp
   - IntroTutMHelp
 
 
@@ -192,7 +196,7 @@
   - !type:UiByEntityPrototype
     prototype: ClothingHeadHatBeret
   conditions:
-  - !type:HoldInHandsCondition
+  - !type:ActiveHandContainsCondition
     item: ClothingHeadHatBeret
 
 # 10. Equip the new clothing
@@ -213,7 +217,21 @@
     target: ClothingHeadHatBeret
     slot: HEAD
 
-# 11. Drop the old clothing item (skipped if the player has nothing in hand)
+# 11. Point at a nearby entity
+- type: tutorialStep
+  id: IntroTutPointClothingVendor
+  parent: BaseTutorialStepBase
+  target: VendingMachineClothing
+  bubble:
+    text: intro-tut-point-clothing-vendor-bubble
+    attachToTarget: true
+  chatMessage: intro-tut-point-clothing-vendor-chat
+  ttsMessage: intro-tut-point-clothing-vendor-tts
+  observeRange: 12
+  conditions:
+  - !type:PointListenedCondition
+
+# 12. Drop the old clothing item (skipped if the player has nothing in hand)
 - type: tutorialStep
   id: IntroTutDropOldClothing
   parent: BaseTutorialDropStepBase
@@ -227,7 +245,7 @@
   - !type:HoldInHandsCondition
     inverted: true
 
-# 12. Go to the center of the location
+# 13. Go to the center of the location
 - type: tutorialStep
   id: IntroTutGoCenter
   parent: BaseTutorialReachStepBase
@@ -242,7 +260,19 @@
     marker: IntroTutMarkerCenter
     distance: 2
 
-# 13. Explain action bar
+# 14. Lie down and stand up
+- type: tutorialStep
+  id: IntroTutLieDownStandUp
+  parent: BaseTutorialStepBase
+  bubble:
+    text: intro-tut-lie-down-stand-up-bubble
+  chatMessage: intro-tut-lie-down-stand-up-chat
+  ttsMessage: intro-tut-lie-down-stand-up-tts
+  conditions:
+  - !type:LieDownStandUpListenedCondition
+    count: 2
+
+# 15. Explain action bar
 - type: tutorialStep
   id: IntroTutActionBar
   parent: BaseTutorialStepBase
@@ -259,7 +289,7 @@
   - !type:StepDelayCondition
     delay: 5
 
-# 14. Explain MHelp
+# 16. Explain MHelp
 - type: tutorialStep
   id: IntroTutMHelp
   parent: BaseTutorialStepBase

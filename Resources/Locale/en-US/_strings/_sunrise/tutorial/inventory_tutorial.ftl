@@ -138,11 +138,14 @@ inv-tut-drop-second-hand-item-bubble = Drop the screwdriver from the active hand
 inv-tut-drop-second-hand-item-chat = The drop key affects only the active hand. The pen in your other hand stays with you.
 inv-tut-drop-second-hand-item-tts = The drop key affects only the active hand. The pen in your other hand stays with you.
 inv-tut-switch-to-first-hand-bubble = Switch the active hand to the pen [tutkeybind="SwapHands"].
-inv-tut-switch-to-first-hand-chat = The highlight should move to the hand holding the pen. Only then will the drop key affect the pen.
-inv-tut-switch-to-first-hand-tts = The highlight should move to the hand holding the pen. Only then will the drop key affect the pen.
-inv-tut-drop-first-hand-item-bubble = Drop the pen from the active hand [tutkeybind="Drop"].
-inv-tut-drop-first-hand-item-chat = Both hands are now empty. This rule also matters when using items, attacking, or picking up new things.
-inv-tut-drop-first-hand-item-tts = Both hands are now empty. This rule also matters when using items, attacking, or picking up new things.
+inv-tut-switch-to-first-hand-chat = The highlight should move to the hand holding the pen. Only then will the throw key affect the pen.
+inv-tut-switch-to-first-hand-tts = The highlight should move to the hand holding the pen. Only then will the throw key affect the pen.
+inv-tut-throw-first-hand-item-bubble = Throw the pen forward, not just onto the floor. Aim in a direction and press [tutkeybind="ThrowItemInHand"].
+inv-tut-throw-first-hand-item-chat = Throwing is different from dropping: the item flies in the direction you choose. If you accidentally dropped it, pick it back up and use the throw key. Both hands will then be empty.
+inv-tut-throw-first-hand-item-tts = Throwing is different from dropping: the item flies in the direction you choose. If you accidentally dropped it, pick it back up and use the throw key. Both hands will then be empty.
+inv-tut-repair-throw-first-hand-item-bubble = Pick up the pen from the floor into your active hand [tutkeybind="UIClick"].
+inv-tut-repair-throw-first-hand-item-chat = The pen ended up on the floor. Pick it back up to continue learning how to throw.
+inv-tut-repair-throw-first-hand-item-tts = The pen ended up on the floor. Pick it back up to continue learning how to throw.
 
 inv-tut-open-wardrobe-bubble = Open the highlighted wardrobe by hovering over it and pressing [tutkeybind="ActivateItemInWorld"].
 inv-tut-open-wardrobe-chat = Walk up to the wardrobe, hover over it, and press the interaction key. It contains clothing for every empty slot.

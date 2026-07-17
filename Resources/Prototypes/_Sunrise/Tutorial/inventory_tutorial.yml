@@ -14,7 +14,7 @@
   - InvTutPickUpSecondHandItem
   - InvTutDropSecondHandItem
   - InvTutSwitchToFirstHand
-  - InvTutDropFirstHandItem
+  - InvTutThrowFirstHandItem
   - InvTutOpenWardrobe
   - InvTutOpenInventory
   - InvTutTakeShoes
@@ -247,12 +247,12 @@
   - !type:SwapHandsListenedCondition
 
 - type: tutorialStep
-  id: InvTutDropFirstHandItem
+  id: InvTutThrowFirstHandItem
   parent: BaseTutorialStepBase
   bubble:
-    text: inv-tut-drop-first-hand-item-bubble
-  chatMessage: inv-tut-drop-first-hand-item-chat
-  ttsMessage: inv-tut-drop-first-hand-item-tts
+    text: inv-tut-throw-first-hand-item-bubble
+  chatMessage: inv-tut-throw-first-hand-item-chat
+  ttsMessage: inv-tut-throw-first-hand-item-tts
   uiHighlight:
   - !type:UiByName
     name: HandContainer
@@ -260,14 +260,53 @@
   - !type:TutorialComponentEffect
     components:
     - type: TutorialPickupSoftLock
-      blockAll: true
+      allowedItems:
+      - Pen
     - type: TutorialStorageInsertSoftLock
       items:
       - Pen
-      popup: inv-tut-softlock-drop-item
+      popup: inv-tut-softlock-keep-hand-item
+  failures:
+  - conditions:
+    - !type:ItemHandledCondition
+      item: Pen
+      inverted: true
+    - !type:ThrowListenedCondition
+      target: Pen
+      inverted: true
+    repairStep: InvTutRepairThrowFirstHandItem
   conditions:
-  - !type:DropListenedCondition
+  - !type:ThrowListenedCondition
     target: Pen
+
+- type: tutorialStep
+  id: InvTutRepairThrowFirstHandItem
+  parent: BaseTutorialStepBase
+  target: Pen
+  bubble:
+    text: inv-tut-repair-throw-first-hand-item-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-repair-throw-first-hand-item-chat
+  ttsMessage: inv-tut-repair-throw-first-hand-item-tts
+  observeRange: 12
+  uiHighlight:
+  - !type:UiByEntityPrototype
+    prototype: Pen
+  - !type:UiByName
+    name: HandContainer
+  effects:
+  - !type:TutorialComponentEffect
+    components:
+    - type: TutorialPickupSoftLock
+      allowedItems:
+      - Pen
+    - type: TutorialStorageInsertSoftLock
+      items:
+      - Pen
+      popup: inv-tut-softlock-keep-hand-item
+  conditions:
+  - !type:ItemHandledCondition
+    item: Pen
 
 - type: tutorialStep
   id: InvTutOpenWardrobe

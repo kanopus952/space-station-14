@@ -51,13 +51,17 @@ intro-tut-take-clothing-bubble = Take the beret from the vendor. Press [tutkeybi
 intro-tut-take-clothing-chat = In the open vendor, choose the beret. The item will appear in your hand.
 intro-tut-take-clothing-tts = In the open vendor, choose the beret. The item will appear in your hand.
 
-intro-tut-hold-beret-bubble = Hold the beret in your hand with [tutkeybind="UIClick"]. If it is not in your hands, click it in the inventory or pick it up from the floor.
+intro-tut-hold-beret-bubble = Hold the beret in your active hand with [tutkeybind="UIClick"]. If it is on the floor, pick it up; if it is in the other hand, switch hands with [tutkeybind="SwapHands"].
 intro-tut-hold-beret-chat = Before you wear something, it should be in your hand. Hold the beret in your active hand.
 intro-tut-hold-beret-tts = Before you wear something, it should be in your hand. Hold the beret in your active hand.
 
 intro-tut-equip-clothing-bubble = Put on the beret. Open the inventory with [tutkeybind="OpenInventoryMenu"] and drag the item into the right slot, or press [tutkeybind="ActivateItemInHand"] to equip it quickly.
 intro-tut-equip-clothing-chat = Put on the cool beret. It suits you.
 intro-tut-equip-clothing-tts = Put on the cool beret. It suits you.
+
+intro-tut-point-clothing-vendor-bubble = Point at the clothing vendor. Hover your cursor over it and press [tutkeybind="Point"].
+intro-tut-point-clothing-vendor-chat = Pointing is a quick way to show other players an object, direction, or problem without extra words.
+intro-tut-point-clothing-vendor-tts = Pointing is a quick way to show other players an object, direction, or problem without extra words.
 
 intro-tut-drop-old-clothing-bubble = Drop the old clothing item on the floor with [tutkeybind="Drop"].
 intro-tut-drop-old-clothing-chat = The old clothing is now in your hand. Just drop it.
@@ -78,6 +82,10 @@ intro-tut-inventory-tts = Inventory is not just a bag. You use it to wear clothe
 intro-tut-go-center-bubble = Go to the center of the location. Follow the marker.
 intro-tut-go-center-chat = Great! Now move to the central hall.
 intro-tut-go-center-tts = Great! Now move to the central hall.
+
+intro-tut-lie-down-stand-up-bubble = Lie down and stand back up. Press [tutkeybind="ToggleStanding"] once to lie down, then press it again to stand up.
+intro-tut-lie-down-stand-up-chat = Lying down helps you crawl under some objects and roleplay situations. Remember how to stand up again before moving on.
+intro-tut-lie-down-stand-up-tts = Lying down helps you crawl under some objects and roleplay situations. Remember how to stand up again before moving on.
 
 intro-tut-go-bar-bubble = Head to the bar. Follow the marker.
 intro-tut-go-bar-chat = Take a look at the bar. You can catch your breath, drink something, and have a good time there.

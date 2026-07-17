@@ -51,13 +51,17 @@ intro-tut-take-clothing-bubble = Возьмите берет из раздатч
 intro-tut-take-clothing-chat = В открытом раздатчике выберите берет. Предмет появится в вашей руке.
 intro-tut-take-clothing-tts = В открытом раздатчике выберите берет. Предмет появится в вашей руке.
 
-intro-tut-hold-beret-bubble = Возьмите берет в руку [tutkeybind="UIClick"]. Если он не в руках, нажмите по нему в инвентаре или поднимите с пола.
+intro-tut-hold-beret-bubble = Возьмите берет в активную руку [tutkeybind="UIClick"]. Если он на полу, подберите его; если он в другой руке, переключитесь [tutkeybind="SwapHands"].
 intro-tut-hold-beret-chat = Перед тем как надеть вещь, она должна быть у вас в руке. Держите берет в активной руке.
 intro-tut-hold-beret-tts = Перед тем как надеть вещь, она должна быть у вас в руке. Держите берет в активной руке.
 
 intro-tut-equip-clothing-bubble = Наденьте берет. Откройте инвентарь [tutkeybind="OpenInventoryMenu"] и перетащите предмет в нужный слот, или нажмите [tutkeybind="ActivateItemInHand"] для быстрого надевания.
 intro-tut-equip-clothing-chat = Наденьте крутой берет, вам подойдет.
 intro-tut-equip-clothing-tts = Наденьте крутой берет, вам подойдет.
+
+intro-tut-point-clothing-vendor-bubble = Укажите на раздатчик одежды. Наведите на него курсор и нажмите [tutkeybind="Point"].
+intro-tut-point-clothing-vendor-chat = Указание помогает быстро показать другим игрокам предмет, направление или проблему без лишних слов.
+intro-tut-point-clothing-vendor-tts = Указание помогает быстро показать другим игрокам предмет, направление или проблему без лишних слов.
 
 intro-tut-drop-old-clothing-bubble = Выбросьте старый предмет одежды на пол [tutkeybind="Drop"].
 intro-tut-drop-old-clothing-chat = Старая одежда теперь в руке - просто бросьте её.
@@ -78,6 +82,10 @@ intro-tut-inventory-tts = Инвентарь - это не просто сумк
 intro-tut-go-center-bubble = Идите в центр локации - следуйте к маркеру.
 intro-tut-go-center-chat = Отлично! Теперь двигайтесь в центральный зал.
 intro-tut-go-center-tts = Отлично! Теперь двигайтесь в центральный зал.
+
+intro-tut-lie-down-stand-up-bubble = Лягте на пол и снова встаньте. Нажмите [tutkeybind="ToggleStanding"] один раз, чтобы лечь, затем нажмите еще раз, чтобы встать.
+intro-tut-lie-down-stand-up-chat = Лежать полезно, чтобы пролезать под некоторыми объектами и отыгрывать ситуации. Перед продолжением убедитесь, что снова встали.
+intro-tut-lie-down-stand-up-tts = Лежать полезно, чтобы пролезать под некоторыми объектами и отыгрывать ситуации. Перед продолжением убедитесь, что снова встали.
 
 intro-tut-go-bar-bubble = Направляйтесь в бар - следуйте к маркеру.
 intro-tut-go-bar-chat = Загляните в бар - там можно перевести дыхание, выпить напитков и хорошо провести время.
