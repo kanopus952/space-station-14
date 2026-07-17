@@ -228,7 +228,9 @@
   ttsMessage: comm-tut-open-messenger-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_id
   conditions:

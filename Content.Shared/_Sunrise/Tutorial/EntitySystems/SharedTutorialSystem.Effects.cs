@@ -27,10 +27,14 @@ public abstract partial class SharedTutorialSystem
                     break;
             }
         }
+
+        _softLock.ApplyStepSoftLocks(ent, step);
     }
 
     private void ClearStepEffects(Entity<TutorialPlayerComponent> ent)
     {
+        _softLock.ClearStepSoftLocks(ent);
+
         if (!TryGetCurrentStep(ent, out var step))
             return;
 

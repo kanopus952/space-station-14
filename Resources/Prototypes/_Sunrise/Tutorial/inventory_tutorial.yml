@@ -5,9 +5,9 @@
   name: inventory-tutorial-name
   tooltip: inventory-tutorial-tooltip
   grid: /Maps/_Sunrise/Tutorials/inventory_tutorial.yml
+  texture: /Textures/_Sunrise/Tutorial/inventory_tutorial.png
   playerEntity: InventoryTutorialPlayer
   steps:
-  - InvTutOpenInventory
   - InvTutHandsIntro
   - InvTutPickUpFirstHandItem
   - InvTutSwitchToEmptyHand
@@ -16,6 +16,7 @@
   - InvTutSwitchToFirstHand
   - InvTutDropFirstHandItem
   - InvTutOpenWardrobe
+  - InvTutOpenInventory
   - InvTutTakeShoes
   - InvTutEquipShoes
   - InvTutTakeGloves
@@ -95,7 +96,7 @@
       blockAll: true
   conditions:
   - !type:StepDelayCondition
-    delay: 4
+    delay: 8
 
 - type: tutorialStep
   id: InvTutPickUpFirstHandItem
@@ -202,12 +203,19 @@
       blockAll: true
     - type: TutorialStorageInsertSoftLock
       items:
+      - Pen
       - Screwdriver
       popup: inv-tut-softlock-drop-item
   preconditions:
-  - !type:ActiveHandContainsCondition
-    item: Screwdriver
-  preconditionFailStep: InvTutPickUpSecondHandItem
+  - !type:ItemHandledCondition
+    item: Pen
+  preconditionFailStep: InvTutPickUpFirstHandItem
+  failures:
+  - conditions:
+    - !type:ItemHandledCondition
+      item: Pen
+      inverted: true
+    repairStep: InvTutPickUpFirstHandItem
   conditions:
   - !type:DropListenedCondition
     target: Screwdriver
@@ -257,10 +265,6 @@
       items:
       - Pen
       popup: inv-tut-softlock-drop-item
-  preconditions:
-  - !type:ActiveHandContainsCondition
-    item: Pen
-  preconditionFailStep: InvTutSwitchToFirstHand
   conditions:
   - !type:DropListenedCondition
     target: Pen
@@ -345,13 +349,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingShoesColorBlack
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingShoesColorBlack
-  preconditionFailStep: InvTutTakeShoes
   conditions:
   - !type:EquipListenedCondition
     target: ClothingShoesColorBlack
@@ -411,13 +411,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingHandsGlovesColorBlack
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingHandsGlovesColorBlack
-  preconditionFailStep: InvTutTakeGloves
   conditions:
   - !type:EquipListenedCondition
     target: ClothingHandsGlovesColorBlack
@@ -477,13 +473,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingEyesGlassesGar
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingEyesGlassesGar
-  preconditionFailStep: InvTutTakeEyes
   conditions:
   - !type:EquipListenedCondition
     target: ClothingEyesGlassesGar
@@ -543,13 +535,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingHeadsetGrey
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingHeadsetGrey
-  preconditionFailStep: InvTutTakeEars
   conditions:
   - !type:EquipListenedCondition
     target: ClothingHeadsetGrey
@@ -609,13 +597,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingMaskBreath
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingMaskBreath
-  preconditionFailStep: InvTutTakeMask
   conditions:
   - !type:EquipListenedCondition
     target: ClothingMaskBreath
@@ -675,13 +659,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingHeadHatBeret
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingHeadHatBeret
-  preconditionFailStep: InvTutTakeHead
   conditions:
   - !type:EquipListenedCondition
     target: ClothingHeadHatBeret
@@ -741,13 +721,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingNeckScarfStripedRed
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingNeckScarfStripedRed
-  preconditionFailStep: InvTutTakeNeck
   conditions:
   - !type:EquipListenedCondition
     target: ClothingNeckScarfStripedRed
@@ -807,13 +783,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingOuterWinterCoat
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingOuterWinterCoat
-  preconditionFailStep: InvTutTakeOuter
   conditions:
   - !type:EquipListenedCondition
     target: ClothingOuterWinterCoat
@@ -855,7 +827,9 @@
   ttsMessage: inv-tut-equip-back-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_back
   effects:
@@ -873,13 +847,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingBackpack
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingBackpack
-  preconditionFailStep: InvTutTakeBack
   conditions:
   - !type:EquipListenedCondition
     target: ClothingBackpack
@@ -891,6 +861,7 @@
   target: ClothingBeltUtility
   bubble:
     text: inv-tut-take-belt-bubble
+    attachToTarget: true
   chatMessage: inv-tut-take-belt-chat
   ttsMessage: inv-tut-take-belt-tts
   uiHighlight:
@@ -921,7 +892,9 @@
   ttsMessage: inv-tut-equip-belt-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_belt
   effects:
@@ -939,13 +912,9 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - ClothingBeltUtility
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: ClothingBeltUtility
-  preconditionFailStep: InvTutTakeBelt
   conditions:
   - !type:EquipListenedCondition
     target: ClothingBeltUtility
@@ -954,20 +923,20 @@
 - type: tutorialStep
   id: InvTutTakeId
   parent: BaseTutorialStepBase
-  target: PassengerPDA
+  target: InventoryTutorialPDA
   bubble:
     text: inv-tut-take-id-bubble
   chatMessage: inv-tut-take-id-chat
   ttsMessage: inv-tut-take-id-tts
   uiHighlight:
   - !type:UiByEntityPrototype
-    prototype: PassengerPDA
+    prototype: InventoryTutorialPDA
   effects:
   - !type:TutorialComponentEffect
     components:
     - type: TutorialPickupSoftLock
       allowedItems:
-      - PassengerPDA
+      - InventoryTutorialPDA
     - type: TutorialUnequipSoftLock
       slots: All
       popup: inv-tut-softlock-keep-dressed
@@ -976,7 +945,7 @@
       - InventoryTutorialWardrobe
   conditions:
   - !type:ItemHandledCondition
-    item: PassengerPDA
+    item: InventoryTutorialPDA
 
 - type: tutorialStep
   id: InvTutEquipId
@@ -987,14 +956,16 @@
   ttsMessage: inv-tut-equip-id-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_id
   effects:
   - !type:TutorialComponentEffect
     components:
     - type: TutorialEquipSoftLock
-      item: PassengerPDA
+      item: InventoryTutorialPDA
       slot: IDCARD
     - type: TutorialUnequipSoftLock
       slots: All
@@ -1004,17 +975,13 @@
       - InventoryTutorialWardrobe
     - type: TutorialStorageInsertSoftLock
       items:
-      - PassengerPDA
+      - InventoryTutorialPDA
+      targets:
+      - InventoryTutorialWardrobe
       popup: inv-tut-softlock-equip-item
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-equip-item
-  preconditions:
-  - !type:ItemHandledCondition
-    item: PassengerPDA
-  preconditionFailStep: InvTutTakeId
   conditions:
   - !type:EquipListenedCondition
-    target: PassengerPDA
+    target: InventoryTutorialPDA
     slot: IDCARD
 
 - type: tutorialStep
@@ -1023,6 +990,7 @@
   target: Paper
   bubble:
     text: inv-tut-take-paper-bubble
+    attachToTarget: true
   chatMessage: inv-tut-take-paper-chat
   ttsMessage: inv-tut-take-paper-tts
   uiHighlight:
@@ -1068,13 +1036,12 @@
     - type: TutorialStorageInsertSoftLock
       items:
       - Paper
+      targets:
+      - InventoryTutorialWardrobe
+      - ClothingBackpack
+      - ClothingOuterWinterCoat
+      - InventoryTutorialPDA
       popup: inv-tut-softlock-use-highlighted-slot
-    - type: TutorialDropSoftLock
-      popup: inv-tut-softlock-use-highlighted-slot
-  preconditions:
-  - !type:ItemHandledCondition
-    item: Paper
-  preconditionFailStep: InvTutTakePaper
   conditions:
   - !type:EquipListenedCondition
     target: Paper
@@ -1086,6 +1053,7 @@
   target: FlashlightLantern
   bubble:
     text: inv-tut-take-flashlight-bubble
+    attachToTarget: true
   chatMessage: inv-tut-take-flashlight-chat
   ttsMessage: inv-tut-take-flashlight-tts
   uiHighlight:
@@ -1124,16 +1092,14 @@
   effects:
   - !type:TutorialComponentEffect
     components:
-    - type: TutorialEquipSoftLock
-      item: FlashlightLantern
-      slot: NONE
-      popup: inv-tut-softlock-open-storage-first
     - type: TutorialUnequipSoftLock
       slots: All
       popup: inv-tut-softlock-open-storage-first
-    - type: TutorialStorageInsertSoftLock
+    - type: TutorialStorageInteractSoftLock
       items:
       - FlashlightLantern
+      targets:
+      - ClothingBackpack
       popup: inv-tut-softlock-open-storage-first
     - type: TutorialDropSoftLock
       popup: inv-tut-softlock-open-storage-first
@@ -1154,7 +1120,9 @@
   ttsMessage: inv-tut-put-flashlight-backpack-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_back
   effects:
@@ -1176,10 +1144,6 @@
       popup: inv-tut-softlock-use-open-storage
     - type: TutorialDropSoftLock
       popup: inv-tut-softlock-use-open-storage
-  preconditions:
-  - !type:ItemHandledCondition
-    item: FlashlightLantern
-  preconditionFailStep: InvTutTakeFlashlight
   conditions:
   - !type:StorageContainsCondition
     storage: ClothingBackpack
@@ -1188,8 +1152,10 @@
 - type: tutorialStep
   id: InvTutTakeFlashlightBack
   parent: BaseTutorialStepBase
+  target: FlashlightLantern
   bubble:
     text: inv-tut-take-flashlight-back-bubble
+    attachToTarget: true
   chatMessage: inv-tut-take-flashlight-back-chat
   ttsMessage: inv-tut-take-flashlight-back-tts
   uiHighlight:
@@ -1207,17 +1173,8 @@
     - type: TutorialUnequipSoftLock
       slots: All
       popup: inv-tut-softlock-keep-backpack
-    - type: TutorialStorageInsertSoftLock
-      items:
-      - FlashlightLantern
-      popup: inv-tut-softlock-use-hand
     - type: TutorialDropSoftLock
       popup: inv-tut-softlock-use-hand
-  preconditions:
-  - !type:ItemHandledCondition
-    item: FlashlightLantern
-    storage: ClothingBackpack
-  preconditionFailStep: InvTutPutFlashlightBackpack
   conditions:
   - !type:HoldInHandsCondition
     item: FlashlightLantern
@@ -1227,9 +1184,10 @@
   parent: BaseTutorialStepBase
   target: Screwdriver
   bubble:
-    text: inv-tut-take-screwdriver-storage-bubble
-  chatMessage: inv-tut-take-screwdriver-storage-chat
-  ttsMessage: inv-tut-take-screwdriver-storage-tts
+    text: inv-tut-pick-up-tool-bubble
+    attachToTarget: true
+  chatMessage: inv-tut-pick-up-tool-chat
+  ttsMessage: inv-tut-pick-up-tool-tts
   uiHighlight:
   - !type:UiByEntityPrototype
     prototype: Screwdriver
@@ -1255,22 +1213,22 @@
   ttsMessage: inv-tut-open-toolbelt-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_belt
   effects:
   - !type:TutorialComponentEffect
     components:
-    - type: TutorialEquipSoftLock
-      item: Screwdriver
-      slot: NONE
-      popup: inv-tut-softlock-open-storage-first
     - type: TutorialUnequipSoftLock
       slots: All
       popup: inv-tut-softlock-open-storage-first
-    - type: TutorialStorageInsertSoftLock
+    - type: TutorialStorageInteractSoftLock
       items:
       - Screwdriver
+      targets:
+      - ClothingBeltUtility
       popup: inv-tut-softlock-open-storage-first
     - type: TutorialDropSoftLock
       popup: inv-tut-softlock-open-storage-first
@@ -1291,7 +1249,9 @@
   ttsMessage: inv-tut-put-screwdriver-toolbelt-tts
   uiHighlight:
   - !type:UiByName
-    name: Inventory
+    name: Hotbar
+  - !type:UiByName
+    name: SecondHotbar
   - !type:UiByName
     name: SlotButton_belt
   effects:
@@ -1313,10 +1273,6 @@
       popup: inv-tut-softlock-use-open-storage
     - type: TutorialDropSoftLock
       popup: inv-tut-softlock-use-open-storage
-  preconditions:
-  - !type:ItemHandledCondition
-    item: Screwdriver
-  preconditionFailStep: InvTutTakeScrewdriver
   conditions:
   - !type:StorageContainsCondition
     storage: ClothingBeltUtility
@@ -1325,8 +1281,10 @@
 - type: tutorialStep
   id: InvTutTakeScrewdriverBack
   parent: BaseTutorialStepBase
+  target: Screwdriver
   bubble:
     text: inv-tut-take-screwdriver-back-bubble
+    attachToTarget: true
   chatMessage: inv-tut-take-screwdriver-back-chat
   ttsMessage: inv-tut-take-screwdriver-back-tts
   uiHighlight:
@@ -1344,17 +1302,8 @@
     - type: TutorialUnequipSoftLock
       slots: All
       popup: inv-tut-softlock-keep-belt
-    - type: TutorialStorageInsertSoftLock
-      items:
-      - Screwdriver
-      popup: inv-tut-softlock-use-hand
     - type: TutorialDropSoftLock
       popup: inv-tut-softlock-use-hand
-  preconditions:
-  - !type:ItemHandledCondition
-    item: Screwdriver
-    storage: ClothingBeltUtility
-  preconditionFailStep: InvTutPutScrewdriverToolbelt
   conditions:
   - !type:HoldInHandsCondition
     item: Screwdriver
@@ -1376,6 +1325,14 @@
     delay: 5
 
 - type: entity
+  parent: PassengerPDA
+  id: InventoryTutorialPDA
+  components:
+  - type: Pda
+    penSlot:
+      startingItem: null
+
+- type: entity
   id: InventoryTutorialWardrobe
   parent: WardrobeMixed
   name: inventory-tutorial-wardrobe-name
@@ -1394,8 +1351,7 @@
         - id: ClothingOuterWinterCoat
         - id: ClothingBackpack
         - id: ClothingBeltUtility
-        - id: PassengerPDA
-        - id: Paper
+        - id: InventoryTutorialPDA
         - id: FlashlightLantern
 
 - type: startingGear

@@ -207,11 +207,11 @@
     text: intro-tut-drop-old-clothing-bubble
   chatMessage: intro-tut-drop-old-clothing-chat
   ttsMessage: intro-tut-drop-old-clothing-tts
-  preconditions:
-  - !type:HoldInHandsCondition
-  preconditionFailStep: IntroTutGoCenter
-  conditions:
+  conditions: []
+  anyConditions:
   - !type:DropListenedCondition
+  - !type:HoldInHandsCondition
+    inverted: true
 
 # 12. Go to the center of the location
 - type: tutorialStep

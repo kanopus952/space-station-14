@@ -18,7 +18,7 @@ public sealed partial class ActiveHandContainsConditionSystem
         if (!_hands.TryGetActiveItem(entity.AsNullable(), out var activeItem))
             return;
 
-        if (TryGetPrototypeId(activeItem, out var protoId))
+        if (!TryGetPrototypeId(activeItem, out var protoId))
             return;
 
         args.Result = protoId == args.Condition.Item;

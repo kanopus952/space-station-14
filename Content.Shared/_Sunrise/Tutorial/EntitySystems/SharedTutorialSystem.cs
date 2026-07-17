@@ -16,6 +16,7 @@ namespace Content.Shared._Sunrise.Tutorial.EntitySystems;
 public abstract partial class SharedTutorialSystem : EntitySystem
 {
     [Dependency] private readonly SharedTutorialConditionsSystem _tutorial = default!;
+    [Dependency] private readonly TutorialSoftLockSystem _softLock = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;

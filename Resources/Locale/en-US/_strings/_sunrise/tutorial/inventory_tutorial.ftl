@@ -215,9 +215,6 @@ inv-tut-equip-id-bubble = Drag the PDA into the highlighted ID card slot [tutkey
 inv-tut-equip-id-chat = The ID card slot is for PDAs and identification cards. Use the highlighted slot.
 inv-tut-equip-id-tts = The ID card slot is for PDAs and identification cards. Use the highlighted slot.
 
-inv-tut-take-screwdriver-storage-bubble = Take the highlighted screwdriver from the open storage [tutkeybind="UIClick"].
-inv-tut-take-screwdriver-storage-chat = For the final storage exercise, take the screwdriver. It belongs in the toolbelt instead of your hand.
-inv-tut-take-screwdriver-storage-tts = For the final storage exercise, take the screwdriver. It belongs in the toolbelt instead of your hand.
 inv-tut-put-screwdriver-toolbelt-bubble = Drag the screwdriver into the open toolbelt [tutkeybind="UIClick"].
 inv-tut-put-screwdriver-toolbelt-chat = Put the screwdriver into the open toolbelt. Your hands will be free afterwards.
 inv-tut-put-screwdriver-toolbelt-tts = Put the screwdriver into the open toolbelt. Your hands will be free afterwards.
