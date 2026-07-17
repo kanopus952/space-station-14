@@ -22,8 +22,7 @@
                 <Label Name="CompletionTitleLabel"
                        StyleClasses="LabelHeading"
                        HorizontalAlignment="Center"
-                       HorizontalExpand="True"
-                       ClipText="True"/>
+                       HorizontalExpand="True"/>
             </controls:StripeBack>
 
             <RichTextLabel Name="CompletionDescriptionLabel"
