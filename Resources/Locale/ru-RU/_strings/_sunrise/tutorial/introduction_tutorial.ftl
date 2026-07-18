@@ -118,7 +118,7 @@ intro-tut-rummage-bush-bubble = Покопайтесь в кусте рядом 
 intro-tut-rummage-bush-chat = Что-то спрятано в кустах. Следует проверить!
 intro-tut-rummage-bush-tts = Что-то спрятано в кустах. Следует проверить!
 
-intro-tut-equip-id-card-bubble = Вставьте карту доступа в слот ID [tutkeybind="UIClick"] на слот ID карты.
+intro-tut-equip-id-card-bubble = Вставьте карту доступа в слот айди-карты [tutkeybind="UIClick"].
 intro-tut-equip-id-card-chat = Держа карту в руке или в специальном слоте, вы сможете проходить через заблокированные двери.
 intro-tut-equip-id-card-tts = Карта доступа открывает служебные двери. Полезно!
 

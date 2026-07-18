@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared.Actions.Components;
 using Content.Shared._Sunrise.Tutorial.Components;
 using Content.Shared._Sunrise.Tutorial.Components.Trackers;
 using Content.Shared._Sunrise.Tutorial.Conditions;
@@ -13,6 +14,9 @@ public abstract partial class SharedTutorialSystem
 {
     private void ResetTracking(Entity<TutorialPlayerComponent> ent)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         var tracker = EnsureComp<TutorialTrackerComponent>(ent);
         tracker.Counters.Clear();
         UpdateObservedEntities(ent, tracker);
@@ -32,7 +36,8 @@ public abstract partial class SharedTutorialSystem
         tracker.ObservedEntities.Clear();
         tracker.TargetPrototypes.Clear();
         tracker.Counters.Clear();
-        Dirty(ent, tracker);
+        if (!TerminatingOrDeleted(ent))
+            Dirty(ent, tracker);
     }
 
     private void UpdateObservedEntities(Entity<TutorialPlayerComponent> ent, TutorialTrackerComponent tracker)
@@ -48,8 +53,7 @@ public abstract partial class SharedTutorialSystem
         if (!TryGetCurrentStep(ent, out var step))
             return;
 
-        // Event-listened conditions decide which nearby/equipped entities should
-        // receive TutorialObservableComponent for this step.
+        // Условия, отслеживающие события, определяют сущности, на которые нужно добавить TutorialObservableComponent.
         CollectObservedConditions(tracker, step.Conditions);
         CollectObservedConditions(tracker, step.AnyConditions);
         CollectObservedConditions(tracker, step.Preconditions);
@@ -57,6 +61,7 @@ public abstract partial class SharedTutorialSystem
 
         ObserveNearbyEntities(ent, tracker, step);
         ObserveEquippedEntities(ent, tracker);
+        ObserveActionEntities(ent, tracker);
     }
 
     private static void CollectObservedConditions(
@@ -128,6 +133,20 @@ public abstract partial class SharedTutorialSystem
         }
     }
 
+    private void ObserveActionEntities(EntityUid user, TutorialTrackerComponent tracker)
+    {
+        if (tracker.TargetPrototypes.Count == 0 && !ObservesAny(tracker))
+            return;
+
+        if (!TryComp(user, out ActionsComponent? actions))
+            return;
+
+        foreach (var action in actions.Actions)
+        {
+            TryObserveEntityInternal(user, action, tracker);
+        }
+    }
+
     /// <summary>
     /// Starts tracking tutorial-relevant events from <paramref name="target"/> for <paramref name="user"/>.
     /// </summary>
@@ -141,6 +160,9 @@ public abstract partial class SharedTutorialSystem
 
     private bool TryObserveEntityInternal(EntityUid user, EntityUid target, TutorialTrackerComponent tracker)
     {
+        if (TerminatingOrDeleted(user) || TerminatingOrDeleted(target))
+            return false;
+
         if (!ShouldObserveEntity(target, tracker))
             return false;
 
@@ -155,6 +177,9 @@ public abstract partial class SharedTutorialSystem
 
     private void RemoveObserver(EntityUid user, EntityUid target)
     {
+        if (TerminatingOrDeleted(target))
+            return;
+
         if (!TryComp(target, out TutorialObservableComponent? observable))
             return;
 

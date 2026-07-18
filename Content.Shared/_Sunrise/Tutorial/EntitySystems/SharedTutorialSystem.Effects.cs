@@ -21,6 +21,10 @@ public abstract partial class SharedTutorialSystem
                     if (componentEffect.Components.Count > 0)
                         EntityManager.AddComponents(ent, componentEffect.Components, componentEffect.RemoveExisting);
                     break;
+                case TutorialRemoveComponentEffect removeComponentEffect:
+                    if (removeComponentEffect.Components.Count > 0)
+                        EntityManager.RemoveComponents(ent, removeComponentEffect.Components);
+                    break;
                 case TutorialEntityEffect entityEffect:
                     if (_net.IsServer)
                         _entityEffects.ApplyEffects(ent, entityEffect.Effects, entityEffect.Scale, ent);

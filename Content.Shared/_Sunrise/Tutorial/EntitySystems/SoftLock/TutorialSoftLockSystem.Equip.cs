@@ -14,6 +14,9 @@ public sealed partial class TutorialSoftLockSystem
         SubscribeLocalEvent<TutorialEquipSoftLockComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<TutorialEquipSoftLockComponent, IsEquippingTargetAttemptEvent>(OnEquipTargetAttempt);
 
+        SubscribeLocalEvent<TutorialEquipBlockedSoftLockComponent, IsEquippingAttemptEvent>(OnBlockedEquipAttempt);
+        SubscribeLocalEvent<TutorialEquipBlockedSoftLockComponent, IsEquippingTargetAttemptEvent>(OnBlockedEquipTargetAttempt);
+
         SubscribeLocalEvent<TutorialUnequipSoftLockComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<TutorialUnequipSoftLockComponent, IsUnequippingTargetAttemptEvent>(OnUnequipTargetAttempt);
     }
@@ -34,6 +37,22 @@ public sealed partial class TutorialSoftLockSystem
         TryCancelEquip(ent, args);
     }
 
+    private void OnBlockedEquipAttempt(Entity<TutorialEquipBlockedSoftLockComponent> ent, ref IsEquippingAttemptEvent args)
+    {
+        if (_timing.ApplyingState)
+            return;
+
+        TryCancelBlockedEquip(ent, args);
+    }
+
+    private void OnBlockedEquipTargetAttempt(Entity<TutorialEquipBlockedSoftLockComponent> ent, ref IsEquippingTargetAttemptEvent args)
+    {
+        if (_timing.ApplyingState)
+            return;
+
+        TryCancelBlockedEquip(ent, args);
+    }
+
     private void TryCancelEquip(Entity<TutorialEquipSoftLockComponent> ent, EquipAttemptBase args)
     {
         if (_timing.ApplyingState)
@@ -47,6 +66,23 @@ public sealed partial class TutorialSoftLockSystem
 
         args.Reason = ent.Comp.Popup;
         args.Cancel();
+        ShowPopup(args.Equipee, ent.Comp.Popup);
+    }
+
+    private void TryCancelBlockedEquip(Entity<TutorialEquipBlockedSoftLockComponent> ent, EquipAttemptBase args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (!ent.Comp.BlockAllSlots && (args.SlotFlags & ent.Comp.Slots) == 0)
+            return;
+
+        if (!HasBlockedPrototype(args.Equipment, ent.Comp.Items))
+            return;
+
+        args.Reason = ent.Comp.Popup;
+        args.Cancel();
+        ShowPopup(args.Equipee, ent.Comp.Popup);
     }
 
     private void OnUnequipAttempt(Entity<TutorialUnequipSoftLockComponent> ent, ref IsUnequippingAttemptEvent args)

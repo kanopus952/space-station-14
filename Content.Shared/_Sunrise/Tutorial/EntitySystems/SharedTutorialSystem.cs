@@ -28,6 +28,12 @@ public abstract partial class SharedTutorialSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly INetManager _net = default!;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<TutorialPlayerComponent, EntityTerminatingEvent>(OnTutorialPlayerTerminating);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -38,6 +44,9 @@ public abstract partial class SharedTutorialSystem : EntitySystem
         var query = EntityQueryEnumerator<TutorialPlayerComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
             if (!comp.TutorialInitialized)
                 continue;
 
@@ -59,7 +68,7 @@ public abstract partial class SharedTutorialSystem : EntitySystem
     /// </summary>
     public void InitializeTutorial(Entity<TutorialPlayerComponent> ent)
     {
-        if (ent.Comp.TutorialInitialized)
+        if (TerminatingOrDeleted(ent) || ent.Comp.TutorialInitialized)
             return;
 
         ent.Comp.ActiveStepOverride = null;
@@ -71,6 +80,11 @@ public abstract partial class SharedTutorialSystem : EntitySystem
         ent.Comp.EndTime = _timing.CurTime + _proto.Index(ent.Comp.SequenceId).Duration;
         UpdateTimeCounter(ent, ent.Comp.EndTime);
         OnStepChanged(ent, step);
+    }
+
+    private void OnTutorialPlayerTerminating(Entity<TutorialPlayerComponent> ent, ref EntityTerminatingEvent args)
+    {
+        ClearTracking(ent);
     }
 
     /// <summary>

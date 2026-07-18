@@ -126,7 +126,7 @@ public sealed partial class TutorialWindow : FancyWindow
         }
 
         var progress = totalDurationTicks > 0
-            ? (float) completedDurationTicks / totalDurationTicks
+            ? (float)completedDurationTicks / totalDurationTicks
             : 0f;
         progress = Math.Clamp(progress, 0f, 1f);
 

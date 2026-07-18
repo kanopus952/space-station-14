@@ -60,6 +60,18 @@ public sealed partial class TutorialComponentEffect : TutorialEffect
 }
 
 /// <summary>
+///     Снимает компоненты с игрока при активации шага туториала.
+/// </summary>
+public sealed partial class TutorialRemoveComponentEffect : TutorialEffect
+{
+    /// <summary>
+    ///     Компоненты, которые необходимо снять.
+    /// </summary>
+    [DataField(required: true)]
+    public ComponentRegistry Components = new();
+}
+
+/// <summary>
 ///     Applies one-shot entity effects when the step becomes active.
 /// </summary>
 public sealed partial class TutorialEntityEffect : TutorialEffect
