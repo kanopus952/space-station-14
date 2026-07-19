@@ -105,7 +105,7 @@ inv-tut-repair-tool-to-hand-bubble = Take the screwdriver back into your hand wi
 inv-tut-repair-tool-to-hand-chat = The screwdriver needs to go into the toolbelt. Take it back into your hand, then move it into the toolbelt.
 inv-tut-repair-tool-to-hand-tts = The screwdriver needs to go into the toolbelt. Take it back into your hand, then move it into the toolbelt.
 
-inventory-tutorial-wardrobe-name = Inventory tutorial wardrobe
+ent-InventoryTutorialWardrobe = Inventory tutorial wardrobe
 
 tutorial-softlock-pickup-highlighted = Pick up only the highlighted item.
 tutorial-softlock-storage-close = Finish working with the highlighted wardrobe first.

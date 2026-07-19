@@ -11,6 +11,7 @@ using Content.Shared._Sunrise.Tutorial.Prototypes;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -29,6 +30,7 @@ namespace Content.Client._Sunrise.Tutorial;
 public sealed class TutorialSystem : SharedTutorialSystem
 {
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IInputManager _input = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IOverlayManager _overlayManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -67,6 +69,8 @@ public sealed class TutorialSystem : SharedTutorialSystem
     {
         base.Initialize();
 
+        _input.FirstChanceOnKeyEvent += OnFirstChanceKeyEvent;
+
         SubscribeLocalEvent<TutorialBubbleComponent, AfterAutoHandleStateEvent>(AfterAutoHandleState);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TutorialBubbleComponent, ComponentShutdown>(OnComponentShutdown);
@@ -83,6 +87,29 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
         _shaderInstance = _proto.Index(TutorialShader).InstanceUnique();
         _overlayManager.AddOverlay(new TutorialPathOverlay(EntityManager, _player, _timing, _transform, _proto));
+    }
+
+    private void OnFirstChanceKeyEvent(KeyEventArgs args, KeyEventType type)
+    {
+        if (type == KeyEventType.Up || args.Key != Keyboard.Key.Escape)
+            return;
+
+        if (_player.LocalEntity is not { } localPlayer)
+            return;
+
+        if (!TryComp(localPlayer, out TutorialPlayerComponent? tutorialPlayer))
+            return;
+
+        if (!tutorialPlayer.TutorialInitialized)
+            return;
+
+        if (!TryGetCurrentStep((localPlayer, tutorialPlayer), out var step))
+            return;
+
+        if (!step.BlockUiInteraction)
+            return;
+
+        args.Handle();
     }
 
     private void OnScreenChanged((UIScreen? Old, UIScreen? New) ev)
@@ -391,6 +418,7 @@ public sealed class TutorialSystem : SharedTutorialSystem
 
     public override void Shutdown()
     {
+        _input.FirstChanceOnKeyEvent -= OnFirstChanceKeyEvent;
         base.Shutdown();
         SetHighlight(null);
         ClearUiHighlight();
