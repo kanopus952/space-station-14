@@ -1,8 +1,0 @@
-- type: entity
-  id: OrganBaseTail
-  parent: OrganBase
-  name: tail
-  abstract: true
-  components:
-  - type: Organ
-    category: Tail

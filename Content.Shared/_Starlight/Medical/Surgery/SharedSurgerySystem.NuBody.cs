@@ -1,5 +1,7 @@
 using Content.Shared.Body;
+using Content.Shared.Body.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Starlight.Medical.Surgery.Steps.Parts;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
@@ -22,7 +24,6 @@ public abstract partial class SharedSurgerySystem
             "HandLeft" or "HandRight" => "Hand",
             "LegLeft" or "LegRight" => "Leg",
             "FootLeft" or "FootRight" => "Foot",
-            "Tail" => "Tail",
             _ => "Other",
         };
     }
@@ -46,8 +47,7 @@ public abstract partial class SharedSurgerySystem
             "LegRight" => 8,
             "FootLeft" => 9,
             "FootRight" => 10,
-            "Tail" => 11,
-            _ => 12,
+            _ => 11,
         };
     }
 
@@ -61,7 +61,6 @@ public abstract partial class SharedSurgerySystem
             "Hand" => SlotFlags.GLOVES,
             "Leg" => SlotFlags.OUTERCLOTHING | SlotFlags.LEGS,
             "Foot" => SlotFlags.FEET,
-            "Tail" => SlotFlags.NONE,
             _ => SlotFlags.NONE,
         };
     }
@@ -79,7 +78,6 @@ public abstract partial class SharedSurgerySystem
             "right leg" => "LegRight",
             "left foot" => "FootLeft",
             "right foot" => "FootRight",
-            "tail" => "Tail",
             "liver" => "Liver",
             "kidneys" => "Kidneys",
             "stomach" => "Stomach",
@@ -88,6 +86,7 @@ public abstract partial class SharedSurgerySystem
             "eyes" => "Eyes",
             "tongue" => "Tongue",
             "brain" => "Brain",
+            "appendix" => "Appendix",
             _ => null,
         };
     }
@@ -105,7 +104,6 @@ public abstract partial class SharedSurgerySystem
             "right leg" => "Torso",
             "left foot" => "LegLeft",
             "right foot" => "LegRight",
-            "tail" => "Torso",
             _ => null,
         };
     }
@@ -163,7 +161,7 @@ public abstract partial class SharedSurgerySystem
             return false;
 
         var category = slot == null || IsCavitySlot(slot)
-            ? null
+            ? GetRequirementOrganCategory(componentType)
             : GetSlotCategory(slot);
 
         foreach (var contained in container.ContainedEntities)
@@ -171,11 +169,15 @@ public abstract partial class SharedSurgerySystem
             if (IsCavitySlot(slot) && HasComp<OrganComponent>(contained))
                 continue;
 
-            if (category != null && (!TryComp<OrganComponent>(contained, out var organ) || !IsOrganCategory(organ, category)))
+            if (category != null)
+            {
+                if (!TryComp<OrganComponent>(contained, out var organ) || !IsOrganCategory(organ, category))
+                    continue;
+            }
+            else if (!HasComp(contained, componentType))
+            {
                 continue;
-
-            if (!HasComp(contained, componentType))
-                continue;
+            }
 
             found = contained;
             return true;
@@ -209,7 +211,6 @@ public abstract partial class SharedSurgerySystem
                      "right leg",
                      "left foot",
                      "right foot",
-                     "tail",
                  })
         {
             if (!CanAttachToSlot(body, targetPart, candidate))
@@ -234,4 +235,49 @@ public abstract partial class SharedSurgerySystem
                container.Contains(entity) &&
                _containers.Remove(entity, container, destination: destination);
     }
+
+    // Sunrise added start - проверяем surgery-органы по категории, когда marker-компонент есть не на всех прототипах
+    protected bool MatchesSurgeryRequirement(EntityUid entity, Type componentType)
+    {
+        if (GetRequirementOrganCategory(componentType) is not { } category)
+            return HasComp(entity, componentType);
+
+        return TryComp<OrganComponent>(entity, out var organ) && IsOrganCategory(organ, category);
+    }
+
+    private static string? GetRequirementOrganCategory(Type componentType)
+    {
+        if (componentType == typeof(OrganBrainComponent))
+            return "Brain";
+
+        if (componentType == typeof(OrganEyesComponent))
+            return "Eyes";
+
+        if (componentType == typeof(OrganTongueComponent))
+            return "Tongue";
+
+        if (componentType == typeof(OrganAppendixComponent))
+            return "Appendix";
+
+        if (componentType == typeof(OrganEarsComponent))
+            return "Ears";
+
+        if (componentType == typeof(LungComponent))
+            return "Lungs";
+
+        if (componentType == typeof(OrganHeartComponent))
+            return "Heart";
+
+        if (componentType == typeof(OrganStomachComponent))
+            return "Stomach";
+
+        if (componentType == typeof(OrganLiverComponent))
+            return "Liver";
+
+        if (componentType == typeof(OrganKidneysComponent))
+            return "Kidneys";
+
+        return null;
+    }
+    // Sunrise added end
 }

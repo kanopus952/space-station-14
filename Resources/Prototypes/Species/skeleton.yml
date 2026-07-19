@@ -3,8 +3,13 @@
   name: species-name-skeleton
   roundStart: false
   prototype: MobSkeletonPerson
+  bodyTypes: # Sunrise-Edit
+  - SkeletonNormal
   defaultSkinTone: "#fff9e2"
   maleFirstNames: NamesSkeletonFirst
   femaleFirstNames: NamesSkeletonFirst
   dollPrototype: AppearanceSkeletonPerson
   skinColoration: TintedHues
+  buttScan: # Sunrise edit
+    sprite: /Textures/_Sunrise/CopyMachine/butts_scans.rsi
+    state: human

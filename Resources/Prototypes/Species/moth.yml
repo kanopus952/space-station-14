@@ -3,9 +3,16 @@
   name: species-name-moth
   roundStart: true
   prototype: MobMoth
+  bodyTypes: # Sunrise-Edit
+  - MothNormal
   defaultSkinTone: "#ffda93"
   dollPrototype: AppearanceMoth
   skinColoration: Hues
   maleFirstNames: NamesMothFirstMale
   femaleFirstNames: NamesMothFirstFemale
-  lastNames: NamesMothLast
+  # lastNames: NamesMothLast # Sunrise-edit
+  maleLastNames: NamesMothLast
+  femaleLastNames: NamesMothLast
+  buttScan: # Sunrise edit
+    sprite: /Textures/_Sunrise/CopyMachine/butts_scans.rsi
+    state: human

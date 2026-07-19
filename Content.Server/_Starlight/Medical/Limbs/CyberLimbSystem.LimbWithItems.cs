@@ -61,8 +61,8 @@ public sealed partial class CyberLimbSystem : EntitySystem
             }
         }
 
-        if (_slEnt.TryEntity<BaseLayerIdComponent, BaseLayerIdToggledComponent, OrganComponent>(ent.Owner, out var limb, false)
-            && _slEnt.TryEntity<HumanoidAppearanceComponent>(args.Performer, out var performer, false))
+        if (_slEnt.TryEntity<BaseLayerDataComponent, BaseLayerToggledDataComponent, OrganComponent>(ent.Owner, out var limb, false)
+            && _slEnt.TryEntity<HumanoidProfileComponent>(args.Performer, out var performer, false))
             _limb.ToggleLimbVisual(performer, limb, ent.Comp.Toggled);
 
         _audio.PlayPvs(ent.Comp.Sound, args.Performer);

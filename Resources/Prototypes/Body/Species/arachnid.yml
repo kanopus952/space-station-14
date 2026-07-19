@@ -1,5 +1,5 @@
 - type: markingsGroup
-  parent: Undergarments
+  # parent: Undergarments # Sunrise-Edit - underwear is handled by separate clothing layers.
   id: Arachnid
   onlyGroupWhitelisted: true
   limits:
@@ -139,6 +139,7 @@
       Unsexed: UnisexArachnid
   - type: TypingIndicator
     proto: spider
+  # Sunrise start
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepSpiderLegs
@@ -154,6 +155,7 @@
       - "footprint-right-bare-spider"
   - type: ToggleableNightVision
     effect: EffectNightVisioSpecies
+  # Sunrise-end
 
 - type: entity
   parent: OrganBase

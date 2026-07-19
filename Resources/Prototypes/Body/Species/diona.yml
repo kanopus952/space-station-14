@@ -1,5 +1,5 @@
 - type: markingsGroup
-  parent: Undergarments
+  # parent: Undergarments # Sunrise-Edit - underwear is handled by separate clothing layers.
   id: Diona
   onlyGroupWhitelisted: true
   limits:
@@ -170,6 +170,7 @@
     allowedStates:
     - Dead
   - type: Rootable
+  # Sunrise start
   - type: CollectiveMind
     minds:
     - Dioneas
@@ -178,6 +179,7 @@
       - "footprint-left-bare-diona"
     rightBareFootState:
       - "footprint-right-bare-diona"
+  # Sunrise end
 
 - type: entity
   parent: OrganBase

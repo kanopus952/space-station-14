@@ -211,7 +211,7 @@ public sealed partial class SurgerySystem : SharedSurgerySystem
         foreach (var reg in stepComp.Tools.Values)
         {
             var type = reg.Component.GetType();
-            tool = tools.FirstOrDefault(held => HasComp(held, type));
+            tool = tools.FirstOrDefault(held => MatchesSurgeryRequirement(held, type));
             if (tool != default)
                 return true;
         }

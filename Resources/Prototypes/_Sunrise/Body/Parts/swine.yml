@@ -8,6 +8,9 @@
   components:
   - type: Sprite
     sprite: _Sunrise/Mobs/Species/Swine/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Swine
 
 - type: entity
   id: TorsoSwine
@@ -64,8 +67,6 @@
   components:
     - type: Sprite
       state: "l_leg"
-    - type: MovementBodyPart
-      maxDensity: 155
 
 - type: entity
   id: RightLegSwine
@@ -74,8 +75,6 @@
   components:
     - type: Sprite
       state: "r_leg"
-    - type: MovementBodyPart
-      maxDensity: 155
 
 - type: entity
   id: LeftFootSwine

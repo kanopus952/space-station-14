@@ -94,6 +94,8 @@ public abstract partial class SharedSurgerySystem
         var progress = Comp<SurgeryProgressComponent>(args.Part);
         progress.CompletedSteps.Clear();
         progress.CompletedSurgeries.Clear();
+        progress.StartedSurgeries.Clear();
+        Dirty(args.Part, progress);
     }
     private void OnStepComplete(Entity<SurgeryStepComponent> ent, ref SurgeryStepCompleteEvent args)
     {
@@ -115,12 +117,14 @@ public abstract partial class SharedSurgerySystem
         }
         if (args.IsFinal)
             progress.CompletedSurgeries.Add(args.SurgeryProto);
+
+        Dirty(args.Part, progress); // Sunrise-Edit - синхронизируем завершенный шаг с BUI
     }
     private void OnStep(Entity<SurgeryStepComponent> ent, ref SurgeryStepEvent args)
     {
         foreach (var reg in (ent.Comp.Tools ?? []).Values)
         {
-            var tool = args.Tools.FirstOrDefault(x => HasComp(x, reg.Component.GetType()));
+            var tool = args.Tools.FirstOrDefault(x => MatchesSurgeryRequirement(x, reg.Component.GetType())); // Sunrise-Edit
             if (tool == default) return;
 
             if (_net.IsServer && TryComp(tool, out SurgeryToolComponent? toolComp) && toolComp.EndSound != null)
@@ -191,7 +195,7 @@ public abstract partial class SharedSurgerySystem
 
         foreach (var reg in ent.Comp.Tools.Values)
         {
-            var tool = args.Tools.FirstOrDefault(x => HasComp(x, reg.Component.GetType()));
+            var tool = args.Tools.FirstOrDefault(x => MatchesSurgeryRequirement(x, reg.Component.GetType()));
             if (tool == default)
             {
                 args.Invalid = StepInvalidReason.MissingTool;

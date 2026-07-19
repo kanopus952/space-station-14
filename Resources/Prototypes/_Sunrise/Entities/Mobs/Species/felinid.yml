@@ -3,28 +3,28 @@
   id: AppearanceFelinid
   name: felinid appearance
   components:
-  - type: EntityTableContainerFill
-    containers:
-      body_organs: !type:AllSelector
-        children:
-        - id: OrganHumanTorso
-        - id: OrganHumanHead
-        - id: OrganHumanArmLeft
-        - id: OrganHumanArmRight
-        - id: OrganHumanHandLeft
-        - id: OrganHumanHandRight
-        - id: OrganHumanLegLeft
-        - id: OrganHumanLegRight
-        - id: OrganHumanFootLeft
-        - id: OrganHumanFootRight
-        - id: OrganHumanBrain
-        - id: OrganHumanEyes
-        - id: OrganHumanTongue
-        - id: OrganFelinidHeart
-        - id: OrganHumanLungs
-        - id: OrganReptilianStomach
-        - id: OrganAnimalLiver
-        - id: OrganHumanKidneys
+  - type: InitialBody
+    organs:
+      Torso: OrganFelinidTorso
+      Head: OrganFelinidHead
+      ArmLeft: OrganFelinidArmLeft
+      ArmRight: OrganFelinidArmRight
+      HandRight: OrganFelinidHandRight
+      HandLeft: OrganFelinidHandLeft
+      LegLeft: OrganFelinidLegLeft
+      LegRight: OrganFelinidLegRight
+      FootLeft: OrganFelinidFootLeft
+      FootRight: OrganFelinidFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganFelinidEyes
+      Tongue: OrganHumanTongue
+      Heart: OrganFelinidHeart
+      Lungs: OrganHumanLungs
+      Stomach: OrganReptilianStomach
+      Liver: OrganAnimalLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Felinid
 
 - type: entity
   save: false
@@ -55,8 +55,11 @@
     spawned:
     - id: FoodMeatFelinid
       amount: 2
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Felinid
+  - type: SunriseHumanoidProfile
+  - type: SunriseHumanoidBaseLayers
+  - type: HideableHumanoidLayers
     hideLayersOnEquip:
     - Hair
     - Snout
@@ -496,6 +499,8 @@
   - type: Stamina
     baseCritThreshold: 100
   - type: FootprintEmitter
+    leftBareFootState: [ footprint-left-bare-cat ]
+    rightBareFootState: [ footprint-right-bare-cat ]
   - type: Vocal
     sounds:
       Male: MaleFelinid

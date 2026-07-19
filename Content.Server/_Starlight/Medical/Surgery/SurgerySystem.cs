@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Shared.Body;
@@ -77,17 +78,38 @@ public sealed partial class SurgerySystem : SharedSurgerySystem
             var ev = new SurgeryValidEvent(body, part);
 
             var isCompleted = progress.CompletedSurgeries.Contains(surgery);
-            if (!progress.StartedSurgeries.Contains(surgery)
-                && !isCompleted)
+            if (!progress.StartedSurgeries.Contains(surgery))
             {
                 RaiseLocalEvent(surgeryEnt, ref ev);
 
                 if (ev.Cancelled)
                     continue;
+
+                if (isCompleted && IsRepeatableOrganSurgery(surgeryEnt))
+                    isCompleted = !TryResetCompletedSurgery(part, progress, surgery);
             }
 
             surgeries.GetOrNew(GetNetEntity(part)).Add((surgery, ev.Suffix, isCompleted));
         }
+    }
+
+    private bool IsRepeatableOrganSurgery(EntityUid surgery)
+    {
+        return HasComp<SurgeryOrganExistConditionComponent>(surgery) ||
+               HasComp<SurgeryOrganDontExistConditionComponent>(surgery);
+    }
+
+    private bool TryResetCompletedSurgery(EntityUid part, SurgeryProgressComponent progress, EntProtoId surgery)
+    {
+        if (!progress.CompletedSurgeries.Remove(surgery))
+            return false;
+
+        var stepPrefix = $"{surgery}:";
+        progress.CompletedSteps.RemoveWhere(step => step.Id.StartsWith(stepPrefix, StringComparison.Ordinal));
+        progress.StartedSurgeries.Remove(surgery);
+
+        Dirty(part, progress);
+        return true;
     }
 
     private void OnToolAfterInteract(Entity<SurgeryToolComponent> ent, ref AfterInteractEvent args)

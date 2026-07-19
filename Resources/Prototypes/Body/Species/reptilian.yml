@@ -1,5 +1,5 @@
 - type: markingsGroup
-  parent: Undergarments
+  # parent: Undergarments # Sunrise-Edit - underwear is handled by separate clothing layers.
   id: Reptilian
   onlyGroupWhitelisted: true
   limits:
@@ -160,6 +160,7 @@
       Kidneys: OrganReptilianKidneys
   - type: HumanoidProfile
     species: Reptilian
+  - type: HideableHumanoidLayers
     hideLayersOnEquip:
     - Snout
     - HeadTop
@@ -224,6 +225,7 @@
       295: 0.8
       285: 0.7
   - type: Wagging
+  # Sunrise start
   - type: Tag
     tags:
     - CanPilot
@@ -235,6 +237,7 @@
     - "footprint-left-bare-lizard"
     rightBareFootState:
     - "footprint-right-bare-lizard"
+  # Sunrise end
 
 - type: entity
   parent: OrganBase

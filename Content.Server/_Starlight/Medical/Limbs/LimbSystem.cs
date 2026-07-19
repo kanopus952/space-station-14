@@ -1,23 +1,20 @@
 using System.Linq;
 using System.Reflection;
-using Content.Server.Humanoid;
+using Content.Shared._Sunrise.Humanoid;
 using Content.Shared._Starlight.Medical.Limbs;
 using Content.Shared.Body;
 using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Starlight;
 using Content.Shared.Starlight.Medical.Surgery;
 using Robust.Server.Containers;
 using Robust.Shared.Maths;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._Starlight.Medical.Limbs;
 
 public sealed partial class LimbSystem : SharedLimbSystem
 {
     [Dependency] private readonly ContainerSystem _containers = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearanceSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly SunriseHumanoidBodySystem _sunriseBody = default!;
 
     private static readonly MethodInfo? RaiseLocalEventRefMethod = typeof(LimbSystem)
         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
@@ -42,7 +39,7 @@ public sealed partial class LimbSystem : SharedLimbSystem
             return false;
         }
 
-        if (TryComp<HumanoidAppearanceComponent>(body.Owner, out var humanoid))
+        if (TryComp<HumanoidProfileComponent>(body.Owner, out var humanoid))
             AddLimbVisual((body.Owner, humanoid), limb);
 
         RaiseLimbAttachedEvents(body.Owner, limb.Owner);
@@ -70,12 +67,12 @@ public sealed partial class LimbSystem : SharedLimbSystem
         return AmputateSingle(body, limb);
     }
 
-    public void ToggleLimbVisual(Entity<HumanoidAppearanceComponent> body, Entity<BaseLayerIdComponent, BaseLayerIdToggledComponent, OrganComponent> limb, bool toggled)
+    public void ToggleLimbVisual(Entity<HumanoidProfileComponent> body, Entity<BaseLayerDataComponent, BaseLayerToggledDataComponent, OrganComponent> limb, bool toggled)
     {
         if (GetLayer(limb.Comp3) is not { } layer)
             return;
 
-        _humanoidAppearanceSystem.SetBaseLayerId(body, layer, toggled ? limb.Comp2.Layer : limb.Comp1.Layer, true, body.Comp);
+        _sunriseBody.SetBaseLayerData(body.Owner, layer, toggled ? limb.Comp2.Data : limb.Comp1.Data);
     }
 
     private bool AmputateSingle(Entity<BodyComponent> body, EntityUid limb)
@@ -87,7 +84,7 @@ public sealed partial class LimbSystem : SharedLimbSystem
         if (!_containers.Remove(limb, body.Comp.Organs, destination: destination))
             return false;
 
-        if (TryComp<HumanoidAppearanceComponent>(body, out var humanoid) &&
+        if (TryComp<HumanoidProfileComponent>(body, out var humanoid) &&
             TryComp<OrganComponent>(limb, out var organ))
         {
             RemoveLimbVisual((body, humanoid), (limb, organ));
@@ -117,34 +114,32 @@ public sealed partial class LimbSystem : SharedLimbSystem
                 continue;
             }
 
-            if (TryComp<HumanoidAppearanceComponent>(body, out var humanoid))
+            if (TryComp<HumanoidProfileComponent>(body, out var humanoid))
                 AddLimbVisual((body, humanoid), (child, childOrgan));
 
             RaiseLimbAttachedEvents(body, child);
         }
     }
 
-    private void AddLimbVisual(Entity<HumanoidAppearanceComponent?> body, Entity<OrganComponent> limb)
+    private void AddLimbVisual(Entity<HumanoidProfileComponent?> body, Entity<OrganComponent> limb)
     {
         if (GetLayer(limb.Comp) is not { } layer)
             return;
 
-        if (TryComp<BaseLayerIdComponent>(limb.Owner, out var baseLayer) && baseLayer.Layer != null)
+        if (TryComp<BaseLayerDataComponent>(limb.Owner, out var baseLayer) && baseLayer.Data != null)
         {
-            _humanoidAppearanceSystem.SetBaseLayerId(body, layer, baseLayer.Layer, true, body.Comp);
-            var @base = _prototype.Index(baseLayer.Layer.Value);
-            _humanoidAppearanceSystem.SetBaseLayerColor(body, layer, @base.MatchSkin ? body.Comp?.SkinColor : Color.White, true, body.Comp);
+            _sunriseBody.SetBaseLayerData(body.Owner, layer, baseLayer.Data);
         }
 
-        _humanoidAppearanceSystem.SetLayersVisibility(body, [layer], true);
+        _sunriseBody.SetLayersVisibility(body.Owner, [layer], true);
     }
 
-    private void RemoveLimbVisual(Entity<HumanoidAppearanceComponent?> body, Entity<OrganComponent> limb)
+    private void RemoveLimbVisual(Entity<HumanoidProfileComponent?> body, Entity<OrganComponent> limb)
     {
         if (GetLayer(limb.Comp) is not { } layer)
             return;
 
-        _humanoidAppearanceSystem.SetLayersVisibility(body, [layer], false);
+        _sunriseBody.SetLayersVisibility(body.Owner, [layer], false);
     }
 
     private bool TryFindBodyOrganByCategory(Entity<BodyComponent> body, string category, out EntityUid organ)
@@ -209,7 +204,6 @@ public sealed partial class LimbSystem : SharedLimbSystem
             "LegRight" => HumanoidVisualLayers.RLeg,
             "FootLeft" => HumanoidVisualLayers.LFoot,
             "FootRight" => HumanoidVisualLayers.RFoot,
-            "Tail" => HumanoidVisualLayers.Tail,
             _ => null,
         };
     }

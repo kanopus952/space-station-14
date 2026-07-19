@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using Content.Server._Sunrise.FleshCult.FleshGrowth;
 using Content.Server._Sunrise.FleshCult.GameRule;
@@ -276,7 +276,7 @@ public sealed partial class FleshCultSystem
         }
 
         // SUNRISE-TODO: Убрать конечности хирургией а тело заменить на скелета
-        if (TryComp<HumanoidAppearanceComponent>(args.Args.Target.Value, out var HuAppComponent))
+        if (TryComp<HumanoidProfileComponent>(args.Args.Target.Value, out var HuAppComponent))
         {
             if (TryComp<BloodstreamComponent>(args.Args.Target.Value, out var bloodstreamComponent))
                 _bloodstreamSystem.TryModifyBloodLevel((args.Args.Target.Value, bloodstreamComponent), -300);
@@ -299,11 +299,11 @@ public sealed partial class FleshCultSystem
             }
 
             var bodyType = _prototypeManager.Index<BodyTypePrototype>("SkeletonNormal");
-            foreach (var (key, id) in bodyType.Sprites)
+            foreach (var (key, data) in bodyType.Layers)
             {
                 if (key != HumanoidVisualLayers.Head)
                 {
-                    _sharedHuApp.SetBaseLayerId(args.Args.Target.Value, key, id, humanoid: HuAppComponent);
+                    _sunriseBody.SetBaseLayerData(args.Args.Target.Value, key, data);
                 }
             }
 
@@ -338,7 +338,7 @@ public sealed partial class FleshCultSystem
         if (!Transform(uid).Anchored)
             return false;
 
-        if (!TryComp<HumanoidAppearanceComponent>(dragged, out var humanoidAppearance))
+        if (!TryComp<HumanoidProfileComponent>(dragged, out var humanoidAppearance))
             return false;
 
         if (!_speciesWhitelist.Contains(humanoidAppearance.Species))
