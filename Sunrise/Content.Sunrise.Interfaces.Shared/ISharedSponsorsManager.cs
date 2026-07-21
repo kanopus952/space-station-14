@@ -458,6 +458,9 @@ public sealed class SponsorInfo
     [JsonPropertyName("sizeFlavor")]
     public int SizeFlavor { get; set; }
 
+    [JsonPropertyName("isTechnical")]
+    public bool IsTechnical { get; set; } = false;
+
     [JsonPropertyName("ghostThemes")]
     public string[] GhostThemes { get; set; } = [];
 
