@@ -28,9 +28,6 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
     private bool _interactive;
 
     private List<ColorSelectorSliders>? _colorSliders;
-    private partial void UpdateSunriseColorSelectors(Marking marking); // Sunrise-Edit
-    private partial bool TryCreateSunriseColorSelectors(Marking marking); // Sunrise-Edit
-
     public event Action<GUIBoundKeyEventArgs, LayerMarkingItem>? Pressed;
     public event Action<GUIBoundKeyEventArgs, LayerMarkingItem>? Unpressed;
     public ProtoId<MarkingPrototype> MarkingId => _markingPrototype.ID;

@@ -99,6 +99,9 @@ public sealed class MarkingEffectSelectorSliders : Control
 
     public void SetEffect(MarkingEffect effect)
     {
+        if (_currentType == effect.Type && Effect.Equals(effect))
+            return;
+
         var newEffect = effect.Clone();
         _currentType = newEffect.Type;
         _typeSelector.TrySelect(_types.IndexOf(_currentType));

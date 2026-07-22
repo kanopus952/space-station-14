@@ -11,9 +11,12 @@ public sealed partial class LayerMarkingItem
     private List<MarkingEffectSelectorSliders>? _sunriseEffectSliders;
     private bool _updatingSunriseEffectFromUi;
 
-    private partial void UpdateSunriseColorSelectors(Marking marking)
+    public void UpdateSunriseColorSelectors(Marking marking)
     {
         if (_updatingSunriseEffectFromUi)
+            return;
+
+        if (!ColorsContainer.Visible)
             return;
 
         if (_sunriseEffectSliders is not { } sliders)
@@ -25,10 +28,13 @@ public sealed partial class LayerMarkingItem
         }
     }
 
-    private partial bool TryCreateSunriseColorSelectors(Marking marking)
+    public bool TryCreateSunriseColorSelectors(Marking marking)
     {
         if (_sunriseEffectSliders is not null)
+        {
+            UpdateSunriseColorSelectors(marking);
             return true;
+        }
 
         _sunriseEffectSliders = [];
 

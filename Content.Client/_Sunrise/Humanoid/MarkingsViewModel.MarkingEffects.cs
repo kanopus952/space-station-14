@@ -23,10 +23,24 @@ public sealed partial class MarkingsViewModel
         if (colorIndex < 0 || colorIndex >= marking.MarkingColors.Count)
             return;
 
-        if (effect.Colors.TryGetValue("base", out var baseColor))
-            marking.SetColor(colorIndex, baseColor);
+        var changed = false;
 
-        marking.SetMarkingEffect(colorIndex, effect.Clone());
+        if (effect.Colors.TryGetValue("base", out var baseColor) &&
+            marking.MarkingColors[colorIndex] != baseColor)
+        {
+            marking.SetColor(colorIndex, baseColor);
+            changed = true;
+        }
+
+        if (!marking.GetMarkingEffectOrDefault(colorIndex).Equals(effect))
+        {
+            marking.SetMarkingEffect(colorIndex, effect.Clone());
+            changed = true;
+        }
+
+        if (!changed)
+            return;
+
         MarkingsChanged?.Invoke(organ, layer);
     }
 }
