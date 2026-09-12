@@ -4863,3 +4863,10 @@
     message: Респрайт С-40r.
   id: 2029
   url: https://github.com/makura-games/sunrise-station/pull/4803
+- author: kanopus7
+  time: '2026-09-12T20:57:09.0000000+00:00'
+  changes:
+  - type: Add
+    message: Апстрим от Wizden до 17 мая.
+  id: 2030
+  url: https://github.com/makura-games/sunrise-station/pull/4732
