@@ -894,7 +894,7 @@
 
 - type: entity
   name: cow
-  parent: [ SimpleMobBase, BaseMobRuminant ]
+  parent: [ BaseMobRuminant, SimpleMobBase ]
   id: MobCow
   description: Moo.
   components:
@@ -1067,7 +1067,7 @@
 
 - type: entity
   name: goat
-  parent: [ SimpleMobBase, BaseMobRuminant ]
+  parent: [ BaseMobRuminant, SimpleMobBase ]
   id: MobGoat
   description: Her spine consists of long sharp segments, no wonder she is so grumpy.
   components:
