@@ -4870,3 +4870,10 @@
     message: Апстрим от Wizden до 17 мая.
   id: 2030
   url: https://github.com/makura-games/sunrise-station/pull/4732
+- author: KaiserMaus
+  time: '2026-09-13T02:46:06.0000000+00:00'
+  changes:
+  - type: Fix
+    message: Исправлен выдача очков исследования если игрок перемещен в криохранилище
+  id: 2031
+  url: https://github.com/makura-games/sunrise-station/pull/4771
