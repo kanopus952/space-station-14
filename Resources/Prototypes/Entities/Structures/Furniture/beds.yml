@@ -93,6 +93,7 @@
   - type: GuideHelp
     guides:
     - MedicalDoctor
+  - type: AmbientMusicMarkerMedical
   - type: CanSleepOnBuckle # Sunrise-Edit
 
 - type: entity
