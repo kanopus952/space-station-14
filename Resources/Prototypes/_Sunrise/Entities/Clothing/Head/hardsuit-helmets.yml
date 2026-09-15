@@ -23,61 +23,55 @@
   id: SunriseHardsuitHelmetNightVisionCyan
   abstract: true
   components:
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionCyan
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#00FFFF26'
 
 - type: entity
   id: SunriseHardsuitHelmetNightVisionGreen
   abstract: true
   components:
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionGreen
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#12AC2726'
 
 - type: entity
   id: SunriseHardsuitHelmetNightVisionWhite
   abstract: true
   components:
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionWhite
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#FFFFFF26'
 
 - type: entity
   id: SunriseHardsuitHelmetNightVisionMint
   abstract: true
   components:
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionMint
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#ADFFEC26'
 
 - type: entity
   id: SunriseHardsuitHelmetNightVisionPurple
   abstract: true
   components:
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionPurple
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#CBADFF26'
 
 - type: entity
   id: SunriseHardsuitHelmetNightVisionSyndie
   abstract: true
   components:
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionSyndie
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#D61B1B26'
 
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
@@ -429,11 +423,10 @@
     action: NVDToggleAction
     mustEquip: true
     disableOnUnequip: true
-  - type: ComponentToggler
-    parent: true
-    components:
-      - type: NightVision
-        effect: EffectNightVisionPirate
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#FF983326'
   - type: ItemToggle
     predictable: false
     onUse: false
@@ -472,11 +465,10 @@
     action: NVDToggleAction
     mustEquip: true
     disableOnUnequip: true
-  - type: ComponentToggler
-    parent: true
-    components:
-      - type: NightVision
-        effect: EffectNightVisionSyndie
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#D61B1B26'
   - type: PowerCellDraw
     drawRate: 2
     useCharge: 20
@@ -586,11 +578,10 @@
     action: NVDToggleAction
     mustEquip: true
     disableOnUnequip: true
-  - type: ComponentToggler
-    parent: true
-    components:
-      - type: NightVision
-        effect: EffectNightVisionSyndie
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#D61B1B26'
   - type: PowerCellDraw
     drawRate: 2
     useCharge: 20
@@ -974,11 +965,10 @@
     action: NVDToggleAction
     mustEquip: true
     disableOnUnequip: true
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: NightVision
-      effect: EffectNightVisionGreen
+  - type: NightVision
+    enabled: false
+    relayOverlay: true
+    lightingColor: '#12AC2726'
   - type: ItemToggle
     predictable: false
     onUse: false

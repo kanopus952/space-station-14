@@ -1,4 +1,3 @@
-using Content.Server.CartridgeLoader;
 using Content.Server._Sunrise.Laws.Systems;
 using Content.Shared._Sunrise.CartridgeLoader.Cartridges;
 using Content.Shared._Sunrise.Laws;

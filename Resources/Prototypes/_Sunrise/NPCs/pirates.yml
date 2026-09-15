@@ -264,7 +264,10 @@
       enum.StrippingUiKey.Key:
        type: StrippableBoundUserInterface
   - type: ToggleableNightVision
-    effect: EffectNightVisionPirate
+  - type: NightVision
+    enabled: false
+    prioritized: false
+    lightingColor: '#FF983326'
   - type: ComplexInteraction
   - type: AnomalyAccent
   - type: TTS

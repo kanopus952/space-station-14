@@ -22,8 +22,8 @@ public sealed partial class ServerPreferencesManager
         Profile profile,
         Sex sex)
     {
-        var voice = profile.Voice;
-        if (voice == string.Empty)
+        var voice = profile.TtsVoice;
+        if (string.IsNullOrWhiteSpace(voice))
             voice = SunriseHumanoidProfileDefaults.DefaultSexVoice[sex];
 
         var jobAlternativeTitles = profile.JobAlternativeTitles.ToDictionary(
@@ -31,7 +31,7 @@ public sealed partial class ServerPreferencesManager
             job => new LocId(job.Title));
 
         return humanoid
-            .WithVoice(voice)
+            .WithTtsVoice(voice)
             .WithBodyType(profile.BodyType)
             .WithSize(profile.Width, profile.Height)
             .WithJobAlternativeTitles(jobAlternativeTitles);

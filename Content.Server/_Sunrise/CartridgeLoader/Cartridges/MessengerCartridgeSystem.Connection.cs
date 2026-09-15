@@ -85,8 +85,16 @@ public sealed partial class MessengerCartridgeSystem
         }
     }
 
-    private void OnCartridgeActivated(EntityUid uid, MessengerCartridgeComponent component, CartridgeActivatedEvent args)
+    private void OnCartridgeRemoved(Entity<MessengerCartridgeComponent> ent, ref CartridgeRemovedEvent args)
     {
+        ent.Comp.LoaderUid = null;
+        ent.Comp.UiReady = false;
+        ent.Comp.LastStatusCheck = null;
+    }
+
+    private void OnCartridgeActivated(Entity<MessengerCartridgeComponent> ent, ref CartridgeActivatedEvent args)
+    {
+        var (uid, component) = ent;
         component.UiReady = false;
 
         if (component.LoaderUid == null)
@@ -105,13 +113,14 @@ public sealed partial class MessengerCartridgeSystem
         }
     }
 
-    private void OnCartridgeDeactivated(EntityUid uid, MessengerCartridgeComponent component, CartridgeDeactivatedEvent args)
+    private void OnCartridgeDeactivated(Entity<MessengerCartridgeComponent> ent, ref CartridgeDeactivatedEvent args)
     {
-        component.UiReady = false;
+        ent.Comp.UiReady = false;
     }
 
-    private void OnCartridgeAdded(EntityUid uid, MessengerCartridgeComponent component, CartridgeAddedEvent args)
+    private void OnCartridgeAdded(Entity<MessengerCartridgeComponent> ent, ref CartridgeAddedEvent args)
     {
+        var (uid, component) = ent;
         component.LoaderUid = args.Loader;
         component.LastStatusCheck = null;
         component.UiReady = false;
@@ -129,13 +138,12 @@ public sealed partial class MessengerCartridgeSystem
 
         TryConnectToServer(uid, component, args.Loader);
 
-        _cartridgeLoader.RegisterBackgroundProgram(args.Loader, uid);
-
         CheckServerStatus(uid, component, args.Loader);
     }
 
-    private void OnUiReady(EntityUid uid, MessengerCartridgeComponent component, CartridgeUiReadyEvent args)
+    private void OnUiReady(Entity<MessengerCartridgeComponent> ent, ref CartridgeUiReadyEvent args)
     {
+        var (uid, component) = ent;
         if (component.LoaderUid == null)
         {
             component.LoaderUid = args.Loader;

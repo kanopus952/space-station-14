@@ -30,7 +30,6 @@ namespace Content.Server.Access.Systems;
 public sealed partial class IdCardConsoleSystem : SharedIdCardConsoleSystem
 {
     [Dependency] private IConfigurationManager _cfgManager = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private StationRecordsSystem _record = default!;
     [Dependency] private UserInterfaceSystem _userInterface = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
@@ -159,8 +158,8 @@ public sealed partial class IdCardConsoleSystem : SharedIdCardConsoleSystem
         _idCard.TryChangeJobTitle(targetId, newJobTitle, player: player);
 
         // Sunrise-Start - fix invalid job prototype log spam using TryIndex
-        if (_prototype.TryIndex(newJobProto, out var job)
-            && _prototype.TryIndex(job.Icon, out var jobIcon))
+        if (ProtoMan.TryIndex(newJobProto, out var job)
+            && ProtoMan.TryIndex(job.Icon, out var jobIcon))
         {
             _idCard.TryChangeJobIcon(targetId, jobIcon, player: player);
             _idCard.TryChangeJobDepartment(targetId, job);

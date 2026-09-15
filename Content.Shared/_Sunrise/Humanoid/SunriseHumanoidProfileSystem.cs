@@ -30,16 +30,16 @@ public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
     public void ApplyProfileTo(Entity<SunriseHumanoidProfileComponent?> ent, HumanoidCharacterProfile profile)
     {
         var component = EnsureComp<SunriseHumanoidProfileComponent>(ent.Owner);
-        component.Voice = profile.Voice;
+        component.TtsVoice = profile.TtsVoice;
         component.BodyType = profile.BodyType;
         component.Width = profile.Width;
         component.Height = profile.Height;
         Dirty(ent.Owner, component);
 
-        var changedEv = new SunriseHumanoidProfileChangedEvent(profile.Species, profile.Voice, profile.BodyType, profile.Width, profile.Height);
+        var changedEv = new SunriseHumanoidProfileChangedEvent(profile.Species, profile.TtsVoice, profile.BodyType, profile.Width, profile.Height);
         RaiseLocalEvent(ent.Owner, ref changedEv);
 
-        var ttsChangedEv = new SunriseHumanoidTtsProfileChangedEvent(profile.Voice);
+        var ttsChangedEv = new SunriseHumanoidTtsProfileChangedEvent(profile.TtsVoice);
         RaiseLocalEvent(ent.Owner, ref ttsChangedEv);
     }
 
@@ -47,7 +47,7 @@ public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
     {
         profile ??= EnsureComp<SunriseHumanoidProfileComponent>(uid);
 
-        profile.Voice = voiceId;
+        profile.TtsVoice = voiceId;
         Dirty(uid, profile);
         RaiseProfileChanged(uid, profile);
     }
@@ -81,7 +81,7 @@ public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
             return;
 
         var component = targetProfile ?? EnsureComp<SunriseHumanoidProfileComponent>(target);
-        component.Voice = sourceProfile.Voice;
+        component.TtsVoice = sourceProfile.TtsVoice;
         component.BodyType = sourceProfile.BodyType;
         component.Width = sourceProfile.Width;
         component.Height = sourceProfile.Height;
@@ -131,13 +131,13 @@ public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
     {
         var changedEv = new SunriseHumanoidProfileChangedEvent(
             GetProfileSpecies(uid),
-            profile.Voice,
+            profile.TtsVoice,
             profile.BodyType,
             profile.Width,
             profile.Height);
         RaiseLocalEvent(uid, ref changedEv);
 
-        var ttsChangedEv = new SunriseHumanoidTtsProfileChangedEvent(profile.Voice);
+        var ttsChangedEv = new SunriseHumanoidTtsProfileChangedEvent(profile.TtsVoice);
         RaiseLocalEvent(uid, ref ttsChangedEv);
     }
 }

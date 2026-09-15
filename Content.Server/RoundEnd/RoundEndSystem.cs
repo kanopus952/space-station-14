@@ -16,7 +16,6 @@ using Content.Shared.GameTicking;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.Station.Components;
@@ -38,7 +37,6 @@ namespace Content.Server.RoundEnd
         [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
         [Dependency] private GameTicker _gameTicker = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
-        [Dependency] private IPrototypeManager _protoManager = default!;
         [Dependency] private EmergencyShuttleSystem _shuttle = default!;
         [Dependency] private StationSystem _stationSystem = default!;
         private bool _autoCalledBefore = false;
@@ -147,7 +145,7 @@ namespace Content.Server.RoundEnd
                 var stationUid = _stationSystem.GetOwningStation(requester.Value);
                 if (TryComp<AlertLevelComponent>(stationUid, out var alertLevel))
                 {
-                    duration = _protoManager
+                    duration = ProtoMan
                         .Index<AlertLevelPrototype>(AlertLevelSystem.DefaultAlertLevelSet)
                         .Levels[alertLevel.CurrentLevel].ShuttleTime;
                 }

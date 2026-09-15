@@ -133,10 +133,7 @@
     speechSounds: Arachnid
     allowedEmotes: ['Click', 'Chitter']
   - type: Vocal
-    sounds:
-      Male: UnisexArachnid
-      Female: UnisexArachnid
-      Unsexed: UnisexArachnid
+    emoteSounds: UnisexArachnid
   - type: TypingIndicator
     proto: spider
   - type: CreamPied
@@ -158,7 +155,10 @@
     rightBareFootState:
       - "footprint-right-bare-spider"
   - type: ToggleableNightVision
-    effect: EffectNightVisioSpecies
+  - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
+    enabled: false
+    prioritized: false
+    lightingColor: '#FFFFFF15'
   # Sunrise-end
 
 - type: entity

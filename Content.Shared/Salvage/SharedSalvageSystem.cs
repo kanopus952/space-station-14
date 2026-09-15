@@ -14,7 +14,6 @@ namespace Content.Shared.Salvage;
 public abstract partial class SharedSalvageSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager CfgManager = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
 
     /// <summary>
     /// Main loot table for salvage expeditions.
@@ -74,7 +73,7 @@ public abstract partial class SharedSalvageSystem : EntitySystem
     // Sunrise-Start
     public T GetBiomeMod<T>(string biome, IRobustRandom rand, ref float rating, string difficultyId) where T : class, IPrototype, IBiomeSpecificMod
     {
-        var mods = _proto
+        var mods = ProtoMan
             .EnumeratePrototypes<T>()
             .Where(x => x.Difficulties == null || x.Difficulties.Contains(difficultyId))
             .ToList();
@@ -98,7 +97,7 @@ public abstract partial class SharedSalvageSystem : EntitySystem
     // Sunrise-Start
     public T GetMod<T>(IRobustRandom rand, ref float rating, string difficultyId) where T : class, IPrototype, ISalvageMod
     {
-        var mods = _proto
+        var mods = ProtoMan
             .EnumeratePrototypes<T>()
             .Where(x => x.Difficulties == null || x.Difficulties.Contains(difficultyId))
             .ToList();

@@ -1,11 +1,11 @@
 using System.Linq;
 using Content.Server.DeviceNetwork.Systems;
-using Content.Server.CartridgeLoader;
 using Content.Server.PDA.Ringer;
 using Content.Server.Station.Systems;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.DeviceNetwork;
+using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.DeviceNetwork.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
@@ -48,7 +48,8 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
         SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeActivatedEvent>(OnCartridgeActivated);
         SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeDeactivatedEvent>(OnCartridgeDeactivated);
         SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeAddedEvent>(OnCartridgeAdded);
-        SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeDeviceNetPacketEvent>(OnPacketReceived);
+        SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeRemovedEvent>(OnCartridgeRemoved);
+        SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeRelayedEvent<DeviceNetworkPacketEvent>>(OnPacketReceived);
         SubscribeLocalEvent<CartridgeLoaderComponent, BoundUIClosedEvent>(OnLoaderUiClosed);
     }
 
@@ -64,13 +65,10 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
             if (component.LoaderUid == null)
                 continue;
 
-            if (!TryComp<CartridgeLoaderComponent>(component.LoaderUid.Value, out var loader))
+            if (!HasComp<CartridgeLoaderComponent>(component.LoaderUid.Value))
                 continue;
 
-            var isActive = loader.ActiveProgram == uid;
-            var isBackground = loader.BackgroundPrograms.Contains(uid);
-
-            if (!isActive && !isBackground)
+            if (!TryComp<CartridgeComponent>(uid, out var cartridge) || cartridge.LoaderUid != component.LoaderUid)
                 continue;
 
             if (component.LastStatusCheck.HasValue)

@@ -88,7 +88,7 @@ public sealed class AllGamePresetsStartTest : AntagTest
                 // Sunrise added end
 
                 // Ignore non-antag game-rules.
-                if (!rule.TryGetComponent<AntagSelectionComponent>(out var antag, SEntMan.ComponentFactory))
+                if (!rule.TryComp<AntagSelectionComponent>(out var antag, SEntMan.ComponentFactory))
                     continue;
 
                 var runningCount = 0;

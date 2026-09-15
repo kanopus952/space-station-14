@@ -29,7 +29,7 @@ public sealed partial class PlantAnalyzerCartridgeSystem : EntitySystem
         var loader = args.Loader;
 
         // Удаляем компонент только если больше нет картриджей с этим функционалом
-        if (!_cartridgeLoaderSystem.HasProgram<PlantAnalyzerCartridgeComponent>(loader))
+        if (!_cartridgeLoaderSystem.HasProgram<PlantAnalyzerCartridgeComponent>(loader.AsNullable()))
         {
             RemComp<PlantAnalyzerComponent>(loader);
         }

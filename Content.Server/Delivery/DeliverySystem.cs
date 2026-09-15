@@ -31,7 +31,6 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
     [Dependency] private LabelSystem _label = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private MessengerServerSystem _messengerServer = default!;
 
     /// <summary>
@@ -143,7 +142,7 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
         if (ent.Comp.WasPenalized)
             return;
 
-        if (!_protoMan.Resolve(ent.Comp.PenaltyBankAccount, out var accountInfo))
+        if (!ProtoMan.Resolve(ent.Comp.PenaltyBankAccount, out var accountInfo))
             return;
 
         var multiplier = GetDeliveryMultiplier(ent);

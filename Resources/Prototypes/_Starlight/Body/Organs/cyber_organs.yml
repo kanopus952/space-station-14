@@ -31,6 +31,8 @@
     - state: eyes_night
   - type: FunctionalOrgan
     comps:
+    - type: NightVision # Sunrise-Edit - параметры зрения применяются до запуска переключателя
+      enabled: false
     - type: ToggleableNightVision
   - type: OrganVisualization
     layer: Eyes

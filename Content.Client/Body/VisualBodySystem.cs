@@ -2,12 +2,12 @@ using System.Linq;
 using Content.Client.DisplacementMap;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
+using Content.Shared.DisplacementMap;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Body;
@@ -78,9 +78,20 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
         if (!_sprite.LayerMapTryGet(target, ent.Comp.Layer, out var index, true))
             return;
 
-        UpdateSunriseBodyTypeLayerData(ent, target, ref ent.Comp.Data); // Sunrise-Edit
-        _sprite.LayerSetData(target, index, ent.Comp.Data);
-        UpdateSunriseBodyTypeLayerVisibility(ent, target, index, ent.Comp.Data.Visible ?? true); // Sunrise-Edit
+        var layerData = ent.Comp.Data; // Sunrise-Edit - не изменяем исходный шаблон органа
+        UpdateSunriseBodyTypeLayerData(ent, target, ref layerData); // Sunrise-Edit
+        _sprite.LayerSetData(target, index, layerData);
+        UpdateSunriseBodyTypeLayerVisibility(ent, target, index, layerData.Visible ?? true); // Sunrise-Edit
+
+        var displacement = ent.Comp.Displacement;
+        if (displacement != null && ProtoMan.Resolve(displacement, out var displacementProto))
+        {
+            _displacement.TryAddDisplacement(displacementProto.Displacement,
+                (target, Comp<SpriteComponent>(target)),
+                index,
+                ent.Comp.Layer,
+                out _);
+        }
     }
 
     private void RemoveVisual(Entity<VisualOrganComponent> ent, EntityUid target)
@@ -89,6 +100,8 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
             return;
 
         _sprite.LayerSetRsiState(target, index, RSI.StateId.Invalid);
+
+        _displacement.EnsureDisplacementIsNotOnSprite((target, Comp<SpriteComponent>(target)), ent.Comp.Layer);
     }
 
     private void OnMarkingsGotInserted(Entity<VisualOrganMarkingsComponent> ent, ref OrganGotInsertedEvent args)
@@ -157,7 +170,7 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
         //     yield break;
         // Sunrise edit end
 
-        var group = _prototype.Index(ent.Comp.MarkingData.Group);
+        var group = ProtoMan.Index(ent.Comp.MarkingData.Group);
         foreach (var layer in ent.Comp.MarkingData.Layers)
         {
             if (!group.Limits.TryGetValue(layer, out var layerLimits))

@@ -1,5 +1,4 @@
 using Content.Client.Interactable.Components;
-using Content.Client.StatusIcon;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Robust.Client.GameObjects;
@@ -13,7 +12,6 @@ public sealed partial class StealthSystem : SharedStealthSystem
     private static readonly ProtoId<ShaderPrototype> Shader = "Stealth";
     private static readonly ProtoId<ShaderPrototype> NoMirageShader = "NoMirageStealth";
 
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
@@ -24,8 +22,8 @@ public sealed partial class StealthSystem : SharedStealthSystem
     {
         base.Initialize();
 
-        _shader = _protoMan.Index(Shader).InstanceUnique();
-        _noMirageShader = _protoMan.Index(NoMirageShader).InstanceUnique(); // Sunrise-Edit
+        _shader = ProtoMan.Index(Shader).InstanceUnique();
+        _noMirageShader = ProtoMan.Index(NoMirageShader).InstanceUnique(); // Sunrise-Edit
 
         SubscribeLocalEvent<StealthComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<StealthComponent, ComponentStartup>(OnStartup);

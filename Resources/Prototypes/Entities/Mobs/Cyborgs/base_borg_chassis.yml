@@ -174,8 +174,7 @@
     speechVerb: Robotic
     speechSounds: Borg
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSilicon
+    emoteSounds: UnisexSilicon
     wilhelmProbability: 0
   - type: DamagedSiliconAccent
   - type: UnblockableSpeech
@@ -218,13 +217,15 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
-      - !type:EmptyContainersBehaviour
-        containers:
-        - borg_brain
-        - borg_module
-        - cell_slot
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
+      - !type:GibBehavior
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ScrapGlass:
+            min: 1
+            max: 1
+          SheetSteel:
+            min: 10
+            max: 20
   - type: HandheldLight
     toggleOnInteract: false
     wattage: 0.2
@@ -448,8 +449,7 @@
     allowedEmotes:
     - Laugh
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSiliconSyndicate
+    emoteSounds: UnisexSiliconSyndicate
   - type: PointLight
     # Sunrise-Start
     color: "#f51e0f"
@@ -473,7 +473,10 @@
   - type: Loadout
     prototypes: [ BorgArmorSiliconLoadoutMk2 ]
   - type: ToggleableNightVision
-    effect: EffectNightVisionSyndie
+  - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
+    enabled: false
+    prioritized: false
+    lightingColor: '#D61B1B26'
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -535,8 +538,7 @@
     allowedEmotes:
     - Laugh
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSiliconSyndicate
+    emoteSounds: UnisexSiliconSyndicate
   - type: PointLight
     color: "#dd200b"
   - type: BypassLock
@@ -550,7 +552,10 @@
   - type: TTS
     voice: Sentrybot
   - type: ToggleableNightVision
-    effect: EffectNightVisionSyndie
+  - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
+    enabled: false
+    prioritized: false
+    lightingColor: '#D61B1B26'
   # Sunrise-end
 
 - type: entity
@@ -607,8 +612,7 @@
     allowedEmotes:
     - Laugh
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSiliconXenoborg
+    emoteSounds: UnisexSiliconXenoborg
     wilhelmProbability: 0
   - type: DamagedSiliconAccent
   - type: UnblockableSpeech

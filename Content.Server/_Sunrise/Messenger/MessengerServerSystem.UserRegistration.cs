@@ -275,16 +275,6 @@ public sealed partial class MessengerServerSystem
         {
             _deviceNetwork.QueuePacket(uid, userId, groupsPayload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
         }
-
-        if (_cartridgeLoader.TryGetProgram<MessengerCartridgeComponent>(pdaUid, out var cartridgeUid, out _))
-        {
-            if (TryComp<CartridgeLoaderComponent>(pdaUid, out var loader) &&
-                !loader.BackgroundPrograms.Contains(cartridgeUid.Value))
-            {
-                _cartridgeLoader.RegisterBackgroundProgram(pdaUid, cartridgeUid.Value);
-                Sawmill.Debug($"Registered messenger cartridge {ToPrettyString(cartridgeUid.Value)} as background program for PDA {ToPrettyString(pdaUid)}");
-            }
-        }
     }
 
     private void HandleRegisterUser(EntityUid uid, MessengerServerComponent component, DeviceNetworkPacketEvent args)
@@ -390,15 +380,7 @@ public sealed partial class MessengerServerSystem
             }
         }
 
-        if (_cartridgeLoader.TryGetProgram<MessengerCartridgeComponent>(pdaUid, out var cartridgeUid, out _))
-        {
-            if (TryComp<CartridgeLoaderComponent>(pdaUid, out var loader) &&
-                !loader.BackgroundPrograms.Contains(cartridgeUid.Value))
-            {
-                _cartridgeLoader.RegisterBackgroundProgram(pdaUid, cartridgeUid.Value);
-                Sawmill.Debug($"Registered messenger cartridge {ToPrettyString(cartridgeUid.Value)} as background program for PDA {ToPrettyString(pdaUid)}");
-            }
-        }
+        // Новый CartridgeLoaderSystem обслуживает установленные картриджи в фоне без регистрации.
     }
 
     /// <summary>

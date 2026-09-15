@@ -9,7 +9,7 @@ using Content.Shared.DeviceNetwork.Components;
 using Content.Shared._Sunrise.Messenger;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
-using Content.Server.CartridgeLoader;
+using Content.Shared.CartridgeLoader;
 using Content.Server.DeviceNetwork.Components;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Robust.Shared.Random;

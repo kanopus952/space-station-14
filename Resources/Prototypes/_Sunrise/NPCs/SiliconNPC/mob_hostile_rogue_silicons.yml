@@ -166,7 +166,10 @@
         variation: 0.125
   - type: SoundWhileAlive
   - type: ToggleableNightVision
-    effect: EffectNightVisionSyndie
+  - type: NightVision
+    enabled: false
+    prioritized: false
+    lightingColor: '#D61B1B26'
   - type: TTS
     voice: Sentrybot
   - type: NpcVeteranFollower
@@ -946,7 +949,10 @@
       path: /Audio/_Sunrise/Effects/silence.ogg
   - type: SoundWhileAlive
   - type: ToggleableNightVision
-    effect: EffectNightVisionSyndie
+  - type: NightVision
+    enabled: false
+    prioritized: false
+    lightingColor: '#D61B1B26'
   - type: TTS
     voice: Sentrybot
 

@@ -10,12 +10,9 @@ public sealed partial class ToggleableNightVisionComponent : Component
     [DataField]
     public EntProtoId Action = "ToggleableNightVision";
 
-    [DataField, AutoNetworkedField]
-    public EntProtoId Effect = "EffectNightVision";
-
     [ViewVariables]
     public EntityUid? ActionEntity;
 
-    [ViewVariables]
+    [ViewVariables, AutoNetworkedField]
     public bool Active;
 }

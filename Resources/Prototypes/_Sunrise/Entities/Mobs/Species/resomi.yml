@@ -274,7 +274,10 @@
             sprite: _Sunrise/Mobs/Species/Resomi/displacement.rsi
             state: belt
   - type: ToggleableNightVision
-    effect: EffectNightVisioSpecies
+  - type: NightVision
+    enabled: false
+    prioritized: false
+    lightingColor: '#FFFFFF15'
   - type: FlashModifier
     modifier: 2
   - type: Vocal
