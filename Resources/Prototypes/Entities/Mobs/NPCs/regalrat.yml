@@ -466,10 +466,7 @@
     - id: FoodMeatRat
       amount: 3  # More meat from guards
   - type: Vocal
-    sounds:
-      Male: Mouse
-      Female: Mouse
-      Unsexed: Mouse
+    emoteSounds: Mouse
     wilhelmProbability: 0.001
   - type: Tag
     tags:

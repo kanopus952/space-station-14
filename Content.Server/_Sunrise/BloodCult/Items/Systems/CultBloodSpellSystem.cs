@@ -42,7 +42,6 @@ public sealed partial class CultBloodSpellSystem : EntitySystem
     [Dependency] private HandsSystem _handsSystem = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionSystem = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
@@ -291,7 +290,7 @@ public sealed partial class CultBloodSpellSystem : EntitySystem
 
                 var blood = new Solution();
                 blood.AddReagent(puddleSolutionContent.Reagent, amount);
-                absorbBlood.AddSolution(blood, _prototypeManager);
+                absorbBlood.AddSolution(blood, ProtoMan);
                 Spawn("CultTileSpawnEffect", Transform(puddle).Coordinates);
             }
         }
@@ -370,7 +369,7 @@ public sealed partial class CultBloodSpellSystem : EntitySystem
                 if (!bloodSpell.HealingGroups.Contains(damageGroup))
                     continue;
 
-                var damageGroupSpecifier = _prototypeManager.Index<DamageGroupPrototype>(damageGroup);
+                var damageGroupSpecifier = ProtoMan.Index<DamageGroupPrototype>(damageGroup);
 
                 var totalDamageInGroup = FixedPoint2.Zero;
 

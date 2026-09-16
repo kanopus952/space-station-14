@@ -22,7 +22,6 @@ namespace Content.Server._Sunrise.Mood;
 public sealed partial class MoodSystem : EntitySystem
 {
     [Dependency] private AlertsSystem _alerts = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
     [Dependency] private SharedJetpackSystem _jetpack = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
@@ -99,7 +98,7 @@ public sealed partial class MoodSystem : EntitySystem
     private void OnMoodEffect(EntityUid uid, MoodComponent component, MoodEffectEvent args)
     {
         if (!_config.GetCVar(SunriseCCVars.MoodEnabled)
-            || !_prototypeManager.TryIndex<MoodEffectPrototype>(args.EffectId, out var prototype))
+            || !ProtoMan.TryIndex<MoodEffectPrototype>(args.EffectId, out var prototype))
             return;
 
         var ev = new OnMoodEffect(uid, args.EffectId, args.EffectModifier, args.EffectOffset);
@@ -115,7 +114,7 @@ public sealed partial class MoodSystem : EntitySystem
         {
             if (component.CategorisedEffects.TryGetValue(prototype.Category, out var oldPrototypeId))
             {
-                if (!_prototypeManager.TryIndex<MoodEffectPrototype>(oldPrototypeId, out var oldPrototype))
+                if (!ProtoMan.TryIndex<MoodEffectPrototype>(oldPrototypeId, out var oldPrototype))
                     return;
 
                 if (prototype.ID != oldPrototype.ID)
@@ -171,7 +170,7 @@ public sealed partial class MoodSystem : EntitySystem
         {
             if (!comp.CategorisedEffects.TryGetValue(category, out var currentProtoId)
                 || currentProtoId != prototypeId
-                || !_prototypeManager.HasIndex<MoodEffectPrototype>(currentProtoId))
+                || !ProtoMan.HasIndex<MoodEffectPrototype>(currentProtoId))
                 return;
             comp.CategorisedEffects.Remove(category);
         }
@@ -200,7 +199,7 @@ public sealed partial class MoodSystem : EntitySystem
 
         foreach (var (_, protoId) in component.CategorisedEffects)
         {
-            if (!_prototypeManager.TryIndex<MoodEffectPrototype>(protoId, out var prototype))
+            if (!ProtoMan.TryIndex<MoodEffectPrototype>(protoId, out var prototype))
                 continue;
 
             amount += prototype.MoodChange;
@@ -397,7 +396,7 @@ public sealed partial class MoodSystem : EntitySystem
 
         foreach (var (_, protoId) in comp.CategorisedEffects)
         {
-            if (!_prototypeManager.TryIndex<MoodEffectPrototype>(protoId, out var proto)
+            if (!ProtoMan.TryIndex<MoodEffectPrototype>(protoId, out var proto)
                 || proto.Hidden)
                 continue;
 
@@ -406,7 +405,7 @@ public sealed partial class MoodSystem : EntitySystem
 
         foreach (var (protoId, _) in comp.UncategorisedEffects)
         {
-            if (!_prototypeManager.TryIndex<MoodEffectPrototype>(protoId, out var proto)
+            if (!ProtoMan.TryIndex<MoodEffectPrototype>(protoId, out var proto)
                 || proto.Hidden)
                 continue;
 

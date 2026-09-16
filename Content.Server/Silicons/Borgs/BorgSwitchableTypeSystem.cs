@@ -89,7 +89,7 @@ public sealed partial class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeS
 
         // Sunrise-Start
         var borgName = MetaData(ent.Owner).EntityName;
-        if (Prototypes.TryIndex<JobPrototype>(prototype.Job, out var jobPrototype))
+        if (ProtoMan.TryIndex<JobPrototype>(prototype.Job, out var jobPrototype))
         {
             UpdateStationRecord(ent.Owner,
                 jobPrototype.LocalizedName,

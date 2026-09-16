@@ -302,7 +302,7 @@ public sealed partial class FleshCultSystem
                 }
             }
 
-            var bodyType = _prototypeManager.Index(SkeletonBodyType);
+            var bodyType = ProtoMan.Index(SkeletonBodyType);
             foreach (var (key, data) in bodyType.Layers)
             {
                 if (key != HumanoidVisualLayers.Head)

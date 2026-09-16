@@ -165,7 +165,7 @@ public sealed partial class MessengerServerSystem
         }
 
         uint? pdaFrequency;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }
@@ -329,7 +329,7 @@ public sealed partial class MessengerServerSystem
         }
 
         uint? pdaFrequency;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }
@@ -389,7 +389,7 @@ public sealed partial class MessengerServerSystem
     private void CreateAutoGroups(MessengerServerComponent component)
     {
         int created = 0;
-        foreach (var autoGroupProto in _prototypeManager.EnumeratePrototypes<MessengerAutoGroupPrototype>())
+        foreach (var autoGroupProto in ProtoMan.EnumeratePrototypes<MessengerAutoGroupPrototype>())
         {
             if (component.Groups.ContainsKey(autoGroupProto.GroupId))
                 continue;
@@ -413,7 +413,7 @@ public sealed partial class MessengerServerSystem
     /// </summary>
     private void AddUserToAutoGroups(EntityUid uid, MessengerServerComponent component, string userId, string userName, IEnumerable<string> departments)
     {
-        foreach (var autoGroupProto in _prototypeManager.EnumeratePrototypes<MessengerAutoGroupPrototype>())
+        foreach (var autoGroupProto in ProtoMan.EnumeratePrototypes<MessengerAutoGroupPrototype>())
         {
             bool shouldAdd = false;
 
@@ -449,7 +449,7 @@ public sealed partial class MessengerServerSystem
                     continue;
 
                 uint? pdaFrequency = null;
-                if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+                if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
                 {
                     pdaFrequency = pdaFreq.Frequency;
                 }
@@ -629,7 +629,7 @@ public sealed partial class MessengerServerSystem
                 return;
 
             uint? pdaFrequency = null;
-            if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+            if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
             {
                 pdaFrequency = pdaFreq.Frequency;
             }

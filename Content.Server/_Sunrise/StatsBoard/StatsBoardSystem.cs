@@ -36,7 +36,6 @@ namespace Content.Server.StatsBoard;
 
 public sealed partial class StatsBoardSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private TagSystem _tagSystem = default!;
     [Dependency] private StationSystem _station = default!;
     [Dependency] private MindSystem _mindSystem = default!;
@@ -406,7 +405,7 @@ public sealed partial class StatsBoardSystem : EntitySystem
         {
             if (TryComp<HumanoidProfileComponent>(uid, out var humanoidAppearanceComponent))
             {
-                var speciesProto = _prototypeManager.Index<SpeciesPrototype>(humanoidAppearanceComponent.Species);
+                var speciesProto = ProtoMan.Index<SpeciesPrototype>(humanoidAppearanceComponent.Species);
 
                 if (roundSpecies.TryGetValue(speciesProto.Name, out var count))
                 {

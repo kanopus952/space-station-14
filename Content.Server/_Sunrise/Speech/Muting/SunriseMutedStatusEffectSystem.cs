@@ -18,7 +18,6 @@ namespace Content.Server._Sunrise.Speech.Muting;
 public sealed partial class SunriseMutedStatusEffectSystem : EntitySystem
 {
     [Dependency] private PopupSystem _popupSystem = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public override void Initialize()
     {
@@ -52,7 +51,7 @@ public sealed partial class SunriseMutedStatusEffectSystem : EntitySystem
         if (args.Handled || HasComp<MutedComponent>(uid) || !HasMutedStatusEffect(component))
             return;
 
-        if (!_prototypeManager.Resolve(args.Emote, out var emote) ||
+        if (!ProtoMan.Resolve(args.Emote, out var emote) ||
             !emote.Category.HasFlag(EmoteCategory.Vocal))
         {
             return;

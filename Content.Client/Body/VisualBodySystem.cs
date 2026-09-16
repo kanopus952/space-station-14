@@ -15,7 +15,6 @@ namespace Content.Client.Body;
 public sealed partial class VisualBodySystem : SharedVisualBodySystem
 {
     // [Dependency] private IConfigurationManager _cfg = default!; // Sunrise edit
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private DisplacementMapSystem _displacement = default!;
     [Dependency] private MarkingManager _marking = default!;
     [Dependency] private SpriteSystem _sprite = default!;

@@ -73,7 +73,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         }
         else
         {
-            if (!PrototypeManager.TryIndex(component.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
+            if (!ProtoMan.TryIndex(component.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
                 return;
             var startingInventory = packPrototype.StartingInventory;
             var next = Randomizer.Next(0, startingInventory.Count);

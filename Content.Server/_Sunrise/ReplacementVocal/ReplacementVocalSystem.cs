@@ -7,7 +7,6 @@ namespace Content.Server._Sunrise.ReplacementVocal;
 
 public sealed partial class ReplacementVocalSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -20,20 +19,21 @@ public sealed partial class ReplacementVocalSystem : EntitySystem
         if (!TryComp<VocalComponent>(uid, out var vocalComponent))
             return;
 
-        if (component.Vocal.Keys == vocalComponent.Sounds?.Keys)
+        var sex = CompOrNull<HumanoidProfileComponent>(uid)?.Sex ?? Sex.Unsexed;
+        if (!component.Vocal.TryGetValue(sex, out var replacement) ||
+            !ProtoMan.TryIndex(replacement, out var soundIndex))
+            return;
+
+        if (vocalComponent.EmoteSounds == replacement)
             return;
 
         if (!TryComp<SpeechComponent>(uid, out var speechComponent))
             return;
 
-        component.PreviousVocal = vocalComponent.Sounds;
-
-        vocalComponent.Sounds = component.Vocal;
-
-        LoadEmotes(uid, vocalComponent);
-
-        if (!_proto.TryIndex(vocalComponent.EmoteSounds, out var soundIndex))
-            return;
+        component.PreviousVocal = vocalComponent.EmoteSounds;
+        vocalComponent.EmoteSounds = replacement;
+        component.WasReplaced = true;
+        Dirty(uid, vocalComponent);
 
         foreach (var emote in soundIndex.Sounds.Keys)
         {
@@ -47,16 +47,14 @@ public sealed partial class ReplacementVocalSystem : EntitySystem
 
     private void OnComponentShutdown(EntityUid uid, ReplacementVocalComponent component, ComponentShutdown args)
     {
+        if (component.WasReplaced && TryComp<VocalComponent>(uid, out var vocal))
+        {
+            vocal.EmoteSounds = component.PreviousVocal;
+            Dirty(uid, vocal);
+        }
+
         if (!TryComp<SpeechComponent>(uid, out var speech))
             return;
-
-        if (!TryComp<VocalComponent>(uid, out var vocal))
-            return;
-
-        if (component.PreviousVocal != null)
-            vocal.Sounds = component.PreviousVocal;
-
-        LoadEmotes(uid, vocal);
 
         foreach (var emote in component.AddedEmotes)
         {
@@ -64,21 +62,5 @@ public sealed partial class ReplacementVocalSystem : EntitySystem
         }
 
         component.AddedEmotes.Clear();
-    }
-
-    private void LoadEmotes(EntityUid uid, VocalComponent vocalComponent)
-    {
-        var sex = CompOrNull<HumanoidProfileComponent>(uid)?.Sex ?? Sex.Unsexed;
-
-        if (vocalComponent.Sounds == null)
-            return;
-
-        if (!vocalComponent.Sounds.TryGetValue(sex, out var protoId))
-            return;
-
-        if (!_proto.HasIndex(protoId))
-            return;
-
-        vocalComponent.EmoteSounds = protoId;
     }
 }

@@ -95,8 +95,8 @@ public abstract partial class SharedChatSystem : EntitySystem
     // Sunrise-Start
     private void CacheCollectiveMinds()
     {
-        _prototypeManager.PrototypesReloaded -= OnPrototypeReload;
-        _mindKeyCodes = _prototypeManager.EnumeratePrototypes<CollectiveMindPrototype>()
+        ProtoMan.PrototypesReloaded -= OnPrototypeReload;
+        _mindKeyCodes = ProtoMan.EnumeratePrototypes<CollectiveMindPrototype>()
             .ToFrozenDictionary(x => x.KeyCode);
     }
     // Sunrise-End

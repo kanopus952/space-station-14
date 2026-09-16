@@ -25,7 +25,6 @@ public sealed partial class MessengerServerSystem : EntitySystem
 {
     [Dependency] private DeviceNetworkSystem _deviceNetwork = default!;
     [Dependency] private SingletonDeviceNetServerSystem _singletonServer = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private ILogManager _logManager = default!;
     [Dependency] private ILocalizationManager _loc = default!;
@@ -43,7 +42,7 @@ public sealed partial class MessengerServerSystem : EntitySystem
     /// </summary>
     public string? GetGroupIdByRadioChannel(string radioChannelId)
     {
-        foreach (var proto in _prototypeManager.EnumeratePrototypes<MessengerAutoGroupPrototype>())
+        foreach (var proto in ProtoMan.EnumeratePrototypes<MessengerAutoGroupPrototype>())
         {
             if (proto.RadioChannel == radioChannelId)
                 return proto.GroupId;

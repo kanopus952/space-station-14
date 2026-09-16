@@ -81,7 +81,7 @@ public sealed partial class PresetIdCardSystem : EntitySystem
 
         _cardSystem.TryChangeJobTitle(uid, job.LocalizedName);
         _cardSystem.TryChangeJobDepartment(uid, job);
-        _cardSystem.TryChangeJobColor(uid, _cardSystem.GetJobColor(_prototypeManager, job), job.RadioIsBold); // Sunrise-End
+        _cardSystem.TryChangeJobColor(uid, _cardSystem.GetJobColor(ProtoMan, job), job.RadioIsBold); // Sunrise-End
 
         if (ProtoMan.Resolve(job.Icon, out var jobIcon))
             _cardSystem.TryChangeJobIcon(uid, jobIcon);

@@ -279,7 +279,7 @@ public sealed partial class RadioSystem : EntitySystem
         var protoId = GetIdCard(senderUid)?.JobIcon;
         var sprite = NoIdIconPath;
 
-        if (_prototype.TryIndex(protoId, out var prototype))
+        if (ProtoMan.TryIndex(protoId, out var prototype))
         {
             switch (prototype.Icon)
             {

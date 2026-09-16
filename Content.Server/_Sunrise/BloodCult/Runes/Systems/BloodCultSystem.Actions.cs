@@ -290,7 +290,7 @@ namespace Content.Server._Sunrise.BloodCult.Runes.Systems
                 return;
 
             if (component.CultType == null ||
-                !_prototypeManager.TryIndex<BloodCultPrototype>($"{component.CultType.Value.ToString()}Cult", out var cultPrototype))
+                !ProtoMan.TryIndex<BloodCultPrototype>($"{component.CultType.Value.ToString()}Cult", out var cultPrototype))
                 return;
 
             _bloodstreamSystem.TryModifyBloodLevel(uid, -20);
@@ -490,7 +490,7 @@ namespace Content.Server._Sunrise.BloodCult.Runes.Systems
                 return;
 
             if (component.CultType == null ||
-                !_prototypeManager.TryIndex<BloodCultPrototype>($"{component.CultType.Value.ToString()}Cult", out var cultPrototype))
+                !ProtoMan.TryIndex<BloodCultPrototype>($"{component.CultType.Value.ToString()}Cult", out var cultPrototype))
                 return;
 
             var xform = Transform(args.Performer).Coordinates;

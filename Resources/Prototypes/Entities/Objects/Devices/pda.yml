@@ -364,18 +364,19 @@
   - type: Icon
     state: pda-hydro
 # Sunrise-Start
-  - type: CartridgeLoader
-    uiKey: enum.PdaUiKey.Key
-    preinstalled:
-      - CrewManifestCartridge
-      - NotekeeperCartridge
-      - NanoTaskCartridge
-      - NewsReaderCartridge
-      - PlantAnalyzerCartridge
-      - NavigatorCartridge
-      - MessengerCartridge
-      - PhotoCartridge
-      - CorporateLawCartridge
+  - type: EntityTableContainerFill
+    containers:
+      preinstalled-program-container: !type:AllSelector
+        children:
+        - id: CrewManifestCartridge
+        - id: NotekeeperCartridge
+        - id: NanoTaskCartridge
+        - id: NewsReaderCartridge
+        - id: PlantAnalyzerCartridge
+        - id: NavigatorCartridge
+        - id: MessengerCartridge
+        - id: PhotoCartridge
+        - id: CorporateLawCartridge
 # Sunrise-End
 
 - type: entity
@@ -1838,15 +1839,17 @@
   # Sunrise-End
   - type: Icon
     state: pda-pirate
-  - type: CartridgeLoader
-    preinstalled:
-    - NotekeeperCartridge
-    - NanoTaskCartridge
-    - NavigatorCartridge
-    - AstroNavCartridge
-    - MessengerCartridge
-    - PhotoCartridge
-    - CorporateLawCartridge
+  - type: EntityTableContainerFill
+    containers:
+      preinstalled-program-container: !type:AllSelector
+        children:
+        - id: NotekeeperCartridge
+        - id: NanoTaskCartridge
+        - id: NavigatorCartridge
+        - id: AstroNavCartridge
+        - id: MessengerCartridge
+        - id: PhotoCartridge
+        - id: CorporateLawCartridge
   # Sunrise-end
 
 - type: entity

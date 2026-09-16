@@ -44,10 +44,7 @@
     maxSaturation: 50
     minSaturation: 40
   - type: Vocal
-    sounds:
-      Male: XenoHumanoid
-      Female: XenoHumanoid
-      Unsexed: XenoHumanoid
+    emoteSounds: XenoHumanoid
   - type: PressureImmunity
   - type: TypingIndicator
     proto: alien

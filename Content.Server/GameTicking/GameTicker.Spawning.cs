@@ -282,7 +282,7 @@ namespace Content.Server.GameTicking
             }
 
             // Sunrise-Start
-            var selectedJob = _prototypeManager.Index<JobPrototype>(jobId);
+            var selectedJob = ProtoMan.Index<JobPrototype>(jobId);
             var spawnPointType = !lateJoin || selectedJob.AlwaysUseSpawner
                 ? SpawnPointType.Job
                 : SpawnPointType.LateJoin;

@@ -10,7 +10,6 @@ namespace Content.Shared._Sunrise.Humanoid;
 
 public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {
@@ -58,14 +57,14 @@ public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
 
         var speciesId = GetProfileSpecies(uid);
         var sex = GetProfileSex(uid);
-        if (_prototype.TryIndex(speciesId, out var species) &&
-            SunriseHumanoidProfileDefaults.IsBodyTypeAllowed(species, bodyType, sex, _prototype))
+        if (ProtoMan.TryIndex(speciesId, out var species) &&
+            SunriseHumanoidProfileDefaults.IsBodyTypeAllowed(species, bodyType, sex, ProtoMan))
         {
             profile.BodyType = bodyType;
         }
         else
         {
-            profile.BodyType = SunriseHumanoidProfileDefaults.GetDefaultBodyType(species, sex, _prototype);
+            profile.BodyType = SunriseHumanoidProfileDefaults.GetDefaultBodyType(species, sex, ProtoMan);
         }
 
         if (!sync)
@@ -110,15 +109,15 @@ public sealed partial class SunriseHumanoidProfileSystem : EntitySystem
     {
         var speciesId = GetProfileSpecies(ent.Owner);
         var sex = GetProfileSex(ent.Owner);
-        _prototype.TryIndex(speciesId, out SpeciesPrototype? species);
+        ProtoMan.TryIndex(speciesId, out SpeciesPrototype? species);
 
         if (species is not null &&
-            SunriseHumanoidProfileDefaults.IsBodyTypeAllowed(species, ent.Comp.BodyType, sex, _prototype))
+            SunriseHumanoidProfileDefaults.IsBodyTypeAllowed(species, ent.Comp.BodyType, sex, ProtoMan))
         {
             return;
         }
 
-        var bodyType = SunriseHumanoidProfileDefaults.GetDefaultBodyType(species, sex, _prototype);
+        var bodyType = SunriseHumanoidProfileDefaults.GetDefaultBodyType(species, sex, ProtoMan);
         if (ent.Comp.BodyType == bodyType)
             return;
 

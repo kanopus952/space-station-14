@@ -8,7 +8,6 @@ namespace Content.Server.Medical.CrewMonitoring;
 
 public sealed partial class CrewMonitoringConsoleSystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private void ApplyFilter(EntityUid uid, ref List<SuitSensorStatus> sensors)
     {
@@ -56,7 +55,7 @@ public sealed partial class CrewMonitoringConsoleSystem
 
         foreach (var departmentId in departmentIds)
         {
-            if (_prototypeManager.TryIndex(departmentId, out var department))
+            if (ProtoMan.TryIndex(departmentId, out var department))
                 allowedDepartments.Add(Loc.GetString(department.Name));
         }
 

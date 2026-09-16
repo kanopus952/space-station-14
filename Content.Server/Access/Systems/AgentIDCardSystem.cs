@@ -161,7 +161,7 @@ namespace Content.Server.Access.Systems
 
             if (TryFindJobProtoFromIcon(jobIcon, out var job))
             {
-                _cardSystem.TryChangeJobColor(uid, _cardSystem.GetJobColor(_prototypeManager, job), job.RadioIsBold);
+                _cardSystem.TryChangeJobColor(uid, _cardSystem.GetJobColor(ProtoMan, job), job.RadioIsBold);
                 _cardSystem.TryChangeJobDepartment(uid, job, idCard); // Sunrise-Edit
             }
 

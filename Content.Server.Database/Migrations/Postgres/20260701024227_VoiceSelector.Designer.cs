@@ -22,12 +22,57 @@ namespace Content.Server.Database.Migrations.Postgres
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+            // Sunrise-Edit - актуальная целевая модель после объединения схем Sunrise и Wizden.
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Content.Server.Database.AHelpMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("ahelp_messages_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AdminOnly")
+                        .HasColumnType("boolean")
+                        .HasColumnName("admin_only");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)")
+                        .HasColumnName("message");
+
+                    b.Property<bool>("PlaySound")
+                        .HasColumnType("boolean")
+                        .HasColumnName("play_sound");
+
+                    b.Property<Guid>("ReceiverUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("receiver_user_id");
+
+                    b.Property<Guid>("SenderUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("sender_user_id");
+
+                    b.Property<DateTimeOffset>("SentAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sent_at");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ahelp_messages");
+
+                    b.HasIndex("ReceiverUserId")
+                        .HasDatabaseName("IX_ahelp_messages_receiver_user_id");
+
+                    b.ToTable("ahelp_messages", (string)null);
+                });
 
             modelBuilder.Entity("Content.Server.Database.Admin", b =>
                 {
@@ -983,6 +1028,155 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.ToTable("job", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.JobAlternativeTitle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("job_alternative_title_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("job_name");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("PK_job_alternative_title");
+
+                    b.HasIndex("ProfileId", "JobName")
+                        .IsUnique();
+
+                    b.ToTable("job_alternative_title", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.MentorHelpMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("mentor_help_messages_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsStaffOnly")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_staff_only");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)")
+                        .HasColumnName("message");
+
+                    b.Property<Guid>("SenderUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("sender_user_id");
+
+                    b.Property<DateTimeOffset>("SentAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sent_at");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("integer")
+                        .HasColumnName("ticket_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_mentor_help_messages");
+
+                    b.HasIndex("SentAt")
+                        .HasDatabaseName("IX_mentor_help_messages_sent_at");
+
+                    b.HasIndex("TicketId")
+                        .HasDatabaseName("IX_mentor_help_messages_ticket_id");
+
+                    b.HasIndex("SentAt", "SenderUserId")
+                        .HasDatabaseName("IX_mentor_help_messages_sent_at_sender_user_id");
+
+                    b.ToTable("mentor_help_messages", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.MentorHelpTicket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("mentor_help_tickets_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("AssignedToUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("assigned_to_user_id");
+
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("closed_at");
+
+                    b.Property<Guid?>("ClosedByUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("closed_by_user_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<int?>("RoundId")
+                        .HasColumnType("integer")
+                        .HasColumnName("round_id");
+
+                    b.Property<int?>("ServerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("server_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("subject");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("PK_mentor_help_tickets");
+
+                    b.HasIndex("AssignedToUserId")
+                        .HasDatabaseName("IX_mentor_help_tickets_assigned_to_user_id");
+
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("IX_mentor_help_tickets_player_id");
+
+                    b.HasIndex("Status")
+                        .HasDatabaseName("IX_mentor_help_tickets_status");
+
+                    b.HasIndex("ClosedAt", "AssignedToUserId")
+                        .HasDatabaseName("IX_mentor_help_tickets_closed_at_assigned_to_user_id");
+
+                    b.ToTable("mentor_help_tickets", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.PlayTime", b =>
                 {
                     b.Property<int>("Id")
@@ -1115,6 +1309,11 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("integer")
                         .HasColumnName("age");
 
+                    b.Property<string>("BodyType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("body_type");
+
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1129,6 +1328,15 @@ namespace Content.Server.Database.Migrations.Postgres
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("facial_hair_color");
+
+                    b.Property<int>("FacialHairColorType")
+                        .HasColumnType("integer")
+                        .HasColumnName("facial_hair_color_type");
+
+                    b.Property<string>("FacialHairExtendedColor")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("facial_hair_extended_color");
 
                     b.Property<string>("FacialHairName")
                         .IsRequired()
@@ -1150,10 +1358,23 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("hair_color");
 
+                    b.Property<int>("HairColorType")
+                        .HasColumnType("integer")
+                        .HasColumnName("hair_color_type");
+
+                    b.Property<string>("HairExtendedColor")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("hair_extended_color");
+
                     b.Property<string>("HairName")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("hair_name");
+
+                    b.Property<float>("Height")
+                        .HasColumnType("real")
+                        .HasColumnName("height");
 
                     b.Property<JsonDocument>("Markings")
                         .HasColumnType("jsonb")
@@ -1194,9 +1415,18 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("species");
 
+                    b.Property<string>("TtsVoice")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tts_voice");
+
                     b.Property<string>("Voice")
                         .HasColumnType("text")
                         .HasColumnName("voice");
+
+                    b.Property<float>("Width")
+                        .HasColumnType("real")
+                        .HasColumnName("width");
 
                     b.HasKey("Id")
                         .HasName("PK_profile");
@@ -1431,6 +1661,65 @@ namespace Content.Server.Database.Migrations.Postgres
                         .IsUnique();
 
                     b.ToTable("trait", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.TutorialCompletion", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("TutorialId")
+                        .HasColumnType("text")
+                        .HasColumnName("tutorial_id");
+
+                    b.Property<double?>("AccountAgeDays")
+                        .HasColumnType("double precision")
+                        .HasColumnName("account_age_days");
+
+                    b.Property<DateTimeOffset>("CompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
+                    b.Property<int>("CompletionCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("completion_count");
+
+                    b.HasKey("PlayerUserId", "TutorialId")
+                        .HasName("PK_tutorial_completion");
+
+                    b.HasIndex("PlayerUserId")
+                        .HasDatabaseName("IX_tutorial_completion_player_user_id");
+
+                    b.HasIndex("TutorialId")
+                        .HasDatabaseName("IX_tutorial_completion_tutorial_id");
+
+                    b.ToTable("tutorial_completion", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.UiLike", b =>
+                {
+                    b.Property<string>("ScopeId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("scope_id");
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("item_id");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_user_id");
+
+                    b.HasKey("ScopeId", "ItemId", "PlayerUserId")
+                        .HasName("PK_ui_likes");
+
+                    b.HasIndex("PlayerUserId", "ScopeId")
+                        .HasDatabaseName("IX_ui_likes_player_user_id_scope_id");
+
+                    b.ToTable("ui_likes", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.Unban", b =>
@@ -1949,6 +2238,30 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.JobAlternativeTitle", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany("JobAlternativeTitles")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_job_alternative_title_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.MentorHelpMessage", b =>
+                {
+                    b.HasOne("Content.Server.Database.MentorHelpTicket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_mentor_help_messages_mentor_help_tickets_ticket_id");
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("Content.Server.Database.Player", b =>
                 {
                     b.OwnsOne("Content.Server.Database.TypedHwid", "LastSeenHWId", b1 =>
@@ -2202,6 +2515,8 @@ namespace Content.Server.Database.Migrations.Postgres
             modelBuilder.Entity("Content.Server.Database.Profile", b =>
                 {
                     b.Navigation("Antags");
+
+                    b.Navigation("JobAlternativeTitles");
 
                     b.Navigation("Jobs");
 

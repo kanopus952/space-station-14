@@ -20,7 +20,7 @@ namespace Content.Server._Sunrise.Shuttles;
 
 public sealed partial class CodeEquipmentSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private MapLoaderSystem _loader = default!;
     [Dependency] private ShuttleSystem _shuttles = default!;
     [Dependency] private StationSystem _station = default!;
@@ -39,11 +39,11 @@ public sealed partial class CodeEquipmentSystem : EntitySystem
 
     private void OnStationPostInit(EntityUid uid, CodeEquipmentComponent comp, StationPostInitEvent ev)
     {
-        var map = _mapManager.CreateMap();
+        _map.CreateMap(out var mapId);
         var loadOptions = new DeserializationOptions();
         loadOptions.InitializeMaps = true;
         loadOptions.StoreYamlUids = true;
-        _loader.TryLoadGrid(map, comp.ShuttlePath, out var shuttleUid, loadOptions);
+        _loader.TryLoadGrid(mapId, comp.ShuttlePath, out var shuttleUid, loadOptions);
         if (shuttleUid is null)
             return;
         comp.Shuttles.Add(shuttleUid.Value.Owner);

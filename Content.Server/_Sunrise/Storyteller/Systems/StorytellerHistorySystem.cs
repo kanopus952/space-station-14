@@ -45,7 +45,6 @@ namespace Content.Server._Sunrise.Storyteller.Systems;
 /// </summary>
 public sealed partial class StorytellerHistorySystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private MindSystem _mindSystem = default!;
@@ -170,12 +169,12 @@ public sealed partial class StorytellerHistorySystem : EntitySystem
         }
 
         var ruleName = args.RuleId;
-        if (_protoManager.TryIndex<EntityPrototype>(args.RuleId, out var entityProto))
+        if (ProtoMan.TryIndex<EntityPrototype>(args.RuleId, out var entityProto))
         {
             ruleName = Loc.TryGetString(entityProto.Name, out var locName) ? locName : entityProto.Name;
         }
 
-        if (_protoManager.TryIndex<StorytellerMetadataPrototype>(args.RuleId, out var metadata))
+        if (ProtoMan.TryIndex<StorytellerMetadataPrototype>(args.RuleId, out var metadata))
         {
             var targetKey = !string.IsNullOrEmpty(metadata.DescriptionLocKey) && Loc.TryGetString(metadata.DescriptionLocKey, out _)
                 ? metadata.DescriptionLocKey
@@ -305,12 +304,12 @@ public sealed partial class StorytellerHistorySystem : EntitySystem
 
     private void OnTechnologyDatabaseModified(EntityUid uid, TechnologyDatabaseComponent component, ref TechnologyDatabaseModifiedEvent args)
     {
-        foreach (var discipline in _protoManager.EnumeratePrototypes<TechDisciplinePrototype>())
+        foreach (var discipline in ProtoMan.EnumeratePrototypes<TechDisciplinePrototype>())
         {
             if (_researchedDisciplines.Contains(discipline.ID))
                 continue;
 
-            var allTechs = _protoManager.EnumeratePrototypes<TechnologyPrototype>()
+            var allTechs = ProtoMan.EnumeratePrototypes<TechnologyPrototype>()
                 .Where(t => t.Discipline == discipline.ID)
                 .ToList();
 
@@ -336,7 +335,7 @@ public sealed partial class StorytellerHistorySystem : EntitySystem
             return;
 
         var jobName = Loc.GetString("storyteller-history-arrival-no-job");
-        if (!string.IsNullOrEmpty(args.JobId) && _protoManager.TryIndex<JobPrototype>(args.JobId, out var jobProto))
+        if (!string.IsNullOrEmpty(args.JobId) && ProtoMan.TryIndex<JobPrototype>(args.JobId, out var jobProto))
         {
             jobName = Loc.TryGetString(jobProto.Name, out var locName) ? locName : args.JobId;
         }
@@ -533,12 +532,12 @@ public sealed partial class StorytellerHistorySystem : EntitySystem
         var hasAutoEnd = Loc.TryGetString(autoEndKey, out _);
 
         var ruleName = args.RuleId;
-        if (_protoManager.TryIndex<EntityPrototype>(args.RuleId, out var entityProto))
+        if (ProtoMan.TryIndex<EntityPrototype>(args.RuleId, out var entityProto))
         {
             ruleName = Loc.TryGetString(entityProto.Name, out var locName) ? locName : entityProto.Name;
         }
 
-        if (_protoManager.TryIndex<StorytellerMetadataPrototype>(args.RuleId, out var metadata) &&
+        if (ProtoMan.TryIndex<StorytellerMetadataPrototype>(args.RuleId, out var metadata) &&
             !string.IsNullOrEmpty(metadata.EndedLocKey) &&
             Loc.TryGetString(metadata.EndedLocKey, out _))
         {

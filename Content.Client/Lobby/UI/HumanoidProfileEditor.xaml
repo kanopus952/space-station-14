@@ -120,7 +120,7 @@
                                 </BoxContainer>
                                 <!-- Sunrise-TTS-Start -->
                                 <BoxContainer HorizontalExpand="True" Visible="False" Name="TTSContainer">
-                                    <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
+                                    <Label Text="{Loc 'humanoid-profile-editor-tts-voice-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="TtsVoiceButton" HorizontalAlignment="Right" />
 									<Button Name="VoicePlayButton" Text="{Loc 'humanoid-profile-editor-voice-play'}" MaxWidth="80" />

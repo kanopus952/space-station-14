@@ -95,7 +95,7 @@ public sealed partial class MessengerServerSystem
             return;
 
         uint? pdaFrequency = null;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }
@@ -177,7 +177,7 @@ public sealed partial class MessengerServerSystem
             return;
 
         uint? pdaFrequency = null;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }
@@ -286,7 +286,7 @@ public sealed partial class MessengerServerSystem
             return;
 
         uint? pdaFrequency = null;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }
@@ -366,7 +366,7 @@ public sealed partial class MessengerServerSystem
             return;
 
         uint? pdaFrequency = null;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }
@@ -458,7 +458,7 @@ public sealed partial class MessengerServerSystem
             return;
 
         uint? pdaFrequency = null;
-        if (_prototypeManager.TryIndex(component.PdaFrequencyId, out var pdaFreq))
+        if (ProtoMan.TryIndex(component.PdaFrequencyId, out var pdaFreq))
         {
             pdaFrequency = pdaFreq.Frequency;
         }

@@ -25,7 +25,6 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private ILogManager _logManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private RingerSystem _ringer = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
@@ -102,7 +101,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     /// </summary>
     private uint? GetMessengerFrequency()
     {
-        if (_prototypeManager.TryIndex<DeviceFrequencyPrototype>(MessengerFrequencyId, out var messengerFrequency))
+        if (ProtoMan.TryIndex<DeviceFrequencyPrototype>(MessengerFrequencyId, out var messengerFrequency))
         {
             return messengerFrequency.Frequency;
         }

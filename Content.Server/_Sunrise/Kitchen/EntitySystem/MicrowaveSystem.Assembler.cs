@@ -33,7 +33,7 @@ public sealed partial class MicrowaveSystem : EntitySystem
             // If a microwave recipe uses a stacked item, use the default stack prototype id instead of prototype id
             if (TryComp<StackComponent>(item, out var stackComp))
             {
-                solidID = _prototype.Index<StackPrototype>(stackComp.StackTypeId).Spawn;
+                solidID = ProtoMan.Index<StackPrototype>(stackComp.StackTypeId).Spawn;
                 amountToAdd = stackComp.Count;
             }
             else

@@ -101,8 +101,7 @@
       params:
         volume: -15
   - type: Vocal
-    sounds:
-      Unsexed: Reaper
+    emoteSounds: Reaper
   - type: RandomMetadata
     nameSegments: [NamesBorg]
   - type: InnateItem

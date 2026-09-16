@@ -32,6 +32,7 @@ using Content.Shared.Zombies;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared.Humanoid;
 
 namespace Content.Server.Zombies
 {

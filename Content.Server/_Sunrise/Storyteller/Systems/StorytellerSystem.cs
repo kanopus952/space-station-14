@@ -98,7 +98,6 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
 
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
@@ -161,10 +160,10 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         if (!query.MoveNext(out var uid, out var comp))
             return false;
 
-        if (!_protoManager.TryIndex<EntityPrototype>(eventId, out var proto))
+        if (!ProtoMan.TryIndex<EntityPrototype>(eventId, out var proto))
             return false;
 
-        if (!_protoManager.TryIndex<StorytellerMetadataPrototype>(eventId, out var metadata))
+        if (!ProtoMan.TryIndex<StorytellerMetadataPrototype>(eventId, out var metadata))
             return false;
 
         TriggerEvent((uid, comp), proto, metadata);
@@ -195,7 +194,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
             component.StorytellerType = _random.Pick(new[] { StorytellerType.Calm, StorytellerType.Classic, StorytellerType.Insane });
         }
 
-        if (_protoManager.TryIndex<StorytellerTypePrototype>(component.StorytellerType.ToString(), out var typeProto))
+        if (ProtoMan.TryIndex<StorytellerTypePrototype>(component.StorytellerType.ToString(), out var typeProto))
         {
             component.GlobalEventCooldownMinutes = typeProto.GlobalEventCooldownMinutes;
             component.HelpfulEventCooldownMinutes = typeProto.HelpfulEventCooldownMinutes;
@@ -228,7 +227,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
 
         var budgetModifier = 1f;
         var maxBudgetModifier = 1f;
-        if (_protoManager.TryIndex<StorytellerTypePrototype>(component.StorytellerType.ToString(), out var typeProto))
+        if (ProtoMan.TryIndex<StorytellerTypePrototype>(component.StorytellerType.ToString(), out var typeProto))
         {
             budgetModifier = typeProto.BudgetModifier;
             maxBudgetModifier = typeProto.MaxBudgetModifier;
@@ -271,7 +270,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         var recMin = 10f;
         var recMax = 20f;
 
-        if (_protoManager.TryIndex<StorytellerTypePrototype>(comp.StorytellerType.ToString(), out var typeProto))
+        if (ProtoMan.TryIndex<StorytellerTypePrototype>(comp.StorytellerType.ToString(), out var typeProto))
         {
             durationMult = typeProto.DurationMultiplier;
             relMin = typeProto.RelaxationMinMinutes;
@@ -768,7 +767,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
             alertLevelStress = CalculateAlertLevelStress(comp);
         }
 
-        _protoManager.TryIndex<StorytellerTypePrototype>(comp?.StorytellerType.ToString() ?? string.Empty, out var storytellerType);
+        ProtoMan.TryIndex<StorytellerTypePrototype>(comp?.StorytellerType.ToString() ?? string.Empty, out var storytellerType);
         var armedCrewScore = CountArmedCrewNotAntags();
         var strength = CalculateNormalizedStationStrength(
             aliveCount,
@@ -985,10 +984,10 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
 
     private float GetMaterialStrengthWeight(ProtoId<MaterialPrototype> materialId)
     {
-        if (_protoManager.TryIndex<StorytellerMaterialWeightPrototype>(materialId, out var weightOverride))
+        if (ProtoMan.TryIndex<StorytellerMaterialWeightPrototype>(materialId, out var weightOverride))
             return weightOverride.Weight;
 
-        if (!_protoManager.TryIndex(materialId, out MaterialPrototype? proto))
+        if (!ProtoMan.TryIndex(materialId, out MaterialPrototype? proto))
             return MaterialStrengthUnknownFallback;
 
         if (proto.StorytellerStrengthWeight > 0f)
@@ -1086,12 +1085,12 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         var currentDuration = GameTicker.RoundDuration();
 
         // Query all rule prototypes with storyteller metadata
-        foreach (var proto in _protoManager.EnumeratePrototypes<EntityPrototype>())
+        foreach (var proto in ProtoMan.EnumeratePrototypes<EntityPrototype>())
         {
             if (proto.Abstract)
                 continue;
 
-            if (!_protoManager.TryIndex<StorytellerMetadataPrototype>(proto.ID, out var metadata))
+            if (!ProtoMan.TryIndex<StorytellerMetadataPrototype>(proto.ID, out var metadata))
                 continue;
 
             var isEventMajorAntag = metadata.ThreatType == StorytellerThreatType.MajorAntag;
@@ -1625,7 +1624,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
                     {
                         isAntag = true;
                         var stressVal = 4f; // Default fallback
-                        if (roleComp.AntagPrototype != null && _protoManager.TryIndex(roleComp.AntagPrototype, out var antagProto))
+                        if (roleComp.AntagPrototype != null && ProtoMan.TryIndex(roleComp.AntagPrototype, out var antagProto))
                         {
                             stressVal = antagProto.StorytellerStress;
                         }
@@ -1728,7 +1727,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         _maxResearchStorytellerScore = 1f;
         _totalTechnologyCount = 0;
 
-        foreach (var tech in _protoManager.EnumeratePrototypes<Content.Shared.Research.Prototypes.TechnologyPrototype>())
+        foreach (var tech in ProtoMan.EnumeratePrototypes<Content.Shared.Research.Prototypes.TechnologyPrototype>())
         {
             if (tech.Hidden)
                 continue;
@@ -1749,7 +1748,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         };
 
         var disciplineMult = 1f;
-        if (_protoManager.TryIndex(tech.Discipline, out Content.Shared.Research.Prototypes.TechDisciplinePrototype? discipline))
+        if (ProtoMan.TryIndex(tech.Discipline, out Content.Shared.Research.Prototypes.TechDisciplinePrototype? discipline))
             disciplineMult = discipline.StorytellerUsefulness;
 
         return tierWeight * disciplineMult;
@@ -1779,7 +1778,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         var totalScore = 0f;
         foreach (var techId in uniqueTechs)
         {
-            if (!_protoManager.TryIndex<Content.Shared.Research.Prototypes.TechnologyPrototype>(techId, out var techProto))
+            if (!ProtoMan.TryIndex<Content.Shared.Research.Prototypes.TechnologyPrototype>(techId, out var techProto))
                 continue;
 
             totalScore += GetTechnologyStorytellerWeight(techProto);
@@ -1791,7 +1790,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
     private Dictionary<string, int> GetCrewDistribution()
     {
         var dist = new Dictionary<string, int>();
-        foreach (var dept in _protoManager.EnumeratePrototypes<DepartmentPrototype>())
+        foreach (var dept in ProtoMan.EnumeratePrototypes<DepartmentPrototype>())
         {
             dist[dept.ID] = 0;
         }
@@ -1849,12 +1848,12 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
 
         var reasons = new Dictionary<string, int>();
 
-        foreach (var proto in _protoManager.EnumeratePrototypes<EntityPrototype>())
+        foreach (var proto in ProtoMan.EnumeratePrototypes<EntityPrototype>())
         {
             if (proto.Abstract)
                 continue;
 
-            if (!_protoManager.TryIndex<StorytellerMetadataPrototype>(proto.ID, out var metadata))
+            if (!ProtoMan.TryIndex<StorytellerMetadataPrototype>(proto.ID, out var metadata))
                 continue;
 
             if (metadata.ThreatType == StorytellerThreatType.Helpful)

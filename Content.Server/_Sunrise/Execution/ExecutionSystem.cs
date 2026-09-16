@@ -34,7 +34,6 @@ public sealed partial class ExecutionSystem : SharedExecutionSystem
     [Dependency] private ContainerSystem _containerSystem = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private AppearanceSystem _appearanceSystem = default!;
     [Dependency] private AudioSystem _audioSystem = default!;
@@ -186,7 +185,7 @@ public sealed partial class ExecutionSystem : SharedExecutionSystem
         {
             //🌟Starlight🌟 start
             case HitScanCartridgeAmmoComponent cartridge:
-                var hitscanProto = _prototypeManager.Index(cartridge.Hitscan);
+                var hitscanProto = ProtoMan.Index(cartridge.Hitscan);
                 firedPrototypeId = cartridge.Hitscan.Id;
 
                 if (hitscanProto.Damage is not null)
@@ -203,7 +202,7 @@ public sealed partial class ExecutionSystem : SharedExecutionSystem
                 break;
             //🌟Starlight🌟 end
             case CartridgeAmmoComponent cartridge:
-                var prototype = _prototypeManager.Index<EntityPrototype>(cartridge.Prototype);
+                var prototype = ProtoMan.Index<EntityPrototype>(cartridge.Prototype);
                 firedPrototypeId = cartridge.Prototype.Id;
                 prototype.TryGetComponent<ProjectileComponent>(out var projectilePrototype, _componentFactory);
 
@@ -288,7 +287,7 @@ public sealed partial class ExecutionSystem : SharedExecutionSystem
 
         if (isExplosive && forceLethal)
         {
-            var explosionType = _prototypeManager.Index(explosiveToTrigger!.Value.ExplosionType);
+            var explosionType = ProtoMan.Index(explosiveToTrigger!.Value.ExplosionType);
             ApplyExecutionDamage(victim, weapon, explosionType.DamagePerIntensity, forceLethal: true, ExplosiveOverkillFractionMin, ExplosiveOverkillFractionMax);
 
             if (TryComp<BloodstreamComponent>(victim, out var bloodstream))

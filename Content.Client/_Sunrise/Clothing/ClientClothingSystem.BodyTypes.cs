@@ -15,7 +15,6 @@ namespace Content.Client.Clothing;
 
 public sealed partial class ClientClothingSystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private TagSystem _tag = default!;
 
     private readonly string _hardsuitTag = "Hardsuit";
@@ -61,7 +60,7 @@ public sealed partial class ClientClothingSystem
     {
         bodyTypeVisualKey = null;
         if (!TryComp(equipee, out SunriseHumanoidProfileComponent? profile) ||
-            !_prototype.TryIndex(profile.BodyType, out var bodyType))
+            !ProtoMan.TryIndex(profile.BodyType, out var bodyType))
         {
             return false;
         }

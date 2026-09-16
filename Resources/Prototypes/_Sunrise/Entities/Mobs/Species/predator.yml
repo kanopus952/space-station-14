@@ -60,10 +60,7 @@
         layer:
         - MobLayer
   - type: Vocal
-    sounds:
-      Male: Predator
-      Female: Predator
-      Unsexed: Predator
+    emoteSounds: Predator
   - type: TypingIndicator
     proto: alien
   - type: Damageable

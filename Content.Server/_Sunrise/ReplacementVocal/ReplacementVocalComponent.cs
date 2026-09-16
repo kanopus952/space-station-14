@@ -20,5 +20,7 @@ public sealed partial class ReplacementVocalComponent : Component
     public HashSet<string> AddedEmotes = new();
 
     [DataField]
-    public Dictionary<Sex, ProtoId<EmoteSoundsPrototype>>? PreviousVocal;
+    public ProtoId<EmoteSoundsPrototype>? PreviousVocal;
+
+    public bool WasReplaced;
 }

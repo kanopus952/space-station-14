@@ -87,7 +87,6 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     [Dependency] private StationSystem _station = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private BiomeSystem _biomes = default!;
 
@@ -552,7 +551,7 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
         var shuttlePath = ent.Comp1.EmergencyShuttlePath;
 
         // Sunrise-start
-        var mapId = _mapManager.CreateMap();
+        _mapSystem.CreateMap(out var mapId); // Sunrise-Edit - MapId получаем отдельно от UID карты.
 
         var mapOptions = new DeserializationOptions {};
         if (!_loader.TryLoadGrid(mapId, shuttlePath, out var shuttle, mapOptions))

@@ -96,7 +96,7 @@ public sealed partial class ChameleonControllerSystem : SharedChameleonControlle
         profile.Loadouts.TryGetValue(jobProtoId, out customRoleLoadout);
 
         // Sunrise-start
-        var effectiveJobProtoId = LoadoutSystem.GetEffectiveRolePrototype(jobProtoId, _proto);
+        var effectiveJobProtoId = LoadoutSystem.GetEffectiveRolePrototype(jobProtoId, ProtoMan);
         if (!ProtoMan.HasIndex<RoleLoadoutPrototype>(effectiveJobProtoId))
         // Sunrise-end
             return;

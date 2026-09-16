@@ -350,7 +350,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
     /// </summary>
     public bool IsAccessAllowedByExtendedAccess(ICollection<ProtoId<AccessLevelPrototype>> access, AccessReaderComponent reader)
     {
-        if (!_prototype.TryIndex(reader.Group, out var accessTags))
+        if (!ProtoMan.TryIndex(reader.Group, out var accessTags))
             return false;
 
         if (accessTags.Tags.Count == 0)

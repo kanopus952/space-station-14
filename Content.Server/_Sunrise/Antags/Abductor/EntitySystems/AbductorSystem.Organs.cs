@@ -45,7 +45,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         SubscribeLocalEvent<AbductorOrganComponent, SurgeryOrganImplantationCompleted>(OnAbductorOrganImplanted);
         SubscribeLocalEvent<AbductorOrganComponent, SurgeryOrganExtracted>(OnAbductorOrganExtracted);
 
-        foreach (var specif in _prototypeManager.EnumeratePrototypes<DamageTypePrototype>())
+        foreach (var specif in ProtoMan.EnumeratePrototypes<DamageTypePrototype>())
             _passiveHealing.DamageDict.Add(specif.ID, -1);
         _stopwatch.Start();
     }

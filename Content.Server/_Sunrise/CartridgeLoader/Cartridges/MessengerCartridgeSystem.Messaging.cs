@@ -87,7 +87,7 @@ public sealed partial class MessengerCartridgeSystem
     {
         var photoGallery = new Dictionary<string, PhotoMetadata>();
 
-        foreach (var cartridgeUid in _cartridgeLoader.GetInstalled(loaderUid))
+        foreach (var cartridgeUid in _cartridgeLoader.GetDiskPrograms(loaderUid))
         {
             if (TryComp<PhotoCartridgeComponent>(cartridgeUid, out var photoComp))
             {

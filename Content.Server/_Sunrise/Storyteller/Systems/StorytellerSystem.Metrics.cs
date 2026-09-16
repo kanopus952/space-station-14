@@ -332,7 +332,7 @@ public sealed partial class StorytellerSystem
         static string F4(float v, IFormatProvider p) => v.ToString("F4", p);
 
         var maxBudgetModifier = 1f;
-        if (_protoManager.TryIndex<StorytellerTypePrototype>(comp.StorytellerType.ToString(), out var typeProto))
+        if (ProtoMan.TryIndex<StorytellerTypePrototype>(comp.StorytellerType.ToString(), out var typeProto))
         {
             maxBudgetModifier = typeProto.MaxBudgetModifier;
         }

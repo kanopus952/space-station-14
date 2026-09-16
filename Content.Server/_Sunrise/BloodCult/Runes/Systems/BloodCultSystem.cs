@@ -66,11 +66,9 @@ namespace Content.Server._Sunrise.BloodCult.Runes.Systems
         [Dependency] private InventorySystem _inventorySystem = default!;
         [Dependency] private SharedPointLightSystem _lightSystem = default!;
         [Dependency] private EntityLookupSystem _lookup = default!;
-        [Dependency] private IMapManager _mapMan = default!;
         [Dependency] private MetaDataSystem _metaDataSystem = default!;
         [Dependency] private MindSystem _mindSystem = default!;
         [Dependency] private PopupSystem _popupSystem = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private SharedRoleSystem _roleSystem = default!;
         [Dependency] private ItemSlotsSystem _slotsSystem = default!;

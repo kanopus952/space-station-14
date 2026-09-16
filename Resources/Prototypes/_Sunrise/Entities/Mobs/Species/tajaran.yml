@@ -77,10 +77,7 @@
         Blunt: 1
         Slash: 5
   - type: Vocal
-    sounds:
-      Male: MaleTajaran
-      Female: FemaleTajaran
-      Unsexed: MaleTajaran
+    emoteSounds: MaleTajaran
   - type: Temperature
     currentTemperature: 310.15
     specificHeat: 46

@@ -14,13 +14,13 @@ public sealed partial class ProjectileHitscanCompatibilitySystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        // Sunrise-Edit: subscribe to MapInitEvent instead of ComponentInit to avoid breaking uninitialized save tests
+        // Подписываемся на MapInitEvent, чтобы не ломать проверки сохранения неинициализированных сущностей.
         SubscribeLocalEvent<ProjectileComponent, MapInitEvent>(OnProjectileMapInit);
     }
 
     private void OnProjectileMapInit(EntityUid uid, ProjectileComponent component, ref MapInitEvent args)
     {
-        // Sunrise-Edit: Force fixed rotation on all projectiles during map initialization to avoid modifying physics on spawn in save tests
+        // Фиксируем вращение при MapInitEvent, чтобы не менять физику во время спавна в проверках сохранения.
         if (TryComp<PhysicsComponent>(uid, out var physics))
         {
             _physics.SetFixedRotation(uid, true, body: physics);

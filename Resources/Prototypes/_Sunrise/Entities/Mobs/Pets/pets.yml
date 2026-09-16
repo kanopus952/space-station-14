@@ -640,10 +640,7 @@
   - type: StaminaDamageOnHit
     damage: 1
   - type: Vocal
-    sounds:
-      Male: ClownGoblin
-      Female: ClownGoblin
-      Unsexed: ClownGoblin
+    emoteSounds: ClownGoblin
   - type: Eye
   - type: Puller
     needsHands: false

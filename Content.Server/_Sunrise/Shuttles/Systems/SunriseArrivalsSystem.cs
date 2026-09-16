@@ -45,7 +45,6 @@ public sealed partial class SunriseArrivalsSystem : EntitySystem
     [Dependency] private StationSystem _station = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private DockingSystem _docking = default!;
 
@@ -185,7 +184,7 @@ public sealed partial class SunriseArrivalsSystem : EntitySystem
                 ev.SpawnResult.Value,
                 ev.HumanoidCharacterProfile?.Name ?? "Unknown",
                 ev.Job != null
-                    ? _prototypeManager.Index(ev.Job.Value).LocalizedName
+                    ? ProtoMan.Index(ev.Job.Value).LocalizedName
                     : Loc.GetString("job-name-unknown"));
         }
         catch (Exception e)

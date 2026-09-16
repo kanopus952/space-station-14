@@ -107,8 +107,7 @@
         - map: [ "enum.DamageStateVisualLayers.Base" ]
           state: spider
     - type: Vocal
-      sounds:
-        Unsexed: FleshWormEmote
+      emoteSounds: FleshWormEmote
     - type: DamageStateVisuals
       states:
         Alive:
@@ -197,8 +196,7 @@
         - FleshCultistAcidSpit
         - FleshCultistAbsorbBloodPool
     - type: Vocal
-      sounds:
-        Unsexed: FleshPudgeEmote
+      emoteSounds: FleshPudgeEmote
     - type: FleshMob
       deathMobSpawnCount: 3
       deathMobSpawnId: MobFleshWorm
@@ -382,8 +380,7 @@
         - ReagentId: Blood
           Quantity: 50
     - type: Vocal
-      sounds:
-        Unsexed: FleshWormEmote
+      emoteSounds: FleshWormEmote
     - type: Fixtures
       fixtures:
         fix1:
@@ -456,8 +453,7 @@
         Dead:
           Base: fleshhugger_dead
     - type: Vocal
-      sounds:
-        Unsexed: FleshWormEmote
+      emoteSounds: FleshWormEmote
     - type: Clothing
       quickEquip: false
       sprite: _Sunrise/FleshCult/flesh_cult_mobs.rsi
@@ -538,8 +534,7 @@
         Dead:
           Base: worm_dead
     - type: Vocal
-      sounds:
-        Unsexed: FleshWormEmote
+      emoteSounds: FleshWormEmote
     - type: Physics
       bodyType: KinematicController
     - type: Fixtures

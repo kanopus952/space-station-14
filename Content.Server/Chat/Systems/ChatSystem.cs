@@ -159,7 +159,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             if (!TryProcessSunriseChatMessage(source, ref message, InGameICChatType.CollectiveMind))
                 return;
 
-            _prototypeManager.TryIndex<CollectiveMindPrototype>(abductor.AbductorCollectiveMindProto, out var channel);
+            ProtoMan.TryIndex<CollectiveMindPrototype>(abductor.AbductorCollectiveMindProto, out var channel);
             SendCollectiveMindChat(source, message, channel);
             return;
         }

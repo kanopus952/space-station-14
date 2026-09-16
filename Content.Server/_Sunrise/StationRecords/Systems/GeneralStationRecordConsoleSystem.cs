@@ -20,7 +20,6 @@ namespace Content.Server.StationRecords.Systems;
 
 public sealed partial class GeneralStationRecordConsoleSystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private PopupSystem _popup = default!;
@@ -66,7 +65,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
         }
 
         // Добавляем новую
-        var record = GeneralStationRecord.SanitizeRecord(args.Record, in _prototype);
+        var record = GeneralStationRecord.SanitizeRecord(args.Record, in ProtoMan);
         var id = _stationRecords.AddRecordEntry(owning.Value, record);
         ent.Comp.ActiveKey = id.Id;
 
@@ -202,7 +201,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
 
     private string GetJobName(ProtoId<JobPrototype> job)
     {
-        if (!_prototype.TryIndex(job, out var jobPrototype))
+        if (!ProtoMan.TryIndex(job, out var jobPrototype))
             return Loc.GetString("printed-station-records-unrecognized");
 
         return jobPrototype.LocalizedName;
@@ -223,7 +222,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
 
     private string GetSpeciesName(ProtoId<SpeciesPrototype> species)
     {
-        if (!_prototype.TryIndex(species, out var speciesPrototype))
+        if (!ProtoMan.TryIndex(species, out var speciesPrototype))
             return Loc.GetString("printed-station-records-unrecognized");
 
         return Loc.GetString(speciesPrototype.Name);

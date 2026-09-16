@@ -268,7 +268,7 @@ public sealed partial class FleshCultSystem
                 }
             }
 
-            var bodyType = _prototypeManager.Index(SkeletonBodyType);
+            var bodyType = ProtoMan.Index(SkeletonBodyType);
             foreach (var (key, data) in bodyType.Layers)
             {
                 if (key != HumanoidVisualLayers.Head)
@@ -369,7 +369,7 @@ public sealed partial class FleshCultSystem
                 var blood = new Solution();
                 blood.AddReagent(puddleSolutionContent.Reagent, amount);
 
-                absorbBlood.AddSolution(blood, _prototypeManager);
+                absorbBlood.AddSolution(blood, ProtoMan);
             }
         }
 

@@ -77,10 +77,7 @@
         layer:
         - MobLayer
   - type: Vocal
-    sounds:
-      Male: UnisexSwine
-      Female: UnisexSwine
-      Unsexed: UnisexSwine
+    emoteSounds: UnisexSwine
   - type: SwineAccent
   - type: Damageable
     damageModifierSet: Swine

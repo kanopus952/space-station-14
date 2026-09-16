@@ -169,7 +169,7 @@ public sealed partial class MessengerCartridgeSystem
 
     private void OnLoaderUiClosed(Entity<CartridgeLoaderComponent> ent, ref BoundUIClosedEvent args)
     {
-        if (!ent.Comp.UiKey.Equals(args.UiKey) ||
+        if (!Equals(ent.Comp.UiKey, args.UiKey) ||
             ent.Comp.ActiveProgram is not { } activeProgram ||
             !TryComp<MessengerCartridgeComponent>(activeProgram, out var messenger))
         {

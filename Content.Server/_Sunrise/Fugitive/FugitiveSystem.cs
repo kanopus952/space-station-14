@@ -21,7 +21,6 @@ namespace Content.Server._Sunrise.Fugitive
 {
     public sealed partial class FugitiveSystem : EntitySystem
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
         [Dependency] private IGameTiming _timing = default!;
         [Dependency] private ChatSystem _chat = default!;
@@ -159,7 +158,7 @@ namespace Content.Server._Sunrise.Fugitive
 
 
             if (!TryComp<HumanoidProfileComponent>(uid, out var humanoidComponent) ||
-                !_prototypeManager.TryIndex(humanoidComponent.Species, out var species))
+                !ProtoMan.TryIndex(humanoidComponent.Species, out var species))
             {
                 report.AddMarkup(Loc.GetString("fugitive-report-inhuman", ("name", uid)));
                 return report;

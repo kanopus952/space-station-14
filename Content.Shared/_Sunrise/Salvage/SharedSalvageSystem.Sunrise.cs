@@ -13,10 +13,10 @@ public abstract partial class SharedSalvageSystem
         string difficultyId,
         RobustRandom rand)
     {
-        var factionProtos = _proto.EnumeratePrototypes<SalvageFactionPrototype>().ToList();
+        var factionProtos = ProtoMan.EnumeratePrototypes<SalvageFactionPrototype>().ToList();
 
         if (dungeonFactions != null && dungeonFactions.Count > 0)
-            factionProtos = dungeonFactions.ConvertAll(new Converter<ProtoId<SalvageFactionPrototype>, SalvageFactionPrototype>(_proto.Index));
+            factionProtos = dungeonFactions.ConvertAll(new Converter<ProtoId<SalvageFactionPrototype>, SalvageFactionPrototype>(ProtoMan.Index));
 
         var byDifficulty = factionProtos
             .Where(x => x.Difficulties == null || x.Difficulties.Contains(difficultyId))

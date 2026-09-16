@@ -25,7 +25,6 @@ public sealed partial class ResearchSystem
     [Dependency] private SharedJobSystem _jobs = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
 
     private const int PopulationDeadzone = 4;
     private static readonly ProtoId<ResearchPopulationWeightsPrototype> PopulationWeightsPrototypeId = "SunriseResearchPopulationWeights";
@@ -185,7 +184,7 @@ public sealed partial class ResearchSystem
         if (jobId == null)
             return 0.4f;
 
-        if (!_prototype.TryIndex(PopulationWeightsPrototypeId, out var prototype))
+        if (!ProtoMan.TryIndex(PopulationWeightsPrototypeId, out var prototype))
             return 0.4f;
 
         return prototype.Weights.GetValueOrDefault(jobId.Value, 0.4f);

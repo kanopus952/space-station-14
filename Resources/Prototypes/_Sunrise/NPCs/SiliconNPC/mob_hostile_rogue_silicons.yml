@@ -152,8 +152,7 @@
   - type: Speech
     speechSounds: SyndieBorg
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSiliconSyndicate
+    emoteSounds: UnisexSiliconSyndicate
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepBorg
@@ -942,8 +941,7 @@
   - type: Speech
     speechSounds: SyndieBorg
   - type: Vocal
-    sounds:
-      Unsexed: UnisexSiliconSyndicate
+    emoteSounds: UnisexSiliconSyndicate
   - type: FootstepModifier
     footstepSoundCollection:
       path: /Audio/_Sunrise/Effects/silence.ogg

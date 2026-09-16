@@ -17,8 +17,51 @@ namespace Content.Server.Database.Migrations.Sqlite
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+            // Sunrise-Edit - актуальная целевая модель после объединения схем Sunrise и Wizden.
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.6");
+
+            modelBuilder.Entity("Content.Server.Database.AHelpMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ahelp_messages_id");
+
+                    b.Property<bool>("AdminOnly")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("admin_only");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("message");
+
+                    b.Property<bool>("PlaySound")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("play_sound");
+
+                    b.Property<Guid>("ReceiverUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("receiver_user_id");
+
+                    b.Property<Guid>("SenderUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("sender_user_id");
+
+                    b.Property<DateTimeOffset>("SentAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("sent_at");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ahelp_messages");
+
+                    b.HasIndex("ReceiverUserId")
+                        .HasDatabaseName("IX_ahelp_messages_receiver_user_id");
+
+                    b.ToTable("ahelp_messages", (string)null);
+                });
 
             modelBuilder.Entity("Content.Server.Database.Admin", b =>
                 {
@@ -929,6 +972,149 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("job", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.JobAlternativeTitle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("job_alternative_title_id");
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("job_name");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("PK_job_alternative_title");
+
+                    b.HasIndex("ProfileId", "JobName")
+                        .IsUnique();
+
+                    b.ToTable("job_alternative_title", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.MentorHelpMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mentor_help_messages_id");
+
+                    b.Property<bool>("IsStaffOnly")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("is_staff_only");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("message");
+
+                    b.Property<Guid>("SenderUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("sender_user_id");
+
+                    b.Property<DateTimeOffset>("SentAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("sent_at");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ticket_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_mentor_help_messages");
+
+                    b.HasIndex("SentAt")
+                        .HasDatabaseName("IX_mentor_help_messages_sent_at");
+
+                    b.HasIndex("TicketId")
+                        .HasDatabaseName("IX_mentor_help_messages_ticket_id");
+
+                    b.HasIndex("SentAt", "SenderUserId")
+                        .HasDatabaseName("IX_mentor_help_messages_sent_at_sender_user_id");
+
+                    b.ToTable("mentor_help_messages", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.MentorHelpTicket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mentor_help_tickets_id");
+
+                    b.Property<Guid?>("AssignedToUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("assigned_to_user_id");
+
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("closed_at");
+
+                    b.Property<Guid?>("ClosedByUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("closed_by_user_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_id");
+
+                    b.Property<int?>("RoundId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("round_id");
+
+                    b.Property<int?>("ServerId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("server_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("subject");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("PK_mentor_help_tickets");
+
+                    b.HasIndex("AssignedToUserId")
+                        .HasDatabaseName("IX_mentor_help_tickets_assigned_to_user_id");
+
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("IX_mentor_help_tickets_player_id");
+
+                    b.HasIndex("Status")
+                        .HasDatabaseName("IX_mentor_help_tickets_status");
+
+                    b.HasIndex("ClosedAt", "AssignedToUserId")
+                        .HasDatabaseName("IX_mentor_help_tickets_closed_at_assigned_to_user_id");
+
+                    b.ToTable("mentor_help_tickets", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.PlayTime", b =>
                 {
                     b.Property<int>("Id")
@@ -1050,6 +1236,11 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("age");
 
+                    b.Property<string>("BodyType")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("body_type");
+
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -1064,6 +1255,15 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("facial_hair_color");
+
+                    b.Property<int>("FacialHairColorType")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("facial_hair_color_type");
+
+                    b.Property<string>("FacialHairExtendedColor")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("facial_hair_extended_color");
 
                     b.Property<string>("FacialHairName")
                         .IsRequired()
@@ -1085,10 +1285,23 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("hair_color");
 
+                    b.Property<int>("HairColorType")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("hair_color_type");
+
+                    b.Property<string>("HairExtendedColor")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("hair_extended_color");
+
                     b.Property<string>("HairName")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("hair_name");
+
+                    b.Property<float>("Height")
+                        .HasColumnType("REAL")
+                        .HasColumnName("height");
 
                     b.Property<byte[]>("Markings")
                         .HasColumnType("jsonb")
@@ -1129,9 +1342,18 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("species");
 
+                    b.Property<string>("TtsVoice")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("tts_voice");
+
                     b.Property<string>("Voice")
                         .HasColumnType("TEXT")
                         .HasColumnName("voice");
+
+                    b.Property<float>("Width")
+                        .HasColumnType("REAL")
+                        .HasColumnName("width");
 
                     b.HasKey("Id")
                         .HasName("PK_profile");
@@ -1352,6 +1574,65 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .IsUnique();
 
                     b.ToTable("trait", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.TutorialCompletion", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("TutorialId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("tutorial_id");
+
+                    b.Property<double?>("AccountAgeDays")
+                        .HasColumnType("REAL")
+                        .HasColumnName("account_age_days");
+
+                    b.Property<DateTimeOffset>("CompletedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("completed_at");
+
+                    b.Property<int>("CompletionCount")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("completion_count");
+
+                    b.HasKey("PlayerUserId", "TutorialId")
+                        .HasName("PK_tutorial_completion");
+
+                    b.HasIndex("PlayerUserId")
+                        .HasDatabaseName("IX_tutorial_completion_player_user_id");
+
+                    b.HasIndex("TutorialId")
+                        .HasDatabaseName("IX_tutorial_completion_tutorial_id");
+
+                    b.ToTable("tutorial_completion", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.UiLike", b =>
+                {
+                    b.Property<string>("ScopeId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("scope_id");
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("item_id");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.HasKey("ScopeId", "ItemId", "PlayerUserId")
+                        .HasName("PK_ui_likes");
+
+                    b.HasIndex("PlayerUserId", "ScopeId")
+                        .HasDatabaseName("IX_ui_likes_player_user_id_scope_id");
+
+                    b.ToTable("ui_likes", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.Unban", b =>
@@ -1866,6 +2147,30 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.JobAlternativeTitle", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany("JobAlternativeTitles")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_job_alternative_title_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.MentorHelpMessage", b =>
+                {
+                    b.HasOne("Content.Server.Database.MentorHelpTicket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_mentor_help_messages_mentor_help_tickets_ticket_id");
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("Content.Server.Database.Player", b =>
                 {
                     b.OwnsOne("Content.Server.Database.TypedHwid", "LastSeenHWId", b1 =>
@@ -2119,6 +2424,8 @@ namespace Content.Server.Database.Migrations.Sqlite
             modelBuilder.Entity("Content.Server.Database.Profile", b =>
                 {
                     b.Navigation("Antags");
+
+                    b.Navigation("JobAlternativeTitles");
 
                     b.Navigation("Jobs");
 

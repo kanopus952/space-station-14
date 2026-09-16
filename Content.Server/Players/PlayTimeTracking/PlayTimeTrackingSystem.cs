@@ -356,7 +356,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
         for (var i = 0; i < jobs.Count; i++)
         {
             if (ProtoMan.Resolve(jobs[i], out var job)
-                && JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, _prototypes, (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(userId).SelectedCharacter, sponsorPrototypes)) // Sunrise-Sponsors
+                && JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, ProtoMan, (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(userId).SelectedCharacter, sponsorPrototypes)) // Sunrise-Sponsors
             {
                 continue;
             }

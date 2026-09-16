@@ -75,7 +75,6 @@ public sealed partial class FleshCultSystem : EntitySystem
     [Dependency] private SharedRoleSystem _roles = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private RoundEndSystem _roundEndSystem = default!;
     [Dependency] private IRobustRandom _random = default!;

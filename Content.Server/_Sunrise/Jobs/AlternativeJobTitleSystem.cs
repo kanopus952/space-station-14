@@ -18,7 +18,6 @@ namespace Content.Server._Sunrise.Jobs;
 /// </summary>
 public sealed partial class AlternativeJobTitleSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private SharedIdCardSystem _card = default!;
     [Dependency] private StationRecordsSystem _records = default!;
 
@@ -41,7 +40,7 @@ public sealed partial class AlternativeJobTitleSystem : EntitySystem
         if (!profile.JobAlternativeTitles.TryGetValue(jobId, out var altTitleLocId))
             return null;
 
-        if (!_prototype.TryIndex<JobPrototype>(jobId, out var jobProto))
+        if (!ProtoMan.TryIndex<JobPrototype>(jobId, out var jobProto))
             return null;
 
         if (!jobProto.AlternativeTitles.Contains(altTitleLocId))
