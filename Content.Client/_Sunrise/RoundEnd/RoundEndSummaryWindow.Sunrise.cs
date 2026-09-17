@@ -1,4 +1,5 @@
 using Content.Client._Sunrise.StatsBoard;
+using Content.Client.Message;
 using Content.Shared._Sunrise.StatsBoard;
 using Content.Shared._Sunrise.Storyteller;
 using Content.Shared.GameTicking;
@@ -7,6 +8,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
+using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.RoundEnd;
@@ -261,21 +263,47 @@ public sealed partial class RoundEndSummaryWindow
         var categories = new Dictionary<string, List<StorytellerHistoryType>>
         {
             [Loc.GetString("storyteller-history-filter-events")] =
-            [
+            new List<StorytellerHistoryType>
+            {
                 StorytellerHistoryType.HelpfulEvent,
                 StorytellerHistoryType.NeutralEvent,
                 StorytellerHistoryType.MinorCalmEvent,
                 StorytellerHistoryType.MajorCalmEvent
-            ],
+            },
             [Loc.GetString("storyteller-history-filter-antagonists")] =
-            [StorytellerHistoryType.MinorAntagEvent, StorytellerHistoryType.MajorAntagEvent],
-            [Loc.GetString("storyteller-history-filter-station")] = [StorytellerHistoryType.StationEvent],
-            [Loc.GetString("storyteller-history-filter-deaths")] = [StorytellerHistoryType.Death],
-            [Loc.GetString("storyteller-history-filter-anomalies")] = [StorytellerHistoryType.AnomalyEngine],
-            [Loc.GetString("storyteller-history-filter-explosions")] = [StorytellerHistoryType.Explosion],
-            [Loc.GetString("storyteller-history-filter-research")] = [StorytellerHistoryType.Research],
-            [Loc.GetString("storyteller-history-filter-arrivals")] = [StorytellerHistoryType.Arrival],
-            [Loc.GetString("storyteller-history-filter-cryo")] = [StorytellerHistoryType.Departure]
+            new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.MinorAntagEvent,
+                StorytellerHistoryType.MajorAntagEvent
+            },
+            [Loc.GetString("storyteller-history-filter-station")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.StationEvent
+            },
+            [Loc.GetString("storyteller-history-filter-deaths")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.Death
+            },
+            [Loc.GetString("storyteller-history-filter-anomalies")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.AnomalyEngine
+            },
+            [Loc.GetString("storyteller-history-filter-explosions")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.Explosion
+            },
+            [Loc.GetString("storyteller-history-filter-research")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.Research
+            },
+            [Loc.GetString("storyteller-history-filter-arrivals")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.Arrival
+            },
+            [Loc.GetString("storyteller-history-filter-cryo")] = new List<StorytellerHistoryType>
+            {
+                StorytellerHistoryType.Departure
+            }
         };
 
         foreach (var (label, eventTypes) in categories)

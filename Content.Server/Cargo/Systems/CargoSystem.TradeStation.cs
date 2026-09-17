@@ -216,7 +216,7 @@ public sealed partial class CargoSystem
         var player = args.Actor;
         if (!_accessReaderSystem.IsAllowed(player, uid))
         {
-            ConsolePopup(args.Actor, Loc.GetString("cargo-console-order-not-allowed"));
+            _popup.PopupCursor(Loc.GetString("cargo-console-order-not-allowed"), args.Actor);
             PlayDenySound(uid, component);
             return;
         }

@@ -438,7 +438,7 @@ namespace Content.Server.Shuttles.Systems
 
             if (console == null)
             {
-                _popup.PopupCursor(Loc.GetString("shuttle-console-undock-fail"));
+                _popup.PopupCursor(Loc.GetString("shuttle-console-undock-fail"), args.Actor);
                 return;
             }
 
@@ -453,7 +453,7 @@ namespace Content.Server.Shuttles.Systems
 
             if (!CanShuttleUndock(shuttleUid))
             {
-                _popup.PopupCursor(Loc.GetString("shuttle-console-dock-fail"));
+                _popup.PopupCursor(Loc.GetString("shuttle-console-dock-fail"), args.Actor);
                 return;
             }
 

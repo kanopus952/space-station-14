@@ -20,7 +20,7 @@ namespace Content.Server._Sunrise.StationGoal
 
         [ViewVariables(VVAccess.ReadOnly),
          DataField("extraItems", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
-        public List<string?> ExtraItems = new();
+        public List<string> ExtraItems = new();
         // Sunrise-end
 
         [DataField]

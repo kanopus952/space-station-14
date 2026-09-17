@@ -1,5 +1,4 @@
 using Content.Shared._Sunrise.NightVision.Components;
-using Content.Shared._Sunrise.NightVision.Events;
 using Content.Shared.Actions;
 using Content.Shared.NightVision;
 using Content.Shared.Overlays;
