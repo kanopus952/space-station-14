@@ -6,7 +6,7 @@
   components:
   - type: ContainerInteractionAnimationVisuals # Sunrise-Edit
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/backpack.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/backpack.rsi # Sunrise-Edit
     state: icon
   - type: Item
     size: Huge
@@ -90,7 +90,7 @@
   description: It's a very sterile backpack.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/brigmedic.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/brigmedic.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -99,7 +99,7 @@
   description: It's a tough backpack for the daily grind of station life.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/engineering.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/engineering.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -108,7 +108,7 @@
   description: It's a backpack made of fire resistant fibers. Smells like plasma.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/atmospherics.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/atmospherics.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -117,7 +117,7 @@
   description: It's a backpack especially designed for use in a sterile environment.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/medical.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/medical.rsi # Sunrise-Edit
 
 - type: entity
   parent: [ClothingBackpack, BaseCommandContraband]
@@ -126,7 +126,7 @@
   description: It's a special backpack made exclusively for Nanotrasen officers.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/captain.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/captain.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -135,7 +135,7 @@
   description: A silent backpack made for those silent workers. Silence Co.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/mime.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/mime.rsi # Sunrise-Edit
   - type: Storage
     storageOpenSound: null
     storageInsertSound: null
@@ -147,7 +147,7 @@
   description: A backpack specially designed to repel stains and hazardous liquids.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/chemistry.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/chemistry.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -156,7 +156,7 @@
   description: It's a backpack made of all-natural fibers.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/hydroponics.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/hydroponics.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -165,7 +165,7 @@
   description: A backpack specially designed to repel stains and hazardous liquids.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/science.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/science.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -174,7 +174,7 @@
   description: A backpack made of hypo-allergenic fibers. It's designed to help prevent the spread of disease. Smells like monkey.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/virology.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/virology.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -183,7 +183,7 @@
   description: A backpack designed to be super tough, just in case someone hulks out on you.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/genetics.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/genetics.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack
@@ -192,7 +192,7 @@
   description: A robust backpack for stealing cargo's loot.
   components:
     - type: Sprite
-      sprite: Clothing/Back/Backpacks/cargo.rsi
+      sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/cargo.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpack

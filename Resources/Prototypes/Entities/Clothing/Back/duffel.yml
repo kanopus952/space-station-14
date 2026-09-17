@@ -31,7 +31,7 @@
   description: A large duffel bag made of fire resistant fibers. Smells like plasma.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Duffels/atmospherics.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Duffels/atmospherics.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpackDuffel
@@ -49,7 +49,7 @@
   description: A large duffel bag for holding extra captainly goods.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Duffels/captain.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Duffels/captain.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpackDuffel
@@ -85,7 +85,7 @@
   description: A large duffel bag for holding extra medical related goods.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Duffels/brigmedic.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Duffels/brigmedic.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpackDuffel
@@ -103,7 +103,7 @@
   description: A large duffel bag made of hypo-allergenic fibers. It's designed to help prevent the spread of disease. Smells like monkey.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Duffels/virology.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Duffels/virology.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpackDuffel
@@ -112,7 +112,7 @@
   description: A large duffel bag for holding extra genetic mutations.
   components:
   - type: Sprite
-    sprite: Clothing/Back/Duffels/genetics.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Duffels/genetics.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpackDuffel
@@ -151,7 +151,7 @@
   description: A large duffel bag for stealing cargo's precious loot.
   components:
     - type: Sprite
-      sprite: Clothing/Back/Duffels/cargo.rsi
+      sprite: _Sunrise/Clothing/Back/Resprites/Duffels/cargo.rsi # Sunrise-Edit
 
 - type: entity
   parent: ClothingBackpackDuffel

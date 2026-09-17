@@ -436,7 +436,7 @@
     solution:
       reagents:
       - ReagentId: Slime
-        Quantity: 5
+        Quantity: 10
   - type: ToolRefinable
     refineResult:
     - id: FoodMeatSlime
@@ -593,6 +593,11 @@
       types:
         Asphyxiation: -0.5
   - type: CombatMode
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Slime
+        Quantity: 20
   - type: ToolRefinable
     refineResult:
     - id: FoodMeatSlime

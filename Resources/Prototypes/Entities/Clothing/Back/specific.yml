@@ -8,7 +8,7 @@
     - type: Tag
       tags: [] # ignore "WhitelistChameleon" tag
     - type: Sprite
-      sprite: Clothing/Back/Backpacks/backpack.rsi
+      sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/backpack.rsi # Sunrise-Edit
     - type: ChameleonClothing
       slot: [back]
       default: ClothingBackpack

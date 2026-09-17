@@ -30,7 +30,7 @@ namespace Content.Server.Preferences.Managers
     /// Sends <see cref="MsgPreferencesAndSettings"/> before the client joins the lobby.
     /// Receives <see cref="MsgSelectCharacter"/> and <see cref="MsgUpdateCharacter"/> at any time.
     /// </summary>
-    public sealed partial class ServerPreferencesManager : IServerPreferencesManager, IPostInjectInit // Sunrise-Edit
+    public sealed partial class ServerPreferencesManager : IServerPreferencesManager, IPostInjectInit
     {
         [Dependency] private IServerNetManager _netManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
@@ -49,8 +49,6 @@ namespace Content.Server.Preferences.Managers
             new();
 
         private ISawmill _sawmill = default!;
-
-        // private int MaxCharacterSlots => _cfg.GetCVar(CCVars.GameMaxCharacterSlots);
 
         public void Init()
         {
@@ -211,7 +209,7 @@ namespace Content.Server.Preferences.Managers
                 return;
             }
 
-            if (index < 0 || index >= GetMaxUserCharacterSlots(userId)) // Sunrise-Sponsors
+            if (index < 0 || index >= GetMaxUserCharacterSlots(userId)) // Sunrise-Edit - учитываем спонсорские слоты
             {
                 return;
             }
@@ -301,7 +299,18 @@ namespace Content.Server.Preferences.Managers
                 return;
             }
 
+
+            if (slot < 0)
+            {
+                return;
+            }
+
             var curPrefs = prefsData.Prefs!;
+
+            if (!curPrefs.Characters.ContainsKey(slot))
+            {
+                return;
+            }
 
             // If they try to delete the slot they have selected then we switch to another one.
             // Of course, that's only if they HAVE another slot.
@@ -420,7 +429,7 @@ namespace Content.Server.Preferences.Managers
             msg.Preferences = prefsData.Prefs;
             msg.Settings = new GameSettings
             {
-                MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId) // Sunrise-Sponsors
+                MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId) // Sunrise-Edit - учитываем спонсорские слоты
             };
             EnsureSunriseSelectedCharacterIndex(msg.Preferences, msg.Settings.MaxCharacterSlots); // Sunrise-Edit - выбранный слот должен оставаться доступным
             _netManager.ServerSendMessage(msg, session.Channel);
@@ -435,6 +444,7 @@ namespace Content.Server.Preferences.Managers
         {
             return _cachedPlayerPrefs.ContainsKey(session.UserId);
         }
+
 
         /// <summary>
         /// Tries to get the preferences from the cache

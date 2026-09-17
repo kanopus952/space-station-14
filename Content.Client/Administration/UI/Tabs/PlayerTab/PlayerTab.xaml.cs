@@ -12,6 +12,7 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 using static Content.Client.Administration.UI.Tabs.PlayerTab.PlayerTabHeader;
 using static Robust.Client.UserInterface.Controls.BaseButton;
 
@@ -23,6 +24,7 @@ public sealed partial class PlayerTab : Control
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IPlayerManager _playerMan = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ISharedAdminManager _adminManager = default!; // Sunrise-Edit
 
     private const string ArrowUp = "↑";
@@ -191,7 +193,12 @@ public sealed partial class PlayerTab : Control
         // Sunrise-Sponsors-End
 
         SearchList.PopulateList(sortedPlayers.Select(info => new PlayerListData(info,
-                $"{info.Username} {info.CharacterName} {info.IdentityName} {info.StartingJob}"))
+                $"{info.Username} " +
+                $"{info.CharacterName} " +
+                $"{info.IdentityName} " +
+                $"{info.StartingJob} " +
+                $"{Loc.GetString(info.Subtype ?? string.Empty)} " +
+                $"{(_proto.TryIndex(info.RoleProto, out var proto) ? Loc.GetString(proto.Name) : string.Empty)}"))
             .ToList());
     }
 

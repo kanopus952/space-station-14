@@ -103,12 +103,11 @@ namespace Content.Server.Pointing.EntitySystems
                 // Someone pointing at YOU is slightly more important
                 var popupType = viewerEntity == pointed ? PopupType.Medium : PopupType.Small;
 
-                // Sunrise edit start - добавил оригин в виде предмета, на который тыкнули для иконок
-                RaiseNetworkEvent(new PopupEntityEvent(message, popupType, netSource, GetNetEntity(pointed)), viewerEntity);
-                // Sunrise edit end
+                // Sunrise-Edit: передаём цель указания для клиентской иконки над ней.
+                RaiseNetworkEvent(new PopupEntityEvent(message, popupType, _gameTiming.CurTick, netSource, GetNetEntity(pointed)), viewerEntity); // TODO: Make this use the popup system API
             }
 
-            _replay.RecordServerMessage(new PopupEntityEvent(viewerMessage, PopupType.Small, netSource));
+            _replay.RecordServerMessage(new PopupEntityEvent(viewerMessage, PopupType.Small, _gameTiming.CurTick, netSource));
         }
 
         public bool InRange(EntityUid pointer, EntityCoordinates coordinates)

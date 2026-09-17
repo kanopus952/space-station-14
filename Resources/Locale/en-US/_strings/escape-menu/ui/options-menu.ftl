@@ -34,22 +34,12 @@ ui-options-ambience-volume = Ambience volume:
 ui-options-lobby-volume = Lobby & Round-end volume:
 ui-options-interface-volume = Interface volume:
 ui-options-ambience-max-sounds = Ambience simultaneous sounds:
-ui-options-lobby-music = Lobby Music
+ui-options-lobby-music = Lobby & Round-end Music
 ui-options-restart-sounds = Round Restart Sounds
 ui-options-event-music = Event Music
 ui-options-admin-sounds = Play Admin Sounds
 ui-options-bwoink-sound = Play AHelp Notification Sound
 ui-options-volume-label = Volume
-# Sunrise-Start
-ui-options-scp-echo-enabled = Echo effect
-ui-options-scp-echo-enabled-tooltip =
-    If enabled, each non-global sound will have an echo effect.
-    When enabled, all sounds may become louder. Use the volume slider to adjust the volume.
-ui-options-scp-echo-strong-preset-preferred = Use enhanced echo effect
-ui-options-scp-echo-strong-preset-preferred-tooltip =
-    Determines whether a strong echo effect will be used.
-    In the enhanced effect, sounds will have a longer tail.
-# Sunrise-End
 
 ## Graphics menu
 
@@ -371,15 +361,43 @@ cmd-options-help = Usage: options [tab]
 
 ## Accessibility menu
 
+ui-options-accessibility-header-reduced-motion = Reduced Motion
+ui-options-accessibility-header-visuals = Visuals
+ui-options-accessibility-header-content = Content
+
 ui-options-enable-color-name = Add colors to character names
 ui-options-colorblind-friendly = Colorblind friendly mode
-ui-options-reduced-motion = Reduce motion of visual effects
-ui-options-disable-ai-static = Disable the static effect on the AI camera overlay
+
+ui-options-reduced-motion = Reduce general visual effects
+ui-options-reduced-motion-tooltip = Toggle on to show alternative sprites with reduced motion for some items.
+
+# accessibility option tooltips taken from CVar summary blocks.
+
+ui-options-disable-ai-static = AI camera static
+ui-options-disable-ai-static-tooltip = Replaces the AI static camera effect with a plain gradient.
+ui-options-disable-blurry-vision = Blurry vision
+ui-options-disable-blurry-vision-tooltip = Replaces the movement in the blurry shader with a static effect.
+ui-options-disable-drunk-overlay = Drunk overlay
+ui-options-disable-drunk-overlay-tooltip = Replaces the movement in the drunk shader with a static offset.
+ui-options-disable-flash-effect = Flash
+ui-options-disable-flash-effect-tooltip = Replaces the 'flash' effect with a reduced movement equivalent.
+ui-options-disable-heat-distortion = Heat distortion
+ui-options-disable-heat-distortion-tooltip = Decreases motion on the heat distortion shader.
+ui-options-disable-nv-noise = Night vision overlay
+ui-options-disable-nv-noise-tooltip = Disables the noise effect on the night vision overlay.
+ui-options-disable-rainbow-overlay = Rainbow overlay
+ui-options-disable-rainbow-overlay-tooltip = Replaces the movement in the rainbow overlay shader with a static offset.
+ui-options-disable-singulo-warp = Singularity
+ui-options-disable-singulo-warp-tooltip = Disables the screen warping effect on the singularity.
+
 ui-options-screen-shake-intensity = Screen shake intensity
+
 ui-options-chat-window-opacity = Chat window opacity
 ui-options-speech-bubble-text-opacity = Speech bubble text opacity
 ui-options-speech-bubble-speaker-opacity = Speech bubble speaker opacity
 ui-options-speech-bubble-background-opacity = Speech bubble background opacity
+
+ui-options-censor-nudity = Censor character nudity
 
 ## Admin menu
 
