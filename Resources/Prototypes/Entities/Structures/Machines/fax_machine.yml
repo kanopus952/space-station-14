@@ -5,13 +5,19 @@
   description: Bluespace technologies on the application of bureaucracy.
   components:
   - type: Sprite
-    sprite: Structures/Machines/fax_machine.rsi
+    sprite: _Sunrise/Structures/Machines/fax_machine.rsi # Sunrise-Edit
     drawdepth: SmallObjects
     layers:
     - state: icon
+    - state: idle
+      map: [ "faxEyes" ]
+    - state: printing
+      map: [ "printing" ]
+      visible: false
+    - state:
       map: [ "enum.FaxMachineVisuals.VisualState" ]
   - type: Icon
-    sprite: Structures/Machines/fax_machine.rsi
+    sprite: _Sunrise/Structures/Machines/fax_machine.rsi # Sunrise-Edit
     state: icon
   - type: Appearance
   - type: Physics
@@ -54,13 +60,16 @@
   - type: GenericVisualizer
     visuals:
       enum.PowerDeviceVisuals.Powered:
-        enum.FaxMachineVisuals.VisualState:
-          True: { state: idle }
-          False: { state: icon }
+        faxEyes:
+          True: { visible: true }
+          False: { visible: false }
       enum.FaxMachineVisuals.VisualState:
+        printing:
+          Printing: { visible: true }
+          Normal: { visible: false }
         enum.FaxMachineVisuals.VisualState:
-          Printing: { state: printing }
-          Normal: {state: idle}
+          Inserting: { visible: true }
+          Normal: { visible: false }
   - type: ItemSlots
   - type: ContainerContainer
     containers:
@@ -81,9 +90,15 @@
   components:
   - type: Sprite
     layers:
-      - state: icon
-        map: [ "base" ]
-        color: "#bfe3ff"
+    - state: icon
+      color: "#bfe3ff"
+    - state: idle
+      map: [ "faxEyes" ]
+    - state: printing
+      map: [ "printing" ]
+      visible: false
+    - state:
+      map: [ "enum.FaxMachineVisuals.VisualState" ]
   - type: FaxMachine
     name: "Central Command"
     notifyAdmins: true
@@ -97,9 +112,15 @@
   components:
   - type: Sprite
     layers:
-      - state: icon
-        map: [ "base" ]
-        color: "#a3a3a3"
+    - state: icon
+      color: "#a3a3a3"
+    - state: idle
+      map: [ "faxEyes" ]
+    - state: printing
+      map: [ "printing" ]
+      visible: false
+    - state:
+      map: [ "enum.FaxMachineVisuals.VisualState" ]
   - type: FaxMachine
     name: "ERR*?*%!"
     responsePings: false
@@ -131,13 +152,13 @@
   - type: Item
     size: Normal
   - type: Sprite
-    sprite: Structures/Machines/fax_machine.rsi
+    sprite: _Sunrise/Structures/Machines/fax_machine.rsi # Sunrise-Edit
     drawdepth: SmallObjects
     layers:
     - state: icon
       map: [ "enum.FaxMachineVisuals.VisualState" ]
   - type: Icon
-    sprite: Structures/Machines/fax_machine.rsi
+    sprite: _Sunrise/Structures/Machines/fax_machine.rsi # Sunrise-Edit
     state: icon
   - type: Appearance
   - type: ActivatableUI

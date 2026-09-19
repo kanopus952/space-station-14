@@ -97,12 +97,12 @@ public sealed partial class StealthSystem : SharedStealthSystem
 
         // actual visual visibility effect is limited to +/- 1.
         visibility = Math.Clamp(visibility, -1f, 1f);
-
-        // Sunrise-Start
-        ShaderInstance shaderToUse = component.Mirage ? _shader : _noMirageShader;
+        // Sunrise start
+        var shaderToUse = component.Mirage ? _shader : _noMirageShader;
         shaderToUse.SetParameter("reference", reference);
         shaderToUse.SetParameter("visibility", visibility);
-        // Sunrise-End
+        shaderToUse.SetParameter("shimmer_frequency", component.ShimmerFrequency);
+        // Sunrise end
 
         visibility = MathF.Max(0, visibility);
         _sprite.SetColor((uid, args.Sprite), new Color(visibility, visibility, 1, 1));

@@ -58,10 +58,10 @@
     - Window
   components:
   - type: Sprite
-    sprite: Structures/Windows/directional.rsi
+    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
     state: reinforced_window
   - type: Icon
-    sprite: Structures/Windows/directional.rsi
+    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
     state: reinforced_window
   - type: Construction
     graph: WindowDirectional

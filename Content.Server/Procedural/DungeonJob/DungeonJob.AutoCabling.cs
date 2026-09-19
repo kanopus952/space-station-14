@@ -70,7 +70,8 @@ public sealed partial class DungeonJob
             {
                 var newStart = remaining.First();
                 frontier.Enqueue(newStart, 0f);
-                costSoFar[newStart] = 0f; // Sunrise-Edit
+                if (!costSoFar.ContainsKey(newStart))
+                    costSoFar[newStart] = 0f;
                 lastDirection[newStart] = Direction.Invalid;
             }
 

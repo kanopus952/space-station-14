@@ -28,12 +28,11 @@ using Content.Server._Sunrise.Shuttles.Components;
 
 namespace Content.Server.Shuttles.Systems;
 
+/// <summary>
+/// This is a way to move a shuttle from one location to another, via an intermediate map for fanciness.
+/// </summary>
 public sealed partial class ShuttleSystem
 {
-    /*
-     * This is a way to move a shuttle from one location to another, via an intermediate map for fanciness.
-     */
-
     [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
     [Dependency] private EntityQuery<FTLSmashImmuneComponent> _immuneQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
@@ -409,7 +408,7 @@ public sealed partial class ShuttleSystem
         LeaveNoFTLBehind((entity.Owner, xform), oldGridMatrix, oldMapUid);
 
         // Reset rotation so they always face the same direction.
-        xform.LocalRotation = Angle.Zero;
+        _transform.SetLocalRotation(entity, Angle.Zero, xform);
         _index += width + Buffer;
         comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
 
@@ -613,14 +612,6 @@ public sealed partial class ShuttleSystem
                     break;
             }
         }
-    }
-
-    private float GetSoundRange(EntityUid uid)
-    {
-        if (!_mapGridQuery.TryComp(uid, out var grid))
-            return 4f;
-
-        return MathF.Max(grid.LocalAABB.Width, grid.LocalAABB.Height) + 12.5f;
     }
 
     /// <summary>

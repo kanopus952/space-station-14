@@ -10,6 +10,10 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 # Sunrise added end
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true  # We only care about latest.
+
 jobs:
   build:
     name: CRLF Check

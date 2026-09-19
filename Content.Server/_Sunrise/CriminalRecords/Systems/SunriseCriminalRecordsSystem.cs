@@ -4,7 +4,7 @@ using Content.Shared._Sunrise.CriminalRecords.Systems;
 using Content.Shared.StationRecords;
 using Content.Shared._Sunrise.CriminalRecords.Components;
 using Content.Server._Sunrise.CriminalRecords.Components;
-using Content.Server.StationRecords.Systems;
+using Content.Shared.StationRecords.Systems;
 using Content.Server.Station.Systems;
 using Content.Server._Sunrise.Laws.Systems;
 using Content.Shared.Access.Systems;

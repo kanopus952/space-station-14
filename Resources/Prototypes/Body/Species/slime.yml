@@ -216,7 +216,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: Mobs/Species/Slime/organs.rsi
+    sprite: _Sunrise/Mobs/Species/Slime/organs_base.rsi # Sunrise-Edit
 
 - type: entity
   parent: OrganSlimePerson
@@ -285,6 +285,14 @@
     maxReagents: 6
     metabolizerTypes: [ Slime ]
     stages: [ Digestion, Metabolites ] # Sunrise-Edit: Bloodstream обрабатывает OrganSlimeHeart.
+
+- type: entity
+  parent: [ OrganBaseEyes, OrganSlimePersonInternal, OrganSlimePersonExternal ]
+  id: OrganSlimePersonEyes
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: Mobs/Customization/eyes.rsi
 
 - type: entity
   parent: [ OrganBaseEyes, OrganSlimePersonInternal, OrganSlimePersonExternal ]

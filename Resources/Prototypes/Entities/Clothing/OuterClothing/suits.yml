@@ -203,6 +203,7 @@
     - type: Stealth
       minVisibility: 0.05
       lastVisibility: 0.05
+      shimmerFrequency: 0.05
   - type: PowerCellDraw
     drawRate: 1.8
   - type: ToggleCellDraw

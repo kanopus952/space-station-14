@@ -1053,9 +1053,9 @@
   components:
   - type: BreathMask
   - type: Sprite
-    sprite: Clothing/Head/Hardsuits/mime.rsi
+    sprite: _Sunrise/Clothing/Head/Hardsuits/mime.rsi # Sunrise-Edit
   - type: Clothing
-    sprite: Clothing/Head/Hardsuits/mime.rsi
+    sprite: _Sunrise/Clothing/Head/Hardsuits/mime.rsi # Sunrise-Edit
 
 #Santas Hardsuit
 - type: entity

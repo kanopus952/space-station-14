@@ -28,7 +28,7 @@
     graph: LightFixture
     node: tubeLight
   - type: Sprite
-    sprite: Structures/Wallmounts/Lighting/light_tube.rsi
+    sprite: _Sunrise/Structures/Wallmounts/lighting/light_tube.rsi # Sunrise-Edit
     drawdepth: WallMountedItems
     layers:
     - map: ["enum.PoweredLightLayers.Base"]
@@ -96,7 +96,7 @@
   parent: AlwaysPoweredWallLight
   components:
   - type: Sprite
-    sprite: Structures/Wallmounts/Lighting/light_tube.rsi
+    sprite: _Sunrise/Structures/Wallmounts/lighting/light_tube.rsi # Sunrise-Edit
     state: empty
   - type: PointLight
     enabled: false

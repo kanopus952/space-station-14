@@ -71,6 +71,7 @@
     - type: Stealth
       mirage: true # Sunrise-Edit
       hadOutline: true
+      shimmerFrequency: 0.05
       examineThreshold: 0.9 # Sunrise-Edit
     - type: StealthOnMove
       passiveVisibilityRate: -1 # very useful for going around the station concealed, if you start jitterstrafing you get seen

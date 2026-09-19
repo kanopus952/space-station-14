@@ -140,10 +140,10 @@
         collection: GlassSmack
   - type: Sprite
     drawdepth: Mobs
-    sprite: Structures/Windows/directional.rsi
+    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
     state: window
   - type: Icon
-    sprite: Structures/Windows/directional.rsi
+    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
     state: window
   - type: InteractionPopup
     interactSuccessString: comp-window-knock
@@ -224,10 +224,10 @@
     - Window
   components:
   - type: Sprite
-    sprite: Structures/Windows/directional.rsi
+    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
     state: frosted_window
   - type: Icon
-    sprite: Structures/Windows/directional.rsi
+    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
     state: frosted_window
   - type: Occluder                        # Sunrise-Edit
     boundingBox: "-0.5,-0.5,0.5,-0.28125" # Sunrise-Edit

@@ -97,14 +97,14 @@ public sealed partial class SmartEquipSystem : EntitySystem
 
         if (!TryComp<InventoryComponent>(uid, out var inventory) || !_inventory.HasSlot(uid, equipmentSlot, inventory))
         {
-            _popup.PopupClient(Loc.GetString("smart-equip-missing-equipment-slot", ("slotName", equipmentSlot)), uid, uid);
+            _popup.PopupEntity(Loc.GetString("smart-equip-missing-equipment-slot", ("slotName", equipmentSlot)), uid, uid);
             return;
         }
 
         // early out if we have an item and cant drop it at all
         if (handItem != null && !_hands.CanDropHeld(uid, hands.ActiveHandId))
         {
-            _popup.PopupClient(Loc.GetString("smart-equip-cant-drop"), uid, uid);
+            _popup.PopupEntity(Loc.GetString("smart-equip-cant-drop"), uid, uid);
             return;
         }
 
@@ -133,13 +133,13 @@ public sealed partial class SmartEquipSystem : EntitySystem
         {
             if (handItem == null)
             {
-                _popup.PopupClient(emptyEquipmentSlotString, uid, uid);
+                _popup.PopupEntity(emptyEquipmentSlotString, uid, uid);
                 return;
             }
 
             if (!_inventory.CanEquip(uid, handItem.Value, equipmentSlot, out var reason))
             {
-                _popup.PopupClient(Loc.GetString(reason), uid, uid);
+                _popup.PopupEntity(Loc.GetString(reason), uid, uid);
                 return;
             }
 
@@ -154,7 +154,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
             switch (handItem)
             {
                 case null when storage.Container.ContainedEntities.Count == 0:
-                    _popup.PopupClient(emptyEquipmentSlotString, uid, uid);
+                    _popup.PopupEntity(emptyEquipmentSlotString, uid, uid);
                     return;
                 case null:
                     var removing = storage.Container.ContainedEntities[^1];
@@ -166,7 +166,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
             if (!_storage.CanInsert(slotItem, handItem.Value, out var reason))
             {
                 if (reason != null)
-                    _popup.PopupClient(Loc.GetString(reason), uid, uid);
+                    _popup.PopupEntity(Loc.GetString(reason), uid, uid);
 
                 return;
             }
@@ -205,7 +205,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
 
                 if (toEjectFrom == null)
                 {
-                    _popup.PopupClient(emptyEquipmentSlotString, uid, uid);
+                    _popup.PopupEntity(emptyEquipmentSlotString, uid, uid);
                     return;
                 }
 
@@ -227,7 +227,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
 
             if (toInsertTo == null)
             {
-                _popup.PopupClient(Loc.GetString("smart-equip-no-valid-item-slot-insert", ("item", handItem.Value)), uid, uid);
+                _popup.PopupEntity(Loc.GetString("smart-equip-no-valid-item-slot-insert", ("item", handItem.Value)), uid, uid);
                 return;
             }
 
@@ -241,7 +241,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
 
         if (!_inventory.CanUnequip(uid, equipmentSlot, out var inventoryReason))
         {
-            _popup.PopupClient(Loc.GetString(inventoryReason), uid, uid);
+            _popup.PopupEntity(Loc.GetString(inventoryReason), uid, uid);
             return;
         }
 

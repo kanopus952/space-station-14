@@ -149,8 +149,8 @@
     hideableLayers:
     - enum.HumanoidVisualLayers.Hair
     - enum.HumanoidVisualLayers.Snout
-    # Sunrise start - сохраняем скрытие Sunrise-маркировок ушей головными уборами
     - enum.HumanoidVisualLayers.FacialHair
+    # Sunrise start - сохраняем скрытие Sunrise-маркировок ушей головными уборами
     - enum.HumanoidVisualLayers.HeadTop
     # Sunrise end
 

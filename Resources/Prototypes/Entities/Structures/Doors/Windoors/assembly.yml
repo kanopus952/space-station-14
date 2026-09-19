@@ -6,7 +6,7 @@
   components:
   - type: InteractionOutline
   - type: Sprite
-    sprite: Structures/Doors/Windoors/windoor.rsi
+    sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi # Sunrise-Edit
     layers:
     - state: assembly
   - type: Physics
@@ -57,7 +57,7 @@
   parent: WindoorAssembly
   components:
   - type: Sprite
-    sprite: Structures/Doors/Windoors/windoor.rsi
+    sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi # Sunrise-Edit
     layers:
     - state: secure_underlay
     - state: assembly
