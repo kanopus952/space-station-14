@@ -63,7 +63,7 @@ public sealed partial class BlockingSystem
         args.Damage *= 1f - blockFraction;
         args.Damage += blowthrough;
 
-        var ev = new BlockingEvent(ent, args.Damage);
+        var ev = new BlockingEvent(entity, args.Damage);
         RaiseLocalEvent(item, ev); // Sunrise-Edit — уведомляем особые щиты об успешной попытке блока
 
         if (blocking.IsRaised && damage.AnyPositive())

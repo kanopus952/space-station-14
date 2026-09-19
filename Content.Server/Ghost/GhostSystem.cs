@@ -420,7 +420,7 @@ namespace Content.Server.Ghost
 
             var following = _followerQuery.CompOrNull(uid)?.Following;
             // select player warps cuz no one wants to warp to places.
-            if (GetPlayerWarps(following).ToArray() is not {} warps)
+            if (GetPlayerWarps().ToArray() is not {} warps) // Sunrise edit
                 return;
             if (warps.Length == 0)
                 return;

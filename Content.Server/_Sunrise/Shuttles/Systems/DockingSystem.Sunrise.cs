@@ -37,7 +37,6 @@ public sealed partial class DockingSystem
             SetSunriseAirblocked(ent, args.State is not (DoorState.Open or DoorState.Opening));
     }
 
-    [SubscribeLocalEvent]
     private void OnSunriseAnchorChanged(Entity<DockingComponent> ent, ref AnchorStateChangedEvent args)
     {
         if (args.Anchored)

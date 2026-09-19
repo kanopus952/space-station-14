@@ -56,7 +56,7 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
 
         // Sunrise-Start
         HashSet<uint> siliconIds = new();
-        if (_records.GetRecordsOfType<GeneralStationRecord>(stationId, null) is { } records)
+        if (_records.GetRecordsOfType<GeneralStationRecord>(stationId) is { } records)
         {
             foreach (var (id, record) in records)
             {

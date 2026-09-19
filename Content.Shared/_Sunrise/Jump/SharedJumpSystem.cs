@@ -266,7 +266,7 @@ public abstract partial class SharedJumpSystem : EntitySystem
             var speedMultiplier = bunnyHopComp.SpeedMultiplier += _bunnyHopSpeedUpPerJump;
             bunnyHopComp.SpeedMultiplier = Math.Min(speedMultiplier, _bunnyHopSpeedLimit);
 
-            _movementSpeedModifier.RefreshMovementSpeedModifiers(ent);
+            _movementSpeedModifier.RefreshMovementSpeedModifiers(ent.Owner);
         }
 
         return true;

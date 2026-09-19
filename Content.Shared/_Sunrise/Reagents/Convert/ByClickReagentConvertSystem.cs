@@ -44,7 +44,7 @@ public sealed partial class ByClickReagentConvertSystem : EntitySystem
                 continue;
 
             _useDelay.TryResetDelay(ent.Owner);
-            _popup.PopupClient(ent.Comp.PopupMessage, target, args.User);
+            _popup.PopupEntity(ent.Comp.PopupMessage, target, args.User);
             _audio.PlayPvs(ent.Comp.Sound, target);
             args.Handled = true;
             return;

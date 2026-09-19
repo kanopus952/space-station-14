@@ -187,7 +187,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
     private void OnOpened(Entity<GeneralStationRecordConsoleComponent> ent, ref BoundUIOpenedEvent args)
     {
         ent.Comp.HasAccess = HasAccess(ent, args.Actor);
-        DirtyField(ent, ent.Comp, nameof(GeneralStationRecordConsoleComponent.HasAccess));
+        Dirty(ent);
     }
 
     private bool HasAccess(Entity<GeneralStationRecordConsoleComponent> ent, EntityUid actor)

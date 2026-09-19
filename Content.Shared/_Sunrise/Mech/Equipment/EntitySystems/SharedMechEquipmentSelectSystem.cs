@@ -46,7 +46,7 @@ public sealed partial class SharedMechEquipmentSelectSystem : EntitySystem
             ? Loc.GetString("mech-equipment-select-popup", ("item", comp.CurrentSelectedEquipment))
             : Loc.GetString("mech-equipment-select-none-popup");
 
-        _popup.PopupPredicted(popupString, uid, comp.PilotSlot.ContainedEntity);
+        _popup.PopupEntity(popupString, uid);
         Dirty(uid, comp);
     }
 }

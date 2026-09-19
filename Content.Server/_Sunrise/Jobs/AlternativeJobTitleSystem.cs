@@ -7,6 +7,7 @@ using Content.Shared.PDA;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.StationRecords;
+using Content.Shared.StationRecords.Events;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Sunrise.Jobs;
@@ -24,7 +25,7 @@ public sealed partial class AlternativeJobTitleSystem : EntitySystem
     public override void Initialize()
     {
         // Обновляем запись в манифесте экипажа после создания
-        SubscribeLocalEvent<AfterGeneralRecordCreatedEvent>(OnAfterGeneralRecordCreated);
+        SubscribeLocalEvent<GeneralRecordCreatedEvent>(OnGeneralRecordCreated);
         // Обновляем ID-карту после спавна
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
         // Копируем название должности при клонировании
@@ -49,7 +50,7 @@ public sealed partial class AlternativeJobTitleSystem : EntitySystem
         return Loc.GetString(altTitleLocId);
     }
 
-    private void OnAfterGeneralRecordCreated(AfterGeneralRecordCreatedEvent ev)
+    private void OnGeneralRecordCreated(ref GeneralRecordCreatedEvent ev)
     {
         if (string.IsNullOrEmpty(ev.Record.JobPrototype))
             return;

@@ -134,7 +134,7 @@ public sealed partial class ExecutionSystem : SharedExecutionSystem
         if (attemptEv.Cancelled)
         {
             if (attemptEv.Message != null)
-                _popupSystem.PopupClient(attemptEv.Message, weapon, attacker);
+                _popupSystem.PopupEntity(attemptEv.Message, weapon, attacker);
             return;
         }
 

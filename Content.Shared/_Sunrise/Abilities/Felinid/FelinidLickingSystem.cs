@@ -58,7 +58,7 @@ public sealed partial class FelinidLickingSystem : EntitySystem
         if (!CanLick(ent, args.Target, out var errorMessage))
         {
             if (errorMessage != null)
-                _popup.PopupClient(errorMessage, ent, ent);
+                _popup.PopupEntity(errorMessage, ent, ent);
 
             return;
         }
@@ -99,7 +99,7 @@ public sealed partial class FelinidLickingSystem : EntitySystem
                 var popup = ent.Owner == target
                     ? Loc.GetString("medical-item-stop-bleeding-self")
                     : Loc.GetString("medical-item-stop-bleeding", ("target", Identity.Entity(target, EntityManager)));
-                _popup.PopupClient(popup, target, ent);
+                _popup.PopupEntity(popup, target, ent);
             }
         }
 

@@ -36,11 +36,18 @@ public sealed partial class SunriseGhostTargetWindow : DefaultWindow
     private readonly List<GhostWarpPlayer> _ghostPlayers = [];
 
     public event Action<NetEntity>? WarpClicked;
+    public event Action? OnGhostnadoClicked;
+    public event Action? OnWarpToRandomFollowedClicked;
+    public event Action? OnWarpToRandomClicked;
 
     public SunriseGhostTargetWindow()
     {
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
+
+        GhostnadoButton.OnPressed += _ => OnGhostnadoClicked?.Invoke();
+        WarpToRandomFollowedButton.OnPressed += _ => OnWarpToRandomFollowedClicked?.Invoke();
+        WarpToRandomButton.OnPressed += _ => OnWarpToRandomClicked?.Invoke();
     }
 
     public void Populate()

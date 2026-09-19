@@ -903,13 +903,14 @@
   id: SeniorCourierIDCard
   name: senior courier ID card
   components:
+  # Sunrise-Start
   - type: Sprite
+    sprite: *id-rsi-sunrise
     layers:
     - state: default
-    - state: stripe_top
+    - state: department-side
       color: *color-supply-top
-    - state: stripe_bottom
-      color: *color-supply-bottom
+  # Sunrise-End
     - sprite: *icon-rsi
       offset: *icon-offset
       state: SeniorCourier

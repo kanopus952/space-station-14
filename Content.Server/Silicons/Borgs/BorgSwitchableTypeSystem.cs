@@ -12,6 +12,7 @@ using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.StationRecords;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.StationRecords.Components;
 
 namespace Content.Server.Silicons.Borgs;
 

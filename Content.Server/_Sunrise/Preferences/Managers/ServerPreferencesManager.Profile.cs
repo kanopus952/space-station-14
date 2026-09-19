@@ -121,8 +121,8 @@ public sealed partial class ServerPreferencesManager
 
     private static Color ParseSunriseLegacyColor(string? colorHex, Color fallback)
     {
-        return string.IsNullOrWhiteSpace(colorHex)
-            ? fallback
-            : Color.TryFromHex(colorHex) ?? fallback;
+        return !string.IsNullOrWhiteSpace(colorHex) && Color.TryFromHex(colorHex, out var color)
+            ? color
+            : fallback;
     }
 }

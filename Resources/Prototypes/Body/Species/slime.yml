@@ -295,14 +295,6 @@
       sprite: Mobs/Customization/eyes.rsi
 
 - type: entity
-  parent: [ OrganBaseEyes, OrganSlimePersonInternal, OrganSlimePersonExternal ]
-  id: OrganSlimePersonEyes
-  components:
-  - type: VisualOrgan
-    data:
-      sprite: Mobs/Customization/eyes.rsi
-
-- type: entity
   parent: [ OrganBaseLungs, OrganSlimePersonInternal, OrganSlimePersonMetabolizer ]
   id: OrganSlimePersonLungs
   name: gas sacs

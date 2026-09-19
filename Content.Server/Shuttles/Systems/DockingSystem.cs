@@ -91,6 +91,8 @@ public sealed partial class DockingSystem : SharedDockingSystem
     [SubscribeLocalEvent]
     private void OnAnchorChange(Entity<DockingComponent> entity, ref AnchorStateChangedEvent args)
     {
+        OnSunriseAnchorChanged(entity, ref args); // Sunrise-Edit - обновляем герметичность дока через общую подписку
+
         if (!args.Anchored)
         {
             Undock(entity);

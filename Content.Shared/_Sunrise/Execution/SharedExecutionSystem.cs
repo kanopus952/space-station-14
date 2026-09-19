@@ -117,7 +117,7 @@ public abstract partial class SharedExecutionSystem : EntitySystem
             ? "suicide-popup-melee-initial-external"
             : "execution-popup-melee-initial-external";
 
-        ShowExecutionPopupPredicted(recipientKey, othersKey, PopupType.Medium, PopupType.MediumCaution, attacker, victim, weapon);
+        ShowExecutionPopup(recipientKey, othersKey, PopupType.Medium, PopupType.MediumCaution, attacker, victim, weapon);
 
         var doAfter =
             new DoAfterArgs(EntityManager, attacker, executionTime, new ExecutionDoAfterEvent(), weapon, target: victim, used: weapon)
@@ -149,10 +149,9 @@ public abstract partial class SharedExecutionSystem : EntitySystem
         {
             if (shotAttempted.Message != null)
             {
-                _popupSystem.PopupPredicted(
+                _popupSystem.PopupEntity(
                     shotAttempted.Message,
                     weapon,
-                    attacker,
                     Filter.Entities(attacker),
                     false);
             }
@@ -168,7 +167,7 @@ public abstract partial class SharedExecutionSystem : EntitySystem
             ? "suicide-popup-gun-initial-external"
             : "execution-popup-gun-initial-external";
 
-        ShowExecutionPopupPredicted(recipientKey, othersKey, PopupType.Medium, PopupType.MediumCaution, attacker, victim, weapon);
+        ShowExecutionPopup(recipientKey, othersKey, PopupType.Medium, PopupType.MediumCaution, attacker, victim, weapon);
 
         var executionTime = attacker == victim ? GunExecutionTime * SuicideGunTimeMultiplier : GunExecutionTime;
 
@@ -202,7 +201,7 @@ public abstract partial class SharedExecutionSystem : EntitySystem
         return _tool.HasQuality(tool, SlicingToolQuality, tool.Comp);
     }
 
-    private void ShowExecutionPopupPredicted(
+    private void ShowExecutionPopup(
         string recipientLocString,
         string othersLocString,
         PopupType recipientType,
@@ -214,7 +213,7 @@ public abstract partial class SharedExecutionSystem : EntitySystem
         var recipientMessage = Loc.GetString(recipientLocString, ("attacker", attacker), ("victim", victim), ("weapon", weapon));
         var othersMessage = Loc.GetString(othersLocString, ("attacker", attacker), ("victim", victim), ("weapon", weapon));
 
-        _popupSystem.PopupPredicted(recipientMessage, attacker, attacker, Filter.Entities(attacker), false, recipientType);
-        _popupSystem.PopupPredicted(othersMessage, attacker, null, Filter.PvsExcept(attacker), true, othersType);
+        _popupSystem.PopupEntity(recipientMessage, attacker, Filter.Entities(attacker), false, recipientType);
+        _popupSystem.PopupEntity(othersMessage, attacker, Filter.PvsExcept(attacker), true, othersType);
     }
 }

@@ -101,7 +101,7 @@ public sealed partial class StructureCraftBoundUserInterface : BoundUserInterfac
         // if (construct.ID == "CultPylon" && CheckForStructure(player, id))
         // {
         //     var popup = _entMan.System<SharedPopupSystem>();
-        //     popup.PopupClient(Loc.GetString("cult-structure-craft-another-structure-nearby"), player.Value, player.Value);
+        //     popup.PopupEntity(Loc.GetString("cult-structure-craft-another-structure-nearby"), player.Value, player.Value);
         //     return;
         // }
 
