@@ -11,7 +11,6 @@ using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
-using Content.Server.AlertLevel;
 using Content.Shared.Database;
 using Content.Shared.Flash;
 using Content.Shared.GameTicking.Components;
@@ -31,10 +30,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.Cuffs.Components;
 using Robust.Shared.Player;
-using Content.Server.Administration.Managers;
-using Content.Server.Administration.Systems;
-using Content.Shared.Popups;
-using Content.Shared.AlertLevel;
+using Content.Shared.Mindshield;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -57,15 +53,11 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
     [Dependency] private RoundEndSystem _roundEnd = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private StationSystem _stationSystem = default!;
-    [Dependency] private AlertLevelSystem _alertLevel = default!; // Sunrise-Edit
-    [Dependency] private AdminVerbSystem _adminVerbSystem = default!;
+    [Dependency] private MindShieldSystem _mindShield = default!;
 
     //Used in OnPostFlash, no reference to the rule component is available
     public readonly ProtoId<NpcFactionPrototype> RevolutionaryNpcFaction = "Revolutionary";
     public readonly ProtoId<NpcFactionPrototype> RevPrototypeId = "Rev";
-    private Dictionary<EntityUid, TimeSpan> _scheduledSmites = new();
-
-
 
     public override void Initialize()
     {
@@ -88,37 +80,14 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
     protected override void ActiveTick(EntityUid uid, RevolutionaryRuleComponent component, GameRuleComponent gameRule, float frameTime)
     {
         base.ActiveTick(uid, component, gameRule, frameTime);
-        // Check for command loss or if a banned player needs to be smited.
         if (component.CommandCheck <= _timing.CurTime)
         {
             component.CommandCheck = _timing.CurTime + component.TimerWait;
 
-            // Check for command loss
             if (CheckCommandLose())
             {
-                //  Sunrise-Edit-Start
-                var stations = _stationSystem.GetStations();
-                foreach (var station in stations)
-                {
-                    _alertLevel.SetLevel(station, "Epsilon", true, true, true); // Sunrise-Edit - используем ID нового прототипа уровня тревоги
-                }
-                _roundEnd.EndRound();
-                //  Sunrise-Edit-End
+                HandleSunriseCommandLoss(); // Sunrise-Edit - включаем Epsilon перед завершением раунда.
                 GameTicker.EndGameRule(uid, gameRule);
-            }
-
-            // Execute scheduled smites for banned players
-            if (_scheduledSmites.Count > 0)
-            {
-                var currentTime = _timing.CurTime;
-                foreach (var entity in _scheduledSmites.Keys.ToList().Where(entity => _scheduledSmites[entity] <= currentTime))
-                {
-                    if (Exists(entity))
-                    {
-                        _adminVerbSystem.RandomDeath(entity);
-                    }
-                    _scheduledSmites.Remove(entity);
-                }
             }
         }
     }
@@ -187,7 +156,8 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
         var attemptConvertEv = new AttemptConvertRevolutionaryEvent();
         RaiseLocalEvent(ev.Target, ref attemptConvertEv);
 
-        if (attemptConvertEv.Cancelled)
+        _mindShield.GetMindshieldStatus(ev.Target, out var isMindshielded, out _);
+        if (attemptConvertEv.Cancelled || isMindshielded)
             return;
 
         _npcFaction.AddFaction(ev.Target, RevolutionaryNpcFaction);
@@ -343,15 +313,6 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
         }
 
         return gone == list.Count || list.Count == 0;
-    }
-
-    private void KillDueToBan(EntityUid target)
-    {
-        _popup.PopupEntity(Loc.GetString("rev-banned"), target, target, PopupType.LargeCaution);
-
-        var randomDelay = new Random().Next(10, 60); // 10-60 seconds
-        var targetTime = _timing.CurTime + TimeSpan.FromSeconds(randomDelay);
-        _scheduledSmites[target] = targetTime;
     }
 
     private static readonly string[] Outcomes =

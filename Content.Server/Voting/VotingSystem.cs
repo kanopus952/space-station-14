@@ -14,6 +14,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Threading.Tasks;
+using Content.Server.Players.Whitelist;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
@@ -26,11 +27,11 @@ public sealed partial class VotingSystem : EntitySystem
 
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IAdminManager _adminManager = default!;
-    [Dependency] private IServerDbManager _dbManager = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private ISharedPlaytimeManager _playtimeManager = default!;
+    [Dependency] private WhitelistManager _whitelistManager = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
 
     public override void Initialize()
@@ -40,9 +41,9 @@ public sealed partial class VotingSystem : EntitySystem
         SubscribeNetworkEvent<VotePlayerListRequestEvent>(OnVotePlayerListRequestEvent);
     }
 
-    private async void OnVotePlayerListRequestEvent(VotePlayerListRequestEvent msg, EntitySessionEventArgs args)
+    private void OnVotePlayerListRequestEvent(VotePlayerListRequestEvent msg, EntitySessionEventArgs args)
     {
-        if (!await CheckVotekickInitEligibility(args.SenderSession))
+        if (!CheckVotekickInitEligibility(args.SenderSession))
         {
             var deniedResponse = new VotePlayerListResponseEvent(new (NetUserId, NetEntity, string)[0], true);
             RaiseNetworkEvent(deniedResponse, args.SenderSession.Channel);
@@ -124,7 +125,7 @@ public sealed partial class VotingSystem : EntitySystem
     /// Used to check whether the player initiating a votekick is allowed to do so serverside.
     /// </summary>
     /// <param name="initiator">The session initiating the votekick.</param>
-    public async Task<bool> CheckVotekickInitEligibility(ICommonSession? initiator)
+    public bool CheckVotekickInitEligibility(ICommonSession? initiator)
     {
         if (initiator == null)
             return false;
@@ -149,7 +150,7 @@ public sealed partial class VotingSystem : EntitySystem
         }
 
         // Must be whitelisted
-        if (!await _dbManager.GetWhitelistStatusAsync(initiator.UserId) && _cfg.GetCVar(CCVars.VotekickInitiatorWhitelistedRequirement))
+        if (!_whitelistManager.IsConnectedWhitelisted(initiator.UserId) && _cfg.GetCVar(CCVars.VotekickInitiatorWhitelistedRequirement))
             return false;
 
         // Must be eligible to vote

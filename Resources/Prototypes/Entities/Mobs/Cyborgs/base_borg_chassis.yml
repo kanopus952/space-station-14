@@ -227,7 +227,7 @@
       isLooped: true
   - type: PointLight
     enabled: false
-    mask: /Textures/Effects/LightMasks/cone.png
+    lightMask: ConeSingle
     autoRot: true
     energy: 2 # Sunrise-edit
     radius: 12 # Sunrise-edit
