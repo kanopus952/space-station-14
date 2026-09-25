@@ -9,6 +9,7 @@ using Content.Shared.Destructible;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.Tag;
+using Content.Shared.Wall;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -29,7 +30,7 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
     private const int MinMaxSpawnCount = 1;
 
     private static readonly ProtoId<TagPrototype> DirectionalTag = "Directional";
-    private static readonly ProtoId<TagPrototype>[] WallOrWindowTags = ["Wall", "Window"];
+    private static readonly ProtoId<TagPrototype> WindowTag = "Window";
     private static readonly ProtoId<TagPrototype>[] FleshOrDirectionalTags = ["Flesh", "Directional"];
 
     private float _accumulatedFrameTime;
@@ -37,6 +38,7 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
     [Dependency] private EntityQuery<SpreaderFleshComponent> _spreaderQuery = default!;
     [Dependency] private EntityQuery<TransformComponent> _transformQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<WallComponent> _wallQuery = default!;
 
     public override void Initialize()
     {
@@ -154,7 +156,7 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
 
         foreach (var entityUid in entities)
         {
-            if (_tagSystem.HasAnyTag(entityUid, WallOrWindowTags))
+            if (IsWallOrWindow(entityUid))
             {
                 if (!_tagSystem.HasAnyTag(entityUid, DirectionalTag))
                 {
@@ -196,11 +198,16 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
 
         foreach (var entityUid in existingEntities)
         {
-            if (_tagSystem.HasAnyTag(entityUid, WallOrWindowTags))
+            if (IsWallOrWindow(entityUid))
                 Del(entityUid);
         }
 
         return true;
+    }
+
+    private bool IsWallOrWindow(EntityUid entity)
+    {
+        return _wallQuery.HasComp(entity) || _tagSystem.HasTag(entity, WindowTag);
     }
 
     private void SetupDestructibleComponent(Entity<DestructibleComponent> destructible, string entityStructureId)

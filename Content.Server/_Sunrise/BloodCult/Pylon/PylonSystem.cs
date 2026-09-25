@@ -14,7 +14,7 @@ using Content.Shared.Maps;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
-using Content.Shared.Tag;
+using Content.Shared.Wall;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -28,6 +28,7 @@ namespace Content.Server._Sunrise.BloodCult.Pylon;
 
 public sealed partial class PylonSystem : EntitySystem
 {
+    [Dependency] private EntityQuery<WallComponent> _wallQuery = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private BloodstreamSystem _blood = default!;
@@ -152,8 +153,7 @@ public sealed partial class PylonSystem : EntitySystem
 
             foreach (var entity in _lookup.GetEntitiesIntersecting(posss))
             {
-                if (TryComp<TagComponent>(entity, out var tag)
-                    && tag.Tags.Contains("Wall")
+                if (_wallQuery.HasComp(entity)
                     && MetaData(entity).EntityPrototype?.ID != comp.WallId)
                 {
                     _entMan.SpawnEntity(comp.WallId, Transform(entity).Coordinates);

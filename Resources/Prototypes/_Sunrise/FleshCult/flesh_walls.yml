@@ -24,7 +24,6 @@
   - type: Tag
     tags:
     - Flesh
-    - Wall
     - Window
   - type: TemperatureDamage
     heatDamage:

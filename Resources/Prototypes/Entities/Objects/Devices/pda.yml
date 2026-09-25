@@ -1537,11 +1537,26 @@
   - type: PdaBorderColor
     borderColor: "#454a50"
     accentVColor: "#ffc500"
+  # Sunrise edit start - совмещаем корпус Wizden с дополнительными слоями Sunrise.
   - type: Sprite
-    sprite: Objects/Devices/pda.rsi # Sunrise-Edit - новый PDA использует RSI Wizden.
+    sprite: Objects/Devices/pda.rsi
+    layers:
+    - state: pda-tramdriver
+      map: [ "enum.PdaVisualLayers.Base" ]
+    - sprite: _Sunrise/Objects/Devices/pda.rsi
+      state: light_overlay
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: unshaded
+      visible: false
+    - sprite: _Sunrise/Objects/Devices/pda.rsi
+      state: id_inserted
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: unshaded
+      visible: false
   - type: Icon
-    sprite: Objects/Devices/pda.rsi # Sunrise-Edit - новый PDA использует RSI Wizden.
+    sprite: Objects/Devices/pda.rsi
     state: pda-tramdriver
+  # Sunrise edit end
 
 - type: entity
   parent: BasePDA

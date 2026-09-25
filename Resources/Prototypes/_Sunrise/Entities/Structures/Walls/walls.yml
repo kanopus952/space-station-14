@@ -7,7 +7,6 @@
   components:
   - type: Tag
     tags:
-    - Wall
     - Diagonal
     - ForceNoTileWalls
   - type: IconSmooth
@@ -47,9 +46,9 @@
   - type: Transform
     anchored: true
   - type: Clickable
+  - type: Wall
   - type: Tag
     tags:
-    - Wall
     - ForceNoTileWalls
   - type: Sprite
     drawdepth: Walls

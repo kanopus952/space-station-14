@@ -106,9 +106,6 @@
     level: Metal
   - type: Ricochetable
     chance: 0.2
-  - type: Tag
-    tags:
-    - Wall
   - type: Sprite
     sprite: Structures/Walls/brick.rsi
   - type: Icon
