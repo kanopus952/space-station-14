@@ -169,6 +169,8 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
             BreakOnDamage = false,
             NeedHand = true,
             BreakOnDropItem = false,
+            NeedFreeHand = true,
+            BreakOnHandChange = true,
         };
 
         if (!_doAfter.TryStartDoAfter(doAfterEventArgs))

@@ -108,5 +108,5 @@
         - id: BoxFlashbang
         - id: BoxStinger
         - id: BoxTearGas
-        - id: BolaSecurity # Sunrise-Edit
+        - id: SecurityBola # Sunrise-Edit - канонический ID Wizden.
           amount: 4

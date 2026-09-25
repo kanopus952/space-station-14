@@ -31,19 +31,17 @@
   id: PressureImmunity
 
 - type: statusEffect
-  id: Muted
-  alert: Muted
-
-- type: statusEffect
   id: Corporeal
   alert: Corporeal
 
 - type: statusEffect
   id: Pacified #cannot attack
 
+# Sunrise added start - старые системы Sunrise всё ещё используют эти идентификаторы.
 - type: statusEffect
   id: Adrenaline
   alert: Adrenaline
 
 - type: statusEffect
   id: Incorporeal
+# Sunrise added end

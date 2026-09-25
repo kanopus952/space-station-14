@@ -2446,7 +2446,7 @@
     - sprite: Clothing/Head/Hats/gladiator.rsi
       state: equipped-HELMET
   - type: BasicEntityAmmoProvider
-    proto: BolaSecurity
+    proto: SecurityBola
     capacity: 1
     count: 1
   - type: RechargeBasicEntityAmmo

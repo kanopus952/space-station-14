@@ -33,8 +33,8 @@ public sealed class StationPowerTests : GameTest
         "Plasma",
         "Relic",
         "Snowball",
-        "Reach",
         "Exo",
+        "Tram2"
     ];
     // Sunrise-start
     private static readonly string[] SunriseGameMaps =

@@ -31,6 +31,7 @@
   - Reporter
   - Visitor
   - ServiceWorker
+  - TramDriver
   - Barber # Sunrise-Roles
   - ComMaid  # Sunrise-Lust edit
 
@@ -166,5 +167,6 @@
   roles:
   - Reporter
   - Psychologist
+  - TramDriver
   - Barber  # Sunrise-Roles
   primary: false
