@@ -8,7 +8,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Timing;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
-using Content.Server.Speech.Components;
+using Content.Shared.Speech.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared._Sunrise.Humanoid;
 using Content.Shared.Coordinates;

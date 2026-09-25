@@ -1,8 +1,8 @@
 using System.Threading;
-using Content.Server.AlertLevel;
 using Content.Server.Chat.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
+using Content.Shared.AlertLevel;
 using Content.Shared.GameTicking;
 using Content.Shared.Station.Components;
 using Timer = Robust.Shared.Timing.Timer;
@@ -20,7 +20,7 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AlertLevelChangedEvent>(OnAlertLevelChanged);
+        SubscribeLocalEvent<SunriseAlertLevelChangedEvent>(OnAlertLevelChanged);
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => RecreateToken());
     }
@@ -29,20 +29,12 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
     /// <summary>
     /// Запускает таймер и выводит объявление о смене доступов через некоторое время
     /// </summary>
-    private void OnAlertLevelChanged(AlertLevelChangedEvent ev)
+    private void OnAlertLevelChanged(ref SunriseAlertLevelChangedEvent ev)
     {
-        // Это случай первичного установления кода(зеленый) по умолчанию
-        // Чтобы в начале раунда не слышать, что доступы изменились на зеленый
-        if (ev.PreviousLevel == string.Empty)
-            return;
-
         if (!TryComp<AlertLevelComponent>(ev.Station, out var alert))
             return;
 
-        if (alert.AlertLevels == null)
-            return;
-
-        if (!alert.AlertLevels.Levels.TryGetValue(alert.CurrentLevel, out var currentLevelDetail))
+        if (!ProtoMan.Resolve(ev.AlertLevel, out var currentLevelDetail))
             return;
 
         var options = currentLevelDetail.ExtendedAccessOptions;
@@ -58,10 +50,10 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
         if (options.Value.Announcement != null)
         {
             // В строке локализации оповещения обязательно должно быть указан параметр для времени
-            var message = Loc.GetString(options.Value.Announcement, ("time", options.Value.Delay.TotalSeconds));
+            var message = Loc.GetString(options.Value.Announcement.Value, ("time", options.Value.Delay.TotalSeconds));
 
             _chat.DispatchStationAnnouncement(ev.Station,
-                Loc.GetString(message),
+                message,
                 colorOverride: Color.Yellow,
                 sender: Loc.GetString("access-system-sender"));
         }
@@ -90,7 +82,7 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
             if (reader.AlertAccesses.Count == 0)
                 continue;
 
-            _accessReader.UpdateAccess((uid, reader), station.Comp.CurrentLevel);
+            _accessReader.UpdateAccess((uid, reader), station.Comp.CurrentAlertLevel.Id.ToLowerInvariant());
         }
     }
 

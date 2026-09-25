@@ -473,9 +473,9 @@
   - type: BlockLawChange
   - type: Loadout
     prototypes: [ BorgArmorSiliconLoadoutMk2 ]
-  - type: ToggleableNightVision
   - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#D61B1B26'
   - type: MobThresholds
@@ -552,9 +552,9 @@
       300: Dead
   - type: TTS
     voice: Sentrybot
-  - type: ToggleableNightVision
   - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#D61B1B26'
   # Sunrise-end

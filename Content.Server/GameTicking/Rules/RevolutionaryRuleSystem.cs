@@ -99,7 +99,7 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
                 var stations = _stationSystem.GetStations();
                 foreach (var station in stations)
                 {
-                    _alertLevel.SetLevel(station, "epsilon", true, true, true);
+                    _alertLevel.SetLevel(station, "Epsilon", true, true, true); // Sunrise-Edit - используем ID нового прототипа уровня тревоги
                 }
                 _roundEnd.EndRound();
                 //  Sunrise-Edit-End

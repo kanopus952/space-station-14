@@ -1,6 +1,6 @@
-using Content.Server.AlertLevel;
 using Content.Server._Sunrise.GameTicking.Rules.Components;
 using Content.Server.GameTicking.Rules.Components;
+using Content.Shared.AlertLevel;
 using Robust.Shared.Timing;
 
 namespace Content.Server.GameTicking.Rules;

@@ -1,10 +1,10 @@
 using Content.Server.Popups;
-using Content.Server.Speech.EntitySystems;
 using Content.Shared.Abilities.Mime;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Puppet;
 using Content.Shared.Speech;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared.Speech.Muting;
 using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Prototypes;
@@ -46,7 +46,7 @@ public sealed partial class SunriseMutedStatusEffectSystem : EntitySystem
             args.Handled = true;
     }
 
-    private void OnEmoteAction(EntityUid uid, StatusEffectContainerComponent component, EmoteActionEvent args)
+    private void OnEmoteAction(EntityUid uid, StatusEffectContainerComponent component, ref EmoteActionEvent args)
     {
         if (args.Handled || HasComp<MutedComponent>(uid) || !HasMutedStatusEffect(component))
             return;

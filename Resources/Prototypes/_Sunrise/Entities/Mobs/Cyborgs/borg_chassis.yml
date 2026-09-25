@@ -212,7 +212,9 @@
       300: Dead
   - type: PowerCellDraw # Use it to increase battery life further
     drawRate: 0.5
-  - type: ToggleableNightVision
+  - type: NightVision
+    enabled: false
+    action: ActionToggleNightVision
 
 - type: entity
   id: BorgChassisSyndicateHeavy

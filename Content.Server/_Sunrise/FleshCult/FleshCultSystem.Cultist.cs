@@ -1,6 +1,5 @@
 using Content.Server.Atmos.Components;
 using Content.Server.Body.Components;
-using Content.Shared._Sunrise.NightVision.Components;
 using Content.Shared._Sunrise.CollectiveMind;
 using Content.Shared._Sunrise.FleshCult;
 using Content.Shared.Actions.Components;
@@ -13,6 +12,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Overlays;
 using Content.Shared.Popups;
 using Content.Shared.Store;
 using Content.Shared.Store.Components;
@@ -36,6 +36,8 @@ public sealed partial class FleshCultSystem
     private const string FleshTagProto = "Flesh";
 
     private static readonly ProtoId<TagPrototype> FullBodyOuterTag = "FullBodyOuter";
+
+    private static readonly EntProtoId ToggleNightVisionAction = "ActionToggleNightVision";
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string DefaultFleshCultRule = "FleshCult";
@@ -277,7 +279,11 @@ public sealed partial class FleshCultSystem
 
     private void OnNightVisionMutation(EntityUid uid, FleshCultistComponent component, FleshCultistNightVisionMutationEvent args)
     {
-        EnsureComp<ToggleableNightVisionComponent>(uid);
+        var nightVision = EnsureComp<NightVisionComponent>(uid);
+        nightVision.Enabled = false;
+        nightVision.Action = ToggleNightVisionAction;
+        _action.AddAction(uid, ref nightVision.ActionEntity, nightVision.Action);
+        Dirty(uid, nightVision);
     }
 
     private void OnInsulatedImmunityMutation(EntityUid uid, FleshCultistComponent component, FleshCultistInsulatedImmunityMutationEvent args)

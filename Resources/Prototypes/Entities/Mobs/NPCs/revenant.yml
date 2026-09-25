@@ -108,5 +108,7 @@
     onBump: false
     requirePower: false
     shockDamage: 30
-  - type: ToggleableNightVision
+  - type: NightVision
+    enabled: false
+    action: ActionToggleNightVision
   # Sunrise-end

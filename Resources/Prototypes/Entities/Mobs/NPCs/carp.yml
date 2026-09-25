@@ -91,7 +91,9 @@
     - type: CollectiveMind
       minds:
       - Carp
-    - type: ToggleableNightVision
+    - type: NightVision
+      enabled: false
+      action: ActionToggleNightVision
     # Sunrise-End
 
 - type: entity

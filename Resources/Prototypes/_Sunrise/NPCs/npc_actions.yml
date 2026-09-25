@@ -25,10 +25,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/grenade.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/grenade.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -63,10 +64,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/smoke.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/smoke.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -83,10 +85,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/stingergrenade.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/stingergrenade.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -105,10 +108,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/pyrogrenade.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/pyrogrenade.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -127,10 +131,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/shrapnelgrenade.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/shrapnelgrenade.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -149,10 +154,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Bombs/ied.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Bombs/ied.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -171,10 +177,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: _Sunrise/Objects/Weapons/Guns/Ammunition/Casings/explosives.rsi
-      state: glass
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: _Sunrise/Objects/Weapons/Guns/Ammunition/Casings/explosives.rsi
+    layers:
+    - state: glass
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -193,10 +200,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: _Sunrise/Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
-      state: fuzeball
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: _Sunrise/Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
+    layers:
+    - state: fuzeball
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -215,10 +223,11 @@
   - type: Action
     useDelay: 120
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/smoke.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/smoke.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -237,10 +246,11 @@
   - type: Action
     useDelay: 180
     checkCanInteract: false
-    icon:
-      sprite: Objects/Weapons/Grenades/grenade.rsi
-      state: icon
     itemIconStyle: NoItem
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/grenade.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0
@@ -287,9 +297,12 @@
   components:
   - type: Action
     useDelay: 5
-    icon: { sprite : Objects/Weapons/Guns/Revolvers/python.rsi, state: icon }
     priority: 2
     itemIconStyle: BigAction
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Revolvers/python.rsi
+    layers:
+    - state: icon
   - type: TargetAction
     checkCanAccess: false
     range: 0

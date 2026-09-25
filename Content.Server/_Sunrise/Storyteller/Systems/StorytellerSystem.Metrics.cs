@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Prometheus;
-using Content.Server.AlertLevel;
+using Content.Shared.AlertLevel;
 using Content.Server._Sunrise.Storyteller.Components;
 using Content.Shared._Sunrise.Storyteller.Prototypes;
 using Content.Shared._Sunrise.SunriseCCVars;
@@ -220,7 +220,7 @@ public sealed partial class StorytellerSystem
             "yellow" => 3,
             "red" => 4,
             "gamma" => 5,
-            "delta" => 6,
+            "delta" or "deltanuke" => 6,
             "epsilon" => 7,
             _ => -1
         };
@@ -304,7 +304,7 @@ public sealed partial class StorytellerSystem
 
         if (mainAlertComp != null)
         {
-            AlertLevelGauge.Set(GetAlertLevelNumeric(mainAlertComp.CurrentLevel));
+            AlertLevelGauge.Set(GetAlertLevelNumeric(mainAlertComp.CurrentAlertLevel.Id));
         }
         else
         {
@@ -348,7 +348,7 @@ public sealed partial class StorytellerSystem
         }
         if (mainAlertComp != null)
         {
-            alertLevel = mainAlertComp.CurrentLevel;
+            alertLevel = mainAlertComp.CurrentAlertLevel.Id;
         }
 
         var message =

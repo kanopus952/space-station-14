@@ -263,9 +263,9 @@
     interfaces:
       enum.StrippingUiKey.Key:
        type: StrippableBoundUserInterface
-  - type: ToggleableNightVision
   - type: NightVision
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#FF983326'
   - type: ComplexInteraction

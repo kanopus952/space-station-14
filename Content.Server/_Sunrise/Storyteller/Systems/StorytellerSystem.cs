@@ -51,7 +51,7 @@ using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
-using Content.Server.AlertLevel;
+using Content.Shared.AlertLevel;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Atmos.Monitor;
 using Content.Shared.Station.Components;
@@ -136,7 +136,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
-        SubscribeLocalEvent<AlertLevelChangedEvent>(OnAlertLevelChanged);
+        SubscribeLocalEvent<SunriseAlertLevelChangedEvent>(OnAlertLevelChanged);
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
@@ -217,7 +217,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         var query = EntityQueryEnumerator<AlertLevelComponent, MainStationComponent>();
         while (query.MoveNext(out var stationUid, out var alertComp, out _))
         {
-            RecordAlertLevelChange(component, stationUid, alertComp.CurrentLevel);
+            RecordAlertLevelChange(component, stationUid, alertComp.CurrentAlertLevel.Id);
         }
     }
 
@@ -1978,7 +1978,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         }
     }
 
-    private void OnAlertLevelChanged(AlertLevelChangedEvent ev)
+    private void OnAlertLevelChanged(ref SunriseAlertLevelChangedEvent ev)
     {
         if (!HasComp<MainStationComponent>(ev.Station))
             return;
@@ -1986,7 +1986,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         var query = EntityQueryEnumerator<StorytellerRuleComponent>();
         while (query.MoveNext(out _, out var comp))
         {
-            RecordAlertLevelChange(comp, ev.Station, ev.AlertLevel);
+            RecordAlertLevelChange(comp, ev.Station, ev.AlertLevel.Id);
         }
     }
 
@@ -2056,16 +2056,14 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
             double totalDuration = 0;
 
             var defaultLevel = "green";
-            if (TryComp<AlertLevelComponent>(station, out var alertComp) && alertComp.AlertLevels != null && !string.IsNullOrEmpty(alertComp.AlertLevels.DefaultLevel))
-            {
-                defaultLevel = alertComp.AlertLevels.DefaultLevel;
-            }
+            if (TryComp<AlertLevelComponent>(station, out var alertComp))
+                defaultLevel = alertComp.DefaultAlertLevel.Id;
 
             if (history.Count == 0)
             {
                 var currentLevel = defaultLevel;
                 if (alertComp != null)
-                    currentLevel = alertComp.CurrentLevel;
+                    currentLevel = alertComp.CurrentAlertLevel.Id;
 
                 if (currentLevel.Equals(defaultLevel, StringComparison.OrdinalIgnoreCase))
                 {

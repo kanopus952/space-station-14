@@ -191,9 +191,9 @@
     interactSuccessSound: /Audio/Effects/thudswoosh.ogg
     messagePerceivedByOthers: hugging-success-generic-others
   # Sunrise-Start
-  - type: ToggleableNightVision
   - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#FF983326'
   - type: FootprintEmitter

@@ -181,13 +181,14 @@
     storageInsertSound: null
 
 - type: entity
-  parent: ClothingBackpackSatchel
+  parent: ClothingBackpackHoldingBase #Standardized Bluespace Bags
   id: ClothingBackpackSatchelHolding
   name: satchel of holding
   description: A satchel that opens into a localized pocket of bluespace.
   components:
+  # Sunrise edit start - сохраняем визуалы и характеристики сумки хранения
   - type: Sprite
-    sprite: _Sunrise/Clothing/Back/Satchels/holding.rsi # Sunrise-Edit
+    sprite: _Sunrise/Clothing/Back/Satchels/holding.rsi
     state: icon
     layers:
     - state: icon
@@ -195,7 +196,6 @@
       shader: unshaded
   - type: Item
     size: Ginormous
-    # Sunrise-Start
     inhandVisuals:
       left:
       - state: inhand-left
@@ -205,12 +205,10 @@
       - state: inhand-right
       - state: inhand-right-unlit
         shader: unshaded
-    # Sunrise-End
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,17,7 # Sunrise-Edit
-  # Sunrise-start
+    - 0,0,17,7
   - type: Clothing
     sprite: _Sunrise/Clothing/Back/Satchels/holding.rsi
     clothingVisuals:
@@ -227,7 +225,7 @@
       Cloth: 500
       Plasma: 600
       Uranium: 40
-  # Sunrise-end
+  # Sunrise edit end
 
 - type: entity
   parent: ClothingBackpackSatchelHolding
@@ -238,3 +236,7 @@
   components:
   - type: ExplosionResistance
     damageCoefficient: 0
+  - type: Storage
+    maxItemSize: Colossal # Can hold ANYTHING
+    grid:
+    - 0,0,19,9

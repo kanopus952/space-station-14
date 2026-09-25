@@ -119,7 +119,9 @@
     # Sunrise-Start
     - type: Puller
       needsHands: false
-    - type: ToggleableNightVision
+    - type: NightVision
+      enabled: false
+      action: ActionToggleNightVision
     - type: TTS
       voice: wraith_king_dota_2
     # Sunrise-End
@@ -272,7 +274,9 @@
   description: Either manifests the guardian or recalls it back into your body
   components:
   - type: Action
-    icon: Interface/Actions/manifest.png
     useDelay: 2
+  - type: Sprite
+    layers:
+    - texture: Interface/Actions/manifest.png
   - type: InstantAction
     event: !type:GuardianToggleActionEvent

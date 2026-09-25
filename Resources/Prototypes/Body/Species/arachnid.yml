@@ -154,9 +154,9 @@
       - "footprint-left-bare-spider"
     rightBareFootState:
       - "footprint-right-bare-spider"
-  - type: ToggleableNightVision
   - type: NightVision # Sunrise-Edit - настройки ночного зрения Wizden
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#FFFFFF15'
   # Sunrise-end

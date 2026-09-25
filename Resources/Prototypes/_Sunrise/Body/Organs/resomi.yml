@@ -8,8 +8,8 @@
     comps:
     - type: NightVision
       enabled: false
+      action: ActionToggleNightVision
       prioritized: false
       lightingColor: '#FFFFFF15'
-    - type: ToggleableNightVision
     - type: FlashModifier
       modifier: 2

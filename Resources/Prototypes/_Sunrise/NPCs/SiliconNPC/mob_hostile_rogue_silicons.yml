@@ -164,9 +164,9 @@
       params:
         variation: 0.125
   - type: SoundWhileAlive
-  - type: ToggleableNightVision
   - type: NightVision
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#D61B1B26'
   - type: TTS
@@ -946,9 +946,9 @@
     footstepSoundCollection:
       path: /Audio/_Sunrise/Effects/silence.ogg
   - type: SoundWhileAlive
-  - type: ToggleableNightVision
   - type: NightVision
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#D61B1B26'
   - type: TTS

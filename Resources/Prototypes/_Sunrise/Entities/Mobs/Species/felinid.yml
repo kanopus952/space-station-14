@@ -165,9 +165,9 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4.5
-  - type: ToggleableNightVision
   - type: NightVision
     enabled: false
+    action: ActionToggleNightVision
     prioritized: false
     lightingColor: '#FFFFFF15'
   - type: FlashModifier
