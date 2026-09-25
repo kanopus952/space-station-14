@@ -54,10 +54,10 @@
   name: directional reinforced uranium window
   components:
   - type: Sprite
-    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
+    sprite: Structures/Windows/directional.rsi
     state: uranium_reinforced_window
   - type: Icon
-    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
+    sprite: Structures/Windows/directional.rsi
     state: uranium_reinforced_window
   - type: Construction
     graph: WindowDirectional

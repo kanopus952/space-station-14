@@ -44,7 +44,7 @@
   id: WindoorAssembly
   components:
   - type: Sprite
-    sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi # Sunrise-Edit
+    sprite: Structures/Doors/Windoors/windoor.rsi
     layers:
     - state: assembly
   - type: Destructible
@@ -67,7 +67,7 @@
   description: It opens, it closes, and you can see through it! This one looks tough.
   components:
   - type: Sprite
-    sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi # Sunrise-Edit
+    sprite: Structures/Doors/Windoors/windoor.rsi
     layers:
     - state: secure_underlay
     - state: assembly

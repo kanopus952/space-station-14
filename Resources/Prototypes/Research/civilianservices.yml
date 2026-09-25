@@ -38,7 +38,7 @@
   id: AudioVisualCommunication
   name: research-technology-audio-visual-communication
   icon:
-    sprite: _Sunrise/Structures/Wallmounts/camera.rsi # Sunrise-Edit
+    sprite: Structures/Wallmounts/camera.rsi
     state: cameracase
   discipline: CivilianServices
   tier: 1

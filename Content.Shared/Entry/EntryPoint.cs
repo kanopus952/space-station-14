@@ -30,6 +30,8 @@ namespace Content.Shared.Entry
 
         public override void Init()
         {
+            // Sunrise-Edit - применяем изолированные изменения прототипов Sunrise
+            _prototypeManager.PartialDirectory(new ResPath("/Prototypes/_Sunrise"), 0);
             IgnorePrototypes();
         }
 

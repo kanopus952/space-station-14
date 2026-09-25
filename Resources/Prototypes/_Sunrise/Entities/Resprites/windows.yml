@@ -1,0 +1,57 @@
+# Частичные прототипы сохраняют визуалы направленных окон Sunrise поверх обновлений Wizden.
+
+- type: !PartialOnly entity
+  id: WindowDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+
+- type: !PartialOnly entity
+  id: WindowFrostedDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+
+- type: !PartialOnly entity
+  id: WindowReinforcedDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+
+- type: !PartialOnly entity
+  id: PlasmaWindowDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+
+- type: !PartialOnly entity
+  id: PlasmaReinforcedWindowDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+
+- type: !PartialOnly entity
+  id: UraniumWindowDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+
+- type: !PartialOnly entity
+  id: UraniumReinforcedWindowDirectional
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Windows/directional.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Windows/directional.rsi

@@ -1,0 +1,48 @@
+# Частичные прототипы сохраняют визуалы освещения Sunrise поверх обновлений Wizden.
+
+- type: !PartialOnly entity
+  id: AlwaysPoweredWallLight
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/lighting/light_tube.rsi
+    offset: 0, 0
+
+- type: !PartialOnly entity
+  id: PoweredlightEmpty
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/lighting/light_tube.rsi
+    offset: 0, 0
+
+- type: !PartialOnly entity
+  id: SmallLight
+  components:
+  - type: HolidayVisuals
+    holidays:
+      festive:
+      - WinterPresents
+  - type: HolidayRsiSwap
+    sprite:
+      festive: _Sunrise/Structures/Wallmounts/Lighting/light_small_gift.rsi
+
+- type: !PartialOnly entity
+  id: PoweredSmallLightEmpty
+  components:
+  - type: HolidayVisuals
+    holidays:
+      festive:
+      - WinterPresents
+  - type: HolidayRsiSwap
+    sprite:
+      festive: _Sunrise/Structures/Wallmounts/Lighting/light_small_gift.rsi
+
+- type: !PartialOnly entity
+  id: BaseReplacementLight
+  components:
+  - type: HolidayVisuals
+    holidays:
+      festive:
+      - WinterPresents
+  - type: HolidayRsiSwap
+    sprite:
+      festive: _Sunrise/Objects/Power/light_bulb_gift.rsi

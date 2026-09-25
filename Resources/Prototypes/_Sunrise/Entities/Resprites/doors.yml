@@ -1,0 +1,75 @@
+# Частичные прототипы сохраняют визуалы дверей Sunrise поверх обновлений Wizden.
+
+# Шлюзы
+- type: !PartialOnly entity
+  id: AirlockHydroponics
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/hydroponics.rsi
+
+- type: !PartialOnly entity
+  id: AirlockChemistry
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/chemistry.rsi
+
+- type: !PartialOnly entity
+  id: AirlockMining
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/salvage.rsi
+
+- type: !PartialOnly entity
+  id: AirlockSalvageGlass
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/salvage.rsi
+
+- type: !PartialOnly entity
+  id: AirlockHydroponicsGlass
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/hydroponics.rsi
+
+- type: !PartialOnly entity
+  id: AirlockChemistryGlass
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/chemistry.rsi
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyHydroponics
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/hydroponics.rsi
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyHydroponicsGlass
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/hydroponics.rsi
+
+# Другие двери
+- type: !PartialOnly entity
+  id: BaseSecretDoor
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/secret_door.rsi
+
+- type: !PartialOnly entity
+  id: BaseSecretDoorAssembly
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/secret_door.rsi
+
+- type: !PartialOnly entity
+  id: WindoorAssembly
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi
+
+- type: !PartialOnly entity
+  id: WindoorAssemblySecure
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi

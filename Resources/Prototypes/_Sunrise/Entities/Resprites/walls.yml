@@ -1,0 +1,57 @@
+# Частичные прототипы сохраняют визуалы стен Sunrise поверх обновлений Wizden.
+
+- type: !PartialOnly entity
+  id: WallPlastitaniumIndestructible
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/plastitanium.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/plastitanium.rsi
+
+- type: !PartialOnly entity
+  id: WallPlastitaniumDiagonalIndestructible
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/plastitanium_diagonal.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/plastitanium_diagonal.rsi
+
+- type: !PartialOnly entity
+  id: WallPlastitaniumDiagonal
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/plastitanium_diagonal.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/plastitanium_diagonal.rsi
+
+- type: !PartialOnly entity
+  id: WallShuttleDiagonal
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/shuttle_diagonal.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/shuttle_diagonal.rsi
+
+- type: !PartialOnly entity
+  id: WallShuttle
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/shuttle.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/shuttle.rsi
+
+- type: !PartialOnly entity
+  id: WallMining
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/mining.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/mining.rsi
+
+- type: !PartialOnly entity
+  id: WallMiningDiagonal
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Walls/mining_diagonal.rsi
+  - type: Icon
+    sprite: _Sunrise/Structures/Walls/mining_diagonal.rsi

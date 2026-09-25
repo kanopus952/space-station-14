@@ -52,10 +52,10 @@
   description: Don't smudge up the glass down there.
   components:
   - type: Sprite
-    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
+    sprite: Structures/Windows/directional.rsi
     state: plasma_window
   - type: Icon
-    sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit
+    sprite: Structures/Windows/directional.rsi
     state: plasma_window
   - type: Construction
     graph: WindowDirectional
