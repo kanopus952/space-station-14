@@ -885,9 +885,11 @@
   - type: Sprite
     layers:
     - state: default
-    - state: stripe_top
+    - sprite: Objects/Misc/id_cards.rsi # Sunrise-Edit - новые полосы TramDriver берём из RSI Wizden.
+      state: stripe_top
       color: "#ffc500"
-    - state: stripe_bottom
+    - sprite: Objects/Misc/id_cards.rsi # Sunrise-Edit - новые полосы TramDriver берём из RSI Wizden.
+      state: stripe_bottom
       color: "#454a50"
     - sprite: *icon-rsi
       offset: *icon-offset

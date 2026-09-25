@@ -149,7 +149,6 @@
     sound: /Audio/_Sunrise/Abductor/abductor.ogg
   components:
   - type: Abductor
-  - type: Muted
   - type: AbductorScientist
   - type: ActionGrant
     actions:
@@ -179,7 +178,6 @@
     sound: /Audio/_Sunrise/Abductor/abductor.ogg
   components:
   - type: Abductor
-  - type: Muted
   - type: AbductorAgent
   - type: Tag
     tags:
