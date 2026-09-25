@@ -273,7 +273,8 @@
       metabolites:
         Ethanol: 0.1
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
       - !type:HealthChange
         damage:
@@ -429,7 +430,8 @@
       metabolites:
         Ethanol: 0.6
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 3
   fizziness: 0.8
 
@@ -881,9 +883,11 @@
       metabolites:
         Ethanol: 0.1
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         factor: -2
       - !type:EvenHealthChange
         damage:
@@ -1376,7 +1380,8 @@
       metabolites:
         Ethanol: 0.5
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
       - !type:HealthChange
         damage:
@@ -1529,7 +1534,8 @@
       effects:
       - !type:ModifyStatusEffect
         effectProto: StatusEffectRatvarianLanguage
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
 
 - type: reagent
@@ -1551,7 +1557,8 @@
       effects:
       - !type:ModifyStatusEffect
         effectProto: StatusEffectMuted
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
 
 - type: reagent
@@ -1834,7 +1841,8 @@
         Ethanol: 0.2
         Theobromine: 0.1
       effects:
-        - !type:SatiateThirst
+        - !type:Satiate
+          satiationType: Thirst
           factor: 1
         - !type:ModifyStatusEffect
           effectProto: StatusEffectDrowsiness
@@ -1862,7 +1870,8 @@
         Ethanol: 0.3
         Theobromine: 0.1
       effects:
-        - !type:SatiateThirst
+        - !type:Satiate
+          satiationType: Thirst
           factor: 1
         - !type:ModifyStatusEffect
           effectProto: StatusEffectDrowsiness
@@ -1890,7 +1899,8 @@
         Ethanol: 0.2
         Theobromine: 0.1
       effects:
-        - !type:SatiateThirst
+        - !type:Satiate
+          satiationType: Thirst
           factor: 1
         - !type:ModifyStatusEffect
           effectProto: StatusEffectDrowsiness
@@ -1918,7 +1928,8 @@
         Ethanol: 0.3
         Theobromine: 0.1
       effects:
-        - !type:SatiateThirst
+        - !type:Satiate
+          satiationType: Thirst
           factor: 1
         - !type:ModifyStatusEffect
           effectProto: StatusEffectDrowsiness
@@ -1946,7 +1957,8 @@
         Ethanol: 0.14
         Theobromine: 0.1
       effects:
-        - !type:SatiateThirst
+        - !type:Satiate
+          satiationType: Thirst
           factor: 1
         - !type:ModifyStatusEffect
           effectProto: StatusEffectDrowsiness
@@ -1974,7 +1986,8 @@
         Ethanol: 0.3
         Theobromine: 0.1
       effects:
-        - !type:SatiateThirst
+        - !type:Satiate
+          satiationType: Thirst
           factor: 1
         - !type:ModifyStatusEffect
           effectProto: StatusEffectDrowsiness
@@ -2061,7 +2074,8 @@
       effects:
       - !type:ModifyStatusEffect
         effectProto: StatusEffectMuted
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
 
 - type: reagent
@@ -2112,7 +2126,8 @@
         damage:
           types:
             Poison: .5
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 1
 
 - type: reagent
@@ -2267,7 +2282,8 @@
       metabolites:
         Ethanol: 0.9
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 3
       - !type:Drunk
         boozePower: 10

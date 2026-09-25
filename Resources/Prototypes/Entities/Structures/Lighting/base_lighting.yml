@@ -39,7 +39,7 @@
     energy: 0.8
     radius: 10
     softness: 1
-    offset: "0, -0.5"
+    offset: "0, 0.495"
   - type: Damageable
     damageModifierSet: Metallic
   - type: Injurable
@@ -120,6 +120,7 @@
     enabled: false
   - type: PoweredLight
     bulb: Tube
+  - type: SpookyPoweredLight
   - type: ContainerContainer
     containers:
       light_bulb: !type:ContainerSlot
@@ -331,7 +332,7 @@
     enabled: false
   - type: PointLight
     enabled: false
-    offset: "0, -0.5"
+    offset: "0, 0.495"
   - type: ContainerContainer
     containers:
       light_bulb: !type:ContainerSlot

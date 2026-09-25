@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared.Popups;
 using Content.Shared.Damage;
 using Content.Shared.Revenant;
@@ -12,25 +13,37 @@ using Content.Server.Storage.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
 using Content.Shared.Bed.Sleep;
-using System.Linq;
 using System.Numerics;
+using Content.Server.Ghost;
 using Content.Server.Revenant.Components;
-using Content.Shared.Physics;
+using Content.Server.Storage.EntitySystems;
+using Content.Shared.Bed.Sleep;
+using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Emag.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction;
+using Content.Shared.Item;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Physics;
+using Content.Shared.Popups;
+using Content.Shared.Revenant;
 using Content.Shared.Revenant.Components;
-using Robust.Shared.Physics.Components;
-using Robust.Shared.Utility;
-using Robust.Shared.Map.Components;
+using Content.Shared.Tag;
+using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Utility;
 using Content.Shared.IdentityManagement;
 using Content.Server.Doors.Systems; // Sunrise-Edit
 
@@ -50,10 +63,9 @@ public sealed partial class RevenantSystem
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private DoorSystem _doorSystem = default!; // Sunrise-Edit
 
-    [Dependency] private EntityQuery<TagComponent> _tagQuery = default!;
-    [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
-    [Dependency] private EntityQuery<PoweredLightComponent> _poweredLightQuery = default!;
-    [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
+    [Dependency] private EntityQuery<ItemComponent> _itemQuery;
+    [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery;
+    [Dependency] private EntityQuery<PoweredLightComponent> _poweredLightQuery;
 
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
 
@@ -80,9 +92,10 @@ public sealed partial class RevenantSystem
             return;
         var target = args.Target;
 
-        if (HasComp<PoweredLightComponent>(target))
+        // Try to do something spooky first.
+        if (_ghost.DoGhostBooEvent(target))
         {
-            args.Handled = _ghost.DoGhostBooEvent(target);
+            args.Handled = true;
             return;
         }
 
@@ -167,7 +180,7 @@ public sealed partial class RevenantSystem
             return;
         }
 
-        if (_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0)
+        if (_physics.GetEntitiesIntersectingBody(uid, (int)CollisionGroup.Impassable).Count > 0)
         {
             _popup.PopupEntity(Loc.GetString("revenant-in-solid"), uid, uid);
             return;
@@ -273,7 +286,7 @@ public sealed partial class RevenantSystem
         foreach (var ent in lookup)
         {
             //break windows
-            if (_tagQuery.HasComponent(ent) && _tag.HasTag(ent, WindowTag))
+            if (_tag.HasTag(ent, WindowTag))
             {
                 //hardcoded damage specifiers til i die.
                 var dspec = new DamageSpecifier();
@@ -288,13 +301,12 @@ public sealed partial class RevenantSystem
             _entityStorage.OpenStorage(ent, args.Performer);
 
             //chucks shit
-            if (_itemQuery.HasComponent(ent) &&
+            if (_itemQuery.HasComp(ent) &&
                 TryComp<PhysicsComponent>(ent, out var phys) && phys.BodyType != BodyType.Static)
                 _throwing.TryThrow(ent, _random.NextAngle().ToWorldVec());
 
-            //flicker lights
-            if (_poweredLightQuery.HasComponent(ent))
-                _ghost.DoGhostBooEvent(ent);
+            //spooky stuff
+            _ghost.DoGhostBooEvent(ent);
         }
     }
 

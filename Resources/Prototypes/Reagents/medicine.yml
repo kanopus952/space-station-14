@@ -508,7 +508,8 @@
             Shock: -0.33
             Cold: -0.33
             Mangleness: 0.025 #Sunrise-Edit
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: -10
         conditions:
         - !type:ReagentCondition
@@ -760,16 +761,17 @@
   metabolisms:
     Bloodstream:
       effects:
-        #Sunrise-Start
+        - !type:Satiate
+          satiationType: Thirst
+          factor: 6
+        - !type:ModifyBloodLevel
+          amount: 6
+      #Sunrise-Start
         - !type:HealthChange
           damage:
             types:
               Mangleness: -0.25
-        #Sunrise-End
-        - !type:SatiateThirst
-          factor: 6
-        - !type:ModifyBloodLevel
-          amount: 6
+      #Sunrise-End
 
 - type: reagent
   id: Siderlac
@@ -913,7 +915,8 @@
     Bloodstream:
       effects:
       # what the hell, this isn't satiating at all!!
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         factor: -1
 
   # Should heal quite literally everything, use in very small amounts
@@ -1227,7 +1230,8 @@
           types:
             Blunt: -2.25 # 9 per u
             Mangleness: 0.125 #Sunrise-Edit
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         factor: -1
       - !type:HealthChange
         conditions:
@@ -1251,8 +1255,8 @@
     Digestion:
       metabolismRate: 0.2 # Sunrise-Edit Для нормального деконверта
       effects:
-      # Sunrise-Start
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 1.6
       - !type:DeconvertCultist
         conditions:

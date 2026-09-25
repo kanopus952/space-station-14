@@ -23,9 +23,9 @@
     <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
     <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
     <ProjectReference Include="..\Sunrise\Content.Sunrise.Interfaces.Server\Content.Sunrise.Interfaces.Server.csproj" />
-    <Content Include="server_config.toml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EntityEffects\" />
   </ItemGroup>
   <ItemGroup Condition="Exists('..\SunrisePrivate\Content.Server')">
     <Compile Include="..\SunrisePrivate\Content.Server\**\*.cs" Link="%(RecursiveDir)%(Filename)%(Extension)" />

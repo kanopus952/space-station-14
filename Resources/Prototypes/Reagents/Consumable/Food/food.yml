@@ -10,7 +10,8 @@
   metabolisms:
     Metabolites:
       effects:
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
 #sunrise-start
     Bloodstream:
       metabolites:
@@ -47,7 +48,8 @@
       # Helps you stop bleeding to an extent.
       - !type:ModifyBleed
         amount: -0.25
-      - !type:SatiateHunger #Numbers are balanced with this in mind + it helps limit how much healing you can get from fo
+      - !type:Satiate #Numbers are balanced with this in mind + it helps limit how much healing you can get from food
+        satiationType: Hunger
   #sunrise-start
     Bloodstream:
       metabolites:
@@ -83,7 +85,8 @@
           Brute: -0.4
       - !type:ModifyBloodLevel
         amount: 1 # weaker than iron but pretty good all things considered
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
     #sunrise-start
     Bloodstream:
       metabolites:
@@ -108,7 +111,8 @@
   metabolisms:
     Metabolites:
       effects:
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         conditions:
         - !type:ReagentCondition #Only satiates when eaten with nutriment
           reagent: Nutriment
