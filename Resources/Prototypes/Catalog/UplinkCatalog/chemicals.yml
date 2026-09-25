@@ -4,7 +4,7 @@
   id: UplinkHypopen
   name: uplink-hypopen-name
   description: uplink-hypopen-desc
-  icon: { sprite: /Textures/Objects/Misc/pens.rsi, state: pen }
+  icon: { sprite: /Textures/_Sunrise/Objects/Misc/pens.rsi, state: pen } # Sunrise-Edit
   productEntity: HypopenBox
   discountCategory: rareDiscounts
   discountDownTo:
@@ -57,10 +57,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkNocturineChemistryBottle
@@ -150,11 +147,8 @@
   categories:
   - UplinkChemicals
   conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Edit

@@ -36,6 +36,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared._Sunrise.Weapons.DualWield;
 using Content.Shared.Mech.Components;
+using Content.Shared.Vehicle.Components;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
@@ -215,8 +216,9 @@ public abstract partial class SharedGunSystem : EntitySystem
         gun = default;
 
         // Sunrise edit start - поддерживаем установленное оружие пилотов мехов.
-        if (TryComp<MechPilotComponent>(entity, out var pilot) &&
-            TryComp<MechComponent>(pilot.Mech, out var mech) &&
+        if (TryComp<VehicleOperatorComponent>(entity, out var vehicleOperator) &&
+            vehicleOperator.Vehicle is { } vehicle &&
+            TryComp<MechComponent>(vehicle, out var mech) &&
             mech.CurrentSelectedEquipment is { } equipment &&
             TryComp<GunComponent>(equipment, out var mechGun))
         {
@@ -386,7 +388,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         // Sunrise edit start - use gun coordinates for mechs to prevent firing from center/hitting lying objects
         var fromCoordinates = Transform(user).Coordinates;
-        if (HasComp<MechPilotComponent>(user) || HasComp<MechComponent>(user))
+        if (HasComp<VehicleOperatorComponent>(user) || HasComp<MechComponent>(user))
         {
             fromCoordinates = Transform(gun).Coordinates;
         }

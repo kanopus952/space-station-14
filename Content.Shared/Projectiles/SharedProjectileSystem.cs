@@ -5,6 +5,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Throwing;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -210,7 +211,9 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             }
 
             // Sunrise edit start - ignore shooter's mech
-            if (component.Shooter != null && TryComp<Mech.Components.MechPilotComponent>(component.Shooter.Value, out var pilot) && args.OtherEntity == pilot.Mech)
+            if (component.Shooter != null &&
+                TryComp<VehicleOperatorComponent>(component.Shooter.Value, out var vehicleOperator) &&
+                args.OtherEntity == vehicleOperator.Vehicle)
             {
                 args.Cancelled = true;
                 return;

@@ -12,6 +12,8 @@ public sealed partial class SharedMechEquipmentSelectSystem : EntitySystem
 
     public override void Initialize()
     {
+        base.Initialize();
+
         SubscribeLocalEvent<MechComponent, MechToggleEquipmentEvent>(OnSelectEquipmentAction);
         Subs.BuiEvents<MechComponent>(MechEquipmentSelectUiKey.Key, subs => subs.Event<MechActiveEquipmentSelectMessage>(OnRadialSelected));
     }

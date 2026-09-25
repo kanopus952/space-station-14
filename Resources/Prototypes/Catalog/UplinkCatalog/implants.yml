@@ -4,7 +4,7 @@
   id: UplinkStorageImplanter
   name: uplink-storage-implanter-name
   description: uplink-storage-implanter-desc
-  icon: { sprite: /Textures/Clothing/Back/Backpacks/backpack.rsi, state: icon }
+  icon: { sprite: /Textures/_Sunrise/Clothing/Back/Resprites/Backpacks/backpack.rsi, state: icon } # Sunrise-Edit
   productEntity: StorageImplanter
   discountCategory: rareDiscounts
   discountDownTo:
@@ -18,6 +18,7 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - LoneOpsUplink # Sunrise-Add
 
 - type: listing
   id: UplinkFreedomImplanter
@@ -55,11 +56,18 @@
   productEntity: DnaScramblerImplanter
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 2
+    Telecrystal: 1
   cost:
-    Telecrystal: 3
+    Telecrystal: 2 # Sunrise-Edit
   categories:
     - UplinkImplants
+  #Sunrise-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - FugitiveUplink
+  #Sunrise-end
 
 - type: listing
   id: UplinkEmpImplanter
@@ -104,10 +112,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
+      - LoneOpsUplink # Sunrise-Edit
 
 - type: listing
   id: UplinkMacroBombImplanter
@@ -116,18 +121,15 @@
   icon: { sprite: /Textures/Actions/Implants/implants.rsi, state: explosive }
   productEntity: MacroBombImplanter
   cost:
-    Telecrystal: 13
+    Telecrystal: 7 # Sunrise-Edit #Be gay do crime!
   categories:
     - UplinkImplants
   conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Edit
 
 - type: listing
   id: UplinkDeathAcidifierImplanter
@@ -144,6 +146,7 @@
       whitelist:
         tags:
           - NukeOpsUplink
+          - LoneOpsUplink # Sunrise-Edit
 
 - type: listing
   id: UplinkUplinkImplanter # uplink uplink real
@@ -160,6 +163,9 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - LoneOpsUplink
+          - AssaultOpsUplink
+          - FugitiveUplink
 
 - type: listing
   id: UplinkDeathRattle
@@ -171,14 +177,10 @@
   categories:
   - UplinkImplants
   conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkFakeMindshield
@@ -189,7 +191,7 @@
   discountDownTo:
     Telecrystal: 2
   cost:
-    Telecrystal: 4
+    Telecrystal: 3 # Sunrise-Edit
   categories:
   - UplinkImplants
 

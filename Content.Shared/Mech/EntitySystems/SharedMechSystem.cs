@@ -9,6 +9,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Mech.Components;
 using Content.Shared.Mech.Equipment.Components;
+using Content.Shared.Movement.Components; // Sunrise-Edit - возвращаем вращение после выхода из меха
 using Content.Shared.Popups;
 using Content.Shared.Storage.Components;
 using Content.Shared.Vehicle;
@@ -110,7 +111,7 @@ public abstract partial class SharedMechSystem : EntitySystem
         _actions.AddAction(pilot, ref component.MechCycleActionEntity, component.MechCycleAction, mech);
         _actions.AddAction(pilot, ref component.MechUiActionEntity, component.MechUiAction, mech);
         _actions.AddAction(pilot, ref component.MechEjectActionEntity, component.MechEjectAction, mech);
-        SetupSunriseUser(mech, pilot, component); // Sunrise-Edit - добавляем действия Sunrise
+        _actions.AddAction(pilot, ref component.MechLightsActionEntity, component.MechLightsAction, mech); // Sunrise-Edit - добавляем действие освещения
     }
 
     private void RemoveUser(EntityUid mech, EntityUid pilot)
@@ -171,7 +172,10 @@ public abstract partial class SharedMechSystem : EntitySystem
         if (_net.IsServer)
             _popup.PopupEntity(popupString, uid);
 
-        RaiseSunriseMechMessage(uid, component.MessageCycleEquipment); // Sunrise-Edit - озвучиваем смену оборудования
+        // Sunrise added start - озвучиваем смену оборудования
+        var mechSayEvent = new MechSayEvent(uid, component.MessageCycleEquipment);
+        RaiseLocalEvent(uid, ref mechSayEvent, true);
+        // Sunrise added end
 
         Dirty(uid, component);
     }
@@ -203,7 +207,10 @@ public abstract partial class SharedMechSystem : EntitySystem
         var ev = new MechEquipmentInsertedEvent(uid);
         RaiseLocalEvent(toInsert, ref ev);
         UpdateUserInterface(uid, component);
-        RaiseSunriseMechMessage(uid, component.MessageInsertEquipment); // Sunrise-Edit - озвучиваем установку оборудования
+        // Sunrise added start - озвучиваем установку оборудования
+        var mechSayEvent = new MechSayEvent(uid, component.MessageInsertEquipment);
+        RaiseLocalEvent(uid, ref mechSayEvent, true);
+        // Sunrise added end
     }
 
     /// <summary>
@@ -247,7 +254,10 @@ public abstract partial class SharedMechSystem : EntitySystem
 
         _container.Remove(toRemove, component.EquipmentContainer);
         UpdateUserInterface(uid, component);
-        RaiseSunriseMechMessage(uid, component.MessageRemoveEquipment); // Sunrise-Edit - озвучиваем снятие оборудования
+        // Sunrise added start - озвучиваем снятие оборудования
+        var mechSayEvent = new MechSayEvent(uid, component.MessageRemoveEquipment);
+        RaiseLocalEvent(uid, ref mechSayEvent, true);
+        // Sunrise added end
     }
 
     /// <summary>
@@ -366,7 +376,7 @@ public abstract partial class SharedMechSystem : EntitySystem
         if (!Vehicle.TryGetOperator(uid, out var operatorEnt))
             return false;
 
-        PrepareSunriseEject(uid); // Sunrise-Edit - возвращаем обычное вращение после выхода
+        RemComp<NoRotateOnMoveComponent>(uid); // Sunrise-Edit - возвращаем обычное вращение после выхода
         return _container.RemoveEntity(uid, operatorEnt.Value);
     }
 
@@ -427,13 +437,19 @@ public abstract partial class SharedMechSystem : EntitySystem
         if (args.OldOperator is { } oldOperator)
         {
             RemoveUser(ent, oldOperator);
-            RaiseSunriseMechMessage(ent, ent.Comp.MessageGoodbye); // Sunrise-Edit - прощание меха
+            // Sunrise added start - прощание меха
+            var mechSayEvent = new MechSayEvent(ent, ent.Comp.MessageGoodbye);
+            RaiseLocalEvent(ent, ref mechSayEvent, true);
+            // Sunrise added end
         }
 
         if (args.NewOperator is { } newOperator)
         {
             SetupUser(ent, newOperator, ent);
-            RaiseSunriseMechMessage(ent, ent.Comp.MessageHello); // Sunrise-Edit - приветствие меха
+            // Sunrise added start - приветствие меха
+            var mechSayEvent = new MechSayEvent(ent, ent.Comp.MessageHello);
+            RaiseLocalEvent(ent, ref mechSayEvent, true);
+            // Sunrise added end
         }
 
         UpdateAppearance(ent);

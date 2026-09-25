@@ -8,8 +8,10 @@ using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
+using Content.Shared.Mech.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
@@ -341,8 +343,8 @@ public sealed partial class GunSystem : SharedGunSystem
         if (tracked != null)
         {
             // Sunrise edit start - do not track mechs/mech pilots so smoke stays static in the world
-            if (TryComp<Content.Shared.Mech.Components.MechPilotComponent>(tracked.Value, out _) ||
-                HasComp<Content.Shared.Mech.Components.MechComponent>(tracked.Value))
+            if (TryComp<VehicleOperatorComponent>(tracked.Value, out _) ||
+                HasComp<MechComponent>(tracked.Value))
             {
                 return;
             }

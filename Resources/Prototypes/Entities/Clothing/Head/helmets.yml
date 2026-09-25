@@ -39,7 +39,7 @@
   description: Standard security gear. Protects the head from impacts, and comes with a visor which can be lowered to protect the eyes.
   components:
   - type: Sprite
-    sprite: Clothing/Head/Helmets/security.rsi
+    sprite: _Sunrise/Clothing/Head/Helmets/security.rsi # Sunrise-Edit - сохраняем основной спрайт Sunrise
     layers:
     - state: icon
       map: [ "unfoldedLayer" ]
@@ -47,7 +47,7 @@
       map: [ "foldedLayer" ]
       visible: false
   - type: Clothing
-    sprite: Clothing/Head/Helmets/security.rsi
+    sprite: _Sunrise/Clothing/Head/Helmets/security.rsi # Sunrise-Edit - сохраняем основной спрайт Sunrise
   - type: Tag
     tags:
     - WhitelistChameleon

@@ -426,12 +426,6 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         }
     }
 
-    private partial uint AdjustSunriseRestock(EntityUid uid,
-        VendingMachineComponent component,
-        InventoryType type,
-        uint amount,
-        uint restock);
-
     [SubscribeLocalEvent]
     private void OnActivatableUIOpenAttempt(EntityUid uid, VendingMachineComponent component, ActivatableUIOpenAttemptEvent args)
     {

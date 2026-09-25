@@ -22,10 +22,10 @@ using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Mech.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
@@ -224,7 +224,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     private void OnHeavyAttack(HeavyAttackEvent msg, EntitySessionEventArgs args)
     {
         if (args.SenderSession.AttachedEntity == null
-            || HasComp<MechPilotComponent>(args.SenderSession.AttachedEntity)
+            || HasComp<VehicleOperatorComponent>(args.SenderSession.AttachedEntity)
             || !TryGetWeapon(args.SenderSession.AttachedEntity.Value, out var weaponUid, out var weapon)
             || weaponUid != GetEntity(msg.Weapon))
             return;

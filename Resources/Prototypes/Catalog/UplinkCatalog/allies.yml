@@ -27,7 +27,7 @@
   icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-urist }
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 7
+    Telecrystal: 8
   cost:
     Telecrystal: 11
   categories:
@@ -49,26 +49,28 @@
   categories:
   - UplinkAllies
   conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
 
-- type: listing
-  id: UplinkReinforcementRadioSyndicateCyborgAssault
-  name:  uplink-reinforcement-radio-cyborg-assault-name
-  description: uplink-reinforcement-radio-cyborg-assault-desc
-  productEntity: ReinforcementRadioSyndicateCyborgAssault
-  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-borg-assault }
-  cost:
-    Telecrystal: 65
-  categories:
-    - UplinkAllies
-  conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
+# Sunrise edit start - листинг перенесён в каталог Sunrise
+#- type: listing
+#  id: UplinkReinforcementRadioSyndicateCyborgAssault
+#  name:  uplink-reinforcement-radio-cyborg-assault-name
+#  description: uplink-reinforcement-radio-cyborg-assault-desc
+#  productEntity: ReinforcementRadioSyndicateCyborgAssault
+#  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-borg-assault }
+#  cost:
+#    Telecrystal: 65
+#  categories:
+#    - UplinkAllies
+#  conditions:
+#    - !type:StoreWhitelistCondition
+#      whitelist:
+#        tags:
+#          - NukeOpsUplink
+# Sunrise edit end
 
 - type: listing
   id: UplinkReinforcementRadioSyndicateAncestor
@@ -78,9 +80,9 @@
   icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-ancestor }
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 4
-  cost:
     Telecrystal: 6
+  cost:
+    Telecrystal: 8
   categories:
   - UplinkAllies
   conditions:
@@ -88,6 +90,8 @@
       blacklist:
         tags:
           - NukeOpsUplink
+          - LoneOpsUplink # Sunrise-Edit
+          - AssaultOpsUplink # Sunrise-Edit
 
 - type: listing
   id: UplinkReinforcementRadioSyndicateAncestorNukeops # Version for Nukeops that spawns a syndicate monkey with the NukeOperative component.
@@ -97,9 +101,9 @@
   icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-ancestor }
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 4
-  cost:
     Telecrystal: 6
+  cost:
+    Telecrystal: 8
   categories:
   - UplinkAllies
   conditions:
@@ -107,6 +111,7 @@
       whitelist:
         tags:
           - NukeOpsUplink
+          - LoneOpsUplink # Sunrise-Edit
 
 - type: listing
   id: UplinkCarpDehydrated
@@ -122,6 +127,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - AssaultOpsUplink # Sunrise-Edit
 
 - type: listing
   id: UplinkMobCatMicrobomb
@@ -136,6 +142,14 @@
     Telecrystal: 6
   categories:
     - UplinkAllies
+  # Sunrise-Start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - AssaultOpsUplink
+      - LoneOpsUplink
+  # Sunrise-End
 
 - type: listing
   id: UplinkSyndicatePersonalAI

@@ -397,7 +397,7 @@
 
 # Representative
 - type: entity
-  id: LockerRepresentative
+  id: SunriseLockerRepresentative
   name: representative locker
   parent: LockerBaseSecure
   components:
@@ -425,7 +425,7 @@
 
 - type: entity
   id: LockerRepresentativeFilled
-  parent: LockerRepresentative
+  parent: SunriseLockerRepresentative
   suffix: Filled
   components:
   - type: EntityTableContainerFill

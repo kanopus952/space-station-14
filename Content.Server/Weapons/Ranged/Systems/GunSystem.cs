@@ -26,8 +26,6 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private SharedMapSystem _map = default!;
 
     private const float DamagePitchVariation = 0.05f;
-    partial void InitializeSunrise(); // Sunrise-Edit
-
     public override void Initialize()
     {
         base.Initialize();

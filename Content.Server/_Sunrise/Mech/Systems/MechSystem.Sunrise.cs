@@ -1,35 +1,83 @@
 using Content.Server.Chat.Systems;
+using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mech;
 using Content.Shared.Mech.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
+using Content.Shared.Tag;
+using Content.Shared.Vehicle.Components;
+using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Mech.Systems;
 
 public sealed partial class MechSystem
 {
-    [Dependency] private ChatSystem _chatSystem = default!;
-    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
-    private static readonly ProtoId<DamageTypePrototype> ManglenessDamageType = "Mangleness";
+    private static readonly ProtoId<TagPrototype> PowerCageTag = "PowerCage";
 
     private void InitializeSunrise()
     {
         SubscribeLocalEvent<MechComponent, MechSayEvent>(OnMechSay);
+        SubscribeLocalEvent<MechComponent, VehicleOperatorSetEvent>(OnSunriseOperatorSet);
     }
 
     private void OnMechSay(EntityUid uid, MechComponent component, MechSayEvent args)
     {
-        _chatSystem.TrySendInGameICMessage(uid,
+        _chat.TrySendInGameICMessage(uid,
             Loc.GetString(args.Message),
             InGameICChatType.Whisper,
             ChatTransmitRange.Normal);
+    }
+
+    private bool TryPrepareSunriseEntry(Entity<MechComponent> ent, EntityUid user)
+    {
+        if (_whitelist.IsWhitelistPass(ent.Comp.PilotBlacklist, user))
+        {
+            _popup.PopupEntity(Loc.GetString("mech-no-enter", ("item", ent.Owner)), user);
+            return false;
+        }
+
+        if (TryComp<AccessReaderComponent>(ent, out var accessReader) &&
+            !_accessReader.IsAllowed(user, ent, accessReader))
+        {
+            _popup.PopupEntity(Loc.GetString("mech-no-access", ("item", ent.Owner)), user);
+            return false;
+        }
+
+        foreach (var hand in _hands.EnumerateHands(user))
+        {
+            _hands.DoDrop(user, hand);
+        }
+
+        _faction.Up(user, ent);
+        return true;
+    }
+
+    private void CleanupSunrisePilot(EntityUid mech)
+    {
+        RemComp<NpcFactionMemberComponent>(mech);
+    }
+
+    private void OnSunriseOperatorSet(Entity<MechComponent> ent, ref VehicleOperatorSetEvent args)
+    {
+        if (args.OldOperator != null)
+            CleanupSunrisePilot(ent);
     }
 
     /// <summary>
@@ -38,7 +86,7 @@ public sealed partial class MechSystem
     private void SetSunriseMaxIntegrity(EntityUid uid, MechComponent component)
     {
         if (TryComp<MobThresholdsComponent>(uid, out var thresholds)
-            && _mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var threshold, thresholds)
+            && _mobThreshold.TryGetThresholdForState(uid, MobState.Critical, out var threshold, thresholds)
             && threshold is { } maxIntegrity)
         {
             component.MaxIntegrity = maxIntegrity;
@@ -83,14 +131,10 @@ public sealed partial class MechSystem
             ? InGameICChatType.Speak
             : InGameICChatType.Whisper;
 
-        _chatSystem.TrySendInGameICMessage(uid,
+        _chat.TrySendInGameICMessage(uid,
             Loc.GetString(message),
             chatType,
             ChatTransmitRange.Normal);
     }
 
-    private static void RemoveSunrisePilotDamage(DamageSpecifier damage)
-    {
-        damage.DamageDict.Remove(ManglenessDamageType);
-    }
 }

@@ -164997,7 +164997,7 @@ entities:
     - type: Transform
       pos: -3.5,-27.5
       parent: 2
-- proto: LockerRepresentative
+- proto: SunriseLockerRepresentative
   entities:
   - uid: 2431
     components:

@@ -5,6 +5,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Emp;
 using Content.Shared.Mech.Components;
 using Content.Shared.Mech.EntitySystems;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Sunrise.Mech;
@@ -22,17 +23,16 @@ public sealed partial class SunriseMechSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<MechVulnerableToEMPComponent, EmpPulseEvent>(OnEmpPulse);
-        SubscribeLocalEvent<MechPilotComponent, BeforeCryoTeleportEvent>(OnCryoTeleportAttemptEvent);
+        SubscribeLocalEvent<VehicleOperatorComponent, BeforeCryoTeleportEvent>(OnCryoTeleportAttemptEvent);
     }
 
-    // Sunrise-start
-    private void OnCryoTeleportAttemptEvent(EntityUid uid, MechPilotComponent component, BeforeCryoTeleportEvent args)
+    private void OnCryoTeleportAttemptEvent(Entity<VehicleOperatorComponent> ent, ref BeforeCryoTeleportEvent args)
     {
-        if (!TryComp<MechComponent>(component.Mech, out var mechComponent))
+        if (ent.Comp.Vehicle is not { } mech || !TryComp<MechComponent>(mech, out var mechComponent))
             return;
-        _mech.TryEject(uid, mechComponent);
+
+        _mech.TryEject(mech, mechComponent);
     }
-    // Sunrise-end
 
     public override void Update(float frameTime)
     {

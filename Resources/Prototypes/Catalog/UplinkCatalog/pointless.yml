@@ -1,14 +1,16 @@
 # Pointless
 
-- type: listing
-  id: UplinkBarberScissors
-  name: uplink-barber-scissors-name
-  description: uplink-barber-scissors-desc
-  productEntity: BarberScissors
-  cost:
-    Telecrystal: 1
-  categories:
-  - UplinkPointless
+# Sunrise edit start - ножницы исключены из аплинка
+#- type: listing
+#  id: UplinkBarberScissors
+#  name: uplink-barber-scissors-name
+#  description: uplink-barber-scissors-desc
+#  productEntity: BarberScissors
+#  cost:
+#    Telecrystal: 1
+#  categories:
+#  - UplinkPointless
+# Sunrise edit end
 
 - type: listing
   id: UplinkSnackBox

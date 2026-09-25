@@ -146,6 +146,8 @@ public sealed partial class BibleSystem : EntitySystem
 
         _popup.PopupEntity(othersMessage, args.User, Filter.PvsExcept(args.User), true, PopupType.Medium);
         _popup.PopupEntity(selfMessage, args.User, args.User, PopupType.Large);
+
+        OnSunriseBibleUsed(args.Target.Value); // Sunrise-Edit
     }
 
     [SubscribeLocalEvent]

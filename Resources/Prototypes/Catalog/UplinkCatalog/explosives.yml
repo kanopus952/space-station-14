@@ -27,6 +27,13 @@
     Telecrystal: 1
   categories:
   - UplinkExplosives
+  # Sunrise added start - исключаем товар из аплинка штурмовых оперативников
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - AssaultOpsUplink
+  # Sunrise added end
 
 - type: listing
   id: UplinkSyndieMiniBomb
@@ -40,6 +47,11 @@
     Telecrystal: 6
   categories:
     - UplinkExplosives
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - AssaultOpsUplink
 
 - type: listing
   id: UplinkGrenadePenguin
@@ -53,11 +65,13 @@
     Telecrystal: 4
   categories:
     - UplinkExplosives
+  #Sunrise-start
   conditions:
-  - !type:BuyerWhitelistCondition
+  - !type:StoreWhitelistCondition
     blacklist:
-      components:
-      - SurplusBundle
+      tags:
+      - AssaultOpsUplink
+  #Sunrise-end
 
 - type: listing
   id: UplinkC4
@@ -89,6 +103,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink #Sunrise added
 
 - type: listing
   id: UplinkC4Bundle
@@ -120,7 +135,7 @@
   id: UplinkExplodingPen
   name: uplink-exploding-pen-name
   description: uplink-exploding-pen-desc
-  icon: { sprite: /Textures/Objects/Misc/pens.rsi, state: pen }
+  icon: { sprite: /Textures/_Sunrise/Objects/Misc/pens.rsi, state: pen } # Sunrise-Edit
   productEntity: PenExplodingBox
   discountCategory: usualDiscounts
   discountDownTo:
@@ -145,6 +160,8 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink
+      - AssaultOpsUplink
 
 - type: listing
   id: UplinkSyndicateBombNukie
@@ -160,6 +177,8 @@
     whitelist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink
+      - AssaultOpsUplink
 
 - type: listing
   id: UplinkGrenadeShrapnel
@@ -173,6 +192,13 @@
     Telecrystal: 4
   categories:
   - UplinkExplosives
+  #Sunrise-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - AssaultOpsUplink
+  #Sunrise-end
 
 - type: listing
   id: UplinkGrenadeIncendiary

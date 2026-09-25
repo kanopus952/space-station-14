@@ -308,7 +308,6 @@ public sealed partial class PaperSystem : EntitySystem
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, GetPaperUiState(entity));
     }
 
-    partial void InitializeTemplateFieldSupport();
 }
 
 /// <summary>

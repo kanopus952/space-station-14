@@ -32,6 +32,9 @@ public abstract partial class SharedAgentIdCardSystem : EntitySystem
             !TryComp<AccessComponent>(args.Target, out var targetAccess) || !HasComp<IdCardComponent>(args.Target))
             return;
 
+        if (!CanCopySunriseAccess(ent, args.User)) // Sunrise-Edit - учитываем биокод агентской карты
+            return;
+
         // Am I an id?
         if (!TryComp<AccessComponent>(ent, out var access) || !HasComp<IdCardComponent>(ent))
             return;

@@ -73,6 +73,10 @@ public sealed partial class GatherableSystem : EntitySystem
         if (!TryComp<GatherableComponent>(args.OtherEntity, out var gatherable))
             return;
 
+        // Sunrise-Edit
+        if (!SharedRandomExtensions.PredictedProb(_timing, gathering.Comp.Chance, GetNetEntity(gathering)))
+            return;
+
         Gather((args.OtherEntity, gatherable), gathering);
         gathering.Comp.Amount--;
         Dirty(gathering);

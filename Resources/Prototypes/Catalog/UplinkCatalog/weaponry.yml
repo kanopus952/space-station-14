@@ -7,13 +7,14 @@
   productEntity: WeaponPistolViper
   discountCategory: rareDiscounts
   discountDownTo:
-    Telecrystal: 2
+    Telecrystal: 1 # Sunrise-Edit
   cost:
-    Telecrystal: 3
+    Telecrystal: 2 # Sunrise-Edit
   categories:
   - UplinkWeaponry
 
 # Inbuilt suppressor so it's sneaky + more expensive.
+
 - type: listing
   id: UplinkPistolCobra
   name: uplink-pistol-cobra-name
@@ -23,11 +24,12 @@
   discountDownTo:
     Telecrystal: 2
   cost:
-    Telecrystal: 4
+    Telecrystal: 3 # Sunrise-Edit
   categories:
   - UplinkWeaponry
 
 # Poor accuracy, slow to fire, cheap option
+
 - type: listing
   id: UplinkRifleMosin
   name: uplink-rifle-mosin-name
@@ -37,6 +39,13 @@
     Telecrystal: 1
   categories:
   - UplinkWeaponry
+  #Sunrise-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - AssaultOpsUplink
+  #Sunrise-end
 
 - type: listing
   id: UplinkEsword
@@ -46,7 +55,7 @@
   discountCategory: veryRareDiscounts
   discountDownTo:
     Telecrystal: 4
-  productEntity: EnergySword
+  productEntity: EnergySwordBiocode # Sunrise-edit
   cost:
     Telecrystal: 8
   categories:
@@ -56,7 +65,7 @@
   id: UplinkEnergyDagger
   name: uplink-edagger-name
   description: uplink-edagger-desc
-  icon: { sprite: /Textures/Objects/Weapons/Melee/e_dagger.rsi, state: icon }
+  icon: { sprite: /Textures/_Sunrise/Objects/Weapons/Melee/e_dagger.rsi, state: icon } # Sunrise-Edit
   productEntity: EnergyDaggerBox
   discountCategory: rareDiscounts
   discountDownTo:
@@ -100,7 +109,7 @@
   id: UplinkGlovesNorthStar
   name: uplink-gloves-north-star-name
   description: uplink-gloves-north-star-desc
-  productEntity: ClothingHandsGlovesNorthStar
+  productEntity: ClothingHandsGlovesNorthStarBiocode
   discountCategory: veryRareDiscounts
   discountDownTo:
     Telecrystal: 4
@@ -125,10 +134,10 @@
 
 - type: listing
   id: UplinkEshield
-  name: uplink-eshield-name
-  description: uplink-eshield-desc
+  name: uplink-experimental-eshield-name # Sunrise-Edit
+  description: uplink-experimental-eshield-desc # Sunrise-Edit
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_shield.rsi, state: eshield-on }
-  productEntity: EnergyShield
+  productEntity: EnergyShieldBiocode
   discountCategory: veryRareDiscounts
   discountDownTo:
     Telecrystal: 4
@@ -141,6 +150,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Edit
 
 - type: listing
   id: uplinkRiggedBoxingGloves
@@ -169,6 +179,14 @@
     Telecrystal: 10
   categories:
   - UplinkWeaponry
+  # Sunrise-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink
+  # Sunrise-end
 
 - type: listing
   id: UplinkHushpup
@@ -192,9 +210,9 @@
   productEntity: BriefcaseWeaponC20Filled
   discountCategory: veryRareDiscounts
   discountDownTo:
-    Telecrystal: 10
+    Telecrystal: 8 # Sunrise-Edit
   cost:
-    Telecrystal: 14
+    Telecrystal: 10 # Sunrise-Edit
   categories:
   - UplinkWeaponry
   conditions:
@@ -202,6 +220,8 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Add
+      - AssaultOpsUplink # Sunrise-Add
 
 - type: listing
   id: UplinkC20RBundle
@@ -221,6 +241,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Add
 
 - type: listing
   id: UplinkBulldog
@@ -230,9 +251,9 @@
   productEntity: BriefcaseWeaponBulldogFilled
   discountCategory: veryRareDiscounts
   discountDownTo:
-    Telecrystal: 10
+    Telecrystal: 8 # Sunrise-Edit
   cost:
-    Telecrystal: 14
+    Telecrystal: 12 # Sunrise-Edit
   categories:
   - UplinkWeaponry
   conditions:
@@ -240,6 +261,7 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Add
 
 - type: listing
   id: UplinkBulldogBundle
@@ -259,6 +281,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Add
 
 - type: listing
   id: UplinkEstocBundle
@@ -278,6 +301,7 @@
     whitelist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Add
 
 - type: listing
   id: UplinkGrenadeLauncher
@@ -294,25 +318,29 @@
     blacklist:
       tags:
       - NukeOpsUplink
+      - LoneOpsUplink # Sunrise-Edit
+      - AssaultOpsUplink # Sunrise-Edit
 
-- type: listing
-  id: UplinkGrenadeLauncherBundle
-  name: uplink-grenade-launcher-bundle-name
-  description: uplink-grenade-launcher-bundle-desc
-  icon: { sprite: /Textures/Objects/Weapons/Guns/Launchers/china_lake.rsi, state: icon }
-  productEntity: ClothingBackpackDuffelSyndicateFilledGrenadeLauncher
-  discountCategory: veryRareDiscounts
-  discountDownTo:
-    Telecrystal: 20
-  cost:
-    Telecrystal: 25
-  categories:
-  - UplinkWeaponry
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
+# Sunrise edit start - листинг заменён вариантом для China Lake в каталоге Sunrise
+#- type: listing
+#  id: UplinkGrenadeLauncherBundle
+#  name: uplink-grenade-launcher-bundle-name
+#  description: uplink-grenade-launcher-bundle-desc
+#  icon: { sprite: /Textures/Objects/Weapons/Guns/Launchers/china_lake.rsi, state: icon }
+#  productEntity: ClothingBackpackDuffelSyndicateFilledGrenadeLauncher
+#  discountCategory: veryRareDiscounts
+#  discountDownTo:
+#    Telecrystal: 20
+#  cost:
+#    Telecrystal: 25
+#  categories:
+#  - UplinkWeaponry
+#  conditions:
+#  - !type:StoreWhitelistCondition
+#    whitelist:
+#      tags:
+#      - NukeOpsUplink
+# Sunrise edit end
 
 - type: listing
   id: UplinkL6SawBundle
@@ -322,8 +350,15 @@
   productEntity: ClothingBackpackDuffelSyndicateFilledLMG
   discountCategory: veryRareDiscounts
   discountDownTo:
-    Telecrystal: 24
+    Telecrystal: 18 # Sunrise-Edit
   cost:
-    Telecrystal: 30
+    Telecrystal: 25 # Sunrise-Edit
   categories:
   - UplinkWeaponry
+  # Sunrise added start - исключаем набор из аплинка штурмовых оперативников
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - AssaultOpsUplink
+  # Sunrise added end

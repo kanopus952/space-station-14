@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -36,9 +37,10 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
         var shooter = args.Shooter ?? args.Gun;
         // Sunrise edit start - ignore shooter's mech for hitscan raycast
         var ignored = shooter;
-        if (TryComp<Content.Shared.Mech.Components.MechPilotComponent>(ignored, out var pilot))
+        if (TryComp<VehicleOperatorComponent>(ignored, out var vehicleOperator) &&
+            vehicleOperator.Vehicle is { } vehicle)
         {
-            ignored = pilot.Mech;
+            ignored = vehicle;
         }
         // Sunrise edit end
         var mapCords = _transform.ToMapCoordinates(args.FromCoordinates);

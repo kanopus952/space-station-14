@@ -227,7 +227,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
             var dispenser = GetEntity(args.Dispencer);
 
             if (TryComp<VendingMachineComponent>(dispenser, out var vendingComp))
-                _vending.RestockRandom(dispenser, vendingComp);
+                _vending.RestockRandom((dispenser, vendingComp));
         }
 
         _xformSys.SetCoordinates(victim, GetCoordinates(args.TargetCoordinates));
