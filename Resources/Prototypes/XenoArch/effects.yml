@@ -254,17 +254,10 @@
   components:
   - type: XAERemoveCollision
   # Sunrise-Start
+  - type: XAEApplyStatusEffect
+    statusEffect: StatusEffectClumsyArtifact
   - type: XAEApplyComponents
     components:
-    - type: Clumsy
-      gunShootFailDamage:
-        types:
-          Blunt: 3
-          Piercing: 7
-          Heat: 0.75
-          Shock: 0.75
-          Cold: 0.75
-          Caustic: 0.75
     - type: ArtifactFunnyTarget
   # Sunrise-End
 

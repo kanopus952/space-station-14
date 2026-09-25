@@ -2,8 +2,8 @@
 
 namespace Content.Server._Sunrise.DamageOverlay;
 
-[RegisterComponent, Access(typeof(DamageOverlaySystem))]
-public sealed partial class DamageOverlayComponent : Component
+[RegisterComponent, Access(typeof(SunriseDamagePopupSystem))]
+public sealed partial class SunriseDamagePopupComponent : Component
 {
     [DataField]
     public PopupType DamagePopupType = PopupType.MediumCautionFloating;

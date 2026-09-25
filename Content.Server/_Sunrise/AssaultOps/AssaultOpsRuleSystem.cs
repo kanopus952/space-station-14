@@ -50,8 +50,7 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
     [ValidatePrototypeId<AntagPrototype>]
     private const string CommanderAntagProto = "AssaultCommander";
 
-    [ValidatePrototypeId<CurrencyPrototype>]
-    private const string TelecrystalCurrencyPrototype = "Telecrystal";
+    private static readonly ProtoId<CurrencyPrototype> TelecrystalCurrencyPrototype = "Telecrystal";
 
     public override void Initialize()
     {
@@ -138,7 +137,10 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
             var totalTc = ent.Comp.TcAmountPerOperative * ent.Comp.RoundstartOperatives;
             var store = EnsureComp<StoreComponent>(uplink.Value);
             _store.TryAddCurrency(
-                new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, totalTc } },
+                new Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>
+                {
+                    { TelecrystalCurrencyPrototype, totalTc },
+                },
                 uplink.Value,
                 store);
         }
@@ -148,7 +150,10 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
             var giveTcCount = ent.Comp.TcAmountPerOperative;
             var store = EnsureComp<StoreComponent>(ent.Comp.UplinkEnt.Value);
             _store.TryAddCurrency(
-                new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, giveTcCount } },
+                new Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>
+                {
+                    { TelecrystalCurrencyPrototype, giveTcCount },
+                },
                 ent.Comp.UplinkEnt.Value,
                 store);
         }

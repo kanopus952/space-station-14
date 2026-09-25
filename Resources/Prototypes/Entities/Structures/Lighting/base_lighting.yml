@@ -13,7 +13,7 @@
     - Wallmount
   components:
   # Sunrise start
-  - type: DamageOverlay
+  - type: SunriseDamagePopup
     damagePopupType: SmallFloating
     isStructure: true
   - type: BloomOverlayVisuals

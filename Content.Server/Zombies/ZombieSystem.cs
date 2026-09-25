@@ -82,12 +82,7 @@ namespace Content.Server.Zombies
 
             SubscribeLocalEvent<ZombifyOnDeathComponent, MobStateChangedEvent>(OnDamageChanged);
 
-            // Sunrise added start - способности зомби
-            SubscribeLocalEvent<ZombieComponent, ComponentStartup>(OnSunriseStartup);
-            SubscribeLocalEvent<ZombieComponent, ZombieJumpActionEvent>(OnJump);
-            SubscribeLocalEvent<ZombieComponent, ZombieFlairActionEvent>(OnFlair);
-            SubscribeLocalEvent<ZombieComponent, ThrowDoHitEvent>(OnThrowDoHit);
-            // Sunrise added end
+            InitializeSunrise(); // Sunrise edit
         }
 
         private void OnBeforeRemoveAnomalyOnDeath(Entity<PendingZombieComponent> ent, ref BeforeRemoveAnomalyOnDeathEvent args)

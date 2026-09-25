@@ -117,7 +117,7 @@ namespace Content.Server._Sunrise.StationGoal
 
         private EntityUid SpawnPaperGoal(EntityCoordinates coords, FaxPrintout printout)
         {
-            var entityToSpawn = printout.PrototypeId.Length == 0 ? "Paper" : printout.PrototypeId;
+            var entityToSpawn = printout.PrototypeId.Id.Length == 0 ? "Paper" : printout.PrototypeId.Id;
             var printed = Spawn(entityToSpawn, coords);
             if (!TryComp<PaperComponent>(printed, out var paper))
                 return printed;

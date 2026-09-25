@@ -97,7 +97,7 @@ public sealed partial class ClientClothingSystem
         if (!_tag.HasTag(equipment, _hardsuitTag))
             return displacement;
 
-        return sexDisplacements.GetValueOrDefault($"hardsuit-{bodyTypeVisualKey}")
+        return sexDisplacements?.GetValueOrDefault($"hardsuit-{bodyTypeVisualKey}")
                ?? inventory.Displacements.GetValueOrDefault($"hardsuit-{bodyTypeVisualKey}")
                ?? displacement;
     }

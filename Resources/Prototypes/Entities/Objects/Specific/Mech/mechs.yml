@@ -253,7 +253,7 @@
     radius: 18 # Sunrise-edit
     netsync: false
   - type: AccessReader
-  - type: DamageOverlay # Sunrise-Edit
+  - type: SunriseDamagePopup # Sunrise-Edit
   - type: ExplosionResistance # Sunrise-Edit
     damageCoefficient: 0.9 # Sunrise-Edit
   - type: ProtectedFromStepTriggers # Sunrise-added

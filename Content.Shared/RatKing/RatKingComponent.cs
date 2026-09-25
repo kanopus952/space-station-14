@@ -19,26 +19,26 @@ public sealed partial class RatKingComponent : Component
     public EntityUid? ActionRaiseArmyEntity;
 
     // Sunrise-Start
-    [DataField("actionRaiseGuard", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionRaiseGuard = "ActionRatKingRaiseGuard";
+    [DataField]
+    public EntProtoId ActionRaiseGuard = "ActionRatKingRaiseGuard";
 
     /// <summary>
     ///     The action for the Raise Guard ability
     /// </summary>
-    [DataField("actionRaiseGuardEntity")]
+    [DataField]
     public EntityUid? ActionRaiseGuardEntity;
 
     /// <summary>
     ///     The amount of hunger one use of Raise Guard consumes
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("hungerPerGuardUse", required: true)]
+    [ViewVariables(VVAccess.ReadWrite), DataField(required: true)]
     public float HungerPerGuardUse = 75f;
 
     /// <summary>
     ///     The entity prototype of the mob that Raise Guard summons
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("guardMobSpawnId", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string GuardMobSpawnId = "MobRatGuard";
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public EntProtoId GuardMobSpawnId = "MobRatGuard";
     // Sunrise-End
 
     /// <summary>

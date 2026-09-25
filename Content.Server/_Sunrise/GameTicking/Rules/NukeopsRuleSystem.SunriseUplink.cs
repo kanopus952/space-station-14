@@ -5,6 +5,7 @@ using Content.Server.Traitor.Uplink;
 using Content.Shared.FixedPoint;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
+using Content.Shared.Store;
 using Content.Shared.Store.Components;
 using Robust.Shared.Prototypes;
 
@@ -57,7 +58,10 @@ public sealed partial class NukeopsRuleSystem
             var totalTc = GetCommanderStartupTc(fightersAlreadySelected);
             var store = EnsureComp<StoreComponent>(uplink.Value);
             _store.TryAddCurrency(
-                new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, totalTc } },
+                new Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>
+                {
+                    { TelecrystalCurrencyPrototype, totalTc },
+                },
                 uplink.Value,
                 store);
             return;
@@ -71,7 +75,10 @@ public sealed partial class NukeopsRuleSystem
         var giveTcCount = GetCommanderTcPerFighter();
         var commanderStore = EnsureComp<StoreComponent>(ent.Comp.UplinkEnt.Value);
         _store.TryAddCurrency(
-            new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, giveTcCount } },
+            new Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>
+            {
+                { TelecrystalCurrencyPrototype, giveTcCount },
+            },
             ent.Comp.UplinkEnt.Value,
             commanderStore);
     }

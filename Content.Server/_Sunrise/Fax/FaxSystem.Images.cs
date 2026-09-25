@@ -137,7 +137,7 @@ public sealed partial class FaxSystem
                 continue;
             }
 
-            var prototype = string.IsNullOrEmpty(printout.PrototypeId) ? "Paper" : printout.PrototypeId;
+            EntProtoId prototype = string.IsNullOrEmpty(printout.PrototypeId.Id) ? "Paper" : printout.PrototypeId;
             var printed = Spawn(prototype, Transform(ghost).Coordinates);
             if (!_storage.Insert(worn.Value, printed, out _, storageComp: storage, playSound: false))
             {

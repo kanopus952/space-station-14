@@ -41,7 +41,7 @@
   - type: StunVisuals
   # Sunrise-Start
   - type: TTS
-  - type: DamageOverlay
+  - type: SunriseDamagePopup
   - type: EmoteAnimation
   - type: CustomLimbVisualizer
     displacements:

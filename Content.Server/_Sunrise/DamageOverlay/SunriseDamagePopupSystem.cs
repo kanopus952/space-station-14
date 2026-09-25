@@ -14,7 +14,7 @@ namespace Content.Server._Sunrise.DamageOverlay;
 // TODO: Рефактор попапов, с целью поддержки передачи цвета, размера и иконок в сам попап, не клепая 999 енумов
 // Возможно стоит создать прототипы попапов
 
-public sealed partial class DamageOverlaySystem : EntitySystem
+public sealed partial class SunriseDamagePopupSystem : EntitySystem
 {
     [Dependency] private PopupSystem _popupSystem = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -27,7 +27,7 @@ public sealed partial class DamageOverlaySystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<DamageOverlayComponent, DamageChangedEvent>(OnDamageChange);
+        SubscribeLocalEvent<SunriseDamagePopupComponent, DamageDealtEvent>(OnDamageChange);
 
         SubscribeNetworkEvent<DamageOverlayOptionEvent>(OnDamageOverlayOption);
 
@@ -50,12 +50,9 @@ public sealed partial class DamageOverlaySystem : EntitySystem
         _playerSettings.TryAdd(args.SenderSession, new DamageOverlaySettings(ev.SelfEnabled, ev.StructuresEnabled));
     }
 
-    private void OnDamageChange(Entity<DamageOverlayComponent> ent, ref DamageChangedEvent args)
+    private void OnDamageChange(Entity<SunriseDamagePopupComponent> ent, ref DamageDealtEvent args)
     {
-        if (args.DamageDelta == null)
-            return;
-
-        var damageDelta = args.DamageDelta.GetTotal();
+        var damageDelta = args.Damage.GetTotal();
         var coords = Transform(ent).Coordinates.GetRandomInRadius(ent.Comp.Radius, _random);
 
         // Идея в том, что попапы должны разделяться на две большие категории: без отправителя и с ним
@@ -90,7 +87,7 @@ public sealed partial class DamageOverlaySystem : EntitySystem
         TryCreatePopup(ent, damageDelta, coords, originSession);
     }
 
-    private bool TryCreatePopup(Entity<DamageOverlayComponent> ent,
+    private bool TryCreatePopup(Entity<SunriseDamagePopupComponent> ent,
         FixedPoint2 damageDelta,
         EntityCoordinates coords,
         ICommonSession session,
@@ -113,7 +110,7 @@ public sealed partial class DamageOverlaySystem : EntitySystem
         return true;
     }
 
-    private bool IsDisabledByClient(ICommonSession session, Entity<DamageOverlayComponent> target)
+    private bool IsDisabledByClient(ICommonSession session, Entity<SunriseDamagePopupComponent> target)
     {
         if (DisabledSessions.Contains(session))
             return true;

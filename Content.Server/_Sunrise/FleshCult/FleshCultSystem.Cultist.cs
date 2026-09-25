@@ -49,8 +49,7 @@ public sealed partial class FleshCultSystem
     [ValidatePrototypeId<EntityPrototype>]
     private const string FleshCultSurviveObjective = "FleshCultSurviveObjective";
 
-    [ValidatePrototypeId<CurrencyPrototype>]
-    private const string StolenMutationPointPrototype = "StolenMutationPoint";
+    private static readonly ProtoId<CurrencyPrototype> StolenMutationPointPrototype = "StolenMutationPoint";
 
     private static readonly HumanoidVisualLayers[] FleshSpiderLegLayers =
     [
@@ -156,7 +155,12 @@ public sealed partial class FleshCultSystem
         InitializeActions(uid, component);
         InitializeStore(uid, component);
         InitializeAppearance(uid);
-        _store.TryAddCurrency(new Dictionary<string, FixedPoint2> { { StolenMutationPointPrototype, component.StartingMutationPoints } }, uid);
+        _store.TryAddCurrency(
+            new Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>
+            {
+                { StolenMutationPointPrototype, component.StartingMutationPoints },
+            },
+            uid);
     }
 
     private void InitializeActions(EntityUid uid, FleshCultistComponent component)

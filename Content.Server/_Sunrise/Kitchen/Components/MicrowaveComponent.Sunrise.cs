@@ -1,4 +1,5 @@
 using Content.Shared.Kitchen;
+using Content.Shared.Kitchen.Components;
 using Robust.Shared.Audio;
 
 #pragma warning disable IDE0130 // Namespace не соответствует расположению файла

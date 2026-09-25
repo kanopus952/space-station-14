@@ -14,12 +14,20 @@ namespace Content.Server.Zombies;
 
 public sealed partial class ZombieSystem
 {
+
+    private void InitializeSunrise()
+    {
+        SubscribeLocalEvent<ZombieComponent, ComponentStartup>(OnSunriseStartup);
+        SubscribeLocalEvent<ZombieComponent, ZombieJumpActionEvent>(OnJump);
+        SubscribeLocalEvent<ZombieComponent, ZombieFlairActionEvent>(OnFlair);
+        SubscribeLocalEvent<ZombieComponent, ThrowDoHitEvent>(OnThrowDoHit);
+    }
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private NavMapSystem _navMap = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
-    private void OnSunriseStartup(Entity<ZombieComponent> ent, ComponentStartup args)
+    private void OnSunriseStartup(Entity<ZombieComponent> ent, ref ComponentStartup args)
     {
         _actions.AddAction(ent, ent.Comp.JumpAction);
         _actions.AddAction(ent, ent.Comp.FlairAction);
@@ -39,7 +47,7 @@ public sealed partial class ZombieSystem
         _damageable.TryChangeDamage(args.Target, ent.Comp.ThrowDamage, origin: args.Thrown);
     }
 
-    private void OnFlair(Entity<ZombieComponent> ent, ZombieFlairActionEvent args)
+    private void OnFlair(Entity<ZombieComponent> ent, ref ZombieFlairActionEvent args)
     {
         if (args.Handled)
             return;
@@ -74,7 +82,7 @@ public sealed partial class ZombieSystem
         args.Handled = true;
     }
 
-    private void OnJump(Entity<ZombieComponent> ent, ZombieJumpActionEvent args)
+    private void OnJump(Entity<ZombieComponent> ent, ref ZombieJumpActionEvent args)
     {
         if (args.Handled)
             return;

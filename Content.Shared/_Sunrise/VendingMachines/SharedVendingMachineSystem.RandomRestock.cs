@@ -2,6 +2,8 @@ using System.Linq;
 using Content.Shared._Sunrise.VendingMachines;
 using Content.Shared.VendingMachines.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 
 #pragma warning disable IDE0130
 namespace Content.Shared.VendingMachines;
@@ -33,7 +35,7 @@ public abstract partial class SharedVendingMachineSystem
             item = packPrototype.StartingInventory.ElementAt(index).Key;
         }
 
-        AddInventoryFromPrototype(ent, new Dictionary<string, uint> { [item] = 1 }, InventoryType.Regular, ent.Comp);
+        AddInventoryFromPrototype(ent, new Dictionary<EntProtoId, uint> { [item] = 1 }, InventoryType.Regular, ent.Comp);
         Dirty(ent);
     }
 

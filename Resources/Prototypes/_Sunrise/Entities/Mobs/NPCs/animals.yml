@@ -96,17 +96,9 @@
   id: MobInferiorVulpkanin
   parent: MobBaseInferiorVulpkanin
   components:
-  - type: Clumsy
-    gunShootFailDamage:
-      types:
-        Blunt: 2
-        Piercing: 7
-        Heat: 0.75
-        Shock: 0.75
-        Cold: 0.75
-        Caustic: 0.75
-    clumsySound:
-      path: /Audio/Voice/Reptilian/reptilian_scream.ogg
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectClumsyInferiorVulpkanin
 
 - type: entity
   id: MobBaseSyndicateInferiorVulpkanin
