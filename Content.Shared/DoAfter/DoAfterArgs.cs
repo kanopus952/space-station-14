@@ -49,6 +49,12 @@ public sealed partial class DoAfterArgs
     [DataField]
     public bool ForceNet;
 
+    /// <summary>
+    ///     String that will be added to the examine window of the entity.
+    /// </summary>
+    [DataField]
+    public string? ExamineText;
+
     #region Event options
     /// <summary>
     ///     The event that will get raised when the DoAfter has finished. If null, this will simply raise a <see cref="SimpleDoAfterEvent"/>
@@ -257,6 +263,7 @@ public sealed partial class DoAfterArgs
         Target = other.Target;
         Used = other.Used;
         Hidden = other.Hidden;
+        ExamineText = other.ExamineText;
         EventTarget = other.EventTarget;
         Broadcast = other.Broadcast;
         NeedHand = other.NeedHand;
