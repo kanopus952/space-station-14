@@ -19,7 +19,6 @@
   icon: "JobIconChiefMedicalOfficer"
   supervisors: job-supervisors-captain
   radioBold: true # Sunrise-Edit
-  displayWeight: 60 # Sunrise-Edit
   # Sunrise-Start
   alternativeTitles:
   - job-alt-title-head-physician

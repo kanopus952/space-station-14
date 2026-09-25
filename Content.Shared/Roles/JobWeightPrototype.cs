@@ -13,7 +13,8 @@ public sealed partial class JobWeightPrototype : IPrototype
     /// <summary>
     /// The global fallback profile used by maps that do not define an override.
     /// </summary>
-    public static readonly ProtoId<JobWeightPrototype> Default = "Default";
+    // Sunrise-Edit - используем порядок профессий Sunrise по умолчанию.
+    public static readonly ProtoId<JobWeightPrototype> Default = "SunriseJobWeight";
 
     [IdDataField]
     public string ID { get; private set; } = string.Empty;

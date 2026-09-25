@@ -17,7 +17,6 @@
   icon: "JobIconQuarterMaster"
   supervisors: job-supervisors-captain
   radioBold: true # Sunrise-Edit
-  displayWeight: 40  # Sunrise-Edit
   # Sunrise-Start
   alternativeTitles:
   - job-alt-title-intendant

@@ -20,7 +20,6 @@
   icon: "JobIconHeadOfSecurity"
   supervisors: job-supervisors-captain
   radioBold: true # Sunrise-Edit
-  displayWeight: 80 # Sunrise-Edit
   # Sunrise-Start
   alternativeTitles:
   - job-alt-title-security-chief

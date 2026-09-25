@@ -26,7 +26,6 @@
   requirements:
     - !type:OverallPlaytimeRequirement
       time: 10h
-  displayWeight: -10  # Sunrise
   icon: JobIconBorg
   overrideConsoleVisibility: false # Sunrise added
   supervisors: job-supervisors-rd
