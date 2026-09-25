@@ -52,10 +52,6 @@
         computerLayerKeys:
           True: { visible: true, shader: unshaded }
           False: { visible: true, shader: shaded }
-      enum.WiresVisuals.MaintenancePanelState:
-        enum.WiresVisualLayers.MaintenancePanel:
-          True: { visible: false }
-          False: { visible: true }
       # Sunrise-Start
       enum.EdgeConnectionVisuals.ConnectionMask:
         computerLayerBody:

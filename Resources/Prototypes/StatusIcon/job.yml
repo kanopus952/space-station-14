@@ -577,7 +577,6 @@
   icon:
     sprite: *icon-rsi
     state: Admin
-  allowSelection: false
 
 - type: jobIcon
   parent: JobIcon
@@ -585,7 +584,6 @@
   icon:
     sprite: *icon-rsi
     state: SeniorPhysician
-  allowSelection: true  # Sunrise-edit
 
 - type: jobIcon
   parent: JobIcon
@@ -593,7 +591,6 @@
   icon:
     sprite: *icon-rsi
     state: SeniorOfficer
-  allowSelection: true  # Sunrise-edit
 
 - type: jobIcon
   parent: JobIcon
@@ -601,7 +598,6 @@
   icon:
     sprite: *icon-rsi
     state: SeniorEngineer
-  allowSelection: true  # Sunrise-edit
 
 - type: jobIcon
   parent: JobIcon
@@ -609,7 +605,6 @@
   icon:
     sprite: *icon-rsi
     state: SeniorResearcher
-  allowSelection: true  # Sunrise-edit
 
 # Other
 

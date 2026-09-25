@@ -72,7 +72,10 @@ public abstract partial class SharedSiliconLawSystem : EntitySystem
             cue = lawsetEmag.EmaggedSound;
         }
 
-        NotifyLawsChanged(uid, cue);
+        if (!TryComp<SiliconLawProviderComponent>(uid, out var lawcomp))
+            return;
+
+        NotifyLawsChanged((uid, lawcomp), cue);
         // Sunrise-End
         if(_mind.TryGetMind(uid, out var mindId, out _))
             EnsureSubvertedSiliconRole(mindId);
@@ -82,7 +85,7 @@ public abstract partial class SharedSiliconLawSystem : EntitySystem
         args.Handled = true;
     }
 
-    public virtual void NotifyLawsChanged(EntityUid uid, SoundSpecifier? cue = null)
+    public virtual void NotifyLawsChanged(Entity<SiliconLawProviderComponent> ent, SoundSpecifier? cue = null)
     {
 
     }

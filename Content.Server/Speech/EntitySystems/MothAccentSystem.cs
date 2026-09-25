@@ -1,59 +1,21 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Content.Server.Speech.Components;
-using Robust.Shared.Random;
-using Content.Shared.Speech;
+using Content.Shared.Speech.EntitySystems;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class MothAccentSystem : EntitySystem
+public sealed partial class MothAccentSystem : RelayAccentSystem<MothAccentComponent> // Sunrise-Edit - русская локализация вынесена в partial
 {
-    [Dependency] private IRobustRandom _random = default!; // Russian-Localization
-
     private static readonly Regex RegexLowerBuzz = new Regex("z{1,3}");
     private static readonly Regex RegexUpperBuzz = new Regex("Z{1,3}");
-    private static readonly Regex LowerZheRegex = new("ж+");
-    private static readonly Regex UpperZheRegex = new("Ж+");
-    private static readonly Regex LowerZeRegex = new("з+");
-    private static readonly Regex UpperZeRegex = new("З+");
 
-    public override void Initialize()
+    public override string Accentuate(string message, Entity<MothAccentComponent>? ent = null)
     {
-        base.Initialize();
-        SubscribeLocalEvent<MothAccentComponent, AccentGetEvent>(OnAccent);
-    }
-
-    private void OnAccent(EntityUid uid, MothAccentComponent component, AccentGetEvent args)
-    {
-        var message = args.Message;
-
         // buzzz
         message = RegexLowerBuzz.Replace(message, "zzz");
         // buZZZ
         message = RegexUpperBuzz.Replace(message, "ZZZ");
 
-        // Russian-Localization-Start
-        // ж => жжж
-        message = LowerZheRegex.Replace(
-            message,
-            _random.Pick(new List<string>() { "жж", "жжж" })
-        );
-        // Ж => ЖЖЖ
-        message = UpperZheRegex.Replace(
-            message,
-            _random.Pick(new List<string>() { "ЖЖ", "ЖЖЖ" })
-        );
-        // з => ссс
-        message = LowerZeRegex.Replace(
-            message,
-            _random.Pick(new List<string>() { "зз", "ззз" })
-        );
-        // З => CCC
-        message = UpperZeRegex.Replace(
-            message,
-            _random.Pick(new List<string>() { "ЗЗ", "ЗЗЗ" })
-        );
-        // Russian-Localization-End
-
-        args.Message = message;
+        return AccentuateSunrise(message); // Sunrise-Edit - применяем русскую часть акцента
     }
 }

@@ -97,14 +97,6 @@
   suffix: Airtight, Clear
   description: Heavy duty, slightly stronger, airtight plastic flaps. Definitely can't get past those. No way.
   components:
-  # Sunrise-Start
-  - type: DamageVisuals
-    thresholds: [5, 10, 20]
-    damageDivisor: 7
-    trackAllDamage: true
-    damageOverlay:
-      sprite: Structures/Windows/cracks.rsi
-  # Sunrise-End
   - type: Destructible
     thresholds:
     - trigger:
@@ -116,6 +108,14 @@
   - type: Airtight
   - type: StaticPrice
     price: 100
+  # Sunrise-Start
+  - type: DamageVisuals
+    thresholds: [5, 10, 20]
+    damageDivisor: 7
+    trackAllDamage: true
+    damageOverlay:
+      sprite: Structures/Windows/cracks.rsi
+  # Sunrise-End
 
 - type: entity
   id: PlasticFlapsAirtightOpaque
@@ -124,6 +124,9 @@
   suffix: Airtight, Opaque
   description: Heavy duty, slightly stronger, airtight plastic flaps. Definitely can't get past those. No way.
   components:
+  - type: Airtight
+  - type: StaticPrice
+    price: 100
   # Sunrise-Start
   - type: DamageVisuals
     thresholds: [5, 10, 20]
@@ -131,16 +134,7 @@
     trackAllDamage: true
     damageOverlay:
       sprite: Structures/Windows/cracks.rsi
-  # Sunrise-End
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 150
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
-  - type: Fixtures #Sunrise-start
+  - type: Fixtures
     fixtures:
       fix1:
         shape:
@@ -154,6 +148,3 @@
         - MidImpassable
   - type: Occluder
   #Sunrise-end
-  - type: Airtight
-  - type: StaticPrice
-    price: 100

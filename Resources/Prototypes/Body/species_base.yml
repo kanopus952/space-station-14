@@ -72,7 +72,6 @@
   - type: StatusEffects
     allowed:
     - Electrocution
-    - RatvarianLanguage
     - PressureImmunity
     - Muted
     - Pacified
@@ -192,6 +191,7 @@
   - MobAtmosStandard
   - MobFlammable
   - BaseSpeciesMob
+  - BaseMobDestructible
   id: BaseSpeciesMobOrganic
   save: false
   components:

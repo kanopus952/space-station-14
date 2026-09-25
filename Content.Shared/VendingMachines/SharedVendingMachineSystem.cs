@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._Sunrise.VendingMachines;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Advertise.Components;
@@ -9,7 +8,6 @@ using Content.Shared.DoAfter;
 using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Emp;
-using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.UserInterface;
@@ -17,7 +15,6 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -36,21 +33,11 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
     [Dependency] private SharedSpeakOnUIClosedSystem _speakOn = default!;
     [Dependency] protected SharedUserInterfaceSystem UISystem = default!;
     [Dependency] protected IRobustRandom Randomizer = default!;
-    [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private EmagSystem _emag = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<VendingMachineComponent, ComponentGetState>(OnVendingGetState);
-        SubscribeLocalEvent<VendingMachineComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<VendingMachineComponent, GotEmaggedEvent>(OnEmagged);
-        SubscribeLocalEvent<VendingMachineComponent, EmpPulseEvent>(OnEmpPulse);
-        SubscribeLocalEvent<VendingMachineComponent, RestockDoAfterEvent>(OnRestockDoAfter);
-        SubscribeLocalEvent<VendingMachineComponent, ActivatableUIOpenAttemptEvent>(OnActivatableUIOpenAttempt);
-        SubscribeLocalEvent<VendingMachineComponent, BreakageEventArgs>(OnBreak);
-
-        SubscribeLocalEvent<VendingMachineRestockComponent, AfterInteractEvent>(OnAfterInteract);
 
         Subs.BuiEvents<VendingMachineComponent>(VendingMachineUiKey.Key, subs =>
         {
@@ -58,39 +45,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         });
     }
 
-    //#region starlight
-    /// <summary>
-    /// Restocks one item from the starting inventory, can also be overriden what is restocked on the VendingMachineComponent
-    /// </summary>
-    /// <param name="uid">the EntityUid of the vending machine</param>
-    /// <param name="component">the Vending Machine component of the vending machine</param>
-    public void RestockRandom(EntityUid uid, VendingMachineComponent component)
-    {
-        string? item = null;
-        if (component.RandomRestockTarget != null)
-        {
-            item = component.RandomRestockTarget.ToString();
-        }
-        else
-        {
-            if (!ProtoMan.TryIndex(component.PackPrototypeId, out VendingMachineInventoryPrototype? packPrototype))
-                return;
-            var startingInventory = packPrototype.StartingInventory;
-            var next = Randomizer.Next(0, startingInventory.Count);
-            var target = packPrototype.StartingInventory.ElementAt(next);
-            item = target.Key;
-        }
-
-        if (item == null)
-            return;
-        var theItem = new Dictionary<string, uint>();
-        theItem.Add(item, 1);
-
-        AddInventoryFromPrototype(uid, theItem, InventoryType.Regular, component);
-        Dirty(uid, component);
-    }
-    //#endregion starlight
-
+    [SubscribeLocalEvent]
     private void OnVendingGetState(Entity<VendingMachineComponent> entity, ref ComponentGetState args)
     {
         var component = entity.Comp;
@@ -181,11 +136,13 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         AuthorizedVend(entity.Owner, actor, args.Type, args.ID, entity.Comp);
     }
 
+    [SubscribeLocalEvent]
     protected virtual void OnMapInit(EntityUid uid, VendingMachineComponent component, MapInitEvent args)
     {
         RestockInventoryFromPrototype(uid, component, component.InitialStockQuality);
     }
 
+    [SubscribeLocalEvent]
     private void OnEmpPulse(Entity<VendingMachineComponent> ent, ref EmpPulseEvent args)
     {
         if (!ent.Comp.Broken && _receiver.IsPowered(ent.Owner))
@@ -242,6 +199,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
     /// <param name="type">The type of inventory the item is from</param>
     /// <param name="itemId">The prototype ID of the item</param>
     /// <param name="throwItem">Whether the item should be thrown in a random direction after ejection</param>
+    /// <param name="user"></param>
     /// <param name="vendComponent"></param>
     public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, EntityUid? user = null, VendingMachineComponent? vendComponent = null)
     {
@@ -353,8 +311,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
     }
 
     public void RestockInventoryFromPrototype(EntityUid uid,
-        VendingMachineComponent? component = null,
-        float restockQuality = 1f)
+        VendingMachineComponent? component = null, float restockQuality = 1f)
     {
         if (!Resolve(uid, ref component))
         {
@@ -370,6 +327,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         Dirty(uid, component);
     }
 
+    [SubscribeLocalEvent]
     private void OnEmagged(EntityUid uid, VendingMachineComponent component, ref GotEmaggedEvent args)
     {
         if (!_emag.CompareFlag(args.Type, EmagType.Interaction))
@@ -406,14 +364,14 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         return inventory;
     }
 
-    public List<VendingMachineInventoryEntry> GetAvailableInventory(EntityUid uid,
-        VendingMachineComponent? component = null)
+    public List<VendingMachineInventoryEntry> GetAvailableInventory(EntityUid uid, VendingMachineComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return new();
 
         return GetAllInventory(uid, component).Where(_ => _.Amount > 0).ToList();
     }
+
     private void AddInventoryFromPrototype(EntityUid uid, Dictionary<string, uint>? entries,
         InventoryType type,
         VendingMachineComponent? component = null, float restockQuality = 1.0f)
@@ -452,26 +410,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
                     restock = (uint) Math.Floor(amount * result / chanceOfMissingStock);
                 }
 
-                // Sunrise start
-                if (type == InventoryType.Regular || type == InventoryType.Contraband)
-                {
-                    if (TryComp<PlayerCountDependentStockComponent>(uid, out var dependentStockComponent))
-                    {
-                        var scale = 1f + Math.Pow(_player.PlayerCount, 0.8f) * dependentStockComponent.Coefficient;
-                        if (scale < 1f)
-                            scale = 1f;
-
-                        restock = (uint) Math.Floor(amount * scale);
-                    }
-
-                    restock = Math.Max(restock, 1);
-                }
-                else
-                {
-                    var isSustenance = component.PackPrototypeId == "SustenanceInventory";
-                    restock = isSustenance ? 1u : 2u;
-                }
-                // Sunrise end
+                restock = AdjustSunriseRestock(uid, component, type, amount, restock); // Sunrise-Edit
 
                 if (inventory.TryGetValue(id, out var entry))
                     // Prevent a machine's stock from going over three times
@@ -487,12 +426,20 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         }
     }
 
+    private partial uint AdjustSunriseRestock(EntityUid uid,
+        VendingMachineComponent component,
+        InventoryType type,
+        uint amount,
+        uint restock);
+
+    [SubscribeLocalEvent]
     private void OnActivatableUIOpenAttempt(EntityUid uid, VendingMachineComponent component, ActivatableUIOpenAttemptEvent args)
     {
         if (component.Broken)
             args.Cancel();
     }
 
+    [SubscribeLocalEvent]
     private void OnBreak(EntityUid uid, VendingMachineComponent vendComponent, BreakageEventArgs eventArgs)
     {
         vendComponent.Broken = true;

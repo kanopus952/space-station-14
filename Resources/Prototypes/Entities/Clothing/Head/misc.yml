@@ -223,8 +223,8 @@
     proto: regal
   - type: StaticPrice
     price: 3000
-  - type: AddAccentClothing
-    accent: MobsterAccent
+  - type: MobsterAccent
+    relayAccent: true
 
 - type: entity
   parent: [ ClothingHeadBase, BaseSyndicateContraband ]
@@ -239,8 +239,8 @@
     sprite: Clothing/Head/Hats/catears.rsi
   - type: Clothing
     sprite: Clothing/Head/Hats/catears.rsi
-  - type: AddAccentClothing
-    accent: OwOAccent
+  - type: OwOAccent
+    relayAccent: true
   - type: StaticPrice
     price: 15000
 
@@ -263,8 +263,8 @@
     sprite: Clothing/Head/Hats/catears.rsi
   - type: Clothing
     sprite: Clothing/Head/Hats/catears.rsi
-  - type: AddAccentClothing
-    accent: OwOAccent
+  - type: OwOAccent
+    relayAccent: true
 
 - type: entity
   parent: BaseToggleAction
@@ -283,8 +283,8 @@
     sprite: Clothing/Head/Hats/dogears.rsi
   - type: Clothing
     sprite: Clothing/Head/Hats/dogears.rsi
-  - type: AddAccentClothing
-    accent: BarkAccent
+  - type: BarkAccent
+    relayAccent: true
 
 - type: entity
   parent: ClothingHeadBase

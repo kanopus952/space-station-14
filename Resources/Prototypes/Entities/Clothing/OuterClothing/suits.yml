@@ -337,8 +337,8 @@
     tags:
     - WhitelistChameleon
     - FullBodyOuter # Sunrise-Edit
-  - type: AddAccentClothing
-    accent: BarkAccent
+  - type: BarkAccent
+    relayAccent: true
 
 - type: entity
   parent: ClothingOuterBase

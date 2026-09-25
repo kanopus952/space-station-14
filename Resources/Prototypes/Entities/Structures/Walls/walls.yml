@@ -285,7 +285,6 @@
   - type: Tag
     tags:
     - Wall
-
   - type: Sprite
     sprite: Structures/Walls/debug.rsi
   - type: Icon
@@ -485,8 +484,6 @@
   name: plastitanium wall
   suffix: indestructible
   components:
-  - type: Ricochetable
-    chance: 1
   - type: Sprite
     sprite: _Sunrise/Structures/Walls/plastitanium.rsi # Sunrise-edit
   - type: Icon
@@ -511,6 +508,8 @@
     damageContainer: StructuralInorganic
   - type: RadiationBlocker
     resistance: 5
+  - type: Ricochetable # Sunrise edit
+    chance: 1
 
 - type: entity
   parent: WallPlastitaniumIndestructible
@@ -664,19 +663,8 @@
   - type: IconSmooth
     key: walls
     base: reinf_over
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 350
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalSlam
-      - !type:ChangeConstructionNodeBehavior
-        node: girder
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
+  - type: Damageable
+    damageModifierSet: StructuralMetallic # weaker because rust
 
 - type: entity
   parent: WallDiagonalBaseSunrise # Sunrise-Edit
@@ -1015,19 +1003,8 @@
   - type: IconSmooth
     key: walls
     base: solid
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 150
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalSlam
-      - !type:ChangeConstructionNodeBehavior
-        node: girder
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
+  - type: Damageable
+    damageModifierSet: Metallic # weaker because rust
 
 - type: entity
   parent: BaseWall
@@ -1038,7 +1015,7 @@
     chance: 0.1
   - type: Tag
     tags:
-      - Wall
+    - Wall
   - type: Destructible
     thresholds:
     - trigger:
@@ -1591,8 +1568,6 @@
         !type:DamageTrigger
         damage: 100
       behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
       - !type:PlaySoundBehavior
         sound:
           path: /Audio/Effects/break_stone.ogg

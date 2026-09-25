@@ -9,36 +9,25 @@ public sealed partial class OwOAccentSystem : RelayAccentSystem<OwOAccentCompone
     [Dependency] private IRobustRandom _random = default!;
 
     private static readonly IReadOnlyList<string> Faces = new List<string>{
-            " (•`ω´•)", " ;;w;;", " owo", " UwU", " >w<", " ^w^"
-        }.AsReadOnly();
+        " (•`ω´•)", " ;;w;;", " owo", " UwU", " >w<", " ^w^"
+    }.AsReadOnly();
 
     private static readonly IReadOnlyDictionary<string, string> SpecialWords = new Dictionary<string, string>()
-        {
-            { "you", "wu" },
-            { "ты", "ти" }, // Russian-Localization
-            { "Ты", "Ти" },
-            { "маленький", "мавенки" },
-            { "Маленький", "Мавенки" },
-        };
+    {
+        { "you", "wu" },
+    };
 
-    public string Accentuate(string message)
+    public override string Accentuate(string message, Entity<OwOAccentComponent>? ent = null)
     {
         foreach (var (word, repl) in SpecialWords)
         {
             message = message.Replace(word, repl);
         }
 
-        return message.Replace("!", _random.Pick(Faces))
-            // Russian-Localization-Start
-            .Replace("р", "в").Replace("Р", "В")
-            .Replace("л", "в").Replace("Л", "В")
-            // Russian-Localization-End
+        message = message.Replace("!", _random.Pick(Faces))
             .Replace("r", "w").Replace("R", "W")
             .Replace("l", "w").Replace("L", "W");
-    }
 
-    protected override string AccentuateInternal(EntityUid uid, OwOAccentComponent comp, string message)
-    {
-        return Accentuate(message);
+        return AccentuateSunrise(message); // Sunrise-Edit - применяем русскую часть акцента
     }
 }

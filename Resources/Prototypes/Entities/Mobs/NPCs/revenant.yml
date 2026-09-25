@@ -97,6 +97,7 @@
     tags:
     - SlowImmune
     - KnockdownImmune
+    - AllowPortalTraversal
     - NoPaint # Sunrise-Edit
   # Sunrise-start
   - type: TTS

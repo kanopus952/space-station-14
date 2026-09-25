@@ -1,8 +1,7 @@
 - type: entity
-  name: bed
-  id: Bed
+  abstract: true
   parent: BaseStructure
-  description: This is used to lie in, sleep in or strap on. Resting here provides extremely slow healing.
+  id: BaseBed
   components:
   - type: HealOnBuckle
     damage:
@@ -47,6 +46,18 @@
     damageModifierSet: Metallic
   - type: Injurable
     damageContainer: Inorganic
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Anchorable
+  - type: Pullable
+
+- type: entity
+  parent: BaseBed
+  id: Bed
+  name: bed
+  description: This is used to lie in, sleep in or strap on. Resting here provides extremely slow healing.
+  components:
   - type: Destructible
     thresholds:
     - trigger:
@@ -60,9 +71,6 @@
           SheetSteel1:
             min: 1
             max: 2
-  - type: Transform
-    anchored: true
-    noRot: true
   - type: Anchorable
     delay: 5 #SUNRISE-EDIT
   - type: Pullable
@@ -97,7 +105,7 @@
   - type: CanSleepOnBuckle # Sunrise-Edit
 
 - type: entity
-  parent: Bed
+  parent: BaseBed
   id: DogBed
   name: dog bed
   description: A comfy-looking dog bed. You can even strap your pet in, in case the gravity turns off.
@@ -141,7 +149,7 @@
     damageModifierSet: Inflatable
 
 - type: entity
-  parent: Bed
+  parent: BaseBed
   id: WebBed
   name: web bed
   description: You got webbed.
@@ -172,7 +180,7 @@
     node: bed
 
 - type: entity
-  parent: Bed
+  parent: BaseBed
   id: PsychBed
   name: psychologist bed
   description: An upholstered bed for the psychological care of patients.

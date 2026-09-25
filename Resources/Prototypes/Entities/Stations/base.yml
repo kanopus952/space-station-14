@@ -41,12 +41,6 @@
       shuttlePath: /Maps/_Sunrise/Shuttles/arrivals.yml # Sunrise-edit
 
 - type: entity
-  id: BaseStationGateway
-  abstract: true
-  components:
-    - type: GatewayGenerator
-
-- type: entity
   id: BaseStationShuttles
   abstract: true
   components:

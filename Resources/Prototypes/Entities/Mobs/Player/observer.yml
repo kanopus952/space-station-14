@@ -98,9 +98,6 @@
   - type: ActiveRadio
     receiveAllChannels: true
     globalReceive: true
-  - type: Tag
-    tags:
-    - BypassInteractionRangeChecks
   - type: NightVision
     netsync: false
     enabled: false
@@ -131,8 +128,10 @@
   components:
   - type: Spectral
   - type: Tag
-    tags: # BAD: Intentional removal of inherited tag
+    tags:
     - AllowGhostShownByEvent
+    - AllowPortalTraversal
+    - PreventPortalCollision
 # Sunrise-Start
   - type: UserInterface
     interfaces:
