@@ -11,7 +11,7 @@ using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Sunrise.Interfaces.Shared;
 using Robust.Shared.Configuration;
 using Content.Shared._Sunrise.NewLife;
-using GhostWarpsResponseEvent = Content.Shared.Ghost.SharedGhostSystem.GhostWarpsResponseEvent;
+using GhostWarpsResponseEvent = Content.Shared.Ghost.Systems.SharedGhostSystem.GhostWarpsResponseEvent; // Sunrise-Edit - используем расширенный ответ панели призрака
 
 namespace Content.Client.UserInterface.Systems.Ghost;
 

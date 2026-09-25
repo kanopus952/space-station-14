@@ -1,4 +1,4 @@
-using Content.Server.Atmos.Components;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Shared._Sunrise.CollectiveMind;
 using Content.Shared._Sunrise.FleshCult;
@@ -16,6 +16,7 @@ using Content.Shared.Overlays;
 using Content.Shared.Popups;
 using Content.Shared.Store;
 using Content.Shared.Store.Components;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Tag;
 using Content.Shared.Temperature.Components;
 using Robust.Shared.Audio;
@@ -248,7 +249,7 @@ public sealed partial class FleshCultSystem
         RemCompDeferred<InsulatedComponent>(uid);
         RemCompDeferred<FlashImmunityComponent>(uid);
         RemCompDeferred<RespiratorImmunityComponent>(uid);
-        RemCompDeferred<PressureImmunityComponent>(uid);
+        _statusEffects.TryRemoveStatusEffect(uid, PressureImmunityStatusEffectSystem.PressureImmunityEffect);
         RemCompDeferred<StoreComponent>(uid);
         RemCompDeferred<FleshAbilitiesComponent>(uid);
     }
@@ -293,7 +294,7 @@ public sealed partial class FleshCultSystem
 
     private void OnPressureImmunityMutation(EntityUid uid, FleshCultistComponent component, FleshCultistPressureImmunityMutationEvent args)
     {
-        EnsureComp<PressureImmunityComponent>(uid);
+        _statusEffects.TrySetStatusEffectDuration(uid, PressureImmunityStatusEffectSystem.PressureImmunityEffect);
     }
 
     private void OnFlashImmunityMutation(EntityUid uid, FleshCultistComponent component, FleshCultistFlashImmunityMutationEvent args)

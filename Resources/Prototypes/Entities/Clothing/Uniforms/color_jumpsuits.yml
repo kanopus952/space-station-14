@@ -498,6 +498,6 @@
   description: A multi-colored jumpsuit!
   components:
   - type: Sprite
-    sprite: Clothing/Uniforms/Jumpsuit/rainbow.rsi
+    sprite: _Sunrise/Clothing/Uniforms/Jumpsuit/rainbow.rsi # Sunrise-Edit - сохраняем наш радужный спрайт
   - type: Clothing
-    sprite: Clothing/Uniforms/Jumpsuit/rainbow.rsi
+    sprite: _Sunrise/Clothing/Uniforms/Jumpsuit/rainbow.rsi # Sunrise-Edit - сохраняем наш радужный спрайт

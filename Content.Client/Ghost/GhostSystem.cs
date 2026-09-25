@@ -12,6 +12,7 @@ using Robust.Client.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Configuration; // Sunrise-Edit
+using GhostWarpsResponseEvent = Content.Shared.Ghost.Systems.SharedGhostSystem.GhostWarpsResponseEvent; // Sunrise-Edit - используем расширенный ответ панели призрака
 
 namespace Content.Client.Ghost
 {

@@ -40,8 +40,6 @@ public sealed partial class FleshCultSystem
     [Dependency] private FleshCultRuleSystem _fleshCultRule = default!;
     [Dependency] private SharedPointLightSystem _pointLight = default!;
     [Dependency] private EntityQuery<WallComponent> _wallQuery = default!;
-
-    private static readonly ProtoId<TagPrototype> FleshTag = "Flesh";
     private static readonly ProtoId<TagPrototype>[] FleshSpawnBlockingTags = ["Window", "Flesh"];
 
     public void InitializeHeart()

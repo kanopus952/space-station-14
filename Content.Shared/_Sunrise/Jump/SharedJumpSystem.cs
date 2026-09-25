@@ -26,7 +26,6 @@ using Robust.Shared.Timing;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Stunnable;
 using Content.Shared.Damage.Components;
-using Content.Shared.Ghost;
 using Content.Shared.Buckle;
 
 namespace Content.Shared._Sunrise.Jump;

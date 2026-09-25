@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 
 #pragma warning disable IDE0130
-namespace Content.Shared.VendingMachines;
+namespace Content.Shared.VendingMachines.Components;
 
 public sealed partial class VendingMachineComponent
 {

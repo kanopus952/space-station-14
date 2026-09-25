@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._Sunrise.VendingMachines;
+using Content.Shared.VendingMachines.Components;
 using Robust.Shared.Player;
 
 #pragma warning disable IDE0130

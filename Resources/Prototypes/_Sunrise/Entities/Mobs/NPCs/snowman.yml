@@ -19,7 +19,9 @@
       reagents:
       - ReagentId: SnowWhite
         Quantity: 100
-  - type: PressureImmunity
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectPressureImmunity
   - type: NoSlip
   - type: MovementSpeedModifier
     baseWalkSpeed: 3

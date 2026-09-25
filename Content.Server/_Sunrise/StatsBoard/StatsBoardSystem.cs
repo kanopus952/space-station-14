@@ -14,7 +14,7 @@ using Content.Shared.Damage;
 using Content.Shared.Doors.Systems;
 using Content.Shared.Electrocution;
 using Content.Shared.Fluids;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Interaction.Components;

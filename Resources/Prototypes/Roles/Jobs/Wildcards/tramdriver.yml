@@ -5,6 +5,7 @@
   playTimeTracker: JobTramDriver
   startingGear: TramDriverGear
   icon: "JobIconTramDriver"
+  setPreference: false # Sunrise-Edit - скрываем роль, пока карта Tram2 и её слоты отключены
   supervisors: job-supervisors-hop
   requirements:
     - !type:OverallPlaytimeRequirement # someone that's not doing this job will just be a pain for the station

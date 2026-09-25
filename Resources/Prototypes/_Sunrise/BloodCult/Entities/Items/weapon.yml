@@ -88,7 +88,7 @@
   description: A poleaxe that seems to be linked to its wielder.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Melee/cult_halberd.rsi
+    sprite: _Sunrise/Objects/Weapons/Melee/cult_halberd.rsi
     state: icon
   - type: MeleeWeapon
     wideAnimationRotation: -135
@@ -110,7 +110,7 @@
   - type: Item
     size: Ginormous
   - type: Clothing
-    sprite: Objects/Weapons/Melee/cult_halberd.rsi
+    sprite: _Sunrise/Objects/Weapons/Melee/cult_halberd.rsi
     quickEquip: false
     slots:
     - Back
@@ -303,7 +303,7 @@
   id: NarsieHalberd
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Melee/cult_halberd.rsi
+    sprite: _Sunrise/Objects/Weapons/Melee/cult_halberd.rsi
     state: icon
 
 - type: entity

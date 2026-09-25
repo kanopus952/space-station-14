@@ -3,7 +3,7 @@ using Content.Server.Storage.EntitySystems;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.Fax;
 using Content.Shared.Fax.Components;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Labels.Components;

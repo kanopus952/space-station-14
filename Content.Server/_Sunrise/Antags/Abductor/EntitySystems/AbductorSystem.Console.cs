@@ -14,6 +14,7 @@ using System.Linq;
 using Content.Server.VendingMachines;
 using Content.Shared._Sunrise.Movement.Carrying;
 using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components;
 using Content.Shared.Popups;
 using Content.Shared.Starlight.ItemSwitch;
 using Robust.Shared.Audio;

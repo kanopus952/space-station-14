@@ -644,7 +644,9 @@
   - type: Eye
   - type: Puller
     needsHands: false
-  - type: PressureImmunity
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectPressureImmunity
   - type: NoSlip
   - type: MovementAlwaysTouching
   - type: SleepEmitSound

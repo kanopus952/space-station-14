@@ -41,7 +41,7 @@
 - type: cargoProduct
   id: EngineSingularityCollector
   icon:
-    sprite: Structures/Power/Generation/Singularity/collector.rsi
+    sprite: _Sunrise/Structures/Power/Generation/Singularity/collector.rsi # Sunrise-Edit - показываем наш спрайт коллектора
     state: ca_on
   product: CrateEngineeringSingularityCollector
   cost: 1000

@@ -1,7 +1,7 @@
 using Content.Server._Sunrise.Research.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.GameTicking;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared._Sunrise.Research.Prototypes;
 using Content.Shared._Sunrise.SunriseCCVars;

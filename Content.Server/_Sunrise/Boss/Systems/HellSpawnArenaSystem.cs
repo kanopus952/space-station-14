@@ -17,7 +17,6 @@ using Content.Shared.Construction;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.ForceSay;
 using Content.Shared.GameTicking;
-using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Mech.Components;
@@ -36,6 +35,7 @@ using Robust.Shared.Utility;
 using System.Numerics;
 using Content.Shared.Gibbing;
 using Robust.Shared.Maths;
+using Content.Shared.Ghost.Components;
 
 namespace Content.Server._Sunrise.Boss.Systems;
 

@@ -1,6 +1,6 @@
 // © SUNRISE, An EULA/CLA with a hosting restriction, full text: https://github.com/makura-games/sunrise-station/blob/master/CLA.txt
 using Content.Shared._Sunrise.GhostTheme;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Server.GameObjects;

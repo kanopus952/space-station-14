@@ -45,7 +45,9 @@
     minSaturation: 40
   - type: Vocal
     emoteSounds: XenoHumanoid
-  - type: PressureImmunity
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectPressureImmunity
   - type: TypingIndicator
     proto: alien
   - type: Temperature
