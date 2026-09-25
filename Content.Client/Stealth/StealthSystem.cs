@@ -1,4 +1,5 @@
 using Content.Client.Interactable.Components;
+using Content.Client.Graphics;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Robust.Client.GameObjects;
@@ -45,14 +46,20 @@ public sealed partial class StealthSystem : SharedStealthSystem
             return;
 
         _sprite.SetColor((uid, sprite), Color.White);
-        // Sunrise-Start
-        if (component.Mirage)
-            sprite.PostShader = enabled ? _shader : null;
+        if (enabled)
+        {
+            var shader = component.Mirage ? _shader : _noMirageShader; // Sunrise-Edit - сохраняем вариант невидимости без миража
+            _sprite.SetPostShader((uid, sprite), new SpriteComponent.PostShaderArgs(ContentPostShaderIds.Stealth, shader)
+            {
+                GetScreenTexture = true,
+                RaiseShaderEvent = true,
+                Before = ContentPostShaderIds.BeforeOutlines,
+            });
+        }
         else
-            sprite.PostShader = enabled ? _noMirageShader : null;
-        // Sunrise-End
-        sprite.GetScreenTexture = enabled;
-        sprite.RaiseShaderEvent = enabled;
+        {
+            _sprite.RemovePostShader((uid, sprite), ContentPostShaderIds.Stealth);
+        }
 
         if (!enabled)
         {
@@ -61,11 +68,8 @@ public sealed partial class StealthSystem : SharedStealthSystem
             return;
         }
 
-        if (TryComp(uid, out InteractionOutlineComponent? outline))
-        {
-            RemCompDeferred(uid, outline);
+        if (HasComp<InteractionOutlineComponent>(uid))
             component.HadOutline = true;
-        }
     }
 
     private void OnStartup(EntityUid uid, StealthComponent component, ComponentStartup args)

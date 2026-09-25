@@ -35,6 +35,8 @@ using Content.Shared.Verbs;
 using Robust.Shared.Collections;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Roles.Components;
+using Content.Shared.Ghost.Systems;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Roles.Jobs;
 using Content.Sunrise.Interfaces.Shared; // Sunrise-Sponsors

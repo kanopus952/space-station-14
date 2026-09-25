@@ -6,6 +6,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Throwing;
 using Content.Shared.Vehicle.Components;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -27,6 +28,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = null!;
 
     public override void Initialize()
     {
@@ -40,6 +42,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         SubscribeLocalEvent<EmbeddableProjectileComponent, ComponentShutdown>(OnEmbeddableCompShutdown);
 
         SubscribeLocalEvent<EmbeddedContainerComponent, EntityTerminatingEvent>(OnEmbeddableTermination);
+        SubscribeLocalEvent<ComplexProjectileDamageComponent, BeforeProjectileHitEvent>(OnBeforeComplexProjectileHit);
     }
 
     private void OnEmbedActivate(Entity<EmbeddableProjectileComponent> embeddable, ref ActivateInWorldEvent args)
@@ -189,6 +192,17 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         DetachAllEmbedded(container);
     }
 
+    private void OnBeforeComplexProjectileHit(Entity<ComplexProjectileDamageComponent> ent, ref BeforeProjectileHitEvent args)
+    {
+        foreach (var option in ent.Comp.DamageOptions)
+        {
+            if (!_whitelist.CheckBoth(args.Target, option.Blacklist, option.Whitelist))
+                continue;
+            args.Damage = option.Damage;
+            return;
+        }
+    }
+
     public void DetachAllEmbedded(Entity<EmbeddedContainerComponent> container)
     {
         foreach (var embedded in container.Comp.EmbeddedObjects)
@@ -210,7 +224,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                 return;
             }
 
-            // Sunrise edit start - ignore shooter's mech
+            // Sunrise edit start - игнорируем мех стрелка
             if (component.Shooter != null &&
                 TryComp<VehicleOperatorComponent>(component.Shooter.Value, out var vehicleOperator) &&
                 args.OtherEntity == vehicleOperator.Vehicle)
@@ -221,7 +235,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             // Sunrise edit end
         }
 
-        // Sunrise edit start - Projectile pierce collision prevention
+        // Sunrise edit start - не сталкиваем снаряд повторно с уже пробитой целью
         if (TryComp<Content.Shared._Sunrise.Weapons.Components.ProjectilePierceComponent>(uid, out var pierce) && pierce.PiercedEntities.Contains(args.OtherEntity))
         {
             args.Cancelled = true;
@@ -230,9 +244,9 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         // Sunrise edit end
     }
 
-    public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid? shooterId = null)
+    public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid shooterId)
     {
-        if (component.Shooter == shooterId || shooterId == null)
+        if (component.Shooter == shooterId)
             return;
 
         component.Shooter = shooterId;
@@ -273,3 +287,9 @@ public record struct ProjectileReflectAttemptEvent(EntityUid ProjUid, Projectile
 /// </summary>
 [ByRefEvent]
 public record struct ProjectileHitEvent(DamageSpecifier Damage, EntityUid Target, EntityUid? Shooter = null);
+
+/// <summary>
+/// Raised before a projectile hits an entity
+/// </summary>
+[ByRefEvent]
+public record struct BeforeProjectileHitEvent(DamageSpecifier Damage, EntityUid Target, EntityUid? Shooter = null);

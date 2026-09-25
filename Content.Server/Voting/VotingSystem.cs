@@ -16,6 +16,7 @@ using Robust.Shared.Timing;
 using System.Threading.Tasks;
 using Content.Server.Players.Whitelist;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
 using Robust.Shared.Prototypes;

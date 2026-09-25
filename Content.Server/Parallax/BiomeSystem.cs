@@ -7,7 +7,7 @@ using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.Atmos;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Gravity;
 using Content.Shared.Light.Components;
 using Content.Shared.Parallax.Biomes;
