@@ -419,22 +419,12 @@
     distance: 0.5
     speed: 5
   - type: Body
-  - type: Hunger # probably should be prototyped
-    thresholds:
-      Overfed: 300
-      Okay: 200
-      Peckish: 150
-      Starving: 100
-      Dead: 0
-    baseDecayRate: 0.01
-  - type: Thirst
-    thresholds:
-      OverHydrated: 600
-      Okay: 450
-      Thirsty: 300
-      Parched: 150
-      Dead: 0
-    baseDecayRate: 0.01
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: SunriseRatGuardHunger # Sunrise edit
+      Thirst:
+        prototype: SunriseRatGuardThirst # Sunrise edit
   - type: DamageStateVisuals
     states:
       Alive:

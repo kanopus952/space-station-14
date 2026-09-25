@@ -379,8 +379,8 @@
       path: /Audio/Items/wirecutter_drop.ogg
   - type: Tag
     tags:
-    - PlantSampleTaker
     - Wirecutter
+  - type: BotanySampleTaker
   - type: MeleeWeapon
     wideAnimationRotation: -90
     damage:

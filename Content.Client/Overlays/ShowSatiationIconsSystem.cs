@@ -4,6 +4,7 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
 using Content.Shared.Overlays;
+using Content.Shared.Standing;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
 
@@ -15,6 +16,7 @@ namespace Content.Client.Overlays;
 public sealed partial class ShowSatiationIconsSystem : EquipmentHudSystem<ShowSatiationIconsComponent>
 {
     [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private StandingStateSystem _standing = default!; // Sunrise-Edit
 
     private HashSet<ProtoId<SatiationTypePrototype>> _types = [];
 
@@ -48,6 +50,10 @@ public sealed partial class ShowSatiationIconsSystem : EquipmentHudSystem<ShowSa
 
         foreach (var shownTypeId in _types)
         {
+            // Sunrise-Edit - сохраняем прежнее поведение Sunrise HUD голода.
+            if (shownTypeId == SatiationSystem.Hunger && !_standing.IsDown(entity.Owner))
+                continue;
+
             if (_satiation.GetStatusIconOrNull(entity, shownTypeId) is { } iconId)
             {
                 args.StatusIcons.Add(iconId);

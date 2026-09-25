@@ -14,6 +14,7 @@ using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._Sunrise.Humanoid;
 using Content.Shared.Alert;
 using Content.Shared.Body;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;

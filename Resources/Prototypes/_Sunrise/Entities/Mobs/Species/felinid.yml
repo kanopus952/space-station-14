@@ -45,14 +45,19 @@
   - type: Icon
     sprite: Mobs/Species/Human/parts.rsi
     state: full
-  - type: Hunger
-    baseDecayRate: 0.015
-  - type: Thirst
-    baseDecayRate: 0.05
-    dehydrationDamage:
-      types:
-        Bloodloss: 0.5
-        Asphyxiation: 0.5
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: SunriseFelinidHunger
+      Thirst:
+        prototype: SunriseFelinidThirst
+  - type: SatiationDamage
+    satiations:
+      Thirst:
+        Dead:
+          types:
+            Bloodloss: 0.5
+            Asphyxiation: 0.5
   - type: Butcherable
     spawned:
     - id: FoodMeatFelinid

@@ -91,8 +91,7 @@
     startPowerCorruptionAtCharIdx: 4
     maxPowerCorruptionAtCharIdx: 20
   # Sunrise-Start
-  - type: ShowThirstIcons
-  - type: ShowHungerIcons
+  - type: ShowSatiationIcons
   - type: ShowHealthIcons
   - type: ShowHealthBars
     damageContainers:

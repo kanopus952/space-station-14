@@ -39,6 +39,9 @@ public sealed partial class StationJobsSystem : EntitySystem
         SubscribeLocalEvent<StationJobsComponent, ComponentShutdown>(OnStationDeletion);
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         Subs.CVar(_configurationManager, CCVars.GameDisallowLateJoins, _ => UpdateJobsAvailable(), true);
+
+        // Sunrise-Edit
+        IoCManager.Instance!.TryResolveType(out _sponsorsManager);
     }
 
     private void OnInit(Entity<StationJobsComponent> ent, ref ComponentInit args)

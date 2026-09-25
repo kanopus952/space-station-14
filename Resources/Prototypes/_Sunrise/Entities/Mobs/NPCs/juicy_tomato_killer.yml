@@ -48,7 +48,7 @@
       params:
         variation: 0.125
   - type: Produce
-    seedId: SunriseJuicyTomatoKiller
+    plantId: SunriseJuicyTomatoKillerPlants
   - type: StaticPrice
     price: 500
   - type: GhostRole

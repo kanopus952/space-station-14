@@ -8,10 +8,12 @@
   - type: ComplexInteraction
   - type: TTS
     voice: Soldier
-  - type: Hunger
-    baseDecayRate: 0
-  - type: Thirst
-    baseDecayRate: 0
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: SunriseNoDecayHunger
+      Thirst:
+        prototype: SunriseNoDecayThirst
   - type: GhostTakeoverAvailable
   - type: GhostRole
     makeSentient: true

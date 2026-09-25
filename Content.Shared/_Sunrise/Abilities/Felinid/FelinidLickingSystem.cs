@@ -23,7 +23,7 @@ public sealed partial class FelinidLickingSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;

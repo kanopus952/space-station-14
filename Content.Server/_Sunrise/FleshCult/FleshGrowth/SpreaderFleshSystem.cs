@@ -128,7 +128,7 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
                 continue;
 
             var ents = _mapSystem.GetLocal(transform.GridUid.Value, grid, coords);
-            var entityUids = ents as EntityUid[] ?? ents.ToArray();
+            var entityUids = ents.ToArray();
 
             if (entityUids.Any(x => IsTileBlockedFrom(x, direction)))
                 continue;

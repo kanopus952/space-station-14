@@ -145,7 +145,7 @@
     name: seeds-banana-name
     packetPrototype: BananaSeeds
     productPrototypes: [ FoodBanana ]
-    mutationPrototypes: [ MimanaPlants ]
+    mutationPrototypes: [ MimanaPlants, ExplosiveBananaPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 50
     maturation: 6
@@ -599,7 +599,7 @@
     name: seeds-towercap-name
     packetPrototype: TowercapSeeds
     productPrototypes: [ Log ]
-    mutationPrototypes: [ SteelcapPlants ]
+    mutationPrototypes: [ SteelcapPlants, GlasscapPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 80
     maturation: 15
@@ -627,6 +627,7 @@
     name: seeds-steelcap-name
     packetPrototype: SteelcapSeeds
     productPrototypes: [ SteelLog ]
+    mutationPrototypes: [ PlaststeelcapPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 80
     maturation: 15
@@ -773,6 +774,7 @@
     harvestLogImpact: High
     packetPrototype: KillerTomatoSeeds
     productPrototypes: [ MobTomatoKiller ]
+    mutationPrototypes: [ SunriseJuicyTomatoKillerPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 25
     maturation: 15
@@ -974,6 +976,7 @@
     name: seeds-corn-name
     packetPrototype: CornSeeds
     productPrototypes: [ FoodCorn ]
+    mutationPrototypes: [ SnapcornPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 25
     maturation: 8
@@ -988,10 +991,12 @@
     highHeatTolerance: 298 # 25°C
   - type: PlantChemicals
     chemicals:
-      Nutriment:
-        min: 1
-        max: 10
-        potencyDivisor: 20
+      # Sunrise edit start - кукуруза Sunrise не содержит Nutriment.
+      # Nutriment:
+      #   min: 1
+      #   max: 10
+      #   potencyDivisor: 20
+      # Sunrise edit end
       Cornmeal:
         min: 5
         max: 15
@@ -1153,7 +1158,7 @@
     name: seeds-cannabis-name
     packetPrototype: CannabisSeeds
     productPrototypes: [ LeavesCannabis ]
-    mutationPrototypes: [ RainbowCannabisPlants ]
+    mutationPrototypes: [ RainbowCannabisPlants, CannabisVitaPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 75
     maturation: 8
@@ -1934,7 +1939,7 @@
     name: seeds-watermelon-name
     packetPrototype: WatermelonSeeds
     productPrototypes: [ FoodWatermelon ]
-    mutationPrototypes: [ HolymelonPlants ]
+    mutationPrototypes: [ HolymelonPlants, BarrelmelonPlants ] # Sunrise-Edit
   - type: Plant
     lifespan: 55
     maturation: 12

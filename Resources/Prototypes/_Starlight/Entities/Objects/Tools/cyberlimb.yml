@@ -99,8 +99,8 @@
       path: /Audio/Items/wirecutter_drop.ogg
   - type: Tag
     tags:
-    - PlantSampleTaker
     - Wirecutter
+  - type: BotanySampleTaker
   - type: Sprite
     sprite: _Starlight/Objects/Tools/cyberling.rsi
     state: cutters
@@ -357,7 +357,7 @@
   - type: Tag
     tags:
     - Hoe
-    - BotanyHoe
+  - type: BotanyHoe
   - type: Sprite
     sprite: _Sunrise/Objects/Tools/cyberling.rsi
     state: hoe
@@ -374,9 +374,7 @@
   id: CyberClippers
   description: A tool used to take samples from plants.
   components:
-  - type: Tag
-    tags:
-    - PlantSampleTaker
+  - type: BotanySampleTaker
   - type: Sprite
     sprite: _Sunrise/Objects/Tools/cyberling.rsi
     state: clippers

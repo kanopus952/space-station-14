@@ -26,6 +26,7 @@ using Content.Shared.Explosion.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Hitscan.Components;
 using Robust.Shared.Random;
+using Content.Shared.Body.Systems;
 
 namespace Content.Server._Sunrise.Execution;
 

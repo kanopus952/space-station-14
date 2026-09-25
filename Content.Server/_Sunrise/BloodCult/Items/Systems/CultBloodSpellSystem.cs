@@ -1,12 +1,11 @@
 using System.Linq;
 using Content.Server._Sunrise.BloodCult.Items.Components;
-using Content.Server.Body.Components;
-using Content.Server.Body.Systems;
 using Content.Server.Hands.Systems;
 using Content.Server.Popups;
 using Content.Shared._Sunrise.BloodCult.Components;
 using Content.Shared._Sunrise.BloodCult.Items;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
@@ -30,7 +29,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Collections;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._Sunrise.BloodCult.Items.Systems;
 

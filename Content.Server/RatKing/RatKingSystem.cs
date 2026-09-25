@@ -94,7 +94,7 @@ namespace Content.Server.RatKing
             if (args.Handled)
                 return;
 
-            if (!TryComp<HungerComponent>(uid, out var hunger))
+            if (!TryComp<SatiationComponent>(uid, out var satiation))
                 return;
 
             // Check living guards count
@@ -112,13 +112,14 @@ namespace Content.Server.RatKing
             }
 
             //make sure the hunger doesn't go into the negatives
-            if (_hunger.GetHunger(hunger) < component.HungerPerGuardUse)
+            if (_satiation.GetValueOrNull((uid, satiation), SatiationSystem.Hunger) is not { } hunger ||
+                hunger < component.HungerPerGuardUse)
             {
                 _popup.PopupEntity(Loc.GetString("rat-king-too-hungry"), uid, uid);
                 return;
             }
             args.Handled = true;
-            _hunger.ModifyHunger(uid, -component.HungerPerGuardUse, hunger);
+            _satiation.ModifyValue((uid, satiation), SatiationSystem.Hunger, -component.HungerPerGuardUse);
             var guard = Spawn(component.GuardMobSpawnId, Transform(uid).Coordinates);
             var comp = EnsureComp<RatKingServantComponent>(guard);
             comp.King = uid;

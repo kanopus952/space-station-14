@@ -183,8 +183,8 @@
       path: /Audio/Items/wirecutter_drop.ogg
   - type: Tag
     tags:
-    - PlantSampleTaker
     - ImprovisedWirecutter
+  - type: BotanySampleTaker
   - type: Sprite
     sprite: _Starlight/Objects/Tools/improvised_wirecutters.rsi
     state: cutters
@@ -532,9 +532,9 @@
       - Multitool
       - DoorElectronicsConfigurator
       - Wrench
-      - PlantSampleTaker
       - Wirecutter
       - Screwdriver
+  - type: BotanySampleTaker
 
 - type: entity
   name: forged omnitool
@@ -771,6 +771,6 @@
       - Multitool
       - DoorElectronicsConfigurator
       - Wrench
-      - PlantSampleTaker
       - Wirecutter
       - Screwdriver
+  - type: BotanySampleTaker

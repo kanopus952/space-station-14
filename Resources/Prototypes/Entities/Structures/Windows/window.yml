@@ -245,7 +245,11 @@
     sprite: _Sunrise/Structures/Windows/directional.rsi # Sunrise-Edit - используем спрайты Sunrise
     state: frosted_window
   - type: Occluder # Sunrise-Edit - учитываем неполную высоту направленного окна
-    boundingBox: "-0.5,-0.5,0.5,-0.28125"
+    polygon:
+    - "-0.5,-0.28125"
+    - "0.5,-0.28125"
+    - "0.5,-0.5"
+    - "-0.5,-0.5"
   - type: StaticPrice
     price: 35
 

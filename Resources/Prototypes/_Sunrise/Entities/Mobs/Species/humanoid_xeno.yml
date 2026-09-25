@@ -138,15 +138,20 @@
       sprite: Objects/Misc/handcuffs.rsi
       state: body-overlay-2
       visible: false
-  - type: Hunger
-    baseDecayRate: 0.08
-  - type: Thirst
-    baseDecayRate: 0.15
-    dehydrationDamage:
-      types:
-        Bloodloss: 0.5
-        Asphyxiation: 0.5
-        Caustic: 0.05
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: SunriseFastHunger
+      Thirst:
+        prototype: SunriseFastThirst
+  - type: SatiationDamage
+    satiations:
+      Thirst:
+        Dead:
+          types:
+            Bloodloss: 0.5
+            Asphyxiation: 0.5
+            Caustic: 0.05
   - type: Icon # It will not have an icon in the adminspawn menu without this. Body parts seem fine for whatever reason.
     sprite: _Sunrise/Mobs/Species/HumanoidXeno/parts.rsi
     state: full

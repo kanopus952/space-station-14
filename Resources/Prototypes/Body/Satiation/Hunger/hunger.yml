@@ -1,6 +1,6 @@
 - type: satiation
   id: NormalSatiationHunger
-  baseDecayRate: 0.01666666666
+  baseDecayRate: 0.03 # Sunrise-Edit - сохраняем скорость голода Sunrise.
   maximumValue: 200
   thresholds:
     Overfed: 200
@@ -97,7 +97,7 @@
 - type: entity
   abstract: true
   id: BaseHungerSlowdown
-  component:
+  components:
   - type: SatiationSpeedModifier
     satiations:
       Hunger:
