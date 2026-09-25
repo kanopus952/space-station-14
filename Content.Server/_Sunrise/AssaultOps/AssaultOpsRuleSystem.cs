@@ -7,6 +7,7 @@ using Content.Server.Revolutionary.Components;
 using Content.Server.Explosion.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 using Content.Server.Station.Components;
 using Content.Server.Store.Systems;
 using Content.Server.Traitor.Uplink;
@@ -122,7 +123,7 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
                 ("station", target),
                 ("name", Name(ent))),
             Color.Red,
-            ent.Comp.GreetSoundNotification);
+            ent.Comp.GreetingSound);
 
         ent.Comp.RoundstartOperatives += 1;
 
@@ -134,7 +135,7 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
             if (uplink == null)
                 return;
 
-            var totalTc = ent.Comp.TCAmountPerOperative * ent.Comp.RoundstartOperatives;
+            var totalTc = ent.Comp.TcAmountPerOperative * ent.Comp.RoundstartOperatives;
             var store = EnsureComp<StoreComponent>(uplink.Value);
             _store.TryAddCurrency(
                 new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, totalTc } },
@@ -144,7 +145,7 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
 
         else if (ent.Comp.UplinkEnt != null)
         {
-            var giveTcCount = ent.Comp.TCAmountPerOperative;
+            var giveTcCount = ent.Comp.TcAmountPerOperative;
             var store = EnsureComp<StoreComponent>(ent.Comp.UplinkEnt.Value);
             _store.TryAddCurrency(
                 new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, giveTcCount } },
@@ -185,7 +186,7 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
         }
     }
 
-    private bool InsertKey(EntityUid uid, string icarusKeyImplant)
+    private bool InsertKey(EntityUid uid, EntProtoId icarusKeyImplant)
     {
         var ownedCoords = Transform(uid).Coordinates;
         var implant = Spawn(icarusKeyImplant, ownedCoords);

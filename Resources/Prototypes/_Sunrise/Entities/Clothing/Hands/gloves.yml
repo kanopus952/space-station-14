@@ -167,8 +167,7 @@
   - type: Insulated
     preventOpperatinGuns: true
   - type: TemperatureProtection
-    heatingCoefficient: 1.050
-    coolingCoefficient: 0.2
+    coefficient: 0.2
   - type: ToolRefinable
     refineResult:
     - id: ClothingHandsGlovesFingerlessInsulated

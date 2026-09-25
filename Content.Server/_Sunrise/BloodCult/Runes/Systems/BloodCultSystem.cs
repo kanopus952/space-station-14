@@ -76,7 +76,7 @@ namespace Content.Server._Sunrise.BloodCult.Runes.Systems
         [Dependency] private ItemSlotsSystem _slotsSystem = default!;
         [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
         [Dependency] private SharedStunSystem _stunSystem = default!;
-        [Dependency] private SharedStutteringSystem _stuttering = default!;
+        [Dependency] private StutteringSystem _stuttering = default!;
         [Dependency] private ITileDefinitionManager _tileDefinition = default!;
         [Dependency] private TileSystem _tileSystem = default!;
         [Dependency] private TransformSystem _transformSystem = default!;

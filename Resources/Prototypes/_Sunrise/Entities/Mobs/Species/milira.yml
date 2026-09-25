@@ -69,8 +69,7 @@
   - type: SunriseHumanoidProfile
   - type: SunriseHumanoidBaseLayers
   - type: Temperature
-    currentTemperature: 310.15
-    specificHeat: 42
+    temperature: 310.15
   - type: TemperatureDamage
     heatDamageThreshold: 313
     coldDamageThreshold: 230

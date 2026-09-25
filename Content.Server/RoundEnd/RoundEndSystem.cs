@@ -11,7 +11,6 @@ using Content.Server.Screens.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
-using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.GameTicking;

@@ -79,8 +79,7 @@
   - type: Vocal
     emoteSounds: MaleTajaran
   - type: Temperature
-    currentTemperature: 310.15
-    specificHeat: 46
+    temperature: 310.15
   - type: TemperatureDamage
     heatDamageThreshold: 350
     coldDamageThreshold: 230

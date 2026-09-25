@@ -1,12 +1,14 @@
 using Content.Shared.Humanoid;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
+using Content.Shared.Speech.EntitySystems;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Sunrise.ReplacementVocal;
 
 public sealed partial class ReplacementVocalSystem : EntitySystem
 {
+    [Dependency] private VocalSystem _vocal = default!;
 
     public override void Initialize()
     {
@@ -31,9 +33,8 @@ public sealed partial class ReplacementVocalSystem : EntitySystem
             return;
 
         component.PreviousVocal = vocalComponent.EmoteSounds;
-        vocalComponent.EmoteSounds = replacement;
+        _vocal.SetEmoteSounds((uid, vocalComponent), replacement);
         component.WasReplaced = true;
-        Dirty(uid, vocalComponent);
 
         foreach (var emote in soundIndex.Sounds.Keys)
         {
@@ -48,10 +49,7 @@ public sealed partial class ReplacementVocalSystem : EntitySystem
     private void OnComponentShutdown(EntityUid uid, ReplacementVocalComponent component, ComponentShutdown args)
     {
         if (component.WasReplaced && TryComp<VocalComponent>(uid, out var vocal))
-        {
-            vocal.EmoteSounds = component.PreviousVocal;
-            Dirty(uid, vocal);
-        }
+            _vocal.SetEmoteSounds((uid, vocal), component.PreviousVocal);
 
         if (!TryComp<SpeechComponent>(uid, out var speech))
             return;

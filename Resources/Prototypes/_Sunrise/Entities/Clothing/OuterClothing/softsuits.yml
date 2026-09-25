@@ -243,8 +243,7 @@
     highPressureMultiplier: 1
     lowPressureMultiplier: 1
   - type: TemperatureProtection
-    heatingCoefficient: 1
-    coolingCoefficient: 1
+    coefficient: 1
   - type: Tag
     tags:
     - MonkeyWearable
@@ -261,8 +260,7 @@
     highPressureMultiplier: 1
     lowPressureMultiplier: 1
   - type: TemperatureProtection
-    heatingCoefficient: 1
-    coolingCoefficient: 1
+    coefficient: 1
   - type: Tag
     tags:
     - MonkeyWearable
@@ -279,8 +277,7 @@
     highPressureMultiplier: 1
     lowPressureMultiplier: 1
   - type: TemperatureProtection
-    heatingCoefficient: 1
-    coolingCoefficient: 1
+    coefficient: 1
   - type: Tag
     tags:
     - MonkeyWearable
@@ -297,8 +294,7 @@
     highPressureMultiplier: 1
     lowPressureMultiplier: 1
   - type: TemperatureProtection
-    heatingCoefficient: 1
-    coolingCoefficient: 1
+    coefficient: 1
   - type: Tag
     tags:
     - FullBodyOuter

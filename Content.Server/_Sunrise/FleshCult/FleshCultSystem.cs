@@ -66,7 +66,7 @@ public sealed partial class FleshCultSystem : EntitySystem
     [Dependency] private SharedStunSystem _stunSystem = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
     [Dependency] private SharedJitteringSystem _jittering = default!;
-    [Dependency] private SharedStutteringSystem _stuttering = default!;
+    [Dependency] private StutteringSystem _stuttering = default!;
     [Dependency] private ExplosionSystem _explosionSystem = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
     [Dependency] private ContainerSystem _containerSystem = default!;

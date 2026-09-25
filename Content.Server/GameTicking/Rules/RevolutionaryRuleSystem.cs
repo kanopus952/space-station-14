@@ -34,6 +34,7 @@ using Robust.Shared.Player;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Shared.Popups;
+using Content.Shared.AlertLevel;
 
 namespace Content.Server.GameTicking.Rules;
 

@@ -790,8 +790,7 @@
     - WhitelistChameleon
     - FullCovered
   - type: TemperatureProtection
-    heatingCoefficient: 1.025
-    coolingCoefficient: 0.65
+    coefficient: 0.65
   # Sunrise-End
 
 - type: entity

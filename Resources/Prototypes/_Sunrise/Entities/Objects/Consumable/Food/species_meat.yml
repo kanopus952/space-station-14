@@ -16,8 +16,6 @@
     refineResult:
     - id: FoodMeatCutlet
       amount: 3
-  - type: InternalTemperature
-    conductivity: 0.43
   - type: Construction
     graph: MeatSteak
     node: start

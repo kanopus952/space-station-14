@@ -72,8 +72,7 @@
       types:
         Piercing: 5
   - type: Temperature
-    currentTemperature: 310.15
-    specificHeat: 46
+    temperature: 310.15
   - type: TemperatureDamage
     heatDamageThreshold: 400
     coldDamageThreshold: 193  #starting temperature damage treshold

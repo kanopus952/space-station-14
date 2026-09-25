@@ -115,6 +115,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private SharedContainerSystem _containerSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private AlertLevelSystem _alertLevel = default!;
     [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
 
@@ -217,7 +218,11 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
         var query = EntityQueryEnumerator<AlertLevelComponent, MainStationComponent>();
         while (query.MoveNext(out var stationUid, out var alertComp, out _))
         {
-            RecordAlertLevelChange(component, stationUid, alertComp.CurrentAlertLevel.Id);
+            if (_alertLevel.TryGetLevel((stationUid, alertComp), out var currentLevel) &&
+                currentLevel is { } level)
+            {
+                RecordAlertLevelChange(component, stationUid, level.Id);
+            }
         }
     }
 
@@ -2056,14 +2061,25 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
             double totalDuration = 0;
 
             var defaultLevel = "green";
+            string? currentLevel = null;
             if (TryComp<AlertLevelComponent>(station, out var alertComp))
-                defaultLevel = alertComp.DefaultAlertLevel.Id;
+            {
+                if (_alertLevel.TryGetDefaultLevel((station, alertComp), out var defaultAlertLevel) &&
+                    defaultAlertLevel is { } resolvedDefaultLevel)
+                {
+                    defaultLevel = resolvedDefaultLevel.Id;
+                }
+
+                if (_alertLevel.TryGetLevel((station, alertComp), out var currentAlertLevel) &&
+                    currentAlertLevel is { } resolvedCurrentLevel)
+                {
+                    currentLevel = resolvedCurrentLevel.Id;
+                }
+            }
 
             if (history.Count == 0)
             {
-                var currentLevel = defaultLevel;
-                if (alertComp != null)
-                    currentLevel = alertComp.CurrentAlertLevel.Id;
+                currentLevel ??= defaultLevel;
 
                 if (currentLevel.Equals(defaultLevel, StringComparison.OrdinalIgnoreCase))
                 {

@@ -13,6 +13,7 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
 {
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private AlertLevelSystem _alertLevel = default!;
 
     private static CancellationTokenSource _token = new();
 
@@ -45,7 +46,9 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
         // Предотвращение стаканье смены доступов. Доступы должны сменяться только на последний код угрозы.
         RecreateToken();
 
-        Timer.Spawn(options.Value.Delay, () => AfterDelay((ev.Station, alert)), _token.Token);
+        var station = ev.Station;
+
+        Timer.Spawn(options.Value.Delay, () => AfterDelay((station, alert)), _token.Token);
 
         if (options.Value.Announcement != null)
         {
@@ -68,6 +71,9 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
         if (TerminatingOrDeleted(station))
             return;
 
+        if (!_alertLevel.TryGetLevel(station.AsNullable(), out var currentLevel) || currentLevel is not { } level)
+            return;
+
         _chat.DispatchStationAnnouncement(station,
             Loc.GetString("access-system-accesses-established"),
             colorOverride: Color.Yellow,
@@ -82,7 +88,7 @@ public sealed partial class ExtendedAccessSystem : EntitySystem
             if (reader.AlertAccesses.Count == 0)
                 continue;
 
-            _accessReader.UpdateAccess((uid, reader), station.Comp.CurrentAlertLevel.Id.ToLowerInvariant());
+            _accessReader.UpdateAccess((uid, reader), level.Id.ToLowerInvariant());
         }
     }
 

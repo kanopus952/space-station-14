@@ -295,16 +295,18 @@ public sealed partial class StorytellerSystem
         TotalPlayersGauge.Set(metrics.TotalPlayers);
 
         var alertQuery = EntityQueryEnumerator<AlertLevelComponent, MainStationComponent>();
-        AlertLevelComponent? mainAlertComp = null;
-        while (alertQuery.MoveNext(out _, out var alertComp, out _))
+        Entity<AlertLevelComponent>? mainAlert = null;
+        while (alertQuery.MoveNext(out var station, out var alertComp, out _))
         {
-            mainAlertComp = alertComp;
+            mainAlert = (station, alertComp);
             break;
         }
 
-        if (mainAlertComp != null)
+        if (mainAlert is { } alert &&
+            _alertLevel.TryGetLevel(alert.AsNullable(), out var currentAlertLevel) &&
+            currentAlertLevel is { } level)
         {
-            AlertLevelGauge.Set(GetAlertLevelNumeric(mainAlertComp.CurrentAlertLevel.Id));
+            AlertLevelGauge.Set(GetAlertLevelNumeric(level.Id));
         }
         else
         {
@@ -340,15 +342,18 @@ public sealed partial class StorytellerSystem
 
         var alertLevel = "green";
         var alertQuery = EntityQueryEnumerator<AlertLevelComponent, MainStationComponent>();
-        AlertLevelComponent? mainAlertComp = null;
-        while (alertQuery.MoveNext(out _, out var alertComp, out _))
+        Entity<AlertLevelComponent>? mainAlert = null;
+        while (alertQuery.MoveNext(out var station, out var alertComp, out _))
         {
-            mainAlertComp = alertComp;
+            mainAlert = (station, alertComp);
             break;
         }
-        if (mainAlertComp != null)
+
+        if (mainAlert is { } alert &&
+            _alertLevel.TryGetLevel(alert.AsNullable(), out var currentAlertLevel) &&
+            currentAlertLevel is { } level)
         {
-            alertLevel = mainAlertComp.CurrentAlertLevel.Id;
+            alertLevel = level.Id;
         }
 
         var message =

@@ -20,6 +20,7 @@ using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Starlight.Medical.Surgery.Events;
 using Content.Server.Objectives.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Speech.EntitySystems;
 
 namespace Content.Server._Sunrise.Antags.Abductor;
 
@@ -32,6 +33,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private SunriseHumanoidMarkingSystem _sunriseMarking = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private ReplacementAccentSystem _replacement = default!;
     private static readonly EntProtoId DefaultRule = "AbductorVictim";
 
 
@@ -67,10 +69,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
             AddComp<PacifiedComponent>(args.Body);
 
         if (ent.Comp.Organ == AbductorOrganType.Liar)
-        {
-            EnsureComp<ReplacementAccentComponent>(args.Body, out var accent);
-            accent.Accent = "liar";
-        }
+            _replacement.ApplyAccent(args.Body, "liar");
 
         if (ent.Comp.Organ == AbductorOrganType.TraitorGoal)
         {
