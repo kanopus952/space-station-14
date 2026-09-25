@@ -35,7 +35,7 @@
   name: changeling flesh backpack
   components:
   - type: Sprite
-    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/backpack.rsi # Sunrise-Edit
+    sprite: Clothing/Back/Backpacks/backpack.rsi
     state: icon
   - type: Item
     size: Huge

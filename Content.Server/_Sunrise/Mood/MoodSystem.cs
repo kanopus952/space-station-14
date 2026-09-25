@@ -110,9 +110,9 @@ public sealed partial class MoodSystem : EntitySystem
     private void ApplyEffect(EntityUid uid, MoodComponent component, MoodEffectPrototype prototype, float eventModifier = 1, float eventOffset = 0)
     {
         // Apply categorised effect
-        if (prototype.Category != null)
+        if (prototype.Category is { } category)
         {
-            if (component.CategorisedEffects.TryGetValue(prototype.Category, out var oldPrototypeId))
+            if (component.CategorisedEffects.TryGetValue(category, out var oldPrototypeId))
             {
                 if (!ProtoMan.TryIndex<MoodEffectPrototype>(oldPrototypeId, out var oldPrototype))
                     return;
@@ -120,16 +120,16 @@ public sealed partial class MoodSystem : EntitySystem
                 if (prototype.ID != oldPrototype.ID)
                 {
                     SendEffectText(uid, prototype);
-                    component.CategorisedEffects[prototype.Category] = prototype.ID;
+                    component.CategorisedEffects[category] = prototype.ID;
                 }
             }
             else
             {
-                component.CategorisedEffects.Add(prototype.Category, prototype.ID);
+                component.CategorisedEffects.Add(category, prototype.ID);
             }
 
             if (prototype.Timeout != 0)
-                Timer.Spawn(TimeSpan.FromSeconds(prototype.Timeout), () => RemoveTimedOutEffect(uid, prototype.ID, prototype.Category));
+                Timer.Spawn(TimeSpan.FromSeconds(prototype.Timeout), () => RemoveTimedOutEffect(uid, prototype.ID, category));
         }
         else
         {
@@ -155,7 +155,9 @@ public sealed partial class MoodSystem : EntitySystem
 
     }
 
-    private void RemoveTimedOutEffect(EntityUid uid, string prototypeId, string? category = null)
+    private void RemoveTimedOutEffect(EntityUid uid,
+        string prototypeId,
+        ProtoId<MoodCategoryPrototype>? category = null)
     {
         if (!TryComp<MoodComponent>(uid, out var comp))
             return;
@@ -168,11 +170,11 @@ public sealed partial class MoodSystem : EntitySystem
         }
         else
         {
-            if (!comp.CategorisedEffects.TryGetValue(category, out var currentProtoId)
+            if (!comp.CategorisedEffects.TryGetValue(category.Value, out var currentProtoId)
                 || currentProtoId != prototypeId
                 || !ProtoMan.HasIndex<MoodEffectPrototype>(currentProtoId))
                 return;
-            comp.CategorisedEffects.Remove(category);
+            comp.CategorisedEffects.Remove(category.Value);
         }
 
         RefreshMood(uid, comp);

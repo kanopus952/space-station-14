@@ -1,11 +1,9 @@
-- type: antag
+﻿- type: antag
   id: Changeling
   name: roles-antag-changeling-name
   antagonist: true
   setPreference: false # TODO: set this to true once Changeling exits WIP status
-  playTimeTracker: AntagChangeling # Sunrise-Edit
   objective: roles-antag-changeling-objective
-  storytellerStress: 3 # Sunrise-Edit
 
 - type: antagSpecifier
   parent: RestrictedAntag

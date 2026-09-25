@@ -91,14 +91,11 @@ namespace Content.Server._Sunrise.BloodCult.Runes.Systems
         [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
         [Dependency] private EntityQuery<FlammableComponent> _flammableQuery = default!;
 
-        [ValidatePrototypeId<StackPrototype>]
-        private static string SteelStackPrototypeId = "Steel";
+        private static readonly ProtoId<StackPrototype> SteelStackPrototypeId = "Steel";
 
-        [ValidatePrototypeId<StackPrototype>]
-        private static string PlasteelStackPrototypeId = "Plasteel";
+        private static readonly ProtoId<StackPrototype> PlasteelStackPrototypeId = "Plasteel";
 
-        [ValidatePrototypeId<ContentTileDefinition>]
-        private static string CultTilePrototypeId = "CultFloor";
+        private static readonly ProtoId<ContentTileDefinition> CultTilePrototypeId = "CultFloor";
 
         private static EntProtoId AirlockGlassCultPrototypeId = "AirlockGlassCult";
         private static EntProtoId ConstructShellPrototypeId = "ConstructShell";

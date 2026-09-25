@@ -11,8 +11,7 @@ namespace Content.Server.Chemistry.EntitySystems
 {
     public sealed partial class ChemMasterSystem
     {
-        [ValidatePrototypeId<EntityPrototype>]
-        private const string PatchPrototypeId = "Patch";
+        private static readonly EntProtoId PatchPrototypeId = "Patch";
 
         private void OnCreatePatchesMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterCreatePatchesMessage message)
         {

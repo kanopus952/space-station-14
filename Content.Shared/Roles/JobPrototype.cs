@@ -5,7 +5,6 @@ using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Roles;
@@ -146,8 +145,8 @@ public sealed partial class JobPrototype : IPrototype
     /// <summary>
     /// Виды, которым недоступна должность.
     /// </summary>
-    [DataField("speciesBlacklist", customTypeSerializer: typeof(PrototypeIdListSerializer<SpeciesPrototype>))]
-    public List<string> SpeciesBlacklist = new();
+    [DataField]
+    public List<ProtoId<SpeciesPrototype>> SpeciesBlacklist = [];
 
     /// <summary>
     /// Всегда использовать точку спавна должности, включая позднее присоединение.

@@ -63,26 +63,23 @@ public sealed partial class StationCentCommSystem : EntitySystem
             return;
         }
 
-        if (component.Station != null)
+        if (ProtoMan.TryIndex<GameMapPrototype>(component.Station, out var gameMap))
         {
-            if (ProtoMan.TryIndex<GameMapPrototype>(component.Station, out var gameMap))
-            {
-                _gameTicker.LoadGameMap(gameMap, out var mapId);
-                component.MapId = mapId;
+            _gameTicker.LoadGameMap(gameMap, out var mapId);
+            component.MapId = mapId;
 
-                var mapEnt = _map.GetMapOrInvalid(mapId);
+            var mapEnt = _map.GetMapOrInvalid(mapId);
 
-                if (_shuttle.TryAddFTLDestination(mapId, true, out var ftlDestination))
-                    ftlDestination.Whitelist = component.ShuttleWhitelist;
+            if (_shuttle.TryAddFTLDestination(mapId, true, out var ftlDestination))
+                ftlDestination.Whitelist = component.ShuttleWhitelist;
 
-                EnsureComp<AlwaysPoweredMapComponent>(mapEnt);
+            EnsureComp<AlwaysPoweredMapComponent>(mapEnt);
 
-                _map.InitializeMap(mapId);
-            }
-            else
-            {
-                _sawmill.Warning("No Centcomm map found, skipping setup.");
-            }
+            _map.InitializeMap(mapId);
+        }
+        else
+        {
+            _sawmill.Warning("No Centcomm map found, skipping setup.");
         }
     }
 }

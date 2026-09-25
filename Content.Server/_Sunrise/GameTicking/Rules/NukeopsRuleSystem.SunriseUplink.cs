@@ -17,8 +17,7 @@ public sealed partial class NukeopsRuleSystem
     // Handles Sunrise-specific NukeOps uplink setup and commander TC distribution hooks.
     [Dependency] private UplinkSystem _uplinkSystem = default!;
 
-    [ValidatePrototypeId<AntagPrototype>]
-    private const string CommanderAntagProto = "NukeopsCommander";
+    private static readonly ProtoId<AntagPrototype> CommanderAntagProto = "NukeopsCommander";
     private const int FighterUplinkTc = 30;
 
     private bool TryDistributeExtraTcSunrise(Entity<NukeopsRuleComponent> nukieRule)

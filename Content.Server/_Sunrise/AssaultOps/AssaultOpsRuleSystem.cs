@@ -43,12 +43,8 @@ public sealed partial class AssaultOpsRuleSystem : GameRuleSystem<AssaultOpsRule
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private ExplosionSystem _explosions = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-
-    [ValidatePrototypeId<TagPrototype>]
-    private const string UplinkTagPrototype = "AssaultOpsUplink";
-
-    [ValidatePrototypeId<AntagPrototype>]
-    private const string CommanderAntagProto = "AssaultCommander";
+    private static readonly ProtoId<TagPrototype> UplinkTagPrototype = "AssaultOpsUplink";
+    private static readonly ProtoId<AntagPrototype> CommanderAntagProto = "AssaultCommander";
 
     private static readonly ProtoId<CurrencyPrototype> TelecrystalCurrencyPrototype = "Telecrystal";
 

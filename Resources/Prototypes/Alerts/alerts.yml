@@ -5,11 +5,9 @@
   id: BaseAlertOrder
   order:
     - category: CultBuffed # Sunrise-Edit
-    - alertType: ChangelingBiomass
     - category: Mood #Sunrise Edit
     - category: Health #Sunrise Edit
     - category: Stamina
-    - alertType: ChangelingChemicals
     - alertType: SuitPower
     - category: Internals
     - alertType: Fire

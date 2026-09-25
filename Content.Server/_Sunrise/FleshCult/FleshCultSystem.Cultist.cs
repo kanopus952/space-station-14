@@ -30,24 +30,19 @@ namespace Content.Server._Sunrise.FleshCult;
 /// </summary>
 public sealed partial class FleshCultSystem
 {
-    [ValidatePrototypeId<CollectiveMindPrototype>]
-    private const string FleshCollectiveMindProto = "FleshCult";
+    private static readonly ProtoId<CollectiveMindPrototype> FleshCollectiveMindProto = "FleshCult";
 
-    [ValidatePrototypeId<TagPrototype>]
-    private const string FleshTagProto = "Flesh";
+    private static readonly ProtoId<TagPrototype> FleshTagProto = "Flesh";
 
     private static readonly ProtoId<TagPrototype> FullBodyOuterTag = "FullBodyOuter";
 
     private static readonly EntProtoId ToggleNightVisionAction = "ActionToggleNightVision";
 
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string DefaultFleshCultRule = "FleshCult";
+    private static readonly EntProtoId DefaultFleshCultRule = "FleshCult";
 
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string CreateFleshHeartObjective = "CreateFleshHeartObjective";
+    private static readonly EntProtoId CreateFleshHeartObjective = "CreateFleshHeartObjective";
 
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string FleshCultSurviveObjective = "FleshCultSurviveObjective";
+    private static readonly EntProtoId FleshCultSurviveObjective = "FleshCultSurviveObjective";
 
     private static readonly ProtoId<CurrencyPrototype> StolenMutationPointPrototype = "StolenMutationPoint";
 

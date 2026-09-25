@@ -170,9 +170,6 @@
   id: AntagSELFAgent
 
 - type: playTimeTracker
-  id: AntagChangeling
-
-- type: playTimeTracker
   id: AntagDragon
 
 - type: playTimeTracker
