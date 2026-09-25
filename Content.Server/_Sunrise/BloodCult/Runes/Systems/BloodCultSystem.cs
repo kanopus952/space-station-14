@@ -4,6 +4,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Cuffs;
+using Content.Server.Destructible;
 using Content.Server.DoAfter;
 using Content.Server.Emp;
 using Content.Server.EUI;
@@ -53,6 +54,7 @@ namespace Content.Server._Sunrise.BloodCult.Runes.Systems
         [Dependency] private ContainerSystem _containerSystem = default!;
         [Dependency] private CuffableSystem _cuffable = default!;
         [Dependency] private DamageableSystem _damageableSystem = default!;
+        [Dependency] private DestructibleSystem _destructible = default!;
         [Dependency] private SharedMapSystem _map = default!;
         [Dependency] private DoAfterSystem _doAfterSystem = default!;
         [Dependency] private EmpSystem _empSystem = default!;

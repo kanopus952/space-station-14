@@ -680,7 +680,7 @@
   # Sunrise-start
   - type: Summonable
     requiresBibleUser: false
-    specialItem: SpawnPointGhostFoliant
+    summonEntity: SpawnPointGhostFoliant
   # Sunrise-end
 
 - type: entity

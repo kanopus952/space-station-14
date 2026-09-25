@@ -1877,7 +1877,7 @@
 - type: listing
   id: UplinkSunriseTrashBagBlue
   name: uplink-sunrise-trash-bag-blue-name
-  productEntity: TrashBagBlue
+  productEntity: TrashBagHolding
   cost:
     Suntick: 3
   categories:

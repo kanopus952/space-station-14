@@ -560,7 +560,6 @@
   icon:
     sprite: *icon-rsi
     state: DeathSquad
-  allowSelection: false
 # sunrise-end
 
 - type: jobIcon

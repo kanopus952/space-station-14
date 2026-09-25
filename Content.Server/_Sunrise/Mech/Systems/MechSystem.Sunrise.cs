@@ -34,7 +34,7 @@ public sealed partial class MechSystem
     private void InitializeSunrise()
     {
         SubscribeLocalEvent<MechComponent, MechSayEvent>(OnMechSay);
-        SubscribeLocalEvent<MechComponent, VehicleOperatorSetEvent>(OnSunriseOperatorSet);
+        SubscribeLocalEvent<VehicleOperatorComponent, OnVehicleExitedEvent>(OnSunriseVehicleExited);
     }
 
     private void OnMechSay(EntityUid uid, MechComponent component, MechSayEvent args)
@@ -69,15 +69,10 @@ public sealed partial class MechSystem
         return true;
     }
 
-    private void CleanupSunrisePilot(EntityUid mech)
+    private void OnSunriseVehicleExited(Entity<VehicleOperatorComponent> ent, ref OnVehicleExitedEvent args)
     {
-        RemComp<NpcFactionMemberComponent>(mech);
-    }
-
-    private void OnSunriseOperatorSet(Entity<MechComponent> ent, ref VehicleOperatorSetEvent args)
-    {
-        if (args.OldOperator != null)
-            CleanupSunrisePilot(ent);
+        if (HasComp<MechComponent>(args.Vehicle))
+            RemComp<NpcFactionMemberComponent>(args.Vehicle);
     }
 
     /// <summary>

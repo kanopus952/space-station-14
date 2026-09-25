@@ -505,7 +505,8 @@
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeBinaryConnectors
           map: [ "enum.PipeVisualLayers.Pipe" ]
-        - state: vent_direction
+        - sprite: Structures/Piping/Atmospherics/vent.rsi # Sunrise-Edit - состояние направления добавлено в RSI Wizden
+          state: vent_direction
         - state: vent_off
           map: [ "enabled", "enum.SubfloorLayers.FirstLayer" ]
     - type: AtmosPipeLayers

@@ -18,6 +18,7 @@ namespace Content.Server._Sunrise.FleshCult.FleshGrowth;
 
 public sealed partial class SpreaderFleshSystem : EntitySystem
 {
+    [Dependency] private DestructibleSystem _destructible = default!;
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private TagSystem _tagSystem = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
@@ -190,7 +191,7 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
 
         if (TryComp<DestructibleComponent>(fleshWall, out var destructible))
         {
-            SetupDestructibleComponent(destructible, entityStructureId);
+            SetupDestructibleComponent((fleshWall, destructible), entityStructureId);
         }
 
         foreach (var entityUid in existingEntities)
@@ -202,9 +203,8 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
         return true;
     }
 
-    private void SetupDestructibleComponent(DestructibleComponent destructible, string entityStructureId)
+    private void SetupDestructibleComponent(Entity<DestructibleComponent> destructible, string entityStructureId)
     {
-        destructible.Thresholds.Clear();
         var damageThreshold = new DamageThreshold
         {
             Trigger = new DamageTrigger { Damage = DefaultDamageThreshold }
@@ -224,7 +224,7 @@ public sealed partial class SpreaderFleshSystem : EntitySystem
             Acts = ThresholdActs.Destruction
         });
 
-        destructible.Thresholds.Add(damageThreshold);
+        _destructible.ReplaceThresholds(destructible, damageThreshold);
     }
 
     private bool IsTileBlockedFrom(EntityUid ent, DirectionFlag dir)
