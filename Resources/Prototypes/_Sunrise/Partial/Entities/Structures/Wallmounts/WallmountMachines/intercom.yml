@@ -5,20 +5,26 @@
     noRot: false
     drawdepth: SmallObjects
     sprite: _Sunrise/Structures/Wallmounts/intercom.rsi
+    offset: 0, 0
     layers: !Clear
-    - state: base
-    - state: unshaded
+    - !Index:0
+      state: base
+    - !Index:0
+      state: unshaded
       map: ["enum.PowerDeviceVisualLayers.Powered"]
       shader: unshaded
-    - state: broadcasting
+    - !Index:0
+      state: broadcasting
       map: ["enum.RadioDeviceVisualLayers.Broadcasting"]
       shader: unshaded
       visible: false
-    - state: speaker
+    - !Index:0
+      state: speaker
       map: ["enum.RadioDeviceVisualLayers.Speaker"]
       shader: unshaded
       visible: false
-    - state: panel
+    - !Index:0
+      state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
       visible: false
 
@@ -28,8 +34,11 @@
   - type: Sprite
     drawdepth: SmallObjects
     sprite: _Sunrise/Structures/Wallmounts/intercom.rsi
+    offset: 0, 0
     layers: !Clear
-    - state: build
-    - state: panel
+    - !Index:0
+      state: build
+    - !Index:0
+      state: panel
       visible: false
       map: [ "wires" ]

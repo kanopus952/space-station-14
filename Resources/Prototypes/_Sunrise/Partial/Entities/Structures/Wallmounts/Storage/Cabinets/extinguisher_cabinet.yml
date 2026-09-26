@@ -4,10 +4,14 @@
   - type: Sprite
     sprite: _Sunrise/Structures/Wallmounts/extinguisher_cabinet.rsi
     snapCardinals: true
+    offset: 0, 0
     layers: !Clear
-    - state: frame
-    - state: extinguisher
+    - !Index:0
+      state: frame
+    - !Index:0
+      state: extinguisher
       map: ["enum.ItemCabinetVisuals.Layer"]
       visible: true
-    - state: closed
+    - !Index:0
+      state: closed
       map: ["enum.OpenableVisuals.Layer"]

@@ -4,31 +4,40 @@
   - type: Sprite
     drawdepth: WallMountedItems
     sprite: _Sunrise/Structures/Power/apc.rsi
+    offset: 0, 0
     layers: !Clear
-    - state: base
-    - state: panel
+    - !Index:0
+      state: base
+    - !Index:0
+      state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
       visible: false
-    - state: display-charging
+    - !Index:0
+      state: display-charging
       shader: unshaded
       map: ["enum.ApcVisualLayers.ChargeState"]
-    - state: lock0-locked
+    - !Index:0
+      state: lock0-locked
       shader: unshaded
       map: ["enum.ApcVisualLayers.InterfaceLock"]
       visible: false
-    - state: lock1-locked
+    - !Index:0
+      state: lock1-locked
       shader: unshaded
       map: ["enum.ApcVisualLayers.PanelLock"]
       visible: false
-    - state: lock1-locked #when these are implemented get actual sprites.
+    - !Index:0
+      state: lock1-locked #when these are implemented get actual sprites.
       shader: unshaded
       map: ["enum.ApcVisualLayers.Equipment"]
       visible: false
-    - state: lock1-locked
+    - !Index:0
+      state: lock1-locked
       shader: unshaded
       map: ["enum.ApcVisualLayers.Lighting"]
       visible: false
-    - state: lock1-locked
+    - !Index:0
+      state: lock1-locked
       shader: unshaded
       map: ["enum.ApcVisualLayers.Environment"]
       visible: false

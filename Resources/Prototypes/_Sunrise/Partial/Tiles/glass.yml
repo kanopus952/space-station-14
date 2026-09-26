@@ -1,5 +1,15 @@
 # Стеклянные полы
 - type: !PartialOnly tile
+  id: FloorGlass
+  sprite: /Textures/_Sunrise/Tiles/Glass/glass.png
+  variants: 4
+
+- type: !PartialOnly tile
+  id: FloorRGlass
+  sprite: /Textures/_Sunrise/Tiles/Glass/rglass.png
+  variants: 4
+
+- type: !PartialOnly tile
   id: FloorGlassPlasma
   name: tiles-glass-floor-plasma
   sprite: /Textures/_Sunrise/Tiles/Glass/glass_plasma.png

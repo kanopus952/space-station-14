@@ -15,9 +15,11 @@
     sprite: _Sunrise/Structures/Wallmounts/lighting/light_tube.rsi
     offset: 0, 0
     layers: !Clear
-    - map: ["enum.PoweredLightLayers.Base"]
+    - !Index:0
+      map: ["enum.PoweredLightLayers.Base"]
       state: base
-    - map: ["enum.PoweredLightLayers.Glow"]
+    - !Index:0
+      map: ["enum.PoweredLightLayers.Glow"]
       state: glow
       shader: unshaded
 
@@ -31,28 +33,51 @@
 - type: !PartialOnly entity
   id: SmallLight
   components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/lighting/light_small.rsi
+    offset: 0, 0
   - type: HolidayVisuals
     holidays:
       festive:
       - WinterPresents
   - type: HolidayRsiSwap
     sprite:
-      festive: _Sunrise/Structures/Wallmounts/Lighting/light_small_gift.rsi
+      festive: _Sunrise/Structures/Wallmounts/lighting/light_small_gift.rsi
 
 - type: !PartialOnly entity
   id: PoweredSmallLightEmpty
   components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/lighting/light_small.rsi
+    offset: 0, 0
   - type: HolidayVisuals
     holidays:
       festive:
       - WinterPresents
   - type: HolidayRsiSwap
     sprite:
-      festive: _Sunrise/Structures/Wallmounts/Lighting/light_small_gift.rsi
+      festive: _Sunrise/Structures/Wallmounts/lighting/light_small_gift.rsi
 
 - type: !PartialOnly entity
   id: EmergencyLight
   components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/lighting/emergency_light.rsi
+    offset: 0, 0
+    layers: !Clear
+    - !Index:0
+      state: base
+      map: ["enum.EmergencyLightVisualLayers.Base"]
+    - !Index:0
+      state: emergency_light_off
+      map: ["enum.EmergencyLightVisualLayers.LightOff"]
+      color: "#7CFC00"
+    - !Index:0
+      state: emergency_light_on
+      map: ["enum.EmergencyLightVisualLayers.LightOn"]
+      color: "#7CFC00"
+      shader: unshaded
+      visible: false
   - type: PointLight
     radius: 7
     energy: 1
