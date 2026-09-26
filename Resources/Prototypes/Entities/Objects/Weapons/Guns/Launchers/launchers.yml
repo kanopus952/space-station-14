@@ -72,6 +72,7 @@
   - type: AmmoCounter
   - type: Gun
     pump: true
+    fireRate: 0.67
   - type: BallisticAmmoProvider
     whitelist:
       tags:
@@ -83,8 +84,6 @@
   - type: GunRequiresWield
   - type: StaticPrice
     price: 10000
-  - type: Gun
-    fireRate: 0.67
 
 - type: entity
   parent: [ BaseWeaponLauncher, BaseMajorContraband ]
