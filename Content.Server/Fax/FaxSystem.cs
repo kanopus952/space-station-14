@@ -577,7 +577,7 @@ public sealed partial class FaxSystem : EntitySystem
 
         var printout = component.PrintingQueue.Dequeue();
 
-        var entityToSpawn = component.PrintPaperId;
+        var entityToSpawn = ProtoMan.HasIndex(printout.PrototypeId) ? printout.PrototypeId : component.PrintPaperId;
         var printed = Spawn(entityToSpawn, Transform(uid).Coordinates);
         PlaceSunrisePortableFaxPrintout(uid, printed); // Sunrise-Edit — корректно размещаем бумагу от переносного факса.
 
