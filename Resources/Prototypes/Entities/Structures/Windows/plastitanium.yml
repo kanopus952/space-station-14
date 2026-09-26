@@ -114,8 +114,10 @@
     damageOverlay:
       sprite: Structures/Windows/cracks.rsi
   - type: Repairable
-    fuelCost: 15
-    doAfterDelay: 3
+    # Sunrise edit start - сохраняем прежние параметры ремонта.
+    # fuelCost: 15
+    doAfterDelay: 5
+    # Sunrise edit end
   - type: Damageable
     damageModifierSet: RGlass
   - type: Injurable
@@ -148,10 +150,13 @@
       fix1:
         shape:
           !type:PolygonShape
+            # Sunrise edit start - сохраняем прежнюю форму диагонального окна.
             vertices:
-            - "-0.5,-0.5"
-            - "0.5,0.5"
             - "0.5,-0.5"
+            - "-0.4,-0.5"
+            - "-0.4,0.1"
+            - "0.5,0.5"
+            # Sunrise edit end
         mask:
         - FullTileMask
         layer:
@@ -204,8 +209,10 @@
     damageOverlay:
       sprite: Structures/Windows/cracks-diagonal.rsi
   - type: Repairable
-    fuelCost: 15
-    doAfterDelay: 3
+    # Sunrise edit start - сохраняем прежние параметры ремонта.
+    # fuelCost: 15
+    doAfterDelay: 5
+    # Sunrise edit end
   - type: Damageable
     damageModifierSet: RGlass
   - type: Injurable

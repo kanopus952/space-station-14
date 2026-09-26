@@ -11,7 +11,7 @@
       map: [ "enum.ToggleableVisuals.Layer" ]
   - type: ItemToggleExaminableStatus
   - type: ItemToggleRequiresCharge
-    requiredCharge: 120
+    requiredCharge: 60 # Sunrise-Edit - сохраняем расход заряда нашего электрошокера.
   - type: ItemToggle
     soundActivate:
       collection: sparks
@@ -42,7 +42,7 @@
   - type: MeleeBatteryHitsLeft
   - type: StaminaDamageOnHitRequiresToggle
   - type: StaminaDamageOnHitRequiresCharge
-    requiredCharge: 120
+    requiredCharge: 60 # Sunrise-Edit - расход должен совпадать с порогом включения.
   - type: StaminaDamageOnHit
     damage: 35
     sound: /Audio/Weapons/egloves.ogg

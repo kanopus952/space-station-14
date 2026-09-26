@@ -4,8 +4,8 @@ using Content.Shared.Coordinates;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Emp;
 using Content.Shared.Mech.Components;
-using Content.Shared.Mech.EntitySystems;
 using Content.Shared.Vehicle.Components;
+using Content.Shared.Vehicle.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Sunrise.Mech;
@@ -15,7 +15,7 @@ public sealed partial class SunriseMechSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedMechSystem _mech = default!;
+    [Dependency] private VehicleSystem _vehicle = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -28,10 +28,10 @@ public sealed partial class SunriseMechSystem : EntitySystem
 
     private void OnCryoTeleportAttemptEvent(Entity<VehicleOperatorComponent> ent, ref BeforeCryoTeleportEvent args)
     {
-        if (ent.Comp.Vehicle is not { } mech || !TryComp<MechComponent>(mech, out var mechComponent))
+        if (ent.Comp.Vehicle is not { } mech || !HasComp<MechComponent>(mech))
             return;
 
-        _mech.TryEject(mech, mechComponent);
+        _vehicle.TryExit(mech);
     }
 
     public override void Update(float frameTime)

@@ -5,9 +5,6 @@
   components:
   - type: IconSmooth
     key: walls
-    additionalKeys: !Remove
-    index: !Remove
-    base: !Remove
     mode: NoSprite
   - type: SmoothEdge
   - type: Icon

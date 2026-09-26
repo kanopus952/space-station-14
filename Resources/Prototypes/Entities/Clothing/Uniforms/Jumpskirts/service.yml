@@ -155,6 +155,7 @@
     tags:
     - ClownSuit
     - WhitelistChameleon
+    - NudeBottom # Sunrise-Edit - сохраняем поведение костюма клоуна.
 
 - type: entity
   parent: ClothingUniformSkirtBase

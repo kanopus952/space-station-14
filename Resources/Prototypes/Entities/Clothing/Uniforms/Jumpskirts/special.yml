@@ -8,11 +8,21 @@
     sprite: Clothing/Uniforms/Jumpskirts/Special/operative_s.rsi
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpskirts/Special/operative_s.rsi
+  # Sunrise added start - сохраняем защитные свойства формы оперативника.
+  - type: Armor
+    modifiers:
+      coefficients:
+        Slash: 0.92
+        Piercing: 0.98
+        Heat: 0.95
+  - type: StaminaResistance
+    damageCoefficient: 0.95
+  # Sunrise added end
   - type: StaticPrice
     price: 500
 
 - type: entity
-  parent: ClothingUniformSkirtBase
+  parent: ClothingUniformJumpskirtOperative # Sunrise-Edit - наследуем защиту формы оперативника.
   id: ClothingUniformJumpskirtTacticool
   name: tacticool jumpskirt
   description: Uniform for subpar operative LARPers performing tactical insulated glove theft in deep space.

@@ -28,6 +28,11 @@
     factions:
     - NanoTrasen
   - type: Mech
+  - type: Vehicle
+    canAttack: true
+  - type: ContainerVehicle
+    containerId: mech-pilot-slot
+  - type: ContainerVehicleEntry
     entryDelay: 1
   - type: MechVulnerableToEMP
   - type: MechAir

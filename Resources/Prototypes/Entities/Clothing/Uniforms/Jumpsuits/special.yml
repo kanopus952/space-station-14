@@ -41,6 +41,14 @@
     sprite: Clothing/Uniforms/Jumpsuits/Special/operative.rsi
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuits/Special/operative.rsi
+  # Sunrise added start - сохраняем защитные свойства формы оперативника.
+  - type: Armor
+    modifiers:
+      coefficients:
+        Slash: 0.95
+  - type: StaminaResistance
+    damageCoefficient: 0.95
+  # Sunrise added end
   - type: StaticPrice
     price: 500
 

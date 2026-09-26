@@ -1,6 +1,7 @@
 <comms:CommunicationsConsoleMenu xmlns="https://spacestation14.io"
     xmlns:comms="clr-namespace:Content.Client.Communications.UI"
     xmlns:widgets="clr-namespace:Content.Client.Communications.UI.Widgets"
+    xmlns:sunriseWidgets="clr-namespace:Content.Client._Sunrise.Communications.UI.Widgets"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     MinSize="450 710" SetSize="450 710"
     Title="{Loc 'comms-console-menu-title'}">
@@ -17,9 +18,9 @@
 
         <controls:HSpacer Spacing="12" />
 
-        <!-- Sunrise-Start -->
+        <!-- Sunrise-Start: сохраняем управление ретрансляцией. -->
         <PanelContainer StyleClasses="BackgroundPanelDark">
-            <widgets:RelayControls Name="RelayControls" Margin="0 12 0 12" />
+            <sunriseWidgets:RelayControls Name="RelayControls" Margin="0 12 0 12" />
         </PanelContainer>
 
         <controls:HSpacer Spacing="12" />

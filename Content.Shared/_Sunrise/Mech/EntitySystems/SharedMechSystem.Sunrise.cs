@@ -1,8 +1,11 @@
+using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
 using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Mech;
 using Content.Shared.Mech.Components;
+using Content.Shared.Whitelist;
 
 #pragma warning disable IDE0130
 namespace Content.Shared.Mech.EntitySystems;
@@ -10,6 +13,25 @@ namespace Content.Shared.Mech.EntitySystems;
 public abstract partial class SharedMechSystem
 {
     [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private AccessReaderSystem _sunriseAccessReader = default!;
+
+    private bool CanSunriseEnter(Entity<MechComponent> ent, EntityUid user)
+    {
+        if (_whitelistSystem.IsWhitelistPass(ent.Comp.PilotBlacklist, user))
+        {
+            _popup.PopupEntity(Loc.GetString("mech-no-enter", ("item", ent.Owner)), user);
+            return false;
+        }
+
+        if (TryComp<AccessReaderComponent>(ent, out var accessReader) &&
+            !_sunriseAccessReader.IsAllowed(user, ent, accessReader))
+        {
+            _popup.PopupEntity(Loc.GetString("mech-no-access", ("item", ent.Owner)), user);
+            return false;
+        }
+
+        return true;
+    }
 
     [SubscribeLocalEvent]
     private void OnToggleLightsEvent(Entity<MechComponent> ent, ref MechToggleLightsEvent args)

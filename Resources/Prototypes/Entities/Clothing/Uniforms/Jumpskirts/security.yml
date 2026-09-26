@@ -117,6 +117,7 @@
     - Recyclable
     - PrisonUniform
     - WhitelistChameleon
+    - NudeBottom # Sunrise-Edit - сохраняем поведение формы заключённого.
 
 - type: entity
   parent: [ClothingUniformSkirtBase, BaseSecurityContraband]

@@ -1537,7 +1537,7 @@ public sealed partial class StorytellerSystem : GameRuleSystem<StorytellerRuleCo
                         var damage = melee.Damage.GetTotal().Float();
 
                         if (HasComp<Content.Shared.Weapons.Melee.EnergySword.EnergySwordComponent>(uid) ||
-                            HasComp<Content.Shared.Stunnable.StunbatonComponent>(uid) ||
+                            HasComp<Content.Shared.Damage.Components.StaminaDamageOnHitRequiresToggleComponent>(uid) ||
                             (damage >= 20f && !HasComp<Content.Shared.Tools.Components.ToolComponent>(uid)))
                         {
                             weight = 0.5f;

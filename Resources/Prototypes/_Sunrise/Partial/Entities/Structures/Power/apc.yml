@@ -17,30 +17,14 @@
       shader: unshaded
       map: ["enum.ApcVisualLayers.ChargeState"]
     - !Index:0
-      state: lock0-locked
-      shader: unshaded
-      map: ["enum.ApcVisualLayers.InterfaceLock"]
-      visible: false
-    - !Index:0
-      state: lock1-locked
-      shader: unshaded
-      map: ["enum.ApcVisualLayers.PanelLock"]
-      visible: false
-    - !Index:0
-      state: lock1-locked #when these are implemented get actual sprites.
+      state: channel0-auto_off
       shader: unshaded
       map: ["enum.ApcVisualLayers.Equipment"]
       visible: false
-    - !Index:0
-      state: lock1-locked
-      shader: unshaded
-      map: ["enum.ApcVisualLayers.Lighting"]
-      visible: false
-    - !Index:0
-      state: lock1-locked
-      shader: unshaded
-      map: ["enum.ApcVisualLayers.Environment"]
-      visible: false
+  - type: ApcVisuals
+    channelIndicatorPrefix: channel0
+    channelIndicatorSuffixes: [auto_off, auto_on, manual_off, auto_off]
+    screenStateSuffixes: [lack, charging, full, remote, lack]
   - type: PowerMonitoringDevice
     group: APC
     sourceNode: input

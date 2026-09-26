@@ -69,6 +69,8 @@
     tags:
     - ClownSuit
     - WhitelistChameleon
+  - type: Pierceable # Sunrise-Edit - сохраняем прокалываемость костюма клоуна.
+    level: Flesh
 
 - type: entity
   parent: ClothingUniformJumpsuitClown
