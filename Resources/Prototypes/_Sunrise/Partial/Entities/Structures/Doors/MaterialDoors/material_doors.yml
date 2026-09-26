@@ -1,0 +1,6 @@
+- type: !PartialOnly entity
+  id: WoodDoor
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/MineralDoors/wood_door.rsi

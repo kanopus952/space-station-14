@@ -1329,7 +1329,7 @@ WallVaultRock: WallSolid
 WallVaultSandstone: WallSolid
 WallSandstone: WallSolid
 WallDiamond: WallReinforced
-WallCult: WallBrick
+# WallCult: WallBrick # Sunrise-Edit - сохраняем стену культа для Blood Cult
 WallClown: WallGold
 WallClock: WallBrass
 WallPlastic: WallSolid
@@ -1472,8 +1472,8 @@ TurnstileGenpopEnter: EnergyGateGenpopEnter
 TurnstileGenpopLeave: EnergyGateGenpopLeave
 Turnstile: EnergyGate
 MetalDoor: SilverDoor
-MiningWindow: ReinforcedWindow
-MiningWindowDiagonal: ReinforcedWindowDiagonal
+# MiningWindow: ReinforcedWindow # Sunrise-Edit - сохраняем шахтёрское окно Sunrise
+# MiningWindowDiagonal: ReinforcedWindowDiagonal # Sunrise-Edit - сохраняем диагональное шахтёрское окно Sunrise
 FloorTileItemLightAstroGrass: null
 FloorTileItemGrayConcrete: null
 FloorTileItemGrayConcreteMono: null
@@ -1494,19 +1494,19 @@ WallRockChromiteBananium: WallRockChromite
 WallRockSandBananium: WallRockSand
 WallRockSnowBananium: WallRockSnow
 MeteorRockBananium: MeteorRock
-WallRockBasalt: WallRock
+# WallRockBasalt: WallRock # Sunrise-Edit - сохраняем базальтовую породу Sunrise
 WallRockBasaltCoal: WallRockCoal
 WallRockBasaltGold: WallRockGold
 WallRockBasaltDiamond: WallRockDiamond
 WallRockBasaltPlasma: WallRockPlasma
 WallRockBasaltQuartz: WallRockQuartz
 WallRockBasaltSilver: WallRockSilver
-WallRockBasaltBananium: WallRock
+# WallRockBasaltBananium: WallRock # Sunrise-Edit - сохраняем бананиумную базальтовую породу Sunrise
 WallRockBasaltTin: WallRockTin
 WallRockBasaltUranium: WallRockUranium
 WallRockBasaltArtifactFragment: WallRockArtifactFragment
 WallRockBasaltSalt: WallRockSalt
-WallRockAndesite: WallRock
+# WallRockAndesite: WallRock # Sunrise-Edit - сохраняем андезитовую породу Sunrise
 WallRockAndesiteCoal: WallRockCoal
 WallRockAndesiteGold: WallRockGold
 WallRockAndesiteDiamond: WallRockDiamond

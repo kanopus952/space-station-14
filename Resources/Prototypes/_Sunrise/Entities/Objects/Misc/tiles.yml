@@ -14,18 +14,3 @@
       - FloorLightFancyWood
   - type: Stack
     stackType: FloorLightFancyWood
-
-- type: !PartialOnly entity
-  id: FloorTileItemBase
-  components:
-  - type: Tag
-    tags:
-    - NoPaint
-    - Tile
-  - type: PhysicalComposition
-    materialComposition:
-      Steel: 15
-
-- type: !PartialOnly entity
-  id: FloorTileItemSteel
-  parent: [MetalSounds, FloorTileItemBase]

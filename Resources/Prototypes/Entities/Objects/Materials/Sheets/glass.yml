@@ -472,8 +472,6 @@
         Quantity: 10
       - ReagentId: Brass
         Quantity: 10
-  - type: QuickConstructable # Sunrise-Edit
-    category: ClockworkGlass
 
 - type: entity
   parent: SheetClockworkGlass

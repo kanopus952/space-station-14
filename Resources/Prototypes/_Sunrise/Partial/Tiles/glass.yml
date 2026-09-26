@@ -1,0 +1,36 @@
+# Стеклянные полы
+- type: !PartialOnly tile
+  id: FloorGlassPlasma
+  name: tiles-glass-floor-plasma
+  sprite: /Textures/_Sunrise/Tiles/Glass/glass_plasma.png
+  variants: 4
+  placementVariants: !Clear
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [Prying]
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: SheetPGlass1
+  heatCapacity: 10000
+
+- type: !PartialOnly tile
+  id: FloorGlassUranium
+  name: tiles-glass-floor-uranium
+  sprite: /Textures/_Sunrise/Tiles/Glass/glass_uranium.png
+  variants: 4
+  placementVariants: !Clear
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [Prying]
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: SheetUGlass1
+  heatCapacity: 10000

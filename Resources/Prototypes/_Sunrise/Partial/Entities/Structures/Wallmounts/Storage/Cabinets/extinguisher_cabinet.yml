@@ -1,0 +1,13 @@
+- type: !PartialOnly entity
+  id: ExtinguisherCabinet
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/extinguisher_cabinet.rsi
+    snapCardinals: true
+    layers: !Clear
+    - state: frame
+    - state: extinguisher
+      map: ["enum.ItemCabinetVisuals.Layer"]
+      visible: true
+    - state: closed
+      map: ["enum.OpenableVisuals.Layer"]
