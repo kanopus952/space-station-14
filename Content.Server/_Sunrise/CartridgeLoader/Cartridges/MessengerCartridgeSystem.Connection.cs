@@ -293,9 +293,9 @@ public sealed partial class MessengerCartridgeSystem
             }
 
             if (string.IsNullOrEmpty(device.Address) &&
-                !_deviceNetwork.IsDeviceConnected(uid, device))
+                !_deviceNetwork.IsDeviceConnected((uid, device)))
             {
-                _deviceNetwork.ConnectDevice(uid, device);
+                _deviceNetwork.ConnectDevice((uid, device));
             }
 
             if (string.IsNullOrEmpty(device.Address))
@@ -383,7 +383,7 @@ public sealed partial class MessengerCartridgeSystem
         var pdaPos = _transformSystem.GetWorldPosition(pdaTransform);
         Sawmill.Debug($"PDA position: {pdaPos}, MapId: {pdaTransform.MapID}");
 
-        _deviceNetwork.QueuePacket(loaderUid, component.ServerAddress, payload, frequency: messengerFrequency, network: pdaDevice.DeviceNetId);
+        _deviceNetwork.SendPacket(loaderUid, component.ServerAddress, ref payload, frequency: messengerFrequency, network: pdaDevice.DeviceNetId);
 
         RestoreFrequency(loaderUid, pdaDevice, originalFreq);
     }

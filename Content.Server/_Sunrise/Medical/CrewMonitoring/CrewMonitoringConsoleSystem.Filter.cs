@@ -1,6 +1,6 @@
 using Content.Shared.Implants.Components;
 using Content.Shared.Medical.CrewMonitoring;
-using Content.Shared.Medical.SuitSensor;
+using Content.Shared.Medical.SuitSensors;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 

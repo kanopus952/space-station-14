@@ -1,5 +1,6 @@
 ﻿using Content.Shared.DeviceNetwork;
 using Content.Shared.Medical.SuitSensors;
+using Robust.Shared.Map;
 
 namespace Content.Shared.Medical.CrewMonitoring;
 
@@ -10,4 +11,7 @@ public partial record struct BroadcastSuitSensorStatePayload : INetworkPayload
 {
     [DataField]
     public Dictionary<string, SuitSensorStatus> SensorStatus = new();
+
+    [DataField]
+    public MapId? MapId; // Sunrise-Edit - не смешиваем данные серверов мониторинга с разных карт.
 }

@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Radio;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Shared.DeviceNetwork.Events;
+using DeviceNetworkPacketEvent = Content.Shared.DeviceNetwork.Events.DeviceNetworkPacketEvent<Content.Shared._Sunrise.DeviceNetwork.SunriseNetworkPayload>;
 using Content.Server.Station.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.DeviceNetwork;
@@ -94,9 +95,9 @@ public sealed partial class MessengerServerSystem : EntitySystem
             return;
         }
 
-        if (!_deviceNetwork.IsDeviceConnected(uid, serverDevice))
+        if (!_deviceNetwork.IsDeviceConnected((uid, serverDevice)))
         {
-            if (!_deviceNetwork.ConnectDevice(uid, serverDevice))
+            if (!_deviceNetwork.ConnectDevice((uid, serverDevice)))
             {
                 return;
             }
@@ -114,7 +115,7 @@ public sealed partial class MessengerServerSystem : EntitySystem
     {
     }
 
-    private void OnPacketReceived(EntityUid uid, MessengerServerComponent component, DeviceNetworkPacketEvent args)
+    private void OnPacketReceived(EntityUid uid, MessengerServerComponent component, ref DeviceNetworkPacketEvent args)
     {
         if (!_singletonServer.IsActiveServer(uid))
         {

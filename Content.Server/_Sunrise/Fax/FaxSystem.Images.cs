@@ -1,6 +1,4 @@
-using System.Numerics;
 using Content.Server.Storage.EntitySystems;
-using Content.Shared.DeviceNetwork;
 using Content.Shared.Fax;
 using Content.Shared.Fax.Components;
 using Content.Shared.Ghost.Components;
@@ -25,35 +23,6 @@ public sealed partial class FaxSystem
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private StorageSystem _storage = default!;
     [Dependency] private TransformSystem _transform = default!;
-
-    private static FaxPrintout CreateSunriseNetworkPrintout(
-        NetworkPayload payload,
-        string content,
-        string name,
-        string? label,
-        string? prototypeId,
-        string? stampState,
-        List<StampDisplayInfo>? stampedBy,
-        bool locked,
-        string? senderFaxName)
-    {
-        payload.TryGetValue(FaxConstants.FaxPaperImageData, out SpriteSpecifier? imageContent);
-        Vector2? imageScale = null;
-        if (payload.TryGetValue(FaxConstants.FaxPaperImageScaleData, out Vector2 transmittedScale))
-            imageScale = transmittedScale;
-
-        return new FaxPrintout(
-            content,
-            name,
-            label,
-            prototypeId,
-            stampState,
-            stampedBy,
-            locked,
-            senderFaxName,
-            imageContent,
-            imageScale);
-    }
 
     private static FaxPrintout CreateSunriseFilePrintout(
         FaxFileMessage message,
@@ -86,15 +55,6 @@ public sealed partial class FaxSystem
             paper.EditingDisabled,
             imageContent: paper.ImageContent,
             imageScale: paper.ImageScale);
-    }
-
-    private static void AddSunriseFaxImageData(NetworkPayload payload, PaperComponent paper)
-    {
-        if (paper.ImageContent == null)
-            return;
-
-        payload[FaxConstants.FaxPaperImageData] = paper.ImageContent;
-        payload[FaxConstants.FaxPaperImageScaleData] = paper.ImageScale ?? Vector2.One;
     }
 
     private void PlaceSunrisePortableFaxPrintout(EntityUid fax, EntityUid printout)

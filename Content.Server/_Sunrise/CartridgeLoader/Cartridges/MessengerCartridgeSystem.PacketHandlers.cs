@@ -3,6 +3,7 @@ using Content.Server._Sunrise.Messenger;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
+using DeviceNetworkPacketEvent = Content.Shared.DeviceNetwork.Events.DeviceNetworkPacketEvent<Content.Shared._Sunrise.DeviceNetwork.SunriseNetworkPayload>;
 using Content.Shared._Sunrise.Messenger;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.PDA.Ringer;

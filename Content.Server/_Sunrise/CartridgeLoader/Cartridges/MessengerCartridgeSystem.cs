@@ -6,6 +6,7 @@ using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
+using DeviceNetworkPacketEvent = Content.Shared.DeviceNetwork.Events.DeviceNetworkPacketEvent<Content.Shared._Sunrise.DeviceNetwork.SunriseNetworkPayload>;
 using Content.Shared.DeviceNetwork.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
@@ -118,7 +119,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
         var messengerFreq = GetMessengerFrequency();
         if (messengerFreq.HasValue)
         {
-            _deviceNetwork.SetTransmitFrequency(loaderUid, messengerFreq.Value, deviceNetwork);
+            _deviceNetwork.SetTransmitFrequency((loaderUid, deviceNetwork), messengerFreq.Value);
         }
     }
 
@@ -129,7 +130,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     {
         if (originalFrequency.HasValue)
         {
-            _deviceNetwork.SetTransmitFrequency(loaderUid, originalFrequency.Value, deviceNetwork);
+            _deviceNetwork.SetTransmitFrequency((loaderUid, deviceNetwork), originalFrequency.Value);
         }
     }
 

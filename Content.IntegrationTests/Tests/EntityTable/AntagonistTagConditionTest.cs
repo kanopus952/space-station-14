@@ -37,6 +37,7 @@ public sealed class AntagonistTagConditionTest : GameTest
            id: AntagTagTestAntagOnStation
            name: roles-antag-generic-solo-antagonist-name
            antagonist: true
+           playTimeTracker: AntagTagTestOnStation # Sunrise-Edit - обязательное поле прототипа Sunrise.
            objective: never-shown
            tags:
            - OnStation
@@ -45,6 +46,7 @@ public sealed class AntagonistTagConditionTest : GameTest
            id: AntagTagTestAntagUnkillable
            name: roles-antag-generic-solo-antagonist-name
            antagonist: true
+           playTimeTracker: AntagTagTestUnkillable # Sunrise-Edit - обязательное поле прототипа Sunrise.
            objective: never-shown
            tags:
            - OnStation

@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DeviceNetwork.Events;
+using DeviceNetworkPacketEvent = Content.Shared.DeviceNetwork.Events.DeviceNetworkPacketEvent<Content.Shared._Sunrise.DeviceNetwork.SunriseNetworkPayload>;
 using Content.Shared._Sunrise.Messenger;
 
 namespace Content.Server._Sunrise.Messenger;
@@ -45,11 +46,11 @@ public sealed partial class MessengerServerSystem
 
         if (pdaFrequency.HasValue)
         {
-            _deviceNetwork.QueuePacket(uid, args.SenderAddress, payload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
+            _deviceNetwork.SendPacket(uid, args.SenderAddress, ref payload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
         }
         else
         {
-            _deviceNetwork.QueuePacket(uid, args.SenderAddress, payload);
+            _deviceNetwork.SendPacket(uid, args.SenderAddress, ref payload);
         }
     }
 
@@ -131,11 +132,11 @@ public sealed partial class MessengerServerSystem
 
         if (pdaFrequency.HasValue)
         {
-            _deviceNetwork.QueuePacket(uid, args.SenderAddress, payload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
+            _deviceNetwork.SendPacket(uid, args.SenderAddress, ref payload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
         }
         else
         {
-            _deviceNetwork.QueuePacket(uid, args.SenderAddress, payload);
+            _deviceNetwork.SendPacket(uid, args.SenderAddress, ref payload);
         }
     }
 
@@ -222,11 +223,11 @@ public sealed partial class MessengerServerSystem
 
                     if (updatePdaFrequency.HasValue)
                     {
-                        _deviceNetwork.QueuePacket(uid, senderId, updatePayload, frequency: updatePdaFrequency, network: serverDevice.DeviceNetId);
+                        _deviceNetwork.SendPacket(uid, senderId, ref updatePayload, frequency: updatePdaFrequency, network: serverDevice.DeviceNetId);
                     }
                     else
                     {
-                        _deviceNetwork.QueuePacket(uid, senderId, updatePayload);
+                        _deviceNetwork.SendPacket(uid, senderId, ref updatePayload);
                     }
                 }
             }
@@ -268,11 +269,11 @@ public sealed partial class MessengerServerSystem
 
                 if (recipientPdaFrequency.HasValue)
                 {
-                    _deviceNetwork.QueuePacket(uid, userId, recipientPayload, frequency: recipientPdaFrequency, network: serverDevice.DeviceNetId);
+                    _deviceNetwork.SendPacket(uid, userId, ref recipientPayload, frequency: recipientPdaFrequency, network: serverDevice.DeviceNetId);
                 }
                 else
                 {
-                    _deviceNetwork.QueuePacket(uid, userId, recipientPayload);
+                    _deviceNetwork.SendPacket(uid, userId, ref recipientPayload);
                 }
             }
         }
@@ -315,11 +316,11 @@ public sealed partial class MessengerServerSystem
 
         if (pdaFrequency.HasValue)
         {
-            _deviceNetwork.QueuePacket(uid, args.SenderAddress, payload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
+            _deviceNetwork.SendPacket(uid, args.SenderAddress, ref payload, frequency: pdaFrequency, network: serverDevice.DeviceNetId);
         }
         else
         {
-            _deviceNetwork.QueuePacket(uid, args.SenderAddress, payload);
+            _deviceNetwork.SendPacket(uid, args.SenderAddress, ref payload);
         }
     }
 }
