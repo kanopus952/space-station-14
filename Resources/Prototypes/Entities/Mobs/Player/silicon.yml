@@ -34,6 +34,7 @@
   - type: StationAiOverlay
   - type: ShowElectrocutionHUD
   - type: ActionGrant
+    removeOnShutdown: false
     actions:
     - ActionJumpToCore
     - ActionAIViewLaws
