@@ -264,3 +264,6 @@
       - !type:SpawnEntitiesBehavior
         spawn:
           MaterialCardboard: *BaseDoorSpawn
+  - type: IconSmooth
+    key: cards
+    mode: NoSprite
