@@ -507,10 +507,8 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         TransformSystem.SetWorldRotation(uid, direction.ToWorldAngle() + projectile.Angle);
 
-        // Sunrise-Start allow shot projectiles to start trigger timers.
-        var shotEvent = new ProjectileShotEvent();
-        RaiseLocalEvent(uid, ref shotEvent);
-        // Sunrise-End
+        var ev = new ProjectileShotEvent();
+        RaiseLocalEvent(uid, ref ev);
     }
 
     /// <summary>

@@ -206,7 +206,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     }
 
     [SubscribeLocalEvent]
-    private void OnBeingShot(Entity<ProjectileComponent> entity, ref MapInitEvent args)
+    private void OnBeingShot(Entity<ProjectileComponent> entity, ref ProjectileShotEvent args)
     {
         entity.Comp.WhenToStopIgnoringShooter = _timing.CurTime + entity.Comp.DelayToAcknowledgeShooter;
         // Sunrise-Edit - выполняем совместимость с хитсканами через единственную подписку на MapInitEvent
@@ -292,6 +292,12 @@ public record struct ProjectileReflectAttemptEvent(EntityUid ProjUid, Projectile
 {
     SlotFlags IInventoryRelayEvent.TargetSlots => SlotFlags.WITHOUT_POCKET;
 }
+
+/// <summary>
+/// Raised when a projectile is shot
+/// </summary>
+[ByRefEvent]
+public record struct ProjectileShotEvent;
 
 /// <summary>
 /// Raised when a projectile hits an entity
