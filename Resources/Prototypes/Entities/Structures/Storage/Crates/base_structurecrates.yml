@@ -39,7 +39,7 @@
   - type: RequireProjectileTarget
 
 - type: entity
-  parent: BaseCrate
+  parent: [ BaseCrate, StructureHealthContainerWeak ]
   id: CrateGeneric
   categories: [ HideSpawnMenu ]
   components:
@@ -60,17 +60,15 @@
       sprite: Structures/Storage/Crates/labels.rsi
       map: ["enum.PaperLabelVisuals.Layer"]
   - type: Damageable
-    damageModifierSet: StructuralMetallic # Sunrise edit
+    damageModifierSet: SteelMod
   - type: Injurable
     damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 50
+        damage: 60
       behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
@@ -118,7 +116,7 @@
       offset: "-0.5,0"
       map: ["enum.PaperLabelVisuals.Layer"]
   - type: Damageable
-    damageModifierSet: StructuralMetallic
+    damageModifierSet: PlasteelMod
   - type: Construction
     graph: CrateSecure
     node: cratesecure
@@ -131,3 +129,5 @@
     spread: 90
   - type: Paintable
     group: CrateSecure
+  - type: StaticPrice
+    price: 300

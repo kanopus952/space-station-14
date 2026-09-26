@@ -348,9 +348,9 @@
         volume: 3
         variation: 0.250
     activatedDamage:
-      types:
-        Slash: 12
-        Heat: 12
+        types:
+            Slash: 12
+            Heat: 12
   - type: ItemToggleActiveSound
     activeSound:
       path: /Audio/Weapons/ebladehum.ogg
@@ -427,7 +427,6 @@
       types:
         Slash: 20
         Heat: 20
-        Structural: 20
   - type: MeleeRequiresWield
   - type: HeldSpeedModifier #slowdown is what balances this compared to a dsword
     walkModifier: 0.6

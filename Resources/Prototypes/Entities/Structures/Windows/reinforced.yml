@@ -1,5 +1,5 @@
 - type: entity
-  parent: [BaseDeltaPressureReinforcedGlass, BaseWindowStructure]
+  parent: [BaseDeltaPressureReinforcedGlass, BaseWindowStructure, StructureHealthBarrierStrong]
   id: ReinforcedWindow
   name: reinforced window
   components:
@@ -11,9 +11,7 @@
   - type: Repairable
     doAfterDelay: 5 # Sunrise-Edit
   - type: Damageable
-    damageModifierSet: RGlass
-  - type: Injurable
-    damageContainer: StructuralInorganic
+    damageModifierSet: GlassReinforcedMod
   - type: RCDDeconstructable
     cost: 6
     delay: 6
@@ -22,7 +20,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 75
+        damage: 120
       behaviors:
       - !type:PlaySoundBehavior
         sound:
@@ -32,8 +30,6 @@
           ShardGlassReinforced:
             min: 1
             max: 2
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
   - type: IconSmooth
     base: rwindow
   - type: Construction
@@ -48,7 +44,7 @@
       sprite: Structures/Windows/cracks.rsi
 
 - type: entity
-  parent: [BaseDeltaPressureReinforcedGlassQuarter, BaseWindowStructureDirectional]
+  parent: [BaseDeltaPressureReinforcedGlassQuarter, BaseWindowStructureDirectional, StructureHealthBarrier]
   id: WindowReinforcedDirectional
   name: directional reinforced window
   components:
@@ -69,9 +65,7 @@
     damageOverlay:
       sprite: Structures/Windows/cracks_directional.rsi
   - type: Damageable
-    damageModifierSet: RGlass
-  - type: Injurable
-    damageContainer: StructuralInorganic
+    damageModifierSet: GlassReinforcedMod
   - type: RCDDeconstructable
     cost: 4
     delay: 4
@@ -80,7 +74,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 37
+        damage: 80
       behaviors:
       - !type:PlaySoundBehavior
         sound:
@@ -90,8 +84,6 @@
           ShardGlassReinforced:
             min: 1
             max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
   - type: StaticPrice
     price: 22.5
 

@@ -53,7 +53,7 @@
     boardName: wires-board-name-jukebox
     layoutId: Jukebox
   - type: Damageable
-    damageModifierSet: Metallic
+    damageModifierSet: WoodMod
   - type: Destructible
     thresholds:
     - trigger:
