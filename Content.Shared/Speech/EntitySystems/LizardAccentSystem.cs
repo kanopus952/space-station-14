@@ -3,7 +3,7 @@ using Content.Shared.Speech.Components;
 
 namespace Content.Shared.Speech.EntitySystems;
 
-public sealed partial class LizardAccentSystem : RelayAccentSystem<LizardAccentComponent> // Sunrise-Edit - русская локализация вынесена в partial
+public sealed partial class LizardAccentSystem : RelayAccentSystem<LizardAccentComponent>
 {
     private static readonly Regex RegexLowerS = new("s+");
     private static readonly Regex RegexUpperS = new("S+");

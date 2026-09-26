@@ -15,6 +15,7 @@
   # Sunrise-end
   - type: IgnitionSource
     ignited: false
+  - type: ItemToggleExaminableStatus
   - type: ItemToggle
     predictable: false
     soundActivate:

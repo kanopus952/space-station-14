@@ -73,10 +73,9 @@
   - type: MechAir
   - type: Vehicle
     canAttack: true
-  - type: VehicleHandBlocker
-    blockedHands: 2
   - type: ContainerVehicle
     containerId: "mech-pilot-slot"
+  - type: ContainerVehicleEntry
   - type: AirFilter
     # everything except oxygen and nitrogen
     gases:
@@ -296,6 +295,8 @@
     operatorWhitelist:
       components:
         - HumanoidProfile
+  - type: VehicleHandBlocker
+    blockedHands: 2
   - type: MeleeWeapon
     hidden: true
     attackRate: 1
@@ -507,6 +508,8 @@
     operatorWhitelist:
       components:
       - HumanoidProfile
+  - type: VehicleHandBlocker
+    blockedHands: 2
   # sunrise start
   - type: Reflect
     reflectProb: 0.05
@@ -579,7 +582,15 @@
       tags:
       - SmallMech
   - type: Vehicle
-    transferDamage: false # Sunrise-Edit - сохраняем прежнее отсутствие урона пилоту
+    requiresHands: false
+    transferDamageModifier:
+      coefficients:
+        Blunt: 0.2
+        Slash: 0.2
+        Piercing: 0.2
+        Cold: 0.2
+        Heat: 0.2
+        Shock: 0.2
     operatorWhitelist:
       tags:
       - Hamster
@@ -650,6 +661,7 @@
     maxEquipmentAmount: 0
     airtight: true
   - type: Vehicle
+    requiresHands: false
     transferDamageModifier:
       coefficients:
         Blunt: 0.1

@@ -422,6 +422,8 @@ namespace Content.Server.Power.EntitySystems
                 lastRecv = newRecv;
                 var msg = new PowerConsumerReceivedChanged(newRecv, consumer.DrawRate);
                 RaiseLocalEvent(uid, ref msg);
+
+                _appearance.SetData(uid, PowerConsumerVisuals.Consuming, newRecv > 0);
             }
         }
 
