@@ -8,14 +8,13 @@
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     state: rubber
   - type: Projectile
-    deleteOnCollide: false
     damage:
       types:
         Blunt: 4
   - type: StaminaDamageOnCollide
     damage: 55
   - type: TimedDespawn
-    lifetime: 0.10 # Sunrise-Edit
+    lifetime: 0.10
 
 - type: entity
   id: PelletClusterLethal
@@ -27,12 +26,11 @@
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     state: shard
   - type: Projectile
-    deleteOnCollide: false
     damage:
       types:
         Piercing: 45
   - type: TimedDespawn
-    lifetime: 0.10 # Sunrise-Edit
+    lifetime: 0.10
 
 - type: entity
   id: PelletClusterIncendiary
@@ -44,7 +42,6 @@
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     state: incendiary
   - type: Projectile
-    deleteOnCollide: false
     damage:
       types:
         Blunt: 1
@@ -53,7 +50,7 @@
     fireStacks: 1
     count: 10
   - type: TimedDespawn
-    lifetime: 0.10 # Sunrise-Edit
+    lifetime: 0.10
 
 - type: entity
   id: PelletClusterLessLethal
@@ -65,9 +62,8 @@
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     state: bullet
   - type: Projectile
-    deleteOnCollide: false
     damage:
       types:
         Piercing: 5
   - type: TimedDespawn
-    lifetime: 0.15 # Sunrise-Edit
+    lifetime: 0.15 # Sunrise edit

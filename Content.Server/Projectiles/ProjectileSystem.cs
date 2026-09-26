@@ -112,16 +112,20 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
             canHeal: false);
         // Sunrise edit end
 
-        if (!damage.Empty && Exists(component.Shooter))
+        if (!damage.Empty)
         {
             if (!Deleted(target))
             {
                 _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Pvs(target, entityManager: EntityManager));
             }
 
+            var shotByString = Exists(component.Shooter)
+                ? $"{ToPrettyString(component.Shooter!.Value):user}"
+                : "a now deleted entity (grenade?)";
+
             _adminLogger.Add(LogType.BulletHit,
                 LogImpact.Medium,
-                $"Projectile {ToPrettyString(uid):projectile} shot by {ToPrettyString(component.Shooter!.Value):user} hit {otherName:target} and dealt {damage:damage} damage");
+                $"Projectile {ToPrettyString(uid):projectile} shot by {shotByString} hit {otherName:target} and dealt {damage:damage} damage");
         }
 
         var projectileSpent = !TryPenetrate((uid, component), damage, damageRequired);

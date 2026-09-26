@@ -90,7 +90,7 @@
 
 # steel closet base (that can be constructed/deconstructed)
 - type: entity
-  parent: [ ClosetBase, StructureHealthContainer ]
+  parent: [ ClosetBase, StructureHealthContainerWeak ]
   id: ClosetSteelBase
   components:
   - type: Construction
@@ -106,7 +106,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 100
+        damage: 60
       behaviors:
       - !type:PlaySoundBehavior
         sound:
