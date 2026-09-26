@@ -59,7 +59,7 @@
     layoutId: SurveillanceCamera
   - type: Sprite
     drawdepth: WallMountedItems
-    sprite: _Sunrise/Structures/Wallmounts/camera.rsi # Sunrise-Edit
+    sprite: Structures/Wallmounts/camera.rsi
     layers:
       - map: [ "enum.SurveillanceCameraVisualsKey.Layer" ]
         state: camera
@@ -249,6 +249,6 @@
       thresholds: *ThresholdsSurveilCamera
     - type: Sprite
       drawdepth: WallMountedItems
-      sprite: _Sunrise/Structures/Wallmounts/camera.rsi # Sunrise-Edit
+      sprite: Structures/Wallmounts/camera.rsi
       layers:
         - state: camera_off
