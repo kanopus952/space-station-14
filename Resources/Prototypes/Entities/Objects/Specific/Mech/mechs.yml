@@ -174,7 +174,6 @@
     - Alive
     - Critical
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       250: Critical
@@ -693,7 +692,6 @@
     reflects:
     - NonEnergy
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       200: Critical
@@ -929,7 +927,6 @@
     reflects:
     - NonEnergy
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       600: Critical
@@ -1016,7 +1013,6 @@
     reflects:
     - NonEnergy
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       700: Critical
@@ -1201,7 +1197,6 @@
     - FootstepSound
     - Mauler
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       600: Critical

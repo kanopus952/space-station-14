@@ -100,7 +100,6 @@
     - Alive
     - Critical
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       300: Critical
@@ -216,7 +215,6 @@
     reflects:
     - NonEnergy
   - type: MobThresholds
-    currentThresholdState: Alive
     thresholds:
       0: Alive
       225: Critical
@@ -292,7 +290,6 @@
     reflects:
     - NonEnergy
   - type: MobThresholds
-    currentThresholdState: Alive
     thresholds:
       0: Alive
       200: Critical
@@ -418,7 +415,6 @@
     - FootstepSound
     - Ripley
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       400: Critical
@@ -752,7 +748,6 @@
     - NonEnergy
     - Energy
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       220: Critical
@@ -836,7 +831,6 @@
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       500: Critical
@@ -925,7 +919,6 @@
   - type: AccessReader
     access: [["NuclearOperative"]]
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       500: Critical

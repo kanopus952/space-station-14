@@ -60,7 +60,6 @@
     - FootstepSound
     - Ripley
   - type: MobThresholds
-    currentThresholdState : Alive
     thresholds:
       0: Alive
       300: Critical
