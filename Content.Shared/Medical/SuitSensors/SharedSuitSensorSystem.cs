@@ -2,16 +2,13 @@ using System.Numerics;
 using Content.Shared.Access.Systems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Clothing;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
-using Content.Shared.DeviceNetwork;
 using Content.Shared.DoAfter;
 using Content.Shared.Emp;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
-using Content.Shared.Medical.SuitSensor;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -20,7 +17,6 @@ using Content.Shared.Station;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -370,11 +366,6 @@ public abstract partial class SharedSuitSensorSystem : EntitySystem
         if (sensor.Mode == SuitSensorMode.SensorOff || sensor.User == null || !HasComp<MobStateComponent>(sensor.User) || transform.GridUid == null)
             return null;
 
-        // Sunrise-Start
-        var sensorTransform = Transform(ent);
-        var sensorMapId = sensorTransform.MapID;
-        // Sunrise-End
-
         // try to get mobs id from ID slot
         var userName = Loc.GetString("suit-sensor-component-unknown-name");
         var userJob = Loc.GetString("suit-sensor-component-unknown-job");
@@ -407,7 +398,14 @@ public abstract partial class SharedSuitSensorSystem : EntitySystem
             totalDamageThreshold = critThreshold.Value.Int();
 
         // finally, form suit sensor status
-        var status = new SuitSensorStatus(GetNetEntity(sensor.User.Value), GetNetEntity(ent.Owner), userName, userJob, userJobIcon, userJobDepartments, sensorMapId); // Sunrise-Edit
+        var status = new SuitSensorStatus(
+            GetNetEntity(sensor.User.Value),
+            GetNetEntity(ent.Owner),
+            userName,
+            userJob,
+            userJobIcon,
+            userJobDepartments,
+            transform.MapID); // Sunrise-Edit - серверы и консоли отсеивают датчики с других карт.
         switch (sensor.Mode)
         {
             case SuitSensorMode.SensorBinary:
@@ -444,74 +442,6 @@ public abstract partial class SharedSuitSensorSystem : EntitySystem
                 break;
         }
 
-        return status;
-    }
-
-    /// <summary>
-    /// Create a device network package from the suit sensors status.
-    /// </summary>
-    public NetworkPayload SuitSensorToPacket(SuitSensorStatus status)
-    {
-        var payload = new NetworkPayload()
-        {
-            [DeviceNetworkConstants.Command] = DeviceNetworkConstants.CmdUpdatedState,
-            [SuitSensorConstants.NET_NAME] = status.Name,
-            [SuitSensorConstants.NET_JOB] = status.Job,
-            [SuitSensorConstants.NET_JOB_ICON] = status.JobIcon,
-            [SuitSensorConstants.NET_JOB_DEPARTMENTS] = status.JobDepartments,
-            [SuitSensorConstants.NET_IS_ALIVE] = status.IsAlive,
-            [SuitSensorConstants.NET_SUIT_SENSOR_UID] = status.SuitSensorUid,
-            [SuitSensorConstants.NET_OWNER_UID] = status.OwnerUid,
-        };
-
-        if (status.TotalDamage != null)
-            payload.Add(SuitSensorConstants.NET_TOTAL_DAMAGE, status.TotalDamage);
-        if (status.TotalDamageThreshold != null)
-            payload.Add(SuitSensorConstants.NET_TOTAL_DAMAGE_THRESHOLD, status.TotalDamageThreshold);
-        if (status.Coordinates != null)
-            payload.Add(SuitSensorConstants.NET_COORDINATES, status.Coordinates);
-        // Sunrise-Start
-        if (status.MapId != null)
-            payload.Add(SuitSensorConstants.MAP_ID, status.MapId);
-        // Sunrise-End
-
-        return payload;
-    }
-
-    /// <summary>
-    /// Try to create the suit sensors status from the device network message.
-    /// </summary>
-    public SuitSensorStatus? PacketToSuitSensor(NetworkPayload payload)
-    {
-        // check command
-        if (!payload.TryGetValue(DeviceNetworkConstants.Command, out string? command))
-            return null;
-        if (command != DeviceNetworkConstants.CmdUpdatedState)
-            return null;
-
-        // check name, job and alive
-        if (!payload.TryGetValue(SuitSensorConstants.NET_NAME, out string? name)) return null;
-        if (!payload.TryGetValue(SuitSensorConstants.NET_JOB, out string? job)) return null;
-        if (!payload.TryGetValue(SuitSensorConstants.NET_JOB_ICON, out string? jobIcon)) return null;
-        if (!payload.TryGetValue(SuitSensorConstants.NET_JOB_DEPARTMENTS, out List<string>? jobDepartments)) return null;
-        if (!payload.TryGetValue(SuitSensorConstants.NET_IS_ALIVE, out bool? isAlive)) return null;
-        if (!payload.TryGetValue(SuitSensorConstants.NET_SUIT_SENSOR_UID, out NetEntity suitSensorUid)) return null;
-        if (!payload.TryGetValue(SuitSensorConstants.NET_OWNER_UID, out NetEntity ownerUid)) return null;
-
-        // try get total damage and cords (optionals)
-        payload.TryGetValue(SuitSensorConstants.NET_TOTAL_DAMAGE, out int? totalDamage);
-        payload.TryGetValue(SuitSensorConstants.NET_TOTAL_DAMAGE_THRESHOLD, out int? totalDamageThreshold);
-        payload.TryGetValue(SuitSensorConstants.NET_COORDINATES, out NetCoordinates? coords);
-        payload.TryGetValue(SuitSensorConstants.MAP_ID, out MapId? mapId); // Sunrise-Edit
-
-        var status = new SuitSensorStatus(ownerUid, suitSensorUid, name, job, jobIcon, jobDepartments, mapId) // Sunrise-Edit
-        {
-            IsAlive = isAlive.Value,
-            TotalDamage = totalDamage,
-            TotalDamageThreshold = totalDamageThreshold,
-            Coordinates = coords,
-            MapId = mapId, // Sunrise-Edit
-        };
         return status;
     }
 }

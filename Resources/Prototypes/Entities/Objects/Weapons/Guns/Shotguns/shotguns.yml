@@ -468,4 +468,4 @@
     fireRate: 2
     projectileSpeed: 25 # Sunrise-Edit
   - type: GunSpreadModifier
-    spread: 1.2
+    spread: 0.8

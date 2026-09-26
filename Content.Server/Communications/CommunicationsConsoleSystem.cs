@@ -4,7 +4,6 @@ using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
 using Content.Server.RoundEnd;
-using Content.Server.Screens.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared._Sunrise.TTS;
@@ -15,10 +14,10 @@ using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Communications;
 using Content.Shared.Database;
-using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Popups;
+using Content.Shared.Screens;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
@@ -293,12 +292,12 @@ namespace Content.Server.Communications
             if (!TryComp<DeviceNetworkComponent>(uid, out var net))
                 return;
 
-            var payload = new NetworkPayload
+            var payload = new ScreenTextPayload
             {
-                [ScreenMasks.Text] = message.Message
+                Text = message.Message,
             };
 
-            _deviceNetworkSystem.QueuePacket(uid, null, payload, net.TransmitFrequency);
+            _deviceNetworkSystem.SendPacket(uid, null, ref payload, net.TransmitFrequency);
 
             _adminLogger.Add(LogType.DeviceNetwork, LogImpact.Low, $"{ToPrettyString(message.Actor):player} has sent the following broadcast: {message.Message:msg}");
         }

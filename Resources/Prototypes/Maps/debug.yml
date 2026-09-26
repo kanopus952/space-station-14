@@ -17,8 +17,6 @@
   id: Dev
   mapName: Dev
   mapPath: /Maps/_Sunrise/Test/dev_map.yml # Sunrise-edit
-  maxRandomOffset: 0
-  randomRotation: false
   minPlayers: 0
   stations:
     Dev:
