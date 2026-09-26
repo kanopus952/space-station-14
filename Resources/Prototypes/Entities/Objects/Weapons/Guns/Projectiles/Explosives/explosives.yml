@@ -7,14 +7,14 @@
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     layers:
-    - state: frag
+    - state: smallfrag # Sunrise-Edit
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
     maxIntensity: 40
     intensitySlope: 6
     totalIntensity: 200
-    maxTileBreak: 1
+    maxTileBreak: 0 # Sunrise-Edit
   - type: PointLight
     radius: 3.5
     color: orange

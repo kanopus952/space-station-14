@@ -23,35 +23,6 @@
     - map: ["enum.EdgeLayer.West"]
       state: rock_asteroid_west
 
-# IronRock и WallRock используют новые Wizden RSI и не должны наследовать старые
-# слои SmoothEdge от AsteroidRock. Игровые компоненты AsteroidRock для IronRock
-# продублированы здесь, чтобы смена родителя не меняла прочность и добычу.
-- type: !PartialOnly entity
-  id: IronRock
-  parent: BaseAsteroidRock
-  components:
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 75
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
-      - !type:PlaySoundBehavior
-        sound:
-          path: /Audio/Effects/break_stone.ogg
-          params:
-            volume: -6
-  - type: Gatherable
-    toolWhitelist:
-      tags:
-      - Pickaxe
-
-- type: !PartialOnly entity
-  id: WallRock
-  parent: BaseAsteroidRock
-
 - type: !PartialOnly entity
   id: AsteroidRockCoal
   components:

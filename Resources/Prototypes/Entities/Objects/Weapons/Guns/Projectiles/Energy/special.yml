@@ -43,3 +43,8 @@
     - EmitterBolt
   - type: TimedDespawn
     lifetime: 3
+  # Sunrise added start - болт эмиттера отражается энергетическими отражателями
+  - type: Reflective
+    reflective:
+    - Energy
+  # Sunrise added end

@@ -39,10 +39,11 @@
   - type: SatiationDamage
     satiations:
       Thirst:
-        Dead:
-          types:
-            Bloodloss: 0.5
-            Asphyxiation: 0.5
+        thresholds:
+          Dead:
+            types:
+              Bloodloss: 0.5
+              Asphyxiation: 0.5
   - type: Perishable
   - type: HumanoidProfile
     species: Predator

@@ -100,10 +100,6 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
       # Sunrise edit end
-  placement:
-    mode: SnapgridCenter
-    snap:
-      - Wallmount
 
 - type: entity
   parent: SurveillanceCameraBase

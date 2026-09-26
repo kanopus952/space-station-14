@@ -100,7 +100,7 @@
 
 - type: entity
   id: BaseTicketVendingMachine
-  parent: BaseMachinePowered
+  parent: [ BaseMachinePowered, BaseMachineDestructible ]
   name: vending machine
   description: Just add capitalism!
   abstract: true

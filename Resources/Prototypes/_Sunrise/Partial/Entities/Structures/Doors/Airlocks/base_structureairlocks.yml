@@ -56,7 +56,7 @@
 
 - type: !PartialOnly entity
   id: Airlock
-  parent: [BaseStructure, BaseDeltaPressurePlasma]
+  parent: [BaseStructure, BaseDeltaPressurePlasma, StructureHealthDoor]
   components:
   - type: Ricochetable
     chance: 1

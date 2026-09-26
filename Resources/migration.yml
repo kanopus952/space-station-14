@@ -905,7 +905,7 @@ PosterContrabandSMSyndie: RandomPosterContraband
 CrateMedicalDefib: DefibrillatorCompact
 MailPAI: PersonalAI
 BoxMaintenanceLightbulb: BoxWarmLightbulb
-WindoorSecureBlueShieldLocked: WindoorSecureCommandLocked
+WindoorSecureBlueShieldLocked: WindoorCommandLocked
 VendingMachineRepDrobe: VendingMachineCigs
 Wakizashi: KukriKnife
 TearSmokeGrenade: TearGasGrenade
@@ -1494,7 +1494,7 @@ WallRockChromiteBananium: WallRockChromite
 WallRockSandBananium: WallRockSand
 WallRockSnowBananium: WallRockSnow
 MeteorRockBananium: AsteroidRock
-WallRockBasalt: WallRock
+# WallRockBasalt: WallRock # Sunrise-Edit
 WallRockBasaltCoal: WallRockCoal
 WallRockBasaltGold: WallRockGold
 WallRockBasaltDiamond: WallRockDiamond

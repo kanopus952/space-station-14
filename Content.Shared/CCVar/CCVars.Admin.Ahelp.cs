@@ -44,7 +44,7 @@ public sealed partial class CCVars
     /// </summary>
     /// <seealso cref="CCVars.BwoinkSoundEnabled"/>
     public static readonly CVarDef<string> AHelpSound =
-        CVarDef.Create("audio.ahelp_sound", "/Audio/Effects/adminhelp.ogg", CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
+        CVarDef.Create("audio.ahelp_sound", "/Audio/_Sunrise/ahelp_new.ogg", CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> AhelpAdminPrefixWebhook =
         CVarDef.Create("ahelp.admin_prefix_webhook", true, CVar.SERVERONLY); // Sunrise-Edit

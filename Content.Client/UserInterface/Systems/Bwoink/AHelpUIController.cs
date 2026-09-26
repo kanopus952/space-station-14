@@ -697,6 +697,7 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         //var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);
         //Receive(introMessage);
         // Sunrise-End
+        return true;
     }
 
     public void Dispose()

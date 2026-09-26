@@ -318,11 +318,11 @@
 
 - type: !PartialOnly entity
   id: WallSolid
-  parent: [BaseWall, BaseDeltaPressurePlasma]
+  parent: [BaseWall, BaseDeltaPressurePlasma, StructureHealthWall]
 
 - type: !PartialOnly entity
   id: WallSolidDiagonal
-  parent: WallDiagonalBaseSunrise
+  parent: [WallDiagonalBaseSunrise, StructureHealthWall]
   components:
   - type: Ricochetable
     chance: 0.4
@@ -335,7 +335,6 @@
 
 - type: !PartialOnly entity
   id: WallXenoborgDiagonal
-  parent: WallDiagonalBase
   components:
   - type: Destructible
     thresholds:

@@ -18,12 +18,16 @@
     impactEffect: BulletImpactEffectKinetic
     damage:
       types:
-        Blunt: 15
-        Structural: 15
+        Blunt: 25 # Sunrise-Edit
+        Structural: 20 # Sunrise-Edit
   # Short lifespan
   - type: TimedDespawn
-    lifetime: 0.22 # roughly 5.5 tiles
+    lifetime: 0.275 # Sunrise-Edit - дальность около 6.5 тайлов
   - type: GatheringProjectile
+  # Sunrise added start - дополнительное оглушение кинетическим импульсом
+  - type: StaminaDamageOnCollide
+    damage: 10
+  # Sunrise added end
 
 - type: entity
   parent: BaseBullet
@@ -42,6 +46,11 @@
       types:
         Blunt: 30
         Structural: 35
+    # Sunrise edit start - снаряд пробивает слабые конструкции
+    penetrationThreshold: 80
+    penetrationDamageTypeRequirement:
+    - Structural
+    # Sunrise edit end
   - type: Ammo
     muzzleFlash: HitscanEffect
   - type: TimedDespawn
@@ -50,7 +59,14 @@
     radius: 2.5
     color: white
     energy: 0.5
-  - type: GatheringProjectile
+  # Sunrise edit start - шаттловый снаряд отслеживается радаром и наносит урон выносливости
+  - type: RadarBlip
+    color: "#ffdd44"
+    scale: 0.7
+    shape: Circle
+  - type: StaminaDamageOnCollide
+    damage: 6
+  # Sunrise edit end
 
 - type: entity
   parent: BaseBullet
@@ -75,8 +91,8 @@
       - MobState
     damage:
       types:
-        Blunt: 18
-        Slash: 4
+        Blunt: 20 # Sunrise-Edit
+        Slash: 5 # Sunrise-Edit
   - type: Projectile
     impactEffect: BulletImpactEffectKinetic
     damage:

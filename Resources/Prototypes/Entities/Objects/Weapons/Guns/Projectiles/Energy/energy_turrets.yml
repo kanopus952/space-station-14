@@ -114,3 +114,9 @@
   - type: Tag
     tags:
     - HideContextMenu
+  # Sunrise added start - отображаем электрический снаряд на радаре
+  - type: RadarBlip
+    color: "#44AAFF"
+    scale: 1.0
+    requireInSpace: true
+  # Sunrise added end

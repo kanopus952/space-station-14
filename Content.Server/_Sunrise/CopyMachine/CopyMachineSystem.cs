@@ -245,7 +245,7 @@ public sealed partial class CopyMachineSystem : EntitySystem
 
     private void OnMapInit(Entity<CopyMachineComponent> ent, ref MapInitEvent args)
     {
-        _itemSlots.AddItemSlot(ent, CopyMachineComponent.CopySlotId, ent.Comp.CopySlot);
+        _itemSlots.AddItemSlot((ent.Owner, null), CopyMachineComponent.CopySlotId, ent.Comp.CopySlot);
         UpdateRunningAppearance(ent, false);
 
         UpdateAvailableTemplates(ent);

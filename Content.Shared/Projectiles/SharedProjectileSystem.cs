@@ -209,6 +209,8 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     private void OnBeingShot(Entity<ProjectileComponent> entity, ref MapInitEvent args)
     {
         entity.Comp.WhenToStopIgnoringShooter = _timing.CurTime + entity.Comp.DelayToAcknowledgeShooter;
+        // Sunrise-Edit - выполняем совместимость с хитсканами через единственную подписку на MapInitEvent
+        ApplyStarlightHitscanCompatibility(entity);
         Dirty(entity);
     }
 

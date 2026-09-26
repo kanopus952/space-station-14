@@ -16,13 +16,14 @@
   - type: Clickable
   - type: Physics
     bodyType: Dynamic
+    fixedRotation: true # Sunrise-Edit - снаряд не вращается от столкновений
   - type: TileFrictionModifier
     modifier: 0
   - type: Fixtures
     fixtures:
       projectile:
         shape: !type:PhysShapeAabb
-          bounds: "-0.1,-0.10,0.1,0.30"
+          bounds: "-0.1,-0.1,0.1,0.1" # Sunrise-Edit - компактная симметричная фикстура
         hard: false
         mask:
         - Impassable

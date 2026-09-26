@@ -54,7 +54,7 @@ public sealed partial class SatiationMoodSystem : EntitySystem
                 : null;
 
         if (effects == null ||
-            !_satiation.TryGetValueByThreshold((entity, satiation), args.Type, effects, out var effect, out _) ||
+            !_satiation.TryGetValueByThreshold((entity, satiation), args.Type, effects, out var effect, out _, out _) ||
             effect == null)
         {
             return;

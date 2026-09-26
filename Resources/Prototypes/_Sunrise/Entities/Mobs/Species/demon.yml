@@ -41,10 +41,11 @@
   - type: SatiationDamage
     satiations:
       Thirst:
-        Dead:
-          types:
-            Bloodloss: 0.5
-            Asphyxiation: 0.5
+        thresholds:
+          Dead:
+            types:
+              Bloodloss: 0.5
+              Asphyxiation: 0.5
   - type: Icon
     sprite: _Sunrise/Mobs/Species/Demon/parts.rsi
     state: full_m

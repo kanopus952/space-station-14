@@ -1,6 +1,6 @@
 - type: satiation
   id: NormalSatiationHunger
-  baseDecayRate: -0.03 # Sunrise-Edit - сохраняем скорость голода Sunrise.
+  baseChangeRate: -0.03 # Sunrise-Edit - сохраняем скорость голода Sunrise.
   maximumValue: 200
   thresholds:
     Overfed: 200
@@ -92,13 +92,4 @@
 - type: satiation
   id: DionaHunger
   parent: NormalSatiationHunger
-  baseDecayRate: -0.0083
-
-- type: entity
-  abstract: true
-  id: BaseHungerSlowdown
-  components:
-  - type: SatiationSpeedModifier
-    satiations:
-      Hunger:
-        Peckish: 0.75
+  baseChangeRate: -0.0083

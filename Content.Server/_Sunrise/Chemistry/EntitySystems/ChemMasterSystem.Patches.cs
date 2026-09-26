@@ -16,7 +16,7 @@ namespace Content.Server.Chemistry.EntitySystems
         private void OnCreatePatchesMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterCreatePatchesMessage message)
         {
             var user = message.Actor;
-            var maybeContainer = _itemSlotsSystem.GetItemOrNull(chemMaster, SharedChemMaster.OutputSlotName);
+            var maybeContainer = _itemSlotsSystem.GetItemOrNull((chemMaster.Owner, null), SharedChemMaster.OutputSlotName);
             if (maybeContainer is not { Valid: true } container || !TryComp(container, out StorageComponent? storage))
                 return; // output can't fit patches
 
