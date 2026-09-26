@@ -83956,7 +83956,6 @@ entities:
       deviceLists:
       - 54
       - 12854
-  - uid: 12934: 2
 - proto: GasFilter
   entities:
   - uid: 13526
