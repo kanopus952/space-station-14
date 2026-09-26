@@ -104,9 +104,6 @@
       map: ["base"]
   - type: Item
     heldPrefix: brass
-  - type: FloorTile
-    outputs:
-    - PlatingBrass
   - type: Solution
     solution:
       reagents:

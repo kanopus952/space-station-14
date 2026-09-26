@@ -63,3 +63,118 @@
         enum.ConstructionVisuals.Layer:
           assembly: { state: fire_b1 }
           electronics: { state: fire_b2 }
+
+
+- type: !PartialOnly entity
+  id: BaseAPC
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _Sunrise/Structures/Power/apc.rsi
+    layers: !Clear
+    - state: base
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: display-charging
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.ChargeState"]
+    - state: lock0-locked
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.InterfaceLock"]
+      visible: false
+    - state: lock1-locked
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.PanelLock"]
+      visible: false
+    - state: lock1-locked #when these are implemented get actual sprites.
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.Equipment"]
+      visible: false
+    - state: lock1-locked
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.Lighting"]
+      visible: false
+    - state: lock1-locked
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.Environment"]
+      visible: false
+  - type: PowerMonitoringDevice
+    group: APC
+    sourceNode: input
+    loadNode: output
+    collectionName: apc
+    sprite: _Sunrise/Structures/Power/apc.rsi
+    state: static
+
+- type: !PartialOnly entity
+  id: APCFrame
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Power/apc.rsi
+    state: frame
+
+- type: !PartialOnly entity
+  id: DefibrillatorCabinet
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/defib_cabinet.rsi
+    noRot: false
+    layers: !Clear
+    - state: frame
+    - state: fill
+      map: ["enum.ItemCabinetVisuals.Layer"]
+      visible: true
+    - state: closed
+      map: ["enum.OpenableVisuals.Layer"]
+
+- type: !PartialOnly entity
+  id: ExtinguisherCabinet
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Wallmounts/extinguisher_cabinet.rsi
+    snapCardinals: true
+    layers: !Clear
+    - state: frame
+    - state: extinguisher
+      map: ["enum.ItemCabinetVisuals.Layer"]
+      visible: true
+    - state: closed
+      map: ["enum.OpenableVisuals.Layer"]
+
+- type: !PartialOnly entity
+  id: BaseIntercom
+  components:
+  - type: Sprite
+    noRot: false
+    drawdepth: SmallObjects
+    sprite: _Sunrise/Structures/Wallmounts/intercom.rsi
+    layers: !Clear
+    - state: base
+    - state: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+    - state: broadcasting
+      map: ["enum.RadioDeviceVisualLayers.Broadcasting"]
+      shader: unshaded
+      visible: false
+    - state: speaker
+      map: ["enum.RadioDeviceVisualLayers.Speaker"]
+      shader: unshaded
+      visible: false
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+
+- type: !PartialOnly entity
+  id: IntercomAssembly
+  components:
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _Sunrise/Structures/Wallmounts/intercom.rsi
+    layers: !Clear
+    - state: build
+    - state: panel
+      visible: false
+      map: [ "wires" ]

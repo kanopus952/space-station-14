@@ -73,3 +73,1020 @@
   components:
   - type: Sprite
     sprite: _Sunrise/Structures/Doors/Windoors/windoor.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintSalvageLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintCargoLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintCommandLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintEngiLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintAtmoLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintBarLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintBarKitchenLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintChapelLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintHydroLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintJanitorLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintLawyerLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintServiceLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintTheatreLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintServiceTheatreLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintKitchenLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintKitchenHydroLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintMedLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMedicalMorgueMaintLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintChemLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintRnDLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintRnDMedLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintSecLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintDetectiveLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintHOPLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintCaptainLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintChiefEngineerLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintChiefMedicalOfficerLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintHeadOfSecurityLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintResearchDirectorLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintQuartermasterLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMaintArmoryLocked
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockFreezer
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/freezer.rsi
+
+- type: !PartialOnly entity
+  id: AirlockEngineering
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/engineering.rsi
+
+- type: !PartialOnly entity
+  id: AirlockAtmospherics
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/atmospherics.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockCargo
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/cargo.rsi
+
+- type: !PartialOnly entity
+  id: AirlockSalvage
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/cargo.rsi
+
+- type: !PartialOnly entity
+  id: AirlockMedical
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/medical.rsi
+
+- type: !PartialOnly entity
+  id: AirlockVirology
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/virology.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockScience
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/science.rsi
+
+- type: !PartialOnly entity
+  id: AirlockCommand
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/command.rsi
+
+- type: !PartialOnly entity
+  id: AirlockSecurity
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/security.rsi
+
+- type: !PartialOnly entity
+  id: AirlockMaint
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockSyndicate
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/syndicate.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockCentralCommand
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/centcomm.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockEngineeringGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/engineering.rsi
+
+- type: !PartialOnly entity
+  id: AirlockMaintGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/maint.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockAtmosphericsGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/atmospherics.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockCargoGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/cargo.rsi
+
+- type: !PartialOnly entity
+  id: AirlockMedicalGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/medical.rsi
+
+- type: !PartialOnly entity
+  id: AirlockVirologyGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/virology.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockScienceGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/science.rsi
+
+- type: !PartialOnly entity
+  id: AirlockCommandGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/command.rsi
+
+- type: !PartialOnly entity
+  id: AirlockSecurityGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/security.rsi
+
+- type: !PartialOnly entity
+  id: AirlockSyndicateGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/syndicate.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockMiningGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/mining.rsi
+
+- type: !PartialOnly entity
+  id: AirlockCentralCommandGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/centcomm.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockStandardGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/basic.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyAtmospherics
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/atmospherics.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyAtmosphericsGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/atmospherics.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyCargo
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/cargo.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyCargoGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/cargo.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: PinionAirlockAssembly
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/clockwork_pinion.rsi
+    state: "assembly"
+
+- type: !PartialOnly entity
+  id: PinionAirlockAssemblyGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/clockwork_pinion.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyCommand
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/command.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyCommandGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/command.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyEngineering
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/engineering.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyEngineeringGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/engineering.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyExternal
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/external.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyExternalGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/external.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/glass.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyFreezer
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/freezer.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyMaintenance
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/maint.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyMaintenanceGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/maint.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyMedical
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/medical.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyMedicalGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/medical.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblySalvage
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/salvage.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblySalvageGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/salvage.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyScience
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/science.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyScienceGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/science.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblySecurity
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/security.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblySecurityGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/security.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyShuttle
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/shuttle.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyShuttleGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/shuttle.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyVirology
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/virology.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyVirologyGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/virology.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyCentralCommand
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/centcomm.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyCentralCommandGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/centcomm.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyMining
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/mining.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyMiningGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/mining.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblySyndicate
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/syndicate.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblySyndicateGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/syndicate.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyShuttleSyndicate
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/shuttle_syndicate.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyShuttleSyndicateGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/shuttle_syndicate.rsi
+    state: "assembly"
+
+
+- type: !PartialOnly entity
+  id: AirlockAssemblyHighSec
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/highsec/highsec.rsi
+    state: "assembly"
+
+- type: !PartialOnly entity
+  id: AirlockAssembly
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/basic.rsi
+    state: "assembly"
+
+- type: !PartialOnly entity
+  id: Airlock
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/basic.rsi
+    layers: !Clear
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+    - state: emergency_unlit
+      map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
+      shader: unshaded
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+    - state: electrified_ai
+      sprite: Interface/Misc/ai_hud.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.HUD"]
+    - state: electrified
+      sprite: Effects/electricity.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.Sparks"]
+    - state: sparks
+      map: ["enum.DoorVisualLayers.BaseEmagging"]
+      shader: unshaded
+      visible: false
+
+- type: !PartialOnly entity
+  id: AirlockGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/glass.rsi
+
+- type: !PartialOnly entity
+  id: PinionAirlock
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/clockwork_pinion.rsi
+
+- type: !PartialOnly entity
+  id: PinionAirlockGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/clockwork_pinion.rsi
+
+- type: !PartialOnly entity
+  id: AirlockExternal
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/external.rsi
+
+- type: !PartialOnly entity
+  id: AirlockExternalGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/external.rsi
+
+- type: !PartialOnly entity
+  id: HighSecDoor
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/highsec/highsec.rsi
+    layers: !Clear
+    #- snapCardinals: true # Sunrise-edit
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+    - state: emergency_unlit
+      map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
+      shader: unshaded
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+    - state: electrified_ai
+      sprite: Interface/Misc/ai_hud.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.HUD"]
+    - state: electrified
+      sprite: Effects/electricity.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.Sparks"]
+    - state: sparks
+      map: ["enum.DoorVisualLayers.BaseEmagging"]
+      shader: unshaded
+      visible: false
+
+- type: !PartialOnly entity
+  id: AirlockShuttle
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/shuttle.rsi
+    snapCardinals: false
+    layers: !Clear
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+    - state: emergency_unlit
+      map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
+      shader: unshaded
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+    - state: electrified_ai
+      sprite: Interface/Misc/ai_hud.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.HUD"]
+    - state: electrified
+      sprite: Effects/electricity.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.Sparks"]
+
+- type: !PartialOnly entity
+  id: AirlockGlassShuttle
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/shuttle.rsi
+
+- type: !PartialOnly entity
+  id: AirlockShuttleAssembly
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/shuttle.rsi
+    state: closed
+    snapCardinals: false
+
+- type: !PartialOnly entity
+  id: AirlockGlassShuttleSyndicate
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/shuttle_syndicate.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockShuttleSyndicate
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/shuttle_syndicate.rsi
+
+
+- type: !PartialOnly entity
+  id: AirlockShuttleXenoborg
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/shuttle_xenoborg.rsi
+
+- type: !PartialOnly entity
+  id: BaseFirelock
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/firelock.rsi
+    snapCardinals: true
+    layers: !Clear
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+      visible: false
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+    - state: pressure_unlit
+      visible: false
+      shader: unshaded
+      map: ["enum.FirelockVisualLayersPressure.Base"]
+    - state: temperature_unlit
+      visible: false
+      shader: unshaded
+      map: ["enum.FirelockVisualLayersTemperature.Base"]
+
+- type: !PartialOnly entity
+  id: FirelockGlass
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/firelock.rsi
+
+- type: !PartialOnly entity
+  id: FirelockFrame
+  components:
+  - type: Sprite
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/firelock.rsi
+    layers: !Clear
+    - state: frame1
+      map: [ "enum.ConstructionVisuals.Layer" ]
+
+- type: !PartialOnly entity
+  id: WoodDoor
+  components:
+  - type: Sprite
+    layers: !Remove
+    sprite: _Sunrise/Structures/Doors/MineralDoors/wood_door.rsi

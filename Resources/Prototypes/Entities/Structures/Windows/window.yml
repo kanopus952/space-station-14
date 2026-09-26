@@ -13,8 +13,6 @@
     flags:
     - Anchorable
   - type: Rotatable
-  - type: Ricochetable # Sunrise-Edit - сохраняем рикошет от окон
-    chance: 0.7
   - type: MeleeSound
     soundGroups:
       Brute:
@@ -26,7 +24,10 @@
     - ForceFixRotations
     - Window
   - type: Sprite
-    drawdepth: WallTops
+    sprite: Structures/Windows/window-base.rsi
+  - type: Icon
+    sprite: Structures/Windows/window-base.rsi
+    state: full
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -47,8 +48,10 @@
     fx: EffectRCDDeconstruct4
   - type: Airtight
   - type: IconSmooth
-    key: walls # Sunrise-Edit - сглаживаем окна вместе со стенами
+    key: walls
     base: window
+  - type: PlacementReplacement
+    key: walls
   - type: InteractionPopup
     interactSuccessString: comp-window-knock
     messagePerceivedByOthers: comp-window-knock
@@ -73,9 +76,9 @@
   id: Window
   components:
   - type: Sprite
-    sprite: Structures/Windows/window.rsi
+    sprite: Structures/Windows/window-base.rsi
   - type: Icon
-    sprite: Structures/Windows/window.rsi
+    sprite: Structures/Windows/window-base.rsi
     state: full
   - type: Damageable
     damageModifierSet: Glass
@@ -104,10 +107,9 @@
   name: tinted window
   components:
   - type: Sprite
-    drawdepth: WallTops
-    sprite: Structures/Windows/tinted_window.rsi
+    sprite: Structures/Windows/window-tinted.rsi
   - type: Icon
-    sprite: Structures/Windows/tinted_window.rsi
+    sprite: Structures/Windows/window-tinted.rsi
   - type: IconSmooth
     base: twindow
   - type: Construction
@@ -145,7 +147,6 @@
   - type: Tag
     tags:
     - Window
-    - Directional # Sunrise-Edit - сохраняем тег направленных конструкций
   - type: MeleeSound
     soundGroups:
       Brute:
@@ -244,12 +245,6 @@
   - type: Icon
     sprite: Structures/Windows/directional.rsi
     state: frosted_window
-  - type: Occluder # Sunrise-Edit - учитываем неполную высоту направленного окна
-    polygon:
-    - "-0.5,-0.28125"
-    - "0.5,-0.28125"
-    - "0.5,-0.5"
-    - "-0.5,-0.5"
   - type: StaticPrice
     price: 35
 
@@ -263,8 +258,7 @@
     - Window
   components:
   - type: Sprite
-    drawdepth: WallTops
-    sprite: Structures/Windows/window_diagonal.rsi
+    sprite: Structures/Windows/window-base-diagonal.rsi
     state: state0
   - type: Tag
     tags:
@@ -272,10 +266,10 @@
     - Window
   - type: IconSmooth
     mode: Diagonal
-    key: walls # Sunrise-Edit - сглаживаем окна вместе со стенами
+    key: walls
     base: state
   - type: Icon
-    sprite: Structures/Windows/window_diagonal.rsi
+    sprite: Structures/Windows/window-base-diagonal.rsi
     state: state0
   - type: Fixtures
     fixtures:
@@ -283,12 +277,9 @@
         shape:
           !type:PolygonShape
             vertices:
-            # Sunrise edit start - используем форму диагонального спрайта Sunrise
-            - "0.5,-0.5"
-            - "-0.4,-0.5"
-            - "-0.4,0.1"
+            - "-0.5,-0.5"
             - "0.5,0.5"
-            # Sunrise edit end
+            - "0.5,-0.5"
         mask:
         - FullTileMask
         layer:
@@ -300,7 +291,7 @@
     - East
   - type: DamageVisuals
     damageOverlay:
-      sprite: Structures/Windows/cracks_diagonal.rsi
+      sprite: Structures/Windows/cracks-diagonal.rsi
   - type: Construction
     graph: WindowDiagonal
     node: windowDiagonal

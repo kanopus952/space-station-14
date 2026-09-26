@@ -1,4 +1,4 @@
-- type: entity
+- type: !PartialOnly entity
   id: AirlockHatchMaintenance
   parent: HighSecDoor
   name: Maintenance Hatch
@@ -11,7 +11,7 @@
   - type: Weldable
     time: 10
     
-- type: entity
+- type: !PartialOnly entity
   id: AirlockHatch
   parent: HighSecDoor
   name: Hatch

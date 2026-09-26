@@ -1,6 +1,14 @@
 # Частичные прототипы сохраняют визуалы освещения Sunrise поверх обновлений Wizden.
 
 - type: !PartialOnly entity
+  id: BaseWallLight
+  components:
+  - type: SunriseDamagePopup
+    damagePopupType: SmallFloating
+    isStructure: true
+  - type: BloomOverlayVisuals
+
+- type: !PartialOnly entity
   id: AlwaysPoweredWallLight
   components:
   - type: Sprite
@@ -46,3 +54,11 @@
   - type: HolidayRsiSwap
     sprite:
       festive: _Sunrise/Objects/Power/light_bulb_gift.rsi
+
+- type: !PartialOnly entity
+  id: EmergencyLight
+  components:
+  - type: PointLight
+    radius: 7
+    energy: 1
+    offset: "0, 0.4"
