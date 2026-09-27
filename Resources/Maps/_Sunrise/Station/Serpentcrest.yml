@@ -186321,13 +186321,6 @@ entities:
     - type: Transform
       pos: 3.4193826,-19.583563
       parent: 2
-- proto: WehMedipen
-  entities:
-  - uid: 28792
-    components:
-    - type: Transform
-      pos: -43.28263,-47.99272
-      parent: 2
 - proto: WelderIndustrial
   entities:
   - uid: 28793

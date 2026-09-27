@@ -241,7 +241,11 @@ public async Task JobWeightTest()
         await pair.Server.WaitPost(() => ticker.StartRound());
         await pair.RunTicksSync(10);
 
-        var stationData = pair.Server.EntMan.EntityQuery<StationDataComponent>().Single();
+        var playerEntity = pair.Server.PlayerMan.GetSessionById(players[0]).AttachedEntity;
+        Assert.That(playerEntity, Is.Not.Null);
+        var station = pair.Server.System<StationSystem>().GetOwningStation(playerEntity);
+        Assert.That(station, Is.Not.Null);
+        var stationData = pair.Server.EntMan.GetComponent<StationDataComponent>(station!.Value);
         Assert.That(stationData.JobWeights, Is.EqualTo(map.JobWeights));
 
         // Map-specific and default weights are both preserved on the station; player preferences still determine

@@ -50,8 +50,8 @@ public sealed partial class AntagGhostRoleTest : AntagTest
         {
             var specifier = SProtoMan.Index(selector.Proto);
             var count = selector.GetTargetAntagCount(_random, 1);
-            // We should always spawn at least one antag if we add a GameRule
-            Assert.That(count, Is.GreaterThan(0));
+            // Sunrise-Edit — дополнительные антагонисты могут иметь selector с min: 0.
+            Assert.That(count, Is.GreaterThanOrEqualTo(0));
 
             if (specifier.SpawnerPrototype == null)
                 continue;
