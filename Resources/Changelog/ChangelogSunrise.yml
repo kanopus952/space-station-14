@@ -4917,3 +4917,10 @@
     message: ГСБ теперь имеет доступ к алкоматам, которые находятся у него в кабинете.
   id: 2034
   url: https://github.com/makura-games/sunrise-station/pull/4823
+- author: ThereDrD
+  time: '2026-09-27T00:17:38.0000000+00:00'
+  changes:
+  - type: Fix
+    message: Исправлено отсутствие спавнеров почтальона на картах, теперь они спавнятся где надо
+  id: 2035
+  url: https://github.com/makura-games/sunrise-station/pull/4827
