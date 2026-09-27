@@ -61,10 +61,10 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetPlasteel:
+                SheetPlasteel1:
                   min: 4
                   max: 13
-                SheetSteel:
+                SheetSteel1:
                   min: 5
                   max: 13
     - type: HealthExaminable #Sunrise-Start
@@ -138,13 +138,13 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetPlasteel:
+                SheetPlasteel1:
                   min: 6
                   max: 20
-                SheetSteel:
+                SheetSteel1:
                   min: 4
                   max: 15
-                SheetGlass:
+                SheetGlass1:
                   min: 2
                   max: 3
     - type: StaticPrice
@@ -202,10 +202,10 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetPlasteel:
+                SheetPlasteel1:
                   min: 2
                   max: 6
-                SheetSteel:
+                SheetSteel1:
                   min: 1
                   max: 4
     - type: StaticPrice
@@ -255,13 +255,13 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetPlasteel:
+                SheetPlasteel1:
                   min: 2
                   max: 10
-                SheetSteel:
+                SheetSteel1:
                   min: 4
                   max: 10
-                SheetGlass:
+                SheetGlass1:
                   min: 1
                   max: 2
     - type: StaticPrice
@@ -319,7 +319,7 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetSteel:
+                SheetSteel1:
                   min: 2
                   max: 10
     - type: Construction

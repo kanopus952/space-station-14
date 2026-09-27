@@ -6,7 +6,6 @@
   - type: SolutionManager
     solutions:
     - SolutionSunriseStomachSmall
-    - SolutionSunriseRawProteinFood
 
 - type: entity
   id: OrganTajaranEyes

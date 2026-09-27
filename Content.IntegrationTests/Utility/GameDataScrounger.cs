@@ -31,7 +31,6 @@ namespace Content.IntegrationTests.Utility;
 /// </example>
 public static partial class GameDataScrounger
 {
-
     /// <summary>
     /// <para>
     ///     YAML Linter, for Reasons, depends on the entirety of the test suite.
@@ -227,6 +226,14 @@ public static partial class GameDataScrounger
                     continue;
 
                 var type = entryMapping[TypeNode];
+
+                // Sunrise-Edit: частичный прототип уже представлен полным определением и не должен заменять его метаданные.
+                if (type is YamlScalarNode { Tag.IsEmpty: false } typeNode &&
+                    typeNode.Tag.Value.Equals("!PartialOnly", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 var @abstract = ignored;
                 if (entryMapping.TryGetNode("abstract", out YamlScalarNode? abstractNode))
                 {
