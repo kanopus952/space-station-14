@@ -1,12 +1,14 @@
 # Частичные прототипы возвращают прежние визуалы всех AsteroidRock и наследующихся от них MeteorRock.
 
 - type: !PartialOnly entity
+  id: BaseAsteroidRock
+  components:
+  - !Remove type: IconSmooth
+  - type: SmoothEdge
+
+- type: !PartialOnly entity
   id: AsteroidRock
   components:
-  - type: IconSmooth
-    key: walls
-    mode: NoSprite
-  - type: SmoothEdge
   - type: Icon
     sprite: _Sunrise/Structures/Walls/rock.rsi
     state: rock_asteroid

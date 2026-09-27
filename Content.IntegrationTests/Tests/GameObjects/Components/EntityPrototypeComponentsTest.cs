@@ -54,7 +54,8 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components
 
                     foreach (var node in root.Cast<YamlMappingNode>())
                     {
-                        var prototypeTypeNode = node.GetNode("type");
+                        if (!node.TryGetNode("type", out YamlScalarNode? prototypeTypeNode))
+                            continue;
 
                         // Sunrise-Edit: операции компонентов partial-прототипов проверяются после их применения движком.
                         if (!prototypeTypeNode.Tag.IsEmpty &&
@@ -77,11 +78,19 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components
 
                         entitiesValidated++;
 
-                        foreach (var component in components.Cast<YamlMappingNode>())
+                        foreach (var component in components.OfType<YamlMappingNode>())
                         {
+                            // Sunrise-Edit: операции над списком компонентов сами компонентами не являются.
+                            if (!component.TryGetNode("type", out YamlScalarNode? componentTypeNode) ||
+                                (!component.Tag.IsEmpty &&
+                                 component.Tag.Value.Equals("!Remove", StringComparison.OrdinalIgnoreCase)))
+                            {
+                                continue;
+                            }
+
                             componentsValidated++;
 
-                            var componentType = component.GetNode("type").AsString();
+                            var componentType = componentTypeNode.AsString();
                             var clientAvailability = cComponentFactory.GetComponentAvailability(componentType);
                             var serverAvailability = sComponentFactory.GetComponentAvailability(componentType);
 

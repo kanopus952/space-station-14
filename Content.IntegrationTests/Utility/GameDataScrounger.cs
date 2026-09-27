@@ -67,6 +67,8 @@ public static partial class GameDataScrounger
     {
         public required string Id;
         public required HashSet<string> Components;
+        // Sunrise-Edit: Удалённые в дочернем или partial-прототипе компоненты не должны возвращаться через наследование.
+        public required HashSet<string> RemovedComponents;
         public required List<string> Parents;
         public required bool Abstract;
     }
@@ -190,11 +192,9 @@ public static partial class GameDataScrounger
             }
         }
 
+        ApplyEntityPrototypePatches(); // Sunrise-Edit: partial-прототипы применяются после индексации полных определений.
         PushInheritanceAndIndex();
     }
-
-    private static readonly YamlScalarNode IdNode = new("id");
-    private static readonly YamlScalarNode TypeNode = new("type");
 
     /// <summary>
     ///     Indexes all prototypes in a folder, adding them to <see cref="_entitiesMetaIndex"/> as necessary and
@@ -219,17 +219,21 @@ public static partial class GameDataScrounger
                 Assert.That(entry, Is.AssignableTo<YamlMappingNode>());
                 var entryMapping = (YamlMappingNode)entry;
 
-                var type = entryMapping[TypeNode];
+                if (!entryMapping.TryGetNode("type", out YamlScalarNode? type))
+                    continue;
 
-                // Sunrise-Edit: частичный прототип уже представлен полным определением и не должен заменять его метаданные.
-                if (type is YamlScalarNode { Tag.IsEmpty: false } typeNode &&
-                    typeNode.Tag.Value.Equals("!PartialOnly", StringComparison.OrdinalIgnoreCase))
+                // Sunrise-Edit: partial-прототип изменяет уже проиндексированное полное определение.
+                if (HasTag(type, PartialOnlyTag))
                 {
+                    IndexPartialPrototype(entryMapping, type, file);
                     continue;
                 }
 
                 // Sunrise edit start - индексируем каждый прототип, созданный через CreateVariants.
-                var ids = GetPrototypeIds(entryMapping[IdNode], file);
+                if (!entryMapping.TryGetNode("id", out YamlNode? idNode))
+                    continue;
+
+                var ids = GetPrototypeIds(idNode, file);
 
                 var @abstract = ignored;
                 if (entryMapping.TryGetNode("abstract", out YamlScalarNode? abstractNode))
@@ -247,13 +251,13 @@ public static partial class GameDataScrounger
                 {
                     foreach (var id in ids)
                     {
-                        yield return (((YamlScalarNode)type).Value!, id);
+                        yield return (type.Value!, id);
                     }
                 }
                 // Sunrise edit end
 
                 // If we're an entity prototype..
-                if (type is not YamlScalarNode { Value: "entity" })
+                if (type.Value != "entity")
                     continue;
 
                 // then do some metadata indexing that's feasible w/o serializationmanager.
@@ -261,9 +265,7 @@ public static partial class GameDataScrounger
                 entryMapping.TryGetNode("components", out YamlSequenceNode? components);
 
                 // Sunrise edit start - сохраняем отдельные метаданные и родителей для каждого варианта сущности.
-                var componentTypes = components?.Children
-                    .Select(component => component[TypeNode].AsString())
-                    .ToHashSet() ?? [];
+                var (componentTypes, removedComponentTypes) = GetComponentOperations(components);
 
                 for (var i = 0; i < ids.Count; i++)
                 {
@@ -274,6 +276,7 @@ public static partial class GameDataScrounger
                     {
                         Abstract = @abstract,
                         Components = new HashSet<string>(componentTypes),
+                        RemovedComponents = new HashSet<string>(removedComponentTypes),
                         Parents = GetVariantParents(entryMapping, i, ids.Count, file),
                         Id = id,
                     };
@@ -326,11 +329,15 @@ public static partial class GameDataScrounger
 
         foreach (var parent in entity.Parents)
         {
-            var parentMeta = _entitiesMetaIndex![parent];
+            if (!_entitiesMetaIndex!.TryGetValue(parent, out var parentMeta))
+                throw new InvalidDataException($"Entity prototype {entity.Id} has an unknown parent {parent}.");
+
             VisitEntity(parentMeta, visitedEntities);
 
             entity.Components.UnionWith(parentMeta.Components);
         }
+
+        entity.Components.ExceptWith(entity.RemovedComponents);
     }
 
     // Did you know there's no way to find the resources folder in the real filesystem

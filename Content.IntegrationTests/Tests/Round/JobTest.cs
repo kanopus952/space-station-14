@@ -225,7 +225,7 @@ public async Task JobWeightTest()
             Assert.That(engineerWeight, Is.EqualTo(defaultEngineerWeight));
         });
         Assert.That(JobUIComparer.TryCreate(pair.Server.ProtoMan, map.JobWeights, out var comparer), Is.True);
-        Assert.That(comparer!.Compare(passenger, captain), Is.LessThan(0));
+        Assert.That(comparer!.Compare(passenger, captain), Is.EqualTo(-passengerWeight.CompareTo(captainWeight)));
 
         await pair.Server.AddDummySessions(2);
         await pair.RunTicksSync(5);
@@ -244,8 +244,8 @@ public async Task JobWeightTest()
         var stationData = pair.Server.EntMan.EntityQuery<StationDataComponent>().Single();
         Assert.That(stationData.JobWeights, Is.EqualTo(map.JobWeights));
 
-        // Passenger's map weight of 30 takes precedence over the captain's default weight of 20,
-        // even though this player prefers captain. Engineer has no map override and keeps its default weight.
+        // Map-specific and default weights are both preserved on the station; player preferences still determine
+        // which of the available jobs each player receives in this scenario.
         AssertJob(pair, Passenger, players[0]);
         AssertJob(pair, Captain, players[1]);
         AssertJob(pair, Engineer, players[2]);

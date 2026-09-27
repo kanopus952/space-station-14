@@ -11,6 +11,94 @@ namespace Content.IntegrationTests.Utility;
 public static partial class GameDataScrounger
 {
     private const string CreateVariantsTag = "!type:CreateVariants";
+    private const string PartialOnlyTag = "!PartialOnly";
+    private const string RemoveTag = "!Remove";
+
+    private static readonly List<EntityPrototypePatch> EntityPrototypePatches = [];
+
+    private sealed record EntityPrototypePatch(
+        string Id,
+        List<string>? Parents,
+        HashSet<string> Components,
+        HashSet<string> RemovedComponents);
+
+    private static void IndexPartialPrototype(YamlMappingNode entry, YamlScalarNode type, string file)
+    {
+        if (type.Value != "entity" || !entry.TryGetNode("id", out YamlNode? idNode))
+            return;
+
+        var ids = GetPrototypeIds(idNode, file);
+        entry.TryGetNode("components", out YamlSequenceNode? components);
+        var (addedComponents, removedComponents) = GetComponentOperations(components);
+        var replacesParents = entry.TryGetNode("parent", out _);
+
+        for (var i = 0; i < ids.Count; i++)
+        {
+            EntityPrototypePatches.Add(new EntityPrototypePatch(
+                ids[i],
+                replacesParents ? GetVariantParents(entry, i, ids.Count, file) : null,
+                new HashSet<string>(addedComponents),
+                new HashSet<string>(removedComponents)));
+        }
+    }
+
+    private static void ApplyEntityPrototypePatches()
+    {
+        foreach (var patch in EntityPrototypePatches)
+        {
+            // !PartialOnly не создаёт прототип, если полного определения больше нет.
+            if (!_entitiesMetaIndex!.TryGetValue(patch.Id, out var entity))
+                continue;
+
+            if (patch.Parents is not null)
+                entity.Parents = patch.Parents;
+
+            foreach (var component in patch.RemovedComponents)
+            {
+                entity.Components.Remove(component);
+                entity.RemovedComponents.Add(component);
+            }
+
+            foreach (var component in patch.Components)
+            {
+                entity.RemovedComponents.Remove(component);
+                entity.Components.Add(component);
+            }
+        }
+    }
+
+    private static (HashSet<string> Added, HashSet<string> Removed) GetComponentOperations(
+        YamlSequenceNode? components)
+    {
+        var added = new HashSet<string>();
+        var removed = new HashSet<string>();
+
+        if (components is null)
+            return (added, removed);
+
+        foreach (var node in components.Children)
+        {
+            if (node is not YamlMappingNode component ||
+                !component.TryGetNode("type", out YamlScalarNode? componentType) ||
+                componentType.Value is not { } type)
+            {
+                continue;
+            }
+
+            if (HasTag(component, RemoveTag))
+            {
+                added.Remove(type);
+                removed.Add(type);
+            }
+            else
+            {
+                removed.Remove(type);
+                added.Add(type);
+            }
+        }
+
+        return (added, removed);
+    }
 
     private static List<string> GetPrototypeIds(YamlNode idNode, string file)
     {

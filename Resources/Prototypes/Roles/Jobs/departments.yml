@@ -138,7 +138,7 @@
   - Clown
   - HeadOfPersonnel
   - Janitor
-  - Lawyer
+  # - Lawyer # Sunrise-Edit: Юрист относится к основному отделу Law.
   - Librarian
   - Mime
   - Musician

@@ -48,6 +48,7 @@
       tags:
       - XenoborgCrystal
       - Sheet
+      - Ingot # Sunrise-Edit: Рецепты ядра используют золото и серебро в слитках.
   - type: PointLight
     color: "#0033ff"
     enabled: true

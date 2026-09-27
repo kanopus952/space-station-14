@@ -55,10 +55,8 @@
   name: MNK Drobe
   description: Quality garments provided by MoNoKrome.
   components:
-  #- type: VendingMachine
-  #  pack: MNKDrobeInventory
-  #  offState: off
-  #  brokenState: broken
+  - type: VendingMachine
+    pack: MNKDrobeInventory
   - type: VendingMachineVisuals
     offState: off
     brokenState: broken

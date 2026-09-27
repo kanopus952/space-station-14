@@ -234,6 +234,8 @@
   suffix: Admin
   description: If you are somehow seeing this, no you're not.
   components:
+  - type: Item
+    size: Colossal
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: Storage
