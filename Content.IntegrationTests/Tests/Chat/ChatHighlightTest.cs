@@ -1,6 +1,8 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Content.Client.CharacterInfo;
 using Content.Client.UserInterface.Systems.Chat;
@@ -11,6 +13,7 @@ using Content.Shared.Roles;
 using NUnit.Framework;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Chat;
@@ -18,6 +21,8 @@ namespace Content.IntegrationTests.Tests.Chat;
 public sealed class ChatHighlightTest : GameTest
 {
     [SidedDependency(Side.Client)] private readonly IConfigurationManager _configManager = null!;
+    // Sunrise-Edit: Тест учитывает активную локаль клиента.
+    [SidedDependency(Side.Client)] private readonly ILocalizationManager _localizationManager = null!;
     [SidedDependency(Side.Client)] private readonly IUserInterfaceManager _uiManager = null!;
     private static readonly ProtoId<JobPrototype> Captain = "Captain";
 
@@ -26,6 +31,7 @@ public sealed class ChatHighlightTest : GameTest
     public async Task TestCustomHighlightsPreserved()
     {
         var chatController = _uiManager.GetUIController<ChatUIController>();
+        var captainHighlights = GetCaptainHighlights();
 
         // 1. Enable auto-fill highlights
         _configManager.SetCVar(CCVars.ChatAutoFillHighlights, true);
@@ -81,8 +87,8 @@ public sealed class ChatHighlightTest : GameTest
         Assert.That(activeHighlights, Contains.Item("ling"));
         Assert.That(activeHighlights, Contains.Item("rev"));
         // Auto:
-        Assert.That(activeHighlights, Contains.Item("Captain"));
-        Assert.That(activeHighlights, Contains.Item("(?<!\\w)Cap(?!\\w)")); // "Cap" becomes regex-escaped and word-bounded
+        Assert.That(activeHighlights, Contains.Item(captainHighlights.Name));
+        Assert.That(activeHighlights, Contains.Item(captainHighlights.ShortName));
 
         // 5. Disable auto-fill highlights and verify auto-filled highlights are removed
         _configManager.SetCVar(CCVars.ChatAutoFillHighlights, false);
@@ -90,7 +96,7 @@ public sealed class ChatHighlightTest : GameTest
         activeHighlights = (List<string>)highlightsField.GetValue(chatController)!;
         Assert.That(activeHighlights, Contains.Item("ling"));
         Assert.That(activeHighlights, Contains.Item("rev"));
-        Assert.That(activeHighlights, Is.Not.Contains("Captain"));
+        Assert.That(activeHighlights, Is.Not.Contains(captainHighlights.Name));
     }
 
     [Test]
@@ -98,6 +104,7 @@ public sealed class ChatHighlightTest : GameTest
     public async Task TestEnablingAutoFillPreservesCustomHighlights()
     {
         var chatController = _uiManager.GetUIController<ChatUIController>();
+        var captainHighlights = GetCaptainHighlights();
 
         // 1. Start with auto-fill disabled
         _configManager.SetCVar(CCVars.ChatAutoFillHighlights, false);
@@ -155,7 +162,19 @@ public sealed class ChatHighlightTest : GameTest
         activeHighlights = (List<string>)highlightsField.GetValue(chatController)!;
         Assert.That(activeHighlights, Contains.Item("ling"));
         Assert.That(activeHighlights, Contains.Item("rev"));
-        Assert.That(activeHighlights, Contains.Item("Captain"));
-        Assert.That(activeHighlights, Contains.Item("(?<!\\w)Cap(?!\\w)"));
+        Assert.That(activeHighlights, Contains.Item(captainHighlights.Name));
+        Assert.That(activeHighlights, Contains.Item(captainHighlights.ShortName));
+    }
+
+    private (string Name, string ShortName) GetCaptainHighlights()
+    {
+        var locKey = $"highlights-{Captain.Id.Replace(' ', '-').ToLowerInvariant()}";
+        var highlights = _localizationManager.GetString(locKey)
+            .Split(", ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        Assert.That(highlights, Has.Length.GreaterThanOrEqualTo(2));
+
+        var shortName = highlights[1].Trim('"');
+        return (highlights[0], $"(?<!\\w){Regex.Escape(shortName)}(?!\\w)");
     }
 }

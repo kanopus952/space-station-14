@@ -175775,11 +175775,6 @@ entities:
     - type: Transform
       pos: 5.5,2.5
       parent: 2
-    - type: ActivatableUI
-      requiresComplex: False
-      adminOnly: True
-    - type: Gateway
-      enabled: True
     - type: LinkedEntity
       linkedEntities:
       - 41245
@@ -175795,11 +175790,6 @@ entities:
     - type: Transform
       pos: 16.5,52.5
       parent: 39710
-    - type: ActivatableUI
-      requiresComplex: False
-      adminOnly: True
-    - type: Gateway
-      enabled: True
     - type: LinkedEntity
       linkedEntities:
       - 41217
