@@ -6,6 +6,7 @@
   categories:
   - Tools
   completetime: 4
+  applyMaterialDiscount: false # Sunrise-Edit - щиты возвращают материалы при разрушении.
 
 - type: latheRecipe
   abstract: true

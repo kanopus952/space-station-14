@@ -11,6 +11,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Stacks;
+using Content.Shared.Tiles; // Sunrise-Edit - не позволяем материалам укладывать пол под переработчиком.
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -70,7 +71,8 @@ public abstract partial class SharedMaterialReclaimerSystem : EntitySystem
             }
         }
 
-        args.Handled = TryStartProcessItem(entity.Owner, args.Used, entity.Comp, args.User);
+        args.Handled = TryStartProcessItem(entity.Owner, args.Used, entity.Comp, args.User)
+            || HasComp<FloorTileComponent>(args.Used); // Sunrise-Edit - отклонённый материал не должен применяться к полу под машиной.
     }
 
     private void OnMapInit(EntityUid uid, MaterialReclaimerComponent component, MapInitEvent args)

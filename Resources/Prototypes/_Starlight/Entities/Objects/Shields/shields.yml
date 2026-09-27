@@ -120,7 +120,7 @@
     - type: Injurable
       damageContainer: Shield
     - type: Destructible
-      thresholds:
+      thresholds: !Clear
         - trigger:
             !type:DamageTrigger
             damage: 300
@@ -184,7 +184,7 @@
     - type: Injurable
       damageContainer: Shield
     - type: Destructible
-      thresholds:
+      thresholds: !Clear
         - trigger:
             !type:DamageTrigger
             damage: 140
@@ -237,7 +237,7 @@
     - type: Injurable
       damageContainer: Shield
     - type: Destructible
-      thresholds:
+      thresholds: !Clear
         - trigger:
             !type:DamageTrigger
             damage: 200
@@ -301,7 +301,7 @@
     - type: Injurable
       damageContainer: Shield
     - type: Destructible
-      thresholds:
+      thresholds: !Clear
         - trigger:
             !type:DamageTrigger
             damage: 100

@@ -213,6 +213,8 @@ public async Task JobWeightTest()
         var engineer = pair.Server.ProtoMan.Index(Engineer);
         var captain = pair.Server.ProtoMan.Index(Captain);
         var map = pair.Server.ProtoMan.Index<GameMapPrototype>(JobWeightOverrideMap);
+        var defaultWeights = pair.Server.ProtoMan.Index(JobWeightPrototype.Default);
+        Assert.That(defaultWeights.Weights.TryGetValue(Engineer, out var defaultEngineerWeight), Is.True);
         Assert.That(stationJobs.TryGetJobWeight(passenger, map.JobWeights, out var passengerWeight), Is.True);
         Assert.That(stationJobs.TryGetJobWeight(engineer, map.JobWeights, out var engineerWeight), Is.True);
         Assert.That(stationJobs.TryGetJobWeight(captain, map.JobWeights, out var captainWeight), Is.True);
@@ -220,7 +222,7 @@ public async Task JobWeightTest()
         {
             Assert.That(passengerWeight, Is.EqualTo(30));
             Assert.That(engineerWeight, Is.LessThan(captainWeight));
-            Assert.That(engineerWeight, Is.EqualTo(0));
+            Assert.That(engineerWeight, Is.EqualTo(defaultEngineerWeight));
         });
         Assert.That(JobUIComparer.TryCreate(pair.Server.ProtoMan, map.JobWeights, out var comparer), Is.True);
         Assert.That(comparer!.Compare(passenger, captain), Is.LessThan(0));

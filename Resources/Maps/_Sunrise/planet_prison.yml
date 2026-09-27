@@ -23548,13 +23548,6 @@ entities:
       rot: 12.566370614359172 rad
       pos: -73.524765,-6.496143
       parent: 2
-- proto: ArmBlade
-  entities:
-  - uid: 396
-    components:
-    - type: Transform
-      pos: 32.47731,62.4176
-      parent: 2
 - proto: Ashtray
   entities:
   - uid: 397
