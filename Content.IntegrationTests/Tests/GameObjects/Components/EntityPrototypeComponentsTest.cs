@@ -54,7 +54,16 @@ namespace Content.IntegrationTests.Tests.GameObjects.Components
 
                     foreach (var node in root.Cast<YamlMappingNode>())
                     {
-                        var prototypeType = node.GetNode("type").AsString();
+                        var prototypeTypeNode = node.GetNode("type");
+
+                        // Sunrise-Edit: операции компонентов partial-прототипов проверяются после их применения движком.
+                        if (!prototypeTypeNode.Tag.IsEmpty &&
+                            prototypeTypeNode.Tag.Value.Equals("!PartialOnly", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        var prototypeType = prototypeTypeNode.AsString();
 
                         if (prototypeType != "entity")
                         {

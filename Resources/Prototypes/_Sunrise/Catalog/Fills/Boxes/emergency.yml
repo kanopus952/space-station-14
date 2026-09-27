@@ -110,7 +110,7 @@
     grid:
     - 0,0,2,2
   - type: Label
-    currentLabel: без балона
+    localizedLabel: label-box-survival-without-gas
 
 - type: entity
   parent: BoxSurvivalBase
@@ -220,7 +220,7 @@
     - state: internals
     - state: nitrogentank
   - type: Label
-    currentLabel: reagent-name-nitrogen
+    localizedLabel: reagent-name-nitrogen
 
 - type: entity
   parent: BoxSurvivalBase

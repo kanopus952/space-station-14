@@ -3887,7 +3887,7 @@ entities:
       parent: 490
     - type: Physics
       canCollide: False
-- proto: LightReplacerEmpty
+- proto: LightReplacer
   entities:
   - uid: 565
     components:

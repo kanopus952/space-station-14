@@ -219,12 +219,6 @@ public static partial class GameDataScrounger
                 Assert.That(entry, Is.AssignableTo<YamlMappingNode>());
                 var entryMapping = (YamlMappingNode)entry;
 
-                var id = entryMapping[IdNode];
-
-                // TODO: Add handling for prototype variants
-                if (id is YamlMappingNode)
-                    continue;
-
                 var type = entryMapping[TypeNode];
 
                 // Sunrise-Edit: частичный прототип уже представлен полным определением и не должен заменять его метаданные.
@@ -233,6 +227,9 @@ public static partial class GameDataScrounger
                 {
                     continue;
                 }
+
+                // Sunrise edit start - индексируем каждый прототип, созданный через CreateVariants.
+                var ids = GetPrototypeIds(entryMapping[IdNode], file);
 
                 var @abstract = ignored;
                 if (entryMapping.TryGetNode("abstract", out YamlScalarNode? abstractNode))
@@ -247,7 +244,13 @@ public static partial class GameDataScrounger
                 }
 
                 if (!@abstract)
-                    yield return (((YamlScalarNode)type).Value!, ((YamlScalarNode)id).Value!);
+                {
+                    foreach (var id in ids)
+                    {
+                        yield return (((YamlScalarNode)type).Value!, id);
+                    }
+                }
+                // Sunrise edit end
 
                 // If we're an entity prototype..
                 if (type is not YamlScalarNode { Value: "entity" })
@@ -257,36 +260,27 @@ public static partial class GameDataScrounger
 
                 entryMapping.TryGetNode("components", out YamlSequenceNode? components);
 
-                var parents = new List<string>();
+                // Sunrise edit start - сохраняем отдельные метаданные и родителей для каждого варианта сущности.
+                var componentTypes = components?.Children
+                    .Select(component => component[TypeNode].AsString())
+                    .ToHashSet() ?? [];
 
-                if (entryMapping.TryGetNode("parent", out var parentNode))
+                for (var i = 0; i < ids.Count; i++)
                 {
-                    switch (parentNode)
+                    var id = ids[i];
+
+                    // Assemble metadata for this entity prototype w/o needing serializationmanager.
+                    var entity = new EntityMetadata()
                     {
-                        case YamlScalarNode scalar:
-                        {
-                            parents.Add(scalar.Value!);
-                            break;
-                        }
-                        case YamlSequenceNode seq:
-                        {
-                            parents.AddRange(seq.Children.Select(x => x.AsString()));
-                            break;
-                        }
-                    }
+                        Abstract = @abstract,
+                        Components = new HashSet<string>(componentTypes),
+                        Parents = GetVariantParents(entryMapping, i, ids.Count, file),
+                        Id = id,
+                    };
+
+                    _entitiesMetaIndex![id] = entity;
                 }
-
-
-                // Assemble metadata for this entity prototype w/o needing serializationmanager.
-                var entity = new EntityMetadata()
-                {
-                    Abstract = @abstract,
-                    Components = components?.Children.Select(x => x["type"].ToString()).ToHashSet() ?? new(),
-                    Parents = parents,
-                    Id = id.AsString(),
-                };
-
-                _entitiesMetaIndex![id.AsString()] = entity;
+                // Sunrise edit end
             }
         }
     }

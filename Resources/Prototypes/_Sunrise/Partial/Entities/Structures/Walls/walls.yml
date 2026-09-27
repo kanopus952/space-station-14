@@ -286,7 +286,7 @@
 
 - type: !PartialOnly entity
   id: WallReinforcedDiagonal
-  parent: WallDiagonalBaseSunrise
+  parent: [WallDiagonalBaseSunrise, StructureHealthWallStrong]
 
 - type: !PartialOnly entity
   id: WallShuttleDiagonal
