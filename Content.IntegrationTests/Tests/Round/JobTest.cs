@@ -29,6 +29,7 @@ public sealed class JobTest : GameTest
     private static string _map = "JobTestMap";
     private const string JobWeightOverrideMap = "JobWeightOverrideTestMap";
     private const string JobWeightOverride = "JobWeightOverride";
+    private const int PassengerOverrideWeight = 200; // Sunrise-Edit - вес должен быть выше Sunrise-веса капитана.
 
     [TestPrototypes]
     private static readonly string JobTestMap = @$"
@@ -70,7 +71,7 @@ public sealed class JobTest : GameTest
 - type: jobWeight
   id: {JobWeightOverride}
   weights:
-    {Passenger}: 30
+    {Passenger}: {PassengerOverrideWeight}
 ";
 
     public override PoolSettings PoolSettings => new()
@@ -220,7 +221,8 @@ public async Task JobWeightTest()
         Assert.That(stationJobs.TryGetJobWeight(captain, map.JobWeights, out var captainWeight), Is.True);
         Assert.Multiple(() =>
         {
-            Assert.That(passengerWeight, Is.EqualTo(30));
+            Assert.That(passengerWeight, Is.EqualTo(PassengerOverrideWeight));
+            Assert.That(passengerWeight, Is.GreaterThan(captainWeight));
             Assert.That(engineerWeight, Is.LessThan(captainWeight));
             Assert.That(engineerWeight, Is.EqualTo(defaultEngineerWeight));
         });
@@ -248,8 +250,6 @@ public async Task JobWeightTest()
         var stationData = pair.Server.EntMan.GetComponent<StationDataComponent>(station!.Value);
         Assert.That(stationData.JobWeights, Is.EqualTo(map.JobWeights));
 
-        // Map-specific and default weights are both preserved on the station; player preferences still determine
-        // which of the available jobs each player receives in this scenario.
         AssertJob(pair, Passenger, players[0]);
         AssertJob(pair, Captain, players[1]);
         AssertJob(pair, Engineer, players[2]);
