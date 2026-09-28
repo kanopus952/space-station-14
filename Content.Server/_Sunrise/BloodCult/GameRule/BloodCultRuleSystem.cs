@@ -224,7 +224,7 @@ public sealed partial class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleCo
     private void AfterEntitySelected(Entity<BloodCultRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
         Log.Debug($"AfterAntagEntitySelected {ToPrettyString(ent)}");
-        MakeCultist(args.EntityUid, ent.Comp);
+        MakeCultist(args.EntityUid, ent.Comp, assignMindData: false);
     }
 
     private void OnCultistsStateChanged(EntityUid uid, BloodCultistComponent component, MobStateChangedEvent ev)
@@ -490,7 +490,7 @@ public sealed partial class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleCo
         return potentialTargets;
     }
 
-    public bool MakeCultist(EntityUid cultist, BloodCultRuleComponent rule)
+    public bool MakeCultist(EntityUid cultist, BloodCultRuleComponent rule, bool assignMindData = true)
     {
         if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))
             return false;
@@ -498,7 +498,9 @@ public sealed partial class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleCo
         if (_tagSystem.HasTag(cultist, DeconvertedCultistTag))
             return false;
 
-        _roles.MindAddRole(mindId, _mindRoleCultistPrototypeId);
+        // При выборе стартового антагониста роль и цель уже выдаются общими системами AntagSelection.
+        if (assignMindData)
+            _roles.MindAddRole(mindId, _mindRoleCultistPrototypeId);
 
         var isHumanoid = HasComp<HumanoidProfileComponent>(cultist);
 
@@ -550,7 +552,8 @@ public sealed partial class BloodCultRuleSystem : GameRuleSystem<BloodCultRuleCo
                 _chatManager.DispatchServerMessage(session, Loc.GetString("cult-role-greeting"));
             }
 
-            _mindSystem.TryAddObjective(mindId, mind, "CultistKillObjective");
+            if (assignMindData)
+                _mindSystem.TryAddObjective(mindId, mind, _cultistKillObjective);
         }
 
         Dirty(cultist, cultistComponent);

@@ -221,31 +221,35 @@
 
 - type: !PartialOnly entity
   id: AirlockXenoborg
-  parent: AirlockUnlitVisibleFalse
   components:
+  - type: Airlock
+    openUnlitVisible: false
   - type: Sprite
     sprite: _Sunrise/Structures/Doors/Airlocks/Standard/xenoborg.rsi
 
 - type: !PartialOnly entity
   id: AirlockHatchSyndicate
-  parent: AirlockUnlitVisibleFalse
   components:
+  - type: Airlock
+    openUnlitVisible: false
   - type: Sprite
     sprite: _Sunrise/Structures/Doors/Airlocks/Standard/hatch_syndicate.rsi
     layers: !Remove
 
 - type: !PartialOnly entity
   id: AirlockXeno
-  parent: AirlockUnlitVisibleFalse
   components:
+  - type: Airlock
+    openUnlitVisible: false
   - type: Sprite
     sprite: _Sunrise/Structures/Doors/Airlocks/Standard/xeno.rsi
     layers: !Remove
 
 - type: !PartialOnly entity
   id: AirlockGlassXeno
-  parent: AirlockUnlitVisibleFalse
   components:
+  - type: Airlock
+    openUnlitVisible: false
   - type: Sprite
     sprite: _Sunrise/Structures/Doors/Airlocks/Glass/xeno.rsi
     layers: !Remove
