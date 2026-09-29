@@ -39,9 +39,7 @@ public sealed partial class DecalSystem : SharedDecalSystem
     private void OnLegacyDecalGridStartup(EntityUid uid, DecalGridComponent component, ComponentStartup args)
     {
         MigrateLegacyDecalGrid(uid, component);
-        // Устаревший компонент загружается только для миграции, поэтому удаляем его сразу.
-        // Отложенное удаление оставляло его запущенным до очистки карты и вызывало предупреждение при возврате тестовой пары.
-        RemComp(uid, component);
+        RemCompDeferred(uid, component);
     }
 
     private void OnBeforeSerialization(BeforeSerializationEvent ev)

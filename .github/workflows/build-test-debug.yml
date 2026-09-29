@@ -43,7 +43,7 @@ jobs:
       run: bash Tools/_sunrise/ci/test_workflow.sh build-integration
 
     - name: Discover Integration Tests
-      run: bash Tools/_sunrise/ci/test_workflow.sh discover-shards 8
+      run: bash Tools/_sunrise/ci/test_workflow.sh discover-shards 10
     # Sunrise edit end
 
     # Sunrise added start - передаём тестовым раннерам только нужные результаты сборки
