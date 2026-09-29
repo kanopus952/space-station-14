@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SHARDING_SCRIPT="$ROOT_DIR/Tools/_sunrise/ci/sharding/test_shard_filter.py"
 RESULTS_DIR=/tmp/test-results
-PROFILE_SHARD_COUNT=8
+PROFILE_SHARD_COUNT=10
 cd "$ROOT_DIR"
 
 setup_root_submodules() {
