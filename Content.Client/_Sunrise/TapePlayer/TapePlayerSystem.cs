@@ -12,7 +12,7 @@ namespace Content.Client._Sunrise.TapePlayer
         [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
         [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
-        [Dependency] private INetManager _netManager = default!;
+        [Dependency] private IClientNetManager _netManager = default!;
 
         private bool _tapePlayerClientEnabled;
 
@@ -24,13 +24,14 @@ namespace Content.Client._Sunrise.TapePlayer
             SubscribeLocalEvent<TapePlayerComponent, AfterAutoHandleStateEvent>(OnTapePlayerAfterState);
             _cfg.OnValueChanged(SunriseCCVars.TapePlayerClientEnabled, OnTapePlayerClientOptionChanged, true);
 
-            SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+            _netManager.Connected += OnConnected;
         }
 
         public override void Shutdown()
         {
             base.Shutdown();
             _cfg.UnsubValueChanged(SunriseCCVars.TapePlayerClientEnabled, OnTapePlayerClientOptionChanged);
+            _netManager.Connected -= OnConnected;
         }
 
         private void OnTapePlayerClientOptionChanged(bool option)
@@ -40,7 +41,7 @@ namespace Content.Client._Sunrise.TapePlayer
                 RaiseNetworkEvent(new ClientOptionTapePlayerEvent(_tapePlayerClientEnabled));
         }
 
-        private void OnPlayerAttached(LocalPlayerAttachedEvent args)
+        private void OnConnected(object? sender, NetChannelArgs args)
         {
             RaiseNetworkEvent(new ClientOptionTapePlayerEvent(_tapePlayerClientEnabled));
         }

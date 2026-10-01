@@ -29,7 +29,7 @@ public sealed partial class TTSSystem : EntitySystem
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IDependencyCollection _dependencyCollection = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private IClientNetManager _netManager = default!;
     [Dependency] private SharedTransformSystem _xformSystem = default!;
 
     private ISawmill _sawmill = default!;
@@ -71,7 +71,7 @@ public sealed partial class TTSSystem : EntitySystem
         SubscribeNetworkEvent<PlayTTSEvent>(OnPlayTTS);
         SubscribeNetworkEvent<StopTTSEvent>(OnStopTTS);
         SubscribeNetworkEvent<PlayMultiSpeakerTTSEvent>(OnPlayMultiSpeakerTTS);
-        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+        _netManager.Connected += OnConnected;
     }
 
     public override void Shutdown()
@@ -87,6 +87,7 @@ public sealed partial class TTSSystem : EntitySystem
         _currentPlaying = null;
         _groupedPlaying.Clear();
         _ttsQueue.Clear();
+        _netManager.Connected -= OnConnected;
 
     }
 
@@ -122,7 +123,7 @@ public sealed partial class TTSSystem : EntitySystem
         _ghostRadioEnabled = option;
     }
 
-    private void OnPlayerAttached(LocalPlayerAttachedEvent args)
+    private void OnConnected(object? sender, NetChannelArgs args)
     {
         RaiseNetworkEvent(new ClientOptionTTSEvent(_ttsClientEnable));
     }

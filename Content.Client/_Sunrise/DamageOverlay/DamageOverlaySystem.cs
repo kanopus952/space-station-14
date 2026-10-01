@@ -2,14 +2,13 @@ using Content.Shared._Sunrise.DamageOverlay;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
-using Robust.Shared.Player;
 
 namespace Content.Client._Sunrise.DamageOverlay;
 
 public sealed partial class DamageOverlaySystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private IClientNetManager _netManager = default!;
 
     private bool _damageOverlayEnabled;
     private bool _damageOverlaySelf;
@@ -23,7 +22,7 @@ public sealed partial class DamageOverlaySystem : EntitySystem
         _cfg.OnValueChanged(SunriseCCVars.DamageOverlaySelf, OnDamageOverlaySelfChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.DamageOverlayStructures, OnDamageOverlayStructuresChanged, true);
 
-        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+        _netManager.Connected += OnConnected;
     }
 
     public override void Shutdown()
@@ -33,6 +32,7 @@ public sealed partial class DamageOverlaySystem : EntitySystem
         _cfg.UnsubValueChanged(SunriseCCVars.DamageOverlayEnable, OnDamageOverlayEnableChanged);
         _cfg.UnsubValueChanged(SunriseCCVars.DamageOverlaySelf, OnDamageOverlaySelfChanged);
         _cfg.UnsubValueChanged(SunriseCCVars.DamageOverlayStructures, OnDamageOverlayStructuresChanged);
+        _netManager.Connected -= OnConnected;
     }
 
     private void OnDamageOverlayEnableChanged(bool option)
@@ -57,7 +57,7 @@ public sealed partial class DamageOverlaySystem : EntitySystem
         RaiseNetworkEvent(new DamageOverlayOptionEvent(_damageOverlayEnabled, _damageOverlaySelf, _damageOverlayStructures));
     }
 
-    private void OnPlayerAttached(LocalPlayerAttachedEvent args)
+    private void OnConnected(object? sender, NetChannelArgs args)
     {
         SendDamageOverlayOptions();
     }

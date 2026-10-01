@@ -35,6 +35,7 @@ public sealed partial class AntagGhostRoleTest : AntagTest
     [Test]
     [TestOf(typeof(GameTicker)), TestOf(typeof(AntagSelectionSystem)), TestOf(typeof(AntagSelectionComponent)), TestOf(typeof(GhostRoleSystem))]
     [TestCaseSource(nameof(AntagGameRules))]
+    [NonParallelizable] // Sunrise edit оптимизация теста
     [Description($"Ensures all GameRule entities with {nameof(AntagSelectionComponent)} can properly spawn those roles and they can be taken.")]
     [RunOnSide(Side.Server)]
     public void TestAntagGhostRoles(string ruleId)
@@ -80,6 +81,7 @@ public sealed partial class AntagGhostRoleTest : AntagTest
     }
 
     [Test]
+    [NonParallelizable]
     [TestOf(typeof(GameTicker)), TestOf(typeof(AntagSelectionSystem)), TestOf(typeof(AntagSelectionComponent)), TestOf(typeof(GhostRoleSystem))]
     [Description("Ensures a player can take all antag ghost roles sequentially without transferring unwanted mind data.")]
     [RunOnSide(Side.Server)]
