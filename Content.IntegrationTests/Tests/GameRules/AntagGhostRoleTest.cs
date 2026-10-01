@@ -65,7 +65,7 @@ public sealed partial class AntagGhostRoleTest : AntagTest
         while (roleEnumerator.MoveNext(out var spawner, out var role, out var xform))
         {
             // Ensure the ghost role spawner spawned correctly!
-            Assert.That(spawner.Rule, Is.EqualTo(gameRule?.Owner));
+            Assert.That(spawner.Rule, Is.EqualTo(gameRule));
             Assert.That(spawner.Definition, Is.Not.Null);
             AssertGhostRoleTaken(spawner, role, xform);
             var value = rules[spawner.Definition.Value];
