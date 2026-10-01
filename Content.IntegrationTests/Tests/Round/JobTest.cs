@@ -106,7 +106,6 @@ public sealed class JobTest : GameTest
     /// Simple test that checks that starting the round spawns the player into the test map as a passenger.
     /// </summary>
     [Test]
-    [Ignore("Hit style update limit warn fails this test anyway")] // Sunrise-edit
     public async Task StartRoundTest()
     {
         var pair = Pair;
@@ -134,7 +133,6 @@ public sealed class JobTest : GameTest
     /// Check that job preferences are respected.
     /// </summary>
     [Test]
-    [Ignore("Hit style update limit warn fails this test anyway")] // Sunrise-edit
     public async Task JobPreferenceTest()
     {
         var pair = Pair;
@@ -168,7 +166,6 @@ public sealed class JobTest : GameTest
     /// get their preferred job.
     /// </summary>
     [Test]
-    [Ignore("Hit style update limit warn fails this test anyway")] // Sunrise-edit
 
 public async Task JobWeightTest()
     {
@@ -261,7 +258,6 @@ public async Task JobWeightTest()
     /// Check that jobs are preferentially given to players that have marked those jobs as higher priority.
     /// </summary>
     [Test]
-    [Ignore("Hit style update limit warn fails this test anyway")] // Sunrise-edit
     public async Task JobPriorityTest()
     {
         var pair = Pair;

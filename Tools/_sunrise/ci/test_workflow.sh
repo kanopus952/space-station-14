@@ -153,7 +153,7 @@ run_integration_shard() {
     local console_log="$RESULTS_DIR/console.log"
 
     set +e
-    timeout --signal=TERM --kill-after=2m 1h \
+    timeout --signal=TERM --kill-after=2m 15m \
         dotnet test bin/Content.IntegrationTests/Content.IntegrationTests.dll \
         --settings "$settings" \
         --logger "trx;LogFileName=results.trx" \

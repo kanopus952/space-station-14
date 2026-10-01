@@ -128,7 +128,7 @@ jobs:
 
     - name: Run Content.IntegrationTests
       id: integration-tests
-      timeout-minutes: 62
+      timeout-minutes: 17
       env:
         DOTNET_gcServer: "1"
         SHARD: ${{ matrix.shard }}
