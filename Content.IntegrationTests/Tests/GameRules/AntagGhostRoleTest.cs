@@ -79,6 +79,8 @@ public sealed partial class AntagGhostRoleTest : AntagTest
         // Ensure all ghost roles spawned and were assigned!!!
         Assert.That(rules.Values, Is.All.Zero);
 
+        // End all rules
+        STicker.ClearGameRules();
         Assert.That(STicker.GetAddedGameRules(), Is.Empty);
     }
 
