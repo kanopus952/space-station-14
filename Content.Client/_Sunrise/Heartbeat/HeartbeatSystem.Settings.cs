@@ -2,6 +2,7 @@ using Content.Shared._Sunrise.Heartbeat;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 
 namespace Content.Client._Sunrise.Heartbeat;
 
@@ -18,7 +19,7 @@ public sealed partial class HeartbeatSystem : EntitySystem
 
         _cfg.OnValueChanged(SunriseCCVars.PlayHeartBeatSound, OnOptionsChanged, true);
 
-        _netManager.Connected += OnConnected;
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
     }
 
     public override void Shutdown()
@@ -35,7 +36,7 @@ public sealed partial class HeartbeatSystem : EntitySystem
             RaiseNetworkEvent(new HeartbeatOptionsChangedEvent(_playHeartBeatSound));
     }
 
-    private async void OnConnected(object? sender, NetChannelArgs e)
+    private void OnPlayerAttached(LocalPlayerAttachedEvent args)
     {
         RaiseNetworkEvent(new HeartbeatOptionsChangedEvent(_playHeartBeatSound));
     }

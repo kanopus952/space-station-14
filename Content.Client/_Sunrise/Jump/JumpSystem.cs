@@ -35,10 +35,10 @@ public sealed partial class JumpSystem : SharedJumpSystem
         _cfg.OnValueChanged(SunriseCCVars.JumpSoundDisable, OnJumpSoundEnabledOptionChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.JumpCooldown, OnJumpCooldownChanged, true);
 
-        _netManager.Connected += OnConnected;
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
     }
 
-    private async void OnConnected(object? sender, NetChannelArgs e)
+    private void OnPlayerAttached(LocalPlayerAttachedEvent args)
     {
         RaiseNetworkEvent(new ClientOptionDisableJumpSoundEvent(_jumpSoundDisabled));
     }

@@ -12,6 +12,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
 namespace Content.Client._Sunrise.TTS;
@@ -70,6 +71,7 @@ public sealed partial class TTSSystem : EntitySystem
         SubscribeNetworkEvent<PlayTTSEvent>(OnPlayTTS);
         SubscribeNetworkEvent<StopTTSEvent>(OnStopTTS);
         SubscribeNetworkEvent<PlayMultiSpeakerTTSEvent>(OnPlayMultiSpeakerTTS);
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
     }
 
     public override void Shutdown()
@@ -86,7 +88,6 @@ public sealed partial class TTSSystem : EntitySystem
         _groupedPlaying.Clear();
         _ttsQueue.Clear();
 
-        _netManager.Connected += OnConnected;
     }
 
     public void RequestPreviewTts(string voiceId)
@@ -121,7 +122,7 @@ public sealed partial class TTSSystem : EntitySystem
         _ghostRadioEnabled = option;
     }
 
-    private async void OnConnected(object? sender, NetChannelArgs e)
+    private void OnPlayerAttached(LocalPlayerAttachedEvent args)
     {
         RaiseNetworkEvent(new ClientOptionTTSEvent(_ttsClientEnable));
     }

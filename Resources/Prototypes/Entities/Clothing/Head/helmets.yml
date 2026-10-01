@@ -63,6 +63,7 @@
   - type: FoldableClothing
     foldedEquippedPrefix: visor
     foldedHeldPrefix: visor
+    unfoldedEquippedPrefix: off
   - type: HideLayerClothing
     layers:
       Hair: HEAD

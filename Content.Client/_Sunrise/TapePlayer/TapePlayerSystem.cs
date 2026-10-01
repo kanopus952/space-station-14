@@ -3,6 +3,7 @@ using Content.Shared._Sunrise.TapePlayer;
 using Robust.Client.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 
 namespace Content.Client._Sunrise.TapePlayer
 {
@@ -23,7 +24,7 @@ namespace Content.Client._Sunrise.TapePlayer
             SubscribeLocalEvent<TapePlayerComponent, AfterAutoHandleStateEvent>(OnTapePlayerAfterState);
             _cfg.OnValueChanged(SunriseCCVars.TapePlayerClientEnabled, OnTapePlayerClientOptionChanged, true);
 
-            _netManager.Connected += OnConnected;
+            SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
         }
 
         public override void Shutdown()
@@ -39,7 +40,7 @@ namespace Content.Client._Sunrise.TapePlayer
                 RaiseNetworkEvent(new ClientOptionTapePlayerEvent(_tapePlayerClientEnabled));
         }
 
-        private async void OnConnected(object? sender, NetChannelArgs e)
+        private void OnPlayerAttached(LocalPlayerAttachedEvent args)
         {
             RaiseNetworkEvent(new ClientOptionTapePlayerEvent(_tapePlayerClientEnabled));
         }
