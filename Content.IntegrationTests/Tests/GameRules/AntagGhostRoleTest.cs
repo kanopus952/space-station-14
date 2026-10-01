@@ -35,7 +35,6 @@ public sealed partial class AntagGhostRoleTest : AntagTest
     [Test]
     [TestOf(typeof(GameTicker)), TestOf(typeof(AntagSelectionSystem)), TestOf(typeof(AntagSelectionComponent)), TestOf(typeof(GhostRoleSystem))]
     [TestCaseSource(nameof(AntagGameRules))]
-    [NonParallelizable] // Sunrise edit оптимизация теста
     [Description($"Ensures all GameRule entities with {nameof(AntagSelectionComponent)} can properly spawn those roles and they can be taken.")]
     [RunOnSide(Side.Server)]
     public void TestAntagGhostRoles(string ruleId)
@@ -61,8 +60,13 @@ public sealed partial class AntagGhostRoleTest : AntagTest
             rules[selector.Proto] = value + count;
         }
 
+        var roles = new List<(GhostRoleAntagSpawnerComponent Spawner, GhostRoleComponent Role, TransformComponent Transform)>();
         var roleEnumerator = SEntMan.EntityQueryEnumerator<GhostRoleAntagSpawnerComponent, GhostRoleComponent, TransformComponent>();
         while (roleEnumerator.MoveNext(out var spawner, out var role, out var xform))
+            roles.Add((spawner, role, xform));
+
+        // Sunrise edit - тест зависает в шардах
+        foreach (var (spawner, role, xform) in roles)
         {
             // Ensure the ghost role spawner spawned correctly!
             Assert.That(spawner.Rule, Is.EqualTo(gameRule));
@@ -75,38 +79,44 @@ public sealed partial class AntagGhostRoleTest : AntagTest
         // Ensure all ghost roles spawned and were assigned!!!
         Assert.That(rules.Values, Is.All.Zero);
 
-        // End all rules
-        STicker.ClearGameRules();
         Assert.That(STicker.GetAddedGameRules(), Is.Empty);
     }
 
     [Test]
-    [NonParallelizable]
     [TestOf(typeof(GameTicker)), TestOf(typeof(AntagSelectionSystem)), TestOf(typeof(AntagSelectionComponent)), TestOf(typeof(GhostRoleSystem))]
     [Description("Ensures a player can take all antag ghost roles sequentially without transferring unwanted mind data.")]
     [RunOnSide(Side.Server)]
     public void TestAntagGhostRolesSequential()
     {
-        foreach (var ruleId in AntagGameRules)
+        try
         {
-            var rule = SProtoMan.Index<EntityPrototype>(ruleId);
-            Assert.That(rule.TryComp<AntagSelectionComponent>(out var antag, SEntMan.ComponentFactory), Is.True);
-            STicker.StartGameRule(ruleId);
+            foreach (var ruleId in AntagGameRules)
+            {
+                var rule = SProtoMan.Index<EntityPrototype>(ruleId);
+                Assert.That(rule.TryComp<AntagSelectionComponent>(out var antag, SEntMan.ComponentFactory), Is.True);
+                STicker.StartGameRule(ruleId);
+            }
+
+            var mind = ServerSession!.GetMind();
+
+            var roles = new List<(GhostRoleAntagSpawnerComponent Spawner, GhostRoleComponent Role, TransformComponent Transform)>();
+            var roleEnumerator = SEntMan.EntityQueryEnumerator<GhostRoleAntagSpawnerComponent, GhostRoleComponent, TransformComponent>();
+            while (roleEnumerator.MoveNext(out var spawner, out var role, out var xform))
+                roles.Add((spawner, role, xform));
+
+            foreach (var (spawner, role, xform) in roles)
+            {
+                AssertGhostRoleTaken(spawner, role, xform);
+                var newMind = ServerSession!.GetMind();
+                Assert.That(newMind, Is.Not.EqualTo(mind));
+                mind = newMind;
+            }
+        }
+        finally
+        {
+            STicker.ClearGameRules();
         }
 
-        var mind = ServerSession!.GetMind();
-
-        var roleEnumerator = SEntMan.EntityQueryEnumerator<GhostRoleAntagSpawnerComponent, GhostRoleComponent, TransformComponent>();
-        while (roleEnumerator.MoveNext(out var spawner, out var role, out var xform))
-        {
-            AssertGhostRoleTaken(spawner, role, xform);
-            var newMind = ServerSession!.GetMind();
-            Assert.That(newMind, Is.Not.EqualTo(mind));
-            mind = newMind;
-        }
-
-        // End all rules
-        STicker.ClearGameRules();
         Assert.That(STicker.GetAddedGameRules(), Is.Empty);
     }
 
