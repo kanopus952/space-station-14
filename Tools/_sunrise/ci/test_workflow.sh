@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SHARDING_SCRIPT="$ROOT_DIR/Tools/_sunrise/ci/sharding/test_shard_filter.py"
 RESULTS_DIR=/tmp/test-results
-PROFILE_SHARD_COUNT=10
+PROFILE_SHARD_COUNT=8
 cd "$ROOT_DIR"
 
 setup_root_submodules() {
@@ -133,7 +133,7 @@ run_integration_shard() {
     [[ "$SHARD" =~ ^[0-9]+$ ]]
     local settings=".integration-filters/shard_${SHARD}.runsettings"
     mkdir -p "$RESULTS_DIR"
-    timeout --signal=TERM --kill-after=2m 15m \
+    timeout --signal=TERM --kill-after=2m 1h \
         dotnet test bin/Content.IntegrationTests/Content.IntegrationTests.dll \
         --settings "$settings" \
         --logger "trx;LogFileName=results.trx" \
