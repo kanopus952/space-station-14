@@ -63,7 +63,6 @@
   - type: FoldableClothing
     foldedEquippedPrefix: visor
     foldedHeldPrefix: visor
-    unfoldedEquippedPrefix: off
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -611,6 +610,9 @@
   - type: Clothing
     sprite: Clothing/Head/Helmets/justice.rsi
     equippedPrefix: off
+  - type: FoldableClothing
+    # Sunrise-Edit - при развёрнутом состоянии сохраняем префикс Justice Helm.
+    unfoldedEquippedPrefix: off
   - type: ItemToggleExaminableStatus
   - type: ItemToggle
     predictable: false # issues between ToggleCellDraw and ItemToggleActiveSound

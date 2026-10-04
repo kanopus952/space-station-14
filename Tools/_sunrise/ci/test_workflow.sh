@@ -127,21 +127,13 @@ show_test_results() {
     mkdir -p "$RESULTS_DIR"
     trx --path "$RESULTS_DIR" -o -v quiet || true
 
-    # TRX сохраняет для неуспешного интеграционного теста только стек teardown.
-    # Первичная MultipleAssertException остаётся в обычном console output, поэтому
-    # дополнительно показываем её ключевые строки после сводки TRX.
+    # При MapWarningTo=Failed TRX может сохранить для неуспешного интеграционного
+    # теста только стек teardown. Извлекаем полный блок из сохранённого console
+    # output, где остаётся первичная MultipleAssertException.
     shopt -s nullglob
     local console_logs=("$RESULTS_DIR"/console.log)
     for console_log in "${console_logs[@]}"; do
-        if ! grep -Eiq 'Failed |Not passed|Не пройден|Multiple failures|Assert\.That|Expected:|But was:|Exception|dirty-disposed' "$console_log"; then
-            continue
-        fi
-
-        echo
-        echo "Primary failure details from $console_log:"
-        grep -Ein -B1 -A3 \
-            'Failed |Not passed|Не пройден|Multiple failures|Assert\.That|Expected:|But was:|Exception|dirty-disposed' \
-            "$console_log" || true
+        python3 "$ROOT_DIR/Tools/_sunrise/ci/sharding/failure_report.py" "$console_log" || true
     done
 }
 

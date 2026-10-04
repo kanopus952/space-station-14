@@ -166,8 +166,7 @@ public sealed class JobTest : GameTest
     /// get their preferred job.
     /// </summary>
     [Test]
-
-public async Task JobWeightTest()
+    public async Task JobWeightTest()
     {
         var pair = Pair;
 
@@ -184,7 +183,8 @@ public async Task JobWeightTest()
         Assert.That(stationJobs.TryGetJobWeight(engineer, null, out var engineerWeight), Is.True);
         Assert.That(stationJobs.TryGetJobWeight(passenger, null, out var passengerWeight), Is.True);
         Assert.That(captainWeight, Is.GreaterThan(engineerWeight));
-        Assert.That(engineerWeight, Is.EqualTo(passengerWeight));
+        // Sunrise-Edit - профиль Sunrise повышает вес инженера относительно пассажира.
+        Assert.That(engineerWeight, Is.GreaterThan(passengerWeight));
 
         await pair.SetJobPriorities((Passenger, JobPriority.Medium), (Engineer, JobPriority.High), (Captain, JobPriority.Low));
         ticker.ToggleReadyAll(true);
