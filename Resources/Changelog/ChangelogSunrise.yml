@@ -4965,3 +4965,10 @@
     message: Для инженеров добавлен подсумок для материалов.
   id: 2039
   url: https://github.com/makura-games/sunrise-station/pull/4782
+- author: ПТ | KAVALDi
+  time: '2026-10-09T09:48:39.0000000+00:00'
+  changes:
+  - type: Tweak
+    message: Изменил требуемое время на открытие тюремных пинов (значок строгого режима -> было 100 часов, стало 1 час) и (значок тюремного блока -> было 50 часов, стало 0 часов)
+  id: 2040
+  url: https://github.com/makura-games/sunrise-station/pull/4849
