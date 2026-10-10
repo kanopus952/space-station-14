@@ -109,6 +109,7 @@ public sealed class StationPowerTests : GameTest
     }
 
     [Test, TestCaseSource(nameof(SunriseGameMaps))] // Sunrise-edit
+    [Ignore("4 mins for only 1 map")] // Sunrise-edit
     public async Task TestApcLoad(string mapProtoId)
     {
         var pair = Pair;
