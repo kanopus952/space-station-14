@@ -922,7 +922,6 @@ ClothingOuterCoatHyenhSweater: null
 ClothingOuterVestValet: null
 SpawnPointGladiator: null
 SchoolgirlUniformSpawner: null
-SpawnPointMailCarrier: null
 SpawnMobPibble: null
 ClothingOuterRobeBrown: null
 ClothingUniformMNKTracksuitBlack: null
@@ -1320,6 +1319,8 @@ ClothingHandsPowerGlovesUplinkNTERTGamma: null
 ClothingHandsPowerGlovesUplinkNTERTGammaLeader: null
 ClothingHandsPowerGlovesUplinkNTERTCBURN: null
 ClothingHandsPowerGlovesUplinkNTERTEpsilon: null
+# 2026-09-10
+ClothingOuterArmorBlueShield: null
 # region Sunrise-End
 
 # 2026-07-16
