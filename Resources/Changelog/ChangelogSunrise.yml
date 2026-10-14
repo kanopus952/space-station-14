@@ -4979,3 +4979,21 @@
     message: Лазган пилота СБ удален из шкафа пилота.
   id: 2041
   url: https://github.com/makura-games/sunrise-station/pull/4855
+- author: privett
+  time: '2026-10-14T21:45:57.0000000+00:00'
+  changes:
+  - type: Add
+    message: Добавлены роль офицера ИСН и кабинеты для должности на картах Бокс, Багель, Марафон, Поезд и Оазис.
+  - type: Fix
+    message: Доступные игровые карты были изменены с учетом исправления ошибок.
+  - type: Remove
+    message: Удалена цель на Ромерол.
+  id: 2042
+  url: https://github.com/makura-games/sunrise-station/pull/4854
+- author: ThereDrD
+  time: '2026-10-14T21:45:08.0000000+00:00'
+  changes:
+  - type: Fix
+    message: Исправлена уязвимость дающая возможность читерам гостать всех игроков
+  id: 2043
+  url: https://github.com/makura-games/sunrise-station/pull/4856
