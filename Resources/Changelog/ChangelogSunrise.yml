@@ -4972,3 +4972,10 @@
     message: Изменил требуемое время на открытие тюремных пинов (значок строгого режима -> было 100 часов, стало 1 час) и (значок тюремного блока -> было 50 часов, стало 0 часов)
   id: 2040
   url: https://github.com/makura-games/sunrise-station/pull/4849
+- author: privett
+  time: '2026-10-14T17:29:58.0000000+00:00'
+  changes:
+  - type: Remove
+    message: Лазган пилота СБ удален из шкафа пилота.
+  id: 2041
+  url: https://github.com/makura-games/sunrise-station/pull/4855
