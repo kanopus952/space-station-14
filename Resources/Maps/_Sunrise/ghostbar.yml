@@ -8477,9 +8477,6 @@ entities:
     - type: Transform
       parent: 2
       pos: -22.5,5.5
-    - type: ItemPlacer
-      placedEntities:
-      - invalid
 - proto: MachineCentrifuge
   entities:
   - uid: 2648
