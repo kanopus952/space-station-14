@@ -52,6 +52,15 @@ random_characters = true
 random_species_weights = ""
 ssd_sleep_time = 3600
 
+[database]
+# Change to postgres if needed
+engine = "sqlite"
+pg_host = "localhost"
+pg_port = 5432
+pg_database = "ss14"
+pg_username = "postgres"
+pg_password = "postgres"
+
 [sponsor]
 enabled = true
 project_name = "test"
@@ -62,4 +71,7 @@ inventory_webhook_token = "local"
 # Sunrise-Edit
 [npc]
 disable_without_players = false
+
+[vote]
+ignore_preset_player_limits = true
 # Sunrise-Edit

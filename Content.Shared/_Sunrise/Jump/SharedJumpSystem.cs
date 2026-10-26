@@ -2,9 +2,12 @@ using Content.Shared._Sunrise.Animations;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Climbing.Systems;
+using Content.Shared.Emoting;
 using Content.Shared.Gravity;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew;
@@ -23,32 +26,31 @@ using Robust.Shared.Timing;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Stunnable;
 using Content.Shared.Damage.Components;
+using Content.Shared.Ghost;
 using Content.Shared.Buckle;
 
 namespace Content.Shared._Sunrise.Jump;
 
-// TODO: Рефактор:
-// 1. Выделить способность прыгать в отдельный компонент с Attempt ивентами. Перенести всю логику на компонент
-// 2. Перенести туда все данные из класса систем
-// 3. Больше предикшена, меньше IsServer
 public abstract partial class SharedJumpSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly StandingStateSystem _standingState = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
-    [Dependency] private readonly ClimbSystem _climb = default!;
-    [Dependency] private readonly SharedStaminaSystem _staminaSystem = default!;
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private StandingStateSystem _standingState = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private ClimbSystem _climb = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedStaminaSystem _staminaSystem = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<FixturesComponent> _fixturesQuery;
+
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
 
     private static readonly EntProtoId JumpStatusEffectKey = "StatusEffectJump";
     private static readonly ProtoId<EmotePrototype> EmoteJumpProto = "Jump";
@@ -68,13 +70,12 @@ public abstract partial class SharedJumpSystem : EntitySystem
         SubscribeLocalEvent<EmoteAnimationComponent, BeforeEmoteEvent>(CheckEmote);
         SubscribeLocalEvent<JumpStatusEffectComponent, StatusEffectRelayedEvent<TryStandDoAfterEvent>>(OnStandAttempt);
 
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _fixturesQuery = GetEntityQuery<FixturesComponent>();
-
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.JumpEnable, OnJumpEnableChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopEnable, OnBunnyHopEnableChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopMinSpeedThreshold, OnBunnyHopMinSpeedThresholdChanged, true);
         _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopSpeedBoostWindow, OnBunnyHopSpeedBoostWindowChanged, true);
+        _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopSpeedUpPerJump, OnBunnyHopSpeedUpPerJumpChanged, true);
+        _cfg.OnValueChanged(SunriseCCVars.SunriseCCVars.BunnyHopSpeedLimit, OnBunnyHopSpeedLimitChanged, true);
     }
 
     public override void Update(float frameTime)
@@ -98,7 +99,6 @@ public abstract partial class SharedJumpSystem : EntitySystem
             }
         }
     }
-
     private void CheckEmote(EntityUid uid, EmoteAnimationComponent component, BeforeEmoteEvent args)
     {
         if (args.Emote != EmoteJumpProto)
@@ -111,12 +111,11 @@ public abstract partial class SharedJumpSystem : EntitySystem
             args.Cancel();
     }
 
-    private void OnRefreshMoveSpeed(Entity<BunnyHopComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    private static void OnRefreshMoveSpeed(Entity<BunnyHopComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
         if (ent.Comp.CanBunnyHop)
             args.ModifySpeed(ent.Comp.SpeedMultiplier, ent.Comp.SpeedMultiplier);
     }
-
     private void OnStartup(Entity<JumpStatusEffectComponent> ent, ref StatusEffectAppliedEvent args)
     {
         if (!TryComp<CanJumpComponent>(args.Target, out var jump))
@@ -134,11 +133,8 @@ public abstract partial class SharedJumpSystem : EntitySystem
 
         if (_net.IsServer)
         {
-            _audio.PlayEntity(JumpSound,
-                Filter.Pvs(args.Target).RemovePlayers(_ignoredRecipients),
-                args.Target,
-                true,
-                AudioParams.Default.WithVolume(-5f));
+            _audio.PlayEntity(JumpSound, Filter.Pvs(args.Target).RemovePlayers(_ignoredRecipients),
+                args.Target, true, AudioParams.Default.WithVolume(-5f));
 
             _staminaSystem.TakeStaminaDamage(args.Target, jump.StaminaDamage * stamina.CritThreshold, null, args.Target, args.Target, ignoreResist: true);
         }
@@ -152,8 +148,10 @@ public abstract partial class SharedJumpSystem : EntitySystem
 
             _physics.RemoveCollisionMask(args.Target, id, fixture, (int)CollisionGroup.MidImpassable, manager: fixtures);
         }
+        // There is a problem with synchronization speed reduction due to stamina with increased bhop speed.
+        // This leads to lag.
+        // TryBunnyHop(args.Target, body);
     }
-
     private void OnShutdown(Entity<JumpStatusEffectComponent> ent, ref StatusEffectRemovedEvent args)
     {
         if (!TryComp<CanJumpComponent>(args.Target, out var jump))
@@ -188,7 +186,6 @@ public abstract partial class SharedJumpSystem : EntitySystem
     {
         args.Args.Handled = true;
     }
-
     public bool CanJump(EntityUid uid)
     {
         if (!TryComp<CanJumpComponent>(uid, out var jump))
@@ -245,5 +242,33 @@ public abstract partial class SharedJumpSystem : EntitySystem
         _statusEffects.TryAddStatusEffectDuration(uid,
             JumpStatusEffectKey,
             jump.JumpInAirTime);
+    }
+
+    private bool TryBunnyHop(Entity<JumpStatusEffectComponent> ent, PhysicsComponent body)
+    {
+        if (!_bunnyHopEnabled)
+            return false;
+
+        if (TryComp<PullerComponent>(ent, out var pull) && _pulling.IsPulling(ent, pull))
+            return false;
+
+        var currentSpeed = body.LinearVelocity.Length();
+
+        if (currentSpeed < _bunnyHopMinSpeedThreshold)
+            return false;
+
+        var bunnyHopComp = EnsureComp<BunnyHopComponent>(ent);
+        bunnyHopComp.LastLandingTime = _timing.CurTime;
+
+        var timeSinceLastLand = _timing.CurTime - bunnyHopComp.LastLandingTime;
+        if (timeSinceLastLand <= _bunnyHopSpeedBoostWindow)
+        {
+            var speedMultiplier = bunnyHopComp.SpeedMultiplier += _bunnyHopSpeedUpPerJump;
+            bunnyHopComp.SpeedMultiplier = Math.Min(speedMultiplier, _bunnyHopSpeedLimit);
+
+            _movementSpeedModifier.RefreshMovementSpeedModifiers(ent);
+        }
+
+        return true;
     }
 }

@@ -12,13 +12,14 @@ namespace Content.Client.Store.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class StoreListingControl : Control
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private readonly ClientGameTicker _ticker;
 
     private readonly ListingDataWithCostModifiers _data;
 
+    private readonly string _name; // Sunrise - edit
     private readonly bool _hasBalance;
     private readonly string _price;
     private readonly string _discount;
@@ -33,8 +34,9 @@ public sealed partial class StoreListingControl : Control
         _hasBalance = hasBalance;
         _price = price;
         _discount = discount;
+        _name = ListingLocalisationHelpers.GetLocalisedNameOrEntityName(_data, _prototype); // Sunrise-Edit - отдельно, чтобы не трогать локализацию в update
 
-        StoreItemName.Text = ListingLocalisationHelpers.GetLocalisedNameOrEntityName(_data, _prototype);
+        StoreItemName.Text = _name; // Sunrise-Edit
         StoreItemDescription.SetMessage(ListingLocalisationHelpers.GetLocalisedDescriptionOrEntityDescription(_data, _prototype));
 
         UpdateBuyButtonText();
@@ -72,7 +74,7 @@ public sealed partial class StoreListingControl : Control
 
     private void UpdateName()
     {
-        var name = ListingLocalisationHelpers.GetLocalisedNameOrEntityName(_data, _prototype);
+        var name = _name; // Sunrise-Edit - устранение утечки локализации в update, не трогать иначе будет больно
 
         var stationTime = _timing.CurTime.Subtract(_ticker.RoundStartTimeSpan);
         if (_data.RestockTime > stationTime)

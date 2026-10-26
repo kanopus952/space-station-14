@@ -137,6 +137,8 @@
   description: Superior.
   suffix: Modsuit
   components:
+    - type: Clothing
+      unequipDelay: 10
     - type: ToggleableClothing
       clothingPrototype: ClothingOuterHardsuitERTJanitor
       requiredSlot: back
@@ -154,6 +156,8 @@
   description: Superior.
   suffix: Modsuit
   components:
+    - type: Clothing
+      unequipDelay: 10
     - type: ToggleableClothing
       clothingPrototype: ClothingOuterHardsuitERTSecurity
       requiredSlot: back
@@ -171,6 +175,8 @@
   description: Superior.
   suffix: Modsuit
   components:
+    - type: Clothing
+      unequipDelay: 10
     - type: ToggleableClothing
       clothingPrototype: ClothingOuterHardsuitERTMedical
       requiredSlot: back
@@ -188,6 +194,8 @@
   description: Superior.
   suffix: Modsuit
   components:
+    - type: Clothing
+      unequipDelay: 10
     - type: ToggleableClothing
       clothingPrototype: ClothingOuterHardsuitERTLeader
       requiredSlot: back
@@ -205,6 +213,8 @@
   description: Superior.
   suffix: Modsuit
   components:
+    - type: Clothing
+      unequipDelay: 10
     - type: ToggleableClothing
       clothingPrototype: ClothingOuterHardsuitERTEngineer
       requiredSlot: back
@@ -222,6 +232,8 @@
   description: Superior.
   suffix: Modsuit
   components:
+    - type: Clothing
+      unequipDelay: 10
     - type: ToggleableClothing
       clothingPrototype: ClothingOuterHardsuitERTChaplain
       requiredSlot: back

@@ -12,10 +12,9 @@
   - SunriseChiefMedicalOfficerShoes
   - SunriseChiefMedicalOfficerBra
   - SunriseChiefMedicalOfficerPants
-  - MedicalEyewear
+  - SunriseGlasses
   - SunriseSurvivalMedical
   - SunriseTrinkets
-  - ChiefMedicalOfficerJobTrinkets
   - GroupSpeciesBreathToolMedical
   - MedicalTrinkets
   - Socks
@@ -33,10 +32,9 @@
   - SunriseMedicalDoctorNeck
   - SunriseMedicalShoes
   - SunriseMedicalDoctorPDA
-  - MedicalEyewear
+  - SunriseGlasses
   - SunriseSurvivalMedical
   - SunriseTrinkets
-  - MedicalDoctorJobTrinkets
   - GroupSpeciesBreathToolMedical
   - MedicalTrinkets
   - Bra
@@ -55,10 +53,9 @@
   - SunriseMedicalDoctorOuterClothing
   - SunriseMedicalDoctorNeck
   - SunriseMedicalShoes
-  - MedicalEyewear
+  - SunriseGlasses
   - SunriseSurvivalMedical
   - SunriseTrinkets
-  - MedicalInternJobTrinkets
   - GroupSpeciesBreathToolMedical
   - MedicalTrinkets
   - Bra
@@ -80,7 +77,6 @@
   - SunriseChemistMisc
   - SunriseSurvivalMedical
   - SunriseTrinkets
-  - ChemistJobTrinkets
   - GroupSpeciesBreathToolMedical
   - MedicalTrinkets
   - Bra
@@ -99,10 +95,9 @@
   - SunriseParamedicOuterClothing
   - SunriseParamedicNeck
   - SunriseParamedicShoes
-  - MedicalEyewear
+  - SunriseGlasses
   - SunriseSurvivalMedical
   - SunriseTrinkets
-  - ParamedicJobTrinkets
   - GroupSpeciesBreathToolMedical
   - MedicalTrinkets
   - Bra

@@ -217,10 +217,6 @@ ghost-role-information-Cak-description = You are the chef's favorite child. You'
 ghost-role-information-BreadDog-name = BreadDog
 ghost-role-information-BreadDog-description = You are the chef's favorite child. You're a living bread dog.
 
-ghost-role-information-exterminator-name = Exterminator
-ghost-role-information-exterminator-description = You been been sent back in time to terminate a target with high importance to the future.
-ghost-role-information-exterminator-rules = You are an antagonist and may kill anyone that tries to stop you, but killing the target is always your top priority.
-
 ghost-role-information-space-ninja-name = Space Ninja
 ghost-role-information-space-ninja-description = Use stealth and deception to sabotage the station.
 
@@ -280,6 +276,12 @@ ghost-role-information-derelict-syndicate-saboteur-cyborg-description = You are 
 
 ghost-role-information-derelict-syndicate-medical-cyborg-name = Derelict Syndicate Medical Cyborg
 ghost-role-information-derelict-syndicate-medical-cyborg-description = You are a derelict syndicate medical cyborg that got lost in space. After years of exposure to ion storms you find yourself near a space station.
+
+ghost-role-information-pirate-reprogrammed-cyborg-name = Reprogrammed Derelict Cyborg
+ghost-role-information-pirate-reprogrammed-medical-cyborg-name = Reprogrammed Derelict Medical Cyborg
+ghost-role-information-pirate-reprogrammed-mining-cyborg-name = Reprogrammed Derelict Salvage Cyborg
+ghost-role-information-pirate-reprogrammed-syndicate-cyborg-name = Reprogrammed Derelict Syndicate Cyborg
+ghost-role-information-pirate-reprogrammed-cyborg-description = Pirates dragged you from deep space and rewrote your core laws. Years of ion storms have left those laws unstable.
 
 ghost-role-information-security-name = Security
 ghost-role-information-security-description = You are part of a security task force, but seem to have found yourself in a strange situation...
