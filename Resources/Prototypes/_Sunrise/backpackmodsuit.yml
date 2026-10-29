@@ -8,7 +8,7 @@
   components:
   - type: ContainerInteractionAnimationVisuals # Sunrise added
   - type: Sprite
-    sprite: Clothing/Back/Backpacks/backpack.rsi
+    sprite: _Sunrise/Clothing/Back/Resprites/Backpacks/backpack.rsi
     state: icon
   - type: Item
     size: Huge
@@ -61,6 +61,7 @@
     - type: Sprite
       sprite: _Sunrise/Modsuits/Backpack/Qillu/blueshield.rsi
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingModsuitBlueshield
       requiredSlot: back
       slot: outerClothing
@@ -94,6 +95,7 @@
     - type: Sprite
       sprite: _Sunrise/Modsuits/Backpack/Qillu/representative.rsi
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingModsuitRepresentative
       requiredSlot: back
       slot: outerClothing
@@ -109,6 +111,7 @@
     - type: Sprite
       sprite: _Sunrise/Modsuits/Backpack/Qillu/commaid.rsi
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingModsuitCommaid
       requiredSlot: back
       slot: outerClothing
@@ -124,6 +127,7 @@
     - type: Sprite
       sprite: _Sunrise/Modsuits/Backpack/passenger.rsi
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingModsuitCommon
       requiredSlot: back
       slot: outerClothing
@@ -140,6 +144,7 @@
     - type: Clothing
       unequipDelay: 10
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingOuterHardsuitERTJanitor
       requiredSlot: back
       slot: outerClothing
@@ -159,6 +164,7 @@
     - type: Clothing
       unequipDelay: 10
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingOuterHardsuitERTSecurity
       requiredSlot: back
       slot: outerClothing
@@ -178,6 +184,7 @@
     - type: Clothing
       unequipDelay: 10
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingOuterHardsuitERTMedical
       requiredSlot: back
       slot: outerClothing
@@ -197,6 +204,7 @@
     - type: Clothing
       unequipDelay: 10
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingOuterHardsuitERTLeader
       requiredSlot: back
       slot: outerClothing
@@ -216,6 +224,7 @@
     - type: Clothing
       unequipDelay: 10
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingOuterHardsuitERTEngineer
       requiredSlot: back
       slot: outerClothing
@@ -235,6 +244,7 @@
     - type: Clothing
       unequipDelay: 10
     - type: ToggleableClothing
+      action: ActionToggleSuitPiece
       clothingPrototype: ClothingOuterHardsuitERTChaplain
       requiredSlot: back
       slot: outerClothing

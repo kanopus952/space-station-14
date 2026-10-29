@@ -73,7 +73,7 @@ public sealed partial class SponsorWindow
     private Color GetSubscriptionAccentColor(SponsorInfo sponsorTier)
     {
         if (!string.IsNullOrWhiteSpace(sponsorTier.OOCColor) &&
-            Color.TryFromHex(sponsorTier.OOCColor) is { } oocColor)
+            Color.TryFromHex(sponsorTier.OOCColor, out var oocColor))
         {
             return oocColor;
         }

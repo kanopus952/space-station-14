@@ -268,7 +268,9 @@ public sealed partial class SponsorWindow
         if (string.IsNullOrWhiteSpace(color))
             return null;
 
-        return Color.TryFromHex(color);
+        return Color.TryFromHex(color, out var oocColor)
+            ? oocColor
+            : null;
     }
 
     private string GetSponsorTierBooleanText(bool value)
