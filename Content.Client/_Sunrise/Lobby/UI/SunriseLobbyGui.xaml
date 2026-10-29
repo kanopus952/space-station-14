@@ -10,7 +10,6 @@
     xmlns:serversHub="clr-namespace:Content.Client._Sunrise.ServersHub"
     xmlns:sf="clr-namespace:Content.Client._Sunrise.Sheetlets.SciFiStyle"
     xmlns:style="clr-namespace:Content.Client.Stylesheets"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userProfile="clr-namespace:Content.Client._Sunrise.UserProfile"
     xmlns:vote="clr-namespace:Content.Client.Voting.UI"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets"
@@ -159,11 +158,8 @@
                             MinHeight="36"
                             MinWidth="178"
                             Name="DonateButton"
+                            StyleClasses="SciFiButton SciFiPillButton"
                             VerticalAlignment="Center">
-                            <sf:SciFiPillSweepButton.StyleClasses>
-                                <system:String>SciFiButton</system:String>
-                                <system:String>SciFiPillButton</system:String>
-                            </sf:SciFiPillSweepButton.StyleClasses>
                             <BoxContainer
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal"

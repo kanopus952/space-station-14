@@ -14,12 +14,12 @@ namespace Content.Client._Sunrise.SponsorInventory;
 /// <summary>
 /// Client-side cache and network bridge for sponsor inventory data used by lobby UI.
 /// </summary>
-public sealed class SunriseInventorySystem : EntitySystem
+public sealed partial class SunriseInventorySystem : EntitySystem
 {
-    [Dependency] private readonly IBaseClient _baseClient = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IBaseClient _baseClient = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly Dictionary<int, SunriseInventoryProfile> _profiles = new();
     private readonly HashSet<string> _ownedItemIds = new();

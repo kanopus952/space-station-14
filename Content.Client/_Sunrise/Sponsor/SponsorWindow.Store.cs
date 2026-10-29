@@ -13,8 +13,8 @@ namespace Content.Client._Sunrise.Sponsor;
 
 public sealed partial class SponsorWindow
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly List<SponsorStoreEntry> _storeEntries = new();
     private readonly Dictionary<StoreCatalogCategory, Button> _storeCategoryButtons = new();

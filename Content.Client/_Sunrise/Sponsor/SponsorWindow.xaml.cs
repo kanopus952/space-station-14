@@ -17,9 +17,9 @@ namespace Content.Client._Sunrise.Sponsor;
 [GenerateTypedNameReferences]
 public sealed partial class SponsorWindow : BaseWindow
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly IUriOpener _uri = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private IUriOpener _uri = default!;
     private const int DragMarginSize = 7;
     private const string SponsorDonateProjectPlaceholder = "%project%";
     private readonly ISharedSponsorsManager? _sponsorsManager;

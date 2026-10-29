@@ -17,7 +17,7 @@ namespace Content.Client._Sunrise.Sponsor;
 [GenerateTypedNameReferences]
 public sealed partial class SponsorSubscriptionCard : BoxContainer
 {
-    [Dependency] private readonly IResourceCache _resource = default!;
+    [Dependency] private IResourceCache _resource = default!;
     private const int SubscriptionBenefitTextWidth = 260;
     private const int MaxSubscriptionTitleLenght = 25;
     private const int SubscriptionBenefitLineLength = 34;

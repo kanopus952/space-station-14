@@ -1,15 +1,10 @@
 <ContainerButton xmlns="https://spacestation14.io"
-                 xmlns:system="clr-namespace:System;assembly=System.Runtime"
                  SetWidth="96"
                  SetHeight="120"
                  MinSize="96 120"
-                 RectClipContent="True">
+                 RectClipContent="True"
+                 StyleClasses="button ButtonSquare SponsorInventoryPaletteItem">
     <!-- Fixed card size keeps InventoryWindow palette grids stable during hover, selection, and drag/drop. -->
-    <ContainerButton.StyleClasses>
-        <system:String>button</system:String>
-        <system:String>ButtonSquare</system:String>
-        <system:String>SponsorInventoryPaletteItem</system:String>
-    </ContainerButton.StyleClasses>
 
     <BoxContainer
         HorizontalExpand="True"

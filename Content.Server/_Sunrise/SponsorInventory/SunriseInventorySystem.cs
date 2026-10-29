@@ -3,7 +3,9 @@ using Content.Server._Sunrise.PlayerCache;
 using Content.Server._Sunrise.SponsorValidation;
 using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
+using Content.Shared._Sunrise.Humanoid;
 using Content.Shared._Sunrise.SponsorInventory;
+using Content.Shared.Body;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -22,17 +24,19 @@ namespace Content.Server._Sunrise.SponsorInventory;
 /// </summary>
 public sealed partial class SunriseInventorySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly StationSpawningSystem _spawn = default!;
-    [Dependency] private readonly PlayerCacheManager _playerCache = default!;
-    [Dependency] private readonly SponsorValidationSystem _validation = default!;
-    [Dependency] private readonly IServerPreferencesManager _preferences = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
+    [Dependency] private SunriseHumanoidProfileSystem _sunriseProfile = default!;
+    [Dependency] private StationSpawningSystem _spawn = default!;
+    [Dependency] private PlayerCacheManager _playerCache = default!;
+    [Dependency] private SponsorValidationSystem _validation = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private const int MaxInventoryPurchaseIdLength = 128;
     private const int MaxPetSelectionIdLength = 128;

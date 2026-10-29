@@ -6,9 +6,9 @@ using Robust.Client.UserInterface.Controllers;
 
 namespace Content.Client._Sunrise.Sponsor;
 
-public sealed class SponsorWindowUIController : UIController, IOnStateExited<LobbyState>
+public sealed partial class SponsorWindowUIController : UIController, IOnStateExited<LobbyState>
 {
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
     private SponsorWindow? _window;
     public void OnStateExited(LobbyState state)
     {

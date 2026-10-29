@@ -9,6 +9,7 @@ using Content.Shared._Sunrise.GhostTheme;
 using Content.Shared._Sunrise.Helpers;
 using Content.Shared._Sunrise.Humanoid;
 using Content.Shared._Sunrise.TTS;
+using Content.Shared.Body;
 using Content.Shared.Ghost.Roles;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -30,7 +31,8 @@ namespace Content.Client._Sunrise.Sponsor;
 public sealed partial class SponsorWindow
 {
     // Внутренний экран подробностей спонсорских подписок и построение списков преимуществ.
-    [Dependency] private readonly IClientPreferencesManager _preferences = default!;
+    [Dependency] private IClientPreferencesManager _preferences = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
 
     private const int SponsorTierDetailsBuildBudget = 10;
     private const int SponsorTierVoiceNameMaxLength = 22;
@@ -406,13 +408,8 @@ public sealed partial class SponsorWindow
 
     private bool CanCreateSponsorTierMarkingPreview(string prototypeId)
     {
-        if (!_prototype.TryIndex<MarkingPrototype>(prototypeId, out var marking))
-            return false;
-
-        var species = marking.SpeciesRestrictions is { Count: > 0 }
-            ? marking.SpeciesRestrictions[0]
-            : (string)SharedHumanoidAppearanceSystem.DefaultSpecies;
-        return _prototype.HasIndex<SpeciesPrototype>(species);
+        return _prototype.HasIndex<MarkingPrototype>(prototypeId) &&
+               _prototype.HasIndex<SpeciesPrototype>(HumanoidCharacterProfile.DefaultSpecies);
     }
 
     private static PanelContainer CreateSponsorTierDetailsPlaceholder(SponsorTierDetailsBuildKind kind)
@@ -706,24 +703,60 @@ public sealed partial class SponsorWindow
 
     private SpriteView? CreateSponsorTierMarkingPreview(MarkingPrototype marking)
     {
-        var species = marking.SpeciesRestrictions is { Count: > 0 }
-            ? marking.SpeciesRestrictions[0]
-            : (string)SharedHumanoidAppearanceSystem.DefaultSpecies;
+        // Маркинги привязаны к группам на органах, поэтому ищем первый вид, чья кукла может принять маркинг.
+        foreach (var species in GetSponsorTierMarkingPreviewSpecies())
+        {
+            var dummy = _entity.SpawnEntity(species.DollPrototype, MapCoordinates.Nullspace);
+            if (!TryApplySponsorTierPreviewMarking(dummy, marking))
+            {
+                _entity.DeleteEntity(dummy);
+                continue;
+            }
 
-        if (!_prototype.TryIndex<SpeciesPrototype>(species, out var speciesPrototype))
-            return null;
+            _sponsorTierPreviewEntities.Add(dummy);
+            return CreateSponsorTierSpriteView(dummy);
+        }
 
-        var dummy = _entity.SpawnEntity(speciesPrototype.DollPrototype, MapCoordinates.Nullspace);
-        _sponsorTierPreviewEntities.Add(dummy);
-        var humanoid = _entity.EnsureComponent<HumanoidAppearanceComponent>(dummy);
-        var sprite = _entity.EnsureComponent<SpriteComponent>(dummy);
-        _entity.System<HumanoidAppearanceSystem>().ApplyMarking(
-            marking,
-            null,
-            true,
-            (dummy, humanoid, sprite));
+        return null;
+    }
 
-        return CreateSponsorTierSpriteView(dummy);
+    private IEnumerable<SpeciesPrototype> GetSponsorTierMarkingPreviewSpecies()
+    {
+        if (_prototype.TryIndex(HumanoidCharacterProfile.DefaultSpecies, out var defaultSpecies))
+            yield return defaultSpecies;
+
+        foreach (var species in _prototype.EnumeratePrototypes<SpeciesPrototype>())
+        {
+            if (species.RoundStart && species.ID != HumanoidCharacterProfile.DefaultSpecies)
+                yield return species;
+        }
+    }
+
+    private bool TryApplySponsorTierPreviewMarking(EntityUid dummy, MarkingPrototype marking)
+    {
+        var visualBody = _entity.System<SharedVisualBodySystem>();
+        if (!visualBody.TryGatherMarkingsData(dummy, null, out _, out var organMarkings, out _))
+            return false;
+
+        var sex = marking.SexRestriction ?? Sex.Male;
+        foreach (var (organ, markingData) in organMarkings)
+        {
+            if (!markingData.Layers.Contains(marking.BodyPart) ||
+                !_markingManager.CanBeApplied(markingData.Group, sex, marking))
+            {
+                continue;
+            }
+
+            visualBody.ApplyMarkings(dummy,
+                new()
+                {
+                    // Collection expression для List компилируется в CollectionsMarshal.SetCount, а он запрещён песочницей.
+                    [organ] = new() { [marking.BodyPart] = new List<Marking> { marking.AsMarking() } },
+                });
+            return true;
+        }
+
+        return false;
     }
 
     private SpriteView CreateSponsorTierSpriteView(EntityUid dummy)

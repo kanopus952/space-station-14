@@ -9,7 +9,7 @@ namespace Content.Client._Sunrise.Sponsor;
 
 public sealed partial class SponsorWindow
 {
-    [Dependency] private readonly IResourceCache _resource = default!;
+    [Dependency] private IResourceCache _resource = default!;
     private const int StoreDetailsPreviewSize = 112;
     private const int StoreDetailsTierLineLength = 32;
     private const int StoreDetailsTierLines = 2;

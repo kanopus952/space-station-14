@@ -10,7 +10,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._Sunrise.UserInterface.RichText;
 
-public sealed class SponsorInventoryStatusTag : IMarkupTagHandler
+public sealed partial class SponsorInventoryStatusTag : IMarkupTagHandler
 {
     private const int MarkerFontSize = 13;
     private const int MarkerWidth = 16;
@@ -25,7 +25,7 @@ public sealed class SponsorInventoryStatusTag : IMarkupTagHandler
         "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf",
     ];
 
-    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private IResourceCache _cache = default!;
 
     private Font? _markerFont;
 

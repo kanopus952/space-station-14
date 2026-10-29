@@ -9,9 +9,9 @@ namespace Content.Client._Sunrise.SponsorInventory;
 /// <summary>
 /// UI controller that owns the lobby sponsor inventory window lifecycle.
 /// </summary>
-public sealed class InventoryUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
+public sealed partial class InventoryUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
 {
-    [Dependency] private readonly IClientPreferencesManager _preferences = default!;
+    [Dependency] private IClientPreferencesManager _preferences = default!;
 
     [UISystemDependency] private readonly SunriseInventorySystem _sponsorInventory = default!;
 

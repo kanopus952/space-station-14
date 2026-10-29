@@ -57,12 +57,12 @@ public sealed partial class InventoryWindow : DefaultWindow
     /*
      * Main lifecycle, profile selection, tab state, and job selection for the sponsor inventory window.
      */
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly PlayerCacheManager _playerCache = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private PlayerCacheManager _playerCache = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private static readonly ProtoId<ItemSizePrototype> PocketableItemSize = "Small";
     private const string PlacementFilterAll = "";
