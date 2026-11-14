@@ -19,6 +19,7 @@
   - type: DeployableTurretController
     accessLevels:
     - CentralCommand
+    - Borg
 
 - type: entity
   parent: WeaponEnergyTurretStationControlPanelBase
